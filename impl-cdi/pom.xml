@@ -39,7 +39,7 @@
             <groupId>org.agorava</groupId>
             <artifactId>agorava-core-api</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>javax.enterprise</groupId>
             <artifactId>cdi-api</artifactId>
@@ -71,7 +71,7 @@
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
