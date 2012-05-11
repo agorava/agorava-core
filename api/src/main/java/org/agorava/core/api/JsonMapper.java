@@ -43,6 +43,6 @@ public interface JsonMapper extends Serializable {
      * @param obj
      * @return
      */
-    public String ObjectToJsonString(Object obj);
+    public String objectToJsonString(Object obj);
 
 }

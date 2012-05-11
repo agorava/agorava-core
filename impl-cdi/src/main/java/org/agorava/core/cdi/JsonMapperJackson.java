@@ -68,7 +68,7 @@ public class JsonMapperJackson implements JsonMapper {
     }
 
     @Override
-    public String ObjectToJsonString(Object obj) {
+    public String objectToJsonString(Object obj) {
         try {
             return objectMapper.writeValueAsString(obj);
         } catch (Exception e) {

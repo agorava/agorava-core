@@ -278,7 +278,7 @@ public class OAuthServiceImpl implements OAuthService {
         uri = MessageFormat.format(uri, urlParams);
         OAuthRequest request = getProvider().requestFactory(POST, uri);
 
-        request.addPayload(jsonService.ObjectToJsonString(toPost));
+        request.addPayload(jsonService.objectToJsonString(toPost));
         RestResponse response = sendSignedRequest(request);
         return response.getHeader("Location");
     }
@@ -302,7 +302,7 @@ public class OAuthServiceImpl implements OAuthService {
         uri = MessageFormat.format(uri, urlParams);
         OAuthRequest request = getProvider().requestFactory(PUT, uri);
 
-        request.addPayload(jsonService.ObjectToJsonString(toPut));
+        request.addPayload(jsonService.objectToJsonString(toPut));
         sendSignedRequest(request);
 
     }
