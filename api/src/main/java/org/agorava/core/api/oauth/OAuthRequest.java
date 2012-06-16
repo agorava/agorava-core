@@ -21,7 +21,7 @@ import java.util.Map;
 import org.agorava.core.api.rest.RestRequest;
 
 /**
- * Implementation of this interface Represent an OAuth Request
+ * Implementation of this interface represents an OAuth Request
  * 
  * @author Antoine Sabot-Durand
  * 

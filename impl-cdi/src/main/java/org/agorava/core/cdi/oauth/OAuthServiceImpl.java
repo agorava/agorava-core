@@ -36,7 +36,6 @@ import org.agorava.core.api.JsonMapper;
 import org.agorava.core.api.UserProfile;
 import org.agorava.core.api.event.OAuthComplete;
 import org.agorava.core.api.event.SocialEvent;
-import org.agorava.core.api.exception.AgoravaException;
 import org.agorava.core.api.oauth.OAuthProvider;
 import org.agorava.core.api.oauth.OAuthRequest;
 import org.agorava.core.api.oauth.OAuthService;
@@ -44,8 +43,8 @@ import org.agorava.core.api.oauth.OAuthSession;
 import org.agorava.core.api.oauth.OAuthToken;
 import org.agorava.core.api.rest.RestResponse;
 import org.agorava.core.api.rest.RestVerb;
-import org.agorava.core.cdi.Current;
 import org.agorava.core.cdi.AgoravaExtension;
+import org.agorava.core.cdi.Current;
 import org.agorava.core.cdi.utils.URLUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jboss.solder.logging.Logger;
@@ -210,13 +209,6 @@ public class OAuthServiceImpl implements OAuthService {
     @Override
     public boolean isConnected() {
         return getSession().isConnected();
-    }
-
-    @Override
-    public void requireAuthorization() {
-        if (!isConnected()) {
-            throw new AgoravaException("This action requires an OAuth connexion");
-        }
     }
 
     @Override

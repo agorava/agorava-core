@@ -14,7 +14,6 @@
  * limitations under the License.
  ******************************************************************************/
 
-
 package org.agorava.core.api;
 
 import java.io.Serializable;
@@ -23,7 +22,7 @@ import org.agorava.core.api.rest.RestResponse;
 
 /**
  * 
- * Implementation of this Interface will manage Json Serialization / De-serialization to and from Object
+ * Implementation of this Interface will manage JSON Serialization / De-serialization to and from Object
  * 
  * @author Antoine Sabot-Durand
  * 
@@ -40,9 +39,12 @@ public interface JsonMapper extends Serializable {
     public <T> T mapToObject(RestResponse resp, Class<T> clazz);
 
     /**
-     * @param obj
-     * @return
+     * 
+     * Transforms an object to a JSON string
+     * 
+     * @param object : the object to tranform
+     * @return a String representing the object in JSON format
      */
-    public String objectToJsonString(Object obj);
+    public String objectToJsonString(Object object);
 
 }

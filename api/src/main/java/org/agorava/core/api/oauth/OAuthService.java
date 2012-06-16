@@ -18,7 +18,7 @@ package org.agorava.core.api.oauth;
 
 import java.util.Map;
 
-import org.agorava.core.api.QualifierAware;
+import org.agorava.core.api.SocialMediaAware;
 import org.agorava.core.api.rest.RestResponse;
 import org.agorava.core.api.rest.RestService;
 import org.agorava.core.api.rest.RestVerb;
@@ -28,7 +28,7 @@ import org.agorava.core.api.rest.RestVerb;
  * 
  * @author Antoine Sabot-Durand
  */
-public interface OAuthService extends RestService, QualifierAware {
+public interface OAuthService extends RestService, SocialMediaAware {
 
     /**
      * @return the access token for the OAuth service
@@ -123,13 +123,11 @@ public interface OAuthService extends RestService, QualifierAware {
 
     /**
      * 
-     */
-    void requireAuthorization();
-
-    /**
+     * Signs and sends a simple request
+     * 
      * @param request
-     * @return
+     * @return an HttpResponse containing the response. It could be in various format (json, xml, string)
      */
-    RestResponse sendSignedRequest(OAuthRequest request);
+    public RestResponse sendSignedRequest(OAuthRequest request);
 
 }

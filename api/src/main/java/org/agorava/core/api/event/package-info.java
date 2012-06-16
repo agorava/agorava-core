@@ -14,25 +14,8 @@
  * limitations under the License.
  ******************************************************************************/
 
-package org.agorava.core.api;
-
-import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+package org.agorava.core.api.event;
 
 /**
- * 
- * This Meta-annotation is used to annotate Social Media annotation
- * 
- * @author Antoine Sabot-Durand
- * 
+ * This package contains all the events used by Agorava CDI implemetation
  */
-@Target(ANNOTATION_TYPE)
-@Retention(RUNTIME)
-@Documented
-public @interface ServiceRelated {
-
-}

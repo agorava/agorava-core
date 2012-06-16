@@ -13,26 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-
+/**
+ * 
+ */
 package org.agorava.core.api;
 
-import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+import java.lang.annotation.Annotation;
 
 /**
  * 
- * This Meta-annotation is used to annotate Social Media annotation
+ * Class implementing this interface have knowledge of the Social Media they are related to
  * 
  * @author Antoine Sabot-Durand
  * 
  */
-@Target(ANNOTATION_TYPE)
-@Retention(RUNTIME)
-@Documented
-public @interface ServiceRelated {
+public interface SocialMediaAware {
+
+    /**
+     * Returns the annotation related to the Social Media
+     * 
+     * @return Annotation being a Qualifier
+     */
+    public Annotation getQualifier();
 
 }

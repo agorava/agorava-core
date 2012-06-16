@@ -21,6 +21,7 @@ import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
+import javax.enterprise.event.Event;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.AnnotatedMember;
 import javax.enterprise.inject.spi.BeanManager;
@@ -62,11 +63,14 @@ public class OAuthGenericManager {
     @Inject
     Logger log;
 
+    @Inject
+    private Event<OAuthService> serviceEventProducer;
+
     @Produces
     @ApplyScope
     protected OAuthService produceService(OAuthServiceImpl service) {
         service.setQualifier(qual);
-        servicesHub.configureService(service);
+        serviceEventProducer.select(qual).fire(service);
         return service;
     }
 
@@ -80,7 +84,7 @@ public class OAuthGenericManager {
 
     @Produces
     @SessionScoped
-    //qualifier is applied thanks to Generic Beans Extension
+    // qualifier is applied thanks to Generic Beans Extension
     public OAuthSession produceSession() {
         return new OAuthSessionImpl(qual);
     }

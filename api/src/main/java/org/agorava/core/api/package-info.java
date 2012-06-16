@@ -17,6 +17,5 @@
 package org.agorava.core.api;
 
 /**
- * This package contains API elements to manage interactions with generic OAuth
- * services thru CDI Beans
+ * This package contains generic API elements for Social Media
  */

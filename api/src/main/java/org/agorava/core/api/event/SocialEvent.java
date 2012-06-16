@@ -19,11 +19,24 @@ package org.agorava.core.api.event;
 import java.io.Serializable;
 
 /**
+ * 
+ * Generic event Payload for all Agorava Event
+ * 
+ * 
  * @author Antoine Sabot-Durand
  * 
  */
 public class SocialEvent<T> implements Serializable {
 
+    private static final long serialVersionUID = -2626322336079857836L;
+
+    /**
+     * 
+     * Status of the Event
+     * 
+     * @author Antoine Sabot-Durand
+     * 
+     */
     public enum Status {
         SUCCESS, FAILURE
     }

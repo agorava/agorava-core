@@ -17,7 +17,7 @@
 package org.agorava.core.api.exception;
 
 /**
- * Exception linked to the framework
+ * Generic exception for Agorava
  * 
  * @author Antoine Sabot-Durand
  * 

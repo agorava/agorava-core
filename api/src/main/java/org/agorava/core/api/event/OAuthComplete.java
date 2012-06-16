@@ -21,10 +21,15 @@ package org.agorava.core.api.event;
 import org.agorava.core.api.oauth.OAuthSession;
 
 /**
+ * 
+ * Event sent at the end of OAuth authentication cycle
+ * 
  * @author Antoine Sabot-Durand
  * 
  */
 public class OAuthComplete extends SocialEvent<OAuthSession> {
+
+    private static final long serialVersionUID = -2428276251131445054L;
 
     public OAuthComplete(Status status, String message, OAuthSession payload) {
         super(status, message, payload);

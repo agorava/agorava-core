@@ -13,22 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-/**
- * 
- */
-package org.agorava.core.api;
 
-import org.agorava.core.api.oauth.OAuthService;
+package org.agorava.core.api.rest;
 
 /**
- * @author Antoine Sabot-Durand
- * 
+ * This package contains all the Agorava Rest client framework
  */
-public interface OAuthServiceAware {
-
-    /**
-     * @return
-     */
-    OAuthService getService();
-
-}

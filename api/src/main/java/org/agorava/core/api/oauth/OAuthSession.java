@@ -60,16 +60,33 @@ public interface OAuthSession extends Serializable {
      */
     public void setVerifier(String verifier);
 
+    /**
+     * 
+     * @param userProfile to set
+     * 
+     */
     public void setUserProfile(UserProfile userProfile);
 
+    /**
+     * 
+     * @return the connected userProfile
+     */
     public UserProfile getUserProfile();
 
+    /**
+     * 
+     * @return the annotation for the current Social Media
+     */
     public Annotation getServiceQualifier();
 
     /**
-     * @return
+     * @return true if the session is active
      */
     public boolean isConnected();
 
+    /**
+     * 
+     * @return the name of the session to display for user
+     */
     public String getName();
 }

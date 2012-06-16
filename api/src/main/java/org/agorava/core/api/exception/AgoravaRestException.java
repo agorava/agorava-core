@@ -19,6 +19,9 @@ package org.agorava.core.api.exception;
 import java.text.MessageFormat;
 
 /**
+ * 
+ * Exception thrown when a problem occured in Rest exchanges
+ * 
  * @author Antoine Sabot-Durand
  * 
  */

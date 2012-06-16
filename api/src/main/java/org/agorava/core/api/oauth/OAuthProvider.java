@@ -19,22 +19,22 @@ package org.agorava.core.api.oauth;
 import org.agorava.core.api.rest.RestVerb;
 
 /**
- * @author Antoine Sabot-Durand
+ * Implementation of this Interface will provide low level services (mainly Token generation and signature) for OAuth
+ * management.
  * 
- *         Implementation of this Interface will provide low level service for OAuth management.
+ * @author Antoine Sabot-Durand
  * 
  */
 public interface OAuthProvider {
     /**
-     * This method retrieves an OAuth request token to initiate an OAuth connection. It's the the first step of OAuth
-     * negotiation connection
+     * Returns an OAuth request token to initiate an OAuth connection. It's the the first step of OAuth negotiation connection
      * 
      * @return an OAuth request token
      */
     public OAuthToken getRequestToken();
 
     /**
-     * This method retrieves the Oauth access token from request token and verifier
+     * Returns the Oauth access token from request token and verifier
      * 
      * @param requestToken
      * @param verifier
@@ -64,13 +64,6 @@ public interface OAuthProvider {
      * @return
      */
     public String getAuthorizationUrl(OAuthToken requestToken);
-
-    /**
-     * Initializes the provider with the given settings containing OAuth api key andapi secret
-     * 
-     * @param settings
-     */
-    // public void initProvider(OAuthServiceSettings settings);
 
     /**
      * Creates an OAuthRequest with the given Rest Verb and uri

@@ -69,12 +69,12 @@ public interface OAuthServiceSettings extends Serializable {
     public String getScope();
 
     /**
-     * @return
+     * @return the name of the service
      */
     public String getServiceName();
 
     /**
-     * @return
+     * @return the annotation of the Social Media
      */
     public Annotation getServiceQualifier();
 

@@ -20,7 +20,6 @@ package org.agorava.core.cdi;
 
 import org.agorava.core.api.SocialNetworkServicesHub;
 import org.agorava.core.api.UserProfile;
-import org.agorava.core.api.oauth.OAuthService;
 import org.agorava.core.api.oauth.OAuthSession;
 
 /**
@@ -50,10 +49,6 @@ public abstract class AbstractSocialNetworkServicesHub extends AbstractOAuthServ
     @Override
     public boolean isConnected() {
         return getSession().isConnected();
-    }
-
-    @Override
-    public void configureService(OAuthService service) {
     }
 
     @Override

@@ -16,21 +16,21 @@
 /**
  * 
  */
-package org.agorava.core.api;
+package org.agorava.core.api.oauth;
 
-import java.lang.annotation.Annotation;
 
 /**
+ * 
+ * Class implementing this interface have access to their underlying OAuth Service
+ * 
  * @author Antoine Sabot-Durand
  * 
  */
-public interface QualifierAware {
+public interface OAuthServiceAware {
 
     /**
-     * Returns the Qualifier used for this social network
-     * 
-     * @return Annotation being a Qualifier
+     * @return the underlying OAuthService
      */
-    public Annotation getQualifier();
+    public OAuthService getService();
 
 }

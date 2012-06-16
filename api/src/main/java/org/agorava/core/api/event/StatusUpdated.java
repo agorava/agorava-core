@@ -16,18 +16,17 @@
 
 package org.agorava.core.api.event;
 
-
 /**
- * @author antoine
+ * 
+ * Event sent after a status update
+ * 
+ * @author Antoine Sabot-Durand
  * 
  */
 public class StatusUpdated extends SocialEvent<Object> {
 
-    /**
-     * @param status
-     * @param message
-     * @param payload
-     */
+    private static final long serialVersionUID = -2757535195468162752L;
+
     public StatusUpdated(Status status, String message, Object payload) {
         super(status, message, payload);
     }

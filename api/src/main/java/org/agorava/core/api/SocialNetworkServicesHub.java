@@ -18,22 +18,31 @@
  */
 package org.agorava.core.api;
 
-import org.agorava.core.api.oauth.OAuthService;
+import org.agorava.core.api.oauth.OAuthServiceAware;
 import org.agorava.core.api.oauth.OAuthSession;
 
 /**
- * @author antoine
+ * 
+ * Beans implementing this interface are the entry point of Social Media interaction. They have 2 roles
+ * <ul>
+ * <li>gather all Api families for a given Social Media</li>
+ * <li>provide generic services for the underlying Social Media (for instance get user profile) to allow using it without
+ * knowing it specificities</li>
+ * </ul>
+ * 
+ * 
+ * @author Antoine Sabot-Durand
  * 
  */
-public interface SocialNetworkServicesHub extends OAuthServiceAware, QualifierAware {
+public interface SocialNetworkServicesHub extends OAuthServiceAware, SocialMediaAware {
 
     /**
-     * @return
+     * @return the profile of the connected user
      */
     public UserProfile getMyProfile();
 
     /**
-     * @return the session settings of the given service
+     * @return the oauth session settings of the connected user
      */
     public OAuthSession getSession();
 
@@ -43,15 +52,14 @@ public interface SocialNetworkServicesHub extends OAuthServiceAware, QualifierAw
     public void resetConnection();
 
     /**
-     * @return
+     * @return true if the Social Media is connected
      */
-    boolean isConnected();
+    public boolean isConnected();
 
     /**
-     * @param service
+     * 
+     * @return the parameter name with which Social Media return verifier to achieve OAuth cycle
      */
-    public void configureService(OAuthService service);
-
     public String getVerifierParamName();
 
 }

@@ -22,16 +22,16 @@ import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
-import org.agorava.core.api.OAuthServiceAware;
-import org.agorava.core.api.QualifierAware;
+import org.agorava.core.api.SocialMediaAware;
 import org.agorava.core.api.oauth.OAuthService;
+import org.agorava.core.api.oauth.OAuthServiceAware;
 import org.agorava.core.api.oauth.OAuthSession;
 
 /**
  * @author Antoine Sabot-Durand
  * 
  */
-public abstract class AbstractOAuthServiceAwareImpl implements OAuthServiceAware, QualifierAware {
+public abstract class AbstractOAuthServiceAwareImpl implements OAuthServiceAware, SocialMediaAware {
 
     @Inject
     @Any

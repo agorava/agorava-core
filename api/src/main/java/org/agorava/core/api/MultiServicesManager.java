@@ -24,7 +24,7 @@ import org.agorava.core.api.oauth.OAuthService;
 import org.agorava.core.api.oauth.OAuthSession;
 
 /**
- * Implementation of this interface allow to manage multiple OAuth connection. The connection to service are backed by a Set to
+ * Implementation of this interface allow to manage multiple OAuth Session. The connection to service are backed by a Set to
  * avoid null or duplicate connection. Uniqueness of a connection is based on service type and User name on the service
  * 
  * 
@@ -36,16 +36,8 @@ public interface MultiServicesManager extends Serializable {
     /**
      * @return Set of available service to connect to
      */
+    // FIXME : why this set is a list ?
     public List<String> getListOfServices();
-
-    /**
-     * Instantiate a new service from a Service String name
-     * 
-     * @param serviceName the name of the service
-     * @return the Bean of the new service
-     * 
-     *         public OAuthService getService(String serviceName);
-     */
 
     /**
      * @return the current service
@@ -58,7 +50,7 @@ public interface MultiServicesManager extends Serializable {
     public boolean isCurrentServiceConnected();
 
     /**
-     * Connect the current service at the end of the OAuth process
+     * Connect the current service. To be used at the end of the OAuth process
      */
     public void connectCurrentService();
 
@@ -71,27 +63,31 @@ public interface MultiServicesManager extends Serializable {
     public String initNewSession(String type);
 
     /**
-     * Disconnect the current service and remove it from Set of managed service. Reset the currentService to null
+     * Disconnect the current OAuth session and remove it from Set of managed session. Reset the currentSession to null
      */
     public void destroyCurrentSession();
 
     /**
-     * @return
+     * 
+     * @return the current OAuthSession
      */
     public OAuthSession getCurrentSession();
 
     /**
-     * @param currentSession
+     * 
+     * Change the current Session
+     * 
+     * @param currentSession the OAuthSession to set
      */
     public void setCurrentSession(OAuthSession currentSession);
 
     /**
-     * @return
+     * @return the set of managed session
      */
     Set<OAuthSession> getActiveSessions();
 
     /**
-     * @return
+     * @return the currentServiceHub
      */
     SocialNetworkServicesHub getCurrentServiceHub();
 
