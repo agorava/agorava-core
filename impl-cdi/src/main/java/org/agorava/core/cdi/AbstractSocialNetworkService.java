@@ -20,7 +20,7 @@ package org.agorava.core.cdi;
 
 import java.util.Map;
 
-import org.agorava.core.cdi.utils.URLUtils;
+import org.agorava.core.utils.URLUtils;
 
 /**
  * @author Antoine Sabot-Durand

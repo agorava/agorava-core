@@ -14,7 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package org.agorava.core.cdi.utils;
+package org.agorava.core.utils;
 
 import static com.google.common.collect.Maps.newHashMap;
 

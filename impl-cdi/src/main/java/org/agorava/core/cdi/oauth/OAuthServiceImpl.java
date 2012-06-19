@@ -45,7 +45,7 @@ import org.agorava.core.api.rest.RestResponse;
 import org.agorava.core.api.rest.RestVerb;
 import org.agorava.core.cdi.AgoravaExtension;
 import org.agorava.core.cdi.Current;
-import org.agorava.core.cdi.utils.URLUtils;
+import org.agorava.core.utils.URLUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jboss.solder.logging.Logger;
 

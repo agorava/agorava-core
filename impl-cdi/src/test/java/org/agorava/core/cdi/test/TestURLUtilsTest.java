@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.agorava.core.cdi.utils.URLUtils;
+import org.agorava.core.utils.URLUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -102,7 +102,7 @@ public class TestURLUtilsTest {
     }
 
     /**
-     * Test method for {@link org.agorava.core.cdi.utils.URLUtils#formURLEncodeMap(java.util.Map)}.
+     * Test method for {@link org.agorava.core.utils.URLUtils#formURLEncodeMap(java.util.Map)}.
      */
     @Test
     public final void testFormURLEncodePojo() {

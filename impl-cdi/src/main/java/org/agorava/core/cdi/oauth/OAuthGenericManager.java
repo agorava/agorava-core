@@ -33,6 +33,7 @@ import org.agorava.core.api.oauth.OAuthService;
 import org.agorava.core.api.oauth.OAuthServiceSettings;
 import org.agorava.core.api.oauth.OAuthSession;
 import org.agorava.core.cdi.scribe.OAuthProviderScribe;
+import org.agorava.core.utils.AgoravaContext;
 import org.jboss.solder.bean.Beans;
 import org.jboss.solder.bean.generic.ApplyScope;
 import org.jboss.solder.bean.generic.Generic;
@@ -99,7 +100,9 @@ public class OAuthGenericManager {
         log.debugf("in OAuthGenericManager creating Hub for %s", qual.toString());
         String apiKey = app.apiKey();
         String apiSecret = app.apiSecret();
-        String callback = app.callback();
+        String callback = app.callback().toLowerCase();
+        if (!"oob".equals(callback) && (!callback.startsWith("http://") || callback.startsWith("https://")))
+            callback = AgoravaContext.webAbsolutePath + callback;
         String scope = app.scope();
         settings = new OAuthServiceSettingsImpl(qual, apiKey, apiSecret, callback, scope);
     }
