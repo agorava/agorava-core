@@ -22,7 +22,7 @@ import java.util.Map;
 import org.agorava.core.api.UserProfile;
 
 /**
- * @author antoine
+ * @author Antoine Sabot-Durand
  * 
  */
 public interface RestService extends Serializable {

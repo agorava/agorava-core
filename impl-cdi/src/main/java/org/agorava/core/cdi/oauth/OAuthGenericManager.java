@@ -41,7 +41,7 @@ import org.jboss.solder.bean.generic.GenericConfiguration;
 import org.jboss.solder.logging.Logger;
 
 /**
- * @author Antoine
+ * @author Antoine Sabot-Durand
  * 
  */
 @GenericConfiguration(OAuthApplication.class)
