@@ -14,8 +14,8 @@
  * limitations under the License.
  ******************************************************************************/
 
-package org.agorava.core.api.exception;
-
 /**
  * This package contains all the Agorava specific exception
  */
+package org.agorava.core.api.exception;
+
