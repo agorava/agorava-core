@@ -42,7 +42,7 @@ public interface JsonMapper extends Serializable {
      * 
      * Transforms an object to a JSON string
      * 
-     * @param object : the object to tranform
+     * @param object : the object to transform
      * @return a String representing the object in JSON format
      */
     public String objectToJsonString(Object object);
