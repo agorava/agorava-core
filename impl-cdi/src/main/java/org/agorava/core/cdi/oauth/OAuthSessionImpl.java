@@ -24,7 +24,7 @@ import org.agorava.core.api.oauth.OAuthToken;
 import org.agorava.core.cdi.AgoravaExtension;
 
 /**
- * @author antoine
+ * @author Antoine Sabot-Durand
  */
 public class OAuthSessionImpl implements OAuthSession {
 

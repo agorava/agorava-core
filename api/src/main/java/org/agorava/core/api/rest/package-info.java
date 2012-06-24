@@ -14,8 +14,8 @@
  * limitations under the License.
  ******************************************************************************/
 
-package org.agorava.core.api.rest;
-
 /**
  * This package contains all the Agorava Rest client framework
  */
+package org.agorava.core.api.rest;
+

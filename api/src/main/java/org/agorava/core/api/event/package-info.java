@@ -14,8 +14,8 @@
  * limitations under the License.
  ******************************************************************************/
 
-package org.agorava.core.api.event;
-
 /**
  * This package contains all the events used by Agorava CDI implemetation
  */
+package org.agorava.core.api.event;
+

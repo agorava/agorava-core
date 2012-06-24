@@ -14,9 +14,9 @@
  * limitations under the License.
  ******************************************************************************/
 
-package org.agorava.core.api.oauth;
-
 /**
  * This package contains API elements to manage interactions with generic OAuth
  * services thru CDI Beans
  */
+package org.agorava.core.api.oauth;
+

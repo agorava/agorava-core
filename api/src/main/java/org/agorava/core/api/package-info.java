@@ -14,8 +14,8 @@
  * limitations under the License.
  ******************************************************************************/
 
-package org.agorava.core.api;
-
 /**
  * This package contains generic API elements for Social Media
  */
+package org.agorava.core.api;
+
