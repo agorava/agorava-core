@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2012 Agorava
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,27 +16,25 @@
 
 package org.agorava.core.api;
 
+import org.agorava.core.api.oauth.OAuthService;
+import org.agorava.core.api.oauth.OAuthSession;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
-import org.agorava.core.api.oauth.OAuthService;
-import org.agorava.core.api.oauth.OAuthSession;
-
 /**
  * Implementation of this interface allow to manage multiple OAuth Session. The connection to service are backed by a Set to
  * avoid null or duplicate connection. Uniqueness of a connection is based on service type and User name on the service
- * 
- * 
+ *
  * @author Antoine Sabot-Durand
- * 
  */
+//fixme name of the class is ambiguous : 'Service' too Generic and in the end impl of this Interface will manage user Session not Social Media
 public interface MultiServicesManager extends Serializable {
 
     /**
-     * @return Set of available service to connect to
+     * @return List of available service to connect to
      */
-    // FIXME : why this set is a list ?
     public List<String> getListOfServices();
 
     /**
@@ -56,8 +54,8 @@ public interface MultiServicesManager extends Serializable {
 
     /**
      * Instantiate a new Service which become the new current service
-     * 
-     * @param servType the type of the service to Instantiate
+     *
+     * @param type the type of the service to Instantiate
      * @return the authorization url to call to start the OAuth process
      */
     public String initNewSession(String type);
@@ -68,15 +66,13 @@ public interface MultiServicesManager extends Serializable {
     public void destroyCurrentSession();
 
     /**
-     * 
      * @return the current OAuthSession
      */
     public OAuthSession getCurrentSession();
 
     /**
-     * 
      * Change the current Session
-     * 
+     *
      * @param currentSession the OAuthSession to set
      */
     public void setCurrentSession(OAuthSession currentSession);

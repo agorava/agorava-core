@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2012 Agorava
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,11 +19,9 @@ package org.agorava.core.api.exception;
 import java.text.MessageFormat;
 
 /**
- * 
- * Exception thrown when a problem occured in Rest exchanges
- * 
+ * Exception thrown when a problem occurred in Rest exchanges
+ *
  * @author Antoine Sabot-Durand
- * 
  */
 public class AgoravaRestException extends AgoravaException {
 
@@ -45,13 +43,9 @@ public class AgoravaRestException extends AgoravaException {
         this.msg = msg;
     }
 
-    /**
-     * @param string
-     * @param url2
-     * @param e
-     */
+
     public AgoravaRestException(String url2, Exception e) {
-        super(MessageFormat.format("Error occured while connecting to {0}", url2), e);
+        super(MessageFormat.format("Error occurred while connecting to {0}", url2), e);
         url = url2;
     }
 

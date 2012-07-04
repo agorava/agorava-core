@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2012 Agorava
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,9 +20,10 @@ import java.io.Serializable;
 import java.lang.annotation.Annotation;
 
 /**
- * Interface for model containing settings needed to access to an OAuth 1.0a service It's used by {@link OAuthService} to setup
+ * Interface for model containing settings needed to access to an OAuth 1.0a and 2.0 service.
+ * It's used by {@link OAuthService} to setup
  * connection to OAuth Service
- * 
+ *
  * @author Antoine Sabot-Durand
  * @see OAuthService
  */

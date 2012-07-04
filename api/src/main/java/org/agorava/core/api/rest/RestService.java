@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2012 Agorava
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,107 +19,94 @@ package org.agorava.core.api.rest;
 import java.io.Serializable;
 import java.util.Map;
 
-import org.agorava.core.api.UserProfile;
-
 /**
- * @author antoine
- * 
+ * Manage basic REST actions
+ *
+ * @author Antoine Sabot-Durand
  */
 public interface RestService extends Serializable {
 
     /**
-     * @return
-     */
-    public UserProfile getMyProfile();
-
-    /**
-     * Returns the status of this ServiceHndler
-     * 
+     * Returns the status of this Service
+     *
      * @return true if the connection process is over and successful
      */
     public boolean isConnected();
 
     /**
      * Returns the name/type of the Social Network we're connected to
-     * 
+     *
      * @return name of the service
      */
     public String getType();
 
     /**
-     * Close connexion if needed
+     * Perform a REST Get command and return an object of the provided class
+     *
+     * @param uri   the uri to perform the rest get call
+     * @param clazz class of the returned object
+     * @return an object of the asked class
      */
-    public void resetConnection();
+    public <T> T get(String uri, Class<T> clazz);
+
 
     /**
-     * @param <T>
-     * @param uri
-     * @param clazz
-     * @return
+     * Perform a REST get command with given parameters to put in the given URI and return an object of the provided class
+     *
+     * @param uri       a string with {@link java.text.MessageFormat} placeholders (i.e. {0}, {1}) style for params. It's the uri to perform the REST get call
+     * @param clazz     class of the returned object
+     * @param urlParams list of params to feed the uri with
+     * @param <T>       generic type for returned object
+     * @return an object of the asked class
      */
-    public <T> T getForObject(String uri, Class<T> clazz);
+    public <T> T get(String uri, Class<T> clazz, Object... urlParams);
+
 
     /**
-     * @param uri
-     * @param params
-     * @param clazz
-     * @return
+     * Perform a REST post command with given parameters to put in Body and return an object of the provided class
+     *
+     * @param uri    the URI to post to
+     * @param params parameters to put in body
+     * @param clazz  class of the returned object
+     * @param <T>    generic type for returned object
+     * @return an object of the asked class
      */
-    public <T> T postForObject(String uri, Map<String, ? extends Object> params, Class<T> clazz);
+    public <T> T post(String uri, Map<String, ?> params, Class<T> clazz);
+
 
     /**
-     * @param uri
-     * @param clazz
-     * @param params
-     * @return
+     * Perform a REST post command with given object and given URI params. Expecting a String (a new URL) as returned data
+     *
+     * @param uri       a string with {@link java.text.MessageFormat} placeholders (i.e. {0}, {1}) style for params. It's the uri to perform the REST post call
+     * @param toPost    the object to post
+     * @param urlParams list of params to feed the uri with
+     * @return an uri pointing to a resource corresponding to posted object
      */
-    public <T> T getForObject(String uri, Class<T> clazz, Map<String, ? extends Object> params);
+    String post(String uri, Object toPost, Object... urlParams);
 
     /**
-     * @param uri
-     * @param clazz
-     * @param urlParams
-     * @return
-     */
-    public <T> T getForObject(String uri, Class<T> clazz, Object... urlParams);
-
-    /**
-     * @param uri
-     * @param toPost
-     * @param queryStringData
-     * @param urlVariables
-     * @return
-     */
-    String postForLocation(String uri, Object toPost, Map<String, String> queryStringData, Object... urlParams);
-
-    /**
-     * @param uri
-     * @param toPost
-     * @param urlVariables
-     * @return
-     */
-    String postForLocation(String uri, Object toPost, Object... urlParams);
-
-    /**
-     * @param uri
-     * @param toPut
-     * @param urlParams
+     * Perform a REST put command with given object and given URI params
+     *
+     * @param uri       a string with {@link java.text.MessageFormat} placeholders (i.e. {0}, {1}) style for params. It's the uri to perform the REST put call
+     * @param toPut     the object to put
+     * @param urlParams list of params to feed the uri with
      */
     void put(String uri, Object toPut, Object... urlParams);
 
     /**
-     * @param uri
+     * Perform a REST delete command with given uri
+     *
+     * @param uri to perform te REST delete call
      */
     void delete(String uri);
 
     /**
-     * @return
-     */
-    Map<String, String> getRequestHeader();
-
-    /**
-     * @param requestHeader
+     *
+     *  Allow to add specific parameter to header of all requests send by this service
+     *
+     * @param requestHeader a map containing these headers
      */
     void setRequestHeader(Map<String, String> requestHeader);
+
 
 }

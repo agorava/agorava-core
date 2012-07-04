@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2012 Agorava
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,43 +16,33 @@
 
 package org.agorava.core.cdi.oauth;
 
-import static org.agorava.core.api.rest.RestVerb.GET;
-import static org.agorava.core.api.rest.RestVerb.POST;
-import static org.agorava.core.api.rest.RestVerb.PUT;
-import static org.agorava.core.cdi.AgoravaExtension.getServicesToQualifier;
-
-import java.lang.annotation.Annotation;
-import java.text.MessageFormat;
-import java.util.Map;
-import java.util.Map.Entry;
+import org.agorava.core.api.JsonMapper;
+import org.agorava.core.api.event.OAuthComplete;
+import org.agorava.core.api.event.SocialEvent;
+import org.agorava.core.api.oauth.*;
+import org.agorava.core.api.rest.RestResponse;
+import org.agorava.core.api.rest.RestVerb;
+import org.agorava.core.cdi.AgoravaExtension;
+import org.agorava.core.cdi.Current;
+import org.apache.commons.lang3.StringUtils;
+import org.jboss.solder.logging.Logger;
 
 import javax.enterprise.event.Event;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Inject;
+import java.lang.annotation.Annotation;
+import java.text.MessageFormat;
+import java.util.Map;
+import java.util.Map.Entry;
 
-import org.agorava.core.api.JsonMapper;
-import org.agorava.core.api.UserProfile;
-import org.agorava.core.api.event.OAuthComplete;
-import org.agorava.core.api.event.SocialEvent;
-import org.agorava.core.api.oauth.OAuthProvider;
-import org.agorava.core.api.oauth.OAuthRequest;
-import org.agorava.core.api.oauth.OAuthService;
-import org.agorava.core.api.oauth.OAuthSession;
-import org.agorava.core.api.oauth.OAuthToken;
-import org.agorava.core.api.rest.RestResponse;
-import org.agorava.core.api.rest.RestVerb;
-import org.agorava.core.cdi.AgoravaExtension;
-import org.agorava.core.cdi.Current;
-import org.agorava.core.utils.URLUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.jboss.solder.logging.Logger;
+import static org.agorava.core.api.rest.RestVerb.*;
+import static org.agorava.core.cdi.AgoravaExtension.getServicesToQualifier;
 
 /**
  * This Abstract implementation of {@link OAuthService} uses an {@link OAuthProvider} to deal with remote OAuth Services
- * 
- * 
+ *
  * @author Antoine Sabot-Durand
  */
 
@@ -136,16 +126,6 @@ public class OAuthServiceImpl implements OAuthService {
     }
 
     @Override
-    public void resetConnection() {
-
-        OAuthSession session = getSession();
-        session.setAccessToken(null);
-        session.setVerifier(null);
-        session.setUserProfile(null);
-
-    }
-
-    @Override
     public RestResponse sendSignedRequest(OAuthRequest request) {
         if (getRequestHeader() != null)
             request.getHeaders().putAll(getRequestHeader());
@@ -225,10 +205,6 @@ public class OAuthServiceImpl implements OAuthService {
 
     }
 
-    @Override
-    public UserProfile getMyProfile() {
-        return getSession().getUserProfile();
-    }
 
     @Override
     public OAuthSession getSession() {
@@ -242,30 +218,26 @@ public class OAuthServiceImpl implements OAuthService {
     }
 
     @Override
-    public <T> T getForObject(String uri, Class<T> clazz) {
+    public <T> T get(String uri, Class<T> clazz) {
         return jsonService.mapToObject(sendSignedRequest(GET, uri), clazz);
     }
 
-    @Override
-    public <T> T getForObject(String uri, Class<T> clazz, Map<String, ? extends Object> params) {
-        return jsonService.mapToObject(sendSignedRequest(GET, uri, params), clazz);
-    }
 
     @Override
-    public <T> T getForObject(String uri, Class<T> clazz, Object... urlParams) {
+    public <T> T get(String uri, Class<T> clazz, Object... urlParams) {
         String url = MessageFormat.format(uri, urlParams);
         return jsonService.mapToObject(sendSignedRequest(GET, url), clazz);
     }
 
     @Override
-    public <T> T postForObject(String uri, Map<String, ? extends Object> params, Class<T> clazz) {
+    public <T> T post(String uri, Map<String, ? extends Object> params, Class<T> clazz) {
         OAuthRequest request = getProvider().requestFactory(POST, uri);
         request.addBodyParameters(params);
         return jsonService.mapToObject(sendSignedRequest(request), clazz);
     }
 
     @Override
-    public String postForLocation(String uri, Object toPost, Object... urlParams) {
+    public String post(String uri, Object toPost, Object... urlParams) {
 
         uri = MessageFormat.format(uri, urlParams);
         OAuthRequest request = getProvider().requestFactory(POST, uri);
@@ -275,19 +247,6 @@ public class OAuthServiceImpl implements OAuthService {
         return response.getHeader("Location");
     }
 
-    @Override
-    public String postForLocation(String uri, Object toPost, Map<String, String> queryStringData, Object... urlParams) {
-        if (queryStringData != null && !queryStringData.isEmpty()) {
-            String encodedParams = URLUtils.doFormUrlEncode(queryStringData);
-            if (uri.indexOf('?') == uri.length() - 1)
-                uri += encodedParams;
-            else if (uri.indexOf('?') == -1)
-                uri += "?" + encodedParams;
-            else
-                uri += "&" + encodedParams;
-        }
-        return postForLocation(uri, toPost);
-    }
 
     @Override
     public void put(String uri, Object toPut, Object... urlParams) {
@@ -309,17 +268,10 @@ public class OAuthServiceImpl implements OAuthService {
         return qualifier;
     }
 
-    /**
-     * @return the requestHeader
-     */
-    @Override
-    public Map<String, String> getRequestHeader() {
+    protected Map<String, String> getRequestHeader() {
         return requestHeader;
     }
 
-    /**
-     * @param requestHeader the requestHeader to set
-     */
     @Override
     public void setRequestHeader(Map<String, String> requestHeader) {
         this.requestHeader = requestHeader;
