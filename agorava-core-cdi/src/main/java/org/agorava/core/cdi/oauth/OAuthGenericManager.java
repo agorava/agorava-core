@@ -23,7 +23,6 @@ import org.agorava.core.api.oauth.OAuthSession;
 import org.agorava.core.api.oauth.OAuthSettings;
 import org.agorava.core.cdi.scribe.OAuthProviderScribe;
 import org.agorava.core.utils.AgoravaContext;
-import org.jboss.solder.bean.Beans;
 import org.jboss.solder.bean.generic.ApplyScope;
 import org.jboss.solder.bean.generic.Generic;
 import org.jboss.solder.bean.generic.GenericConfiguration;
@@ -37,7 +36,6 @@ import javax.enterprise.inject.spi.AnnotatedMember;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 import java.lang.annotation.Annotation;
-import java.util.Set;
 
 /**
  * @author Antoine Sabot-Durand
@@ -93,7 +91,6 @@ public class OAuthGenericManager {
 
     @PostConstruct
     void init() {
-        Set<Annotation> qualifiers = Beans.getQualifiers(beanManager, annotatedMember.getAnnotations());
         qual = servicesHub.getQualifier();
         log.debugf("in OAuthGenericManager creating Hub for %s", qual.toString());
         String apiKey = app.apiKey();
