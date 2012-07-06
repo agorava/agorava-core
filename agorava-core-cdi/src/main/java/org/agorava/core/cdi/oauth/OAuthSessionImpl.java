@@ -16,15 +16,15 @@
 
 package org.agorava.core.cdi.oauth;
 
-import java.lang.annotation.Annotation;
-
 import org.agorava.core.api.UserProfile;
 import org.agorava.core.api.oauth.OAuthSession;
 import org.agorava.core.api.oauth.OAuthToken;
 import org.agorava.core.cdi.AgoravaExtension;
 
+import java.lang.annotation.Annotation;
+
 /**
- * @author antoine
+ * @author Antoine Sabot-Durand
  */
 public class OAuthSessionImpl implements OAuthSession {
 
