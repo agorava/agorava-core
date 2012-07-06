@@ -20,13 +20,13 @@ import static org.agorava.core.cdi.AgoravaExtension.getServicesToQualifier;
 
 import java.lang.annotation.Annotation;
 
-import org.agorava.core.api.oauth.OAuthServiceSettings;
+import org.agorava.core.api.oauth.OAuthSettings;
 
 /**
  * @author Antoine Sabot-Durand
  */
 
-public class OAuthServiceSettingsImpl implements OAuthServiceSettings {
+public class OAuthSettingsImpl implements OAuthSettings {
 
     private static final long serialVersionUID = -8018722725677732853L;
 
@@ -83,7 +83,7 @@ public class OAuthServiceSettingsImpl implements OAuthServiceSettings {
         return getServicesToQualifier().get(serviceQualifier);
     }
 
-    OAuthServiceSettingsImpl(Annotation serviceQualifier, String apiKey, String apiSecret, String callback, String scope) {
+    OAuthSettingsImpl(Annotation serviceQualifier, String apiKey, String apiSecret, String callback, String scope) {
         super();
         this.apiKey = apiKey;
         this.apiSecret = apiSecret;
@@ -94,7 +94,7 @@ public class OAuthServiceSettingsImpl implements OAuthServiceSettings {
 
     @Override
     public String toString() {
-        return "OAuthServiceSettingsImpl [apiKey=" + apiKey + ", apiSecret=" + apiSecret + ", callback=" + callback
+        return "OAuthSettingsImpl [apiKey=" + apiKey + ", apiSecret=" + apiSecret + ", callback=" + callback
                 + ", scope=" + scope + ", serviceName=" + getServiceName() + "]";
     }
 

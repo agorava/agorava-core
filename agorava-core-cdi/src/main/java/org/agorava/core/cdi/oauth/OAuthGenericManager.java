@@ -30,7 +30,7 @@ import javax.inject.Inject;
 import org.agorava.core.api.SocialNetworkServicesHub;
 import org.agorava.core.api.oauth.OAuthProvider;
 import org.agorava.core.api.oauth.OAuthService;
-import org.agorava.core.api.oauth.OAuthServiceSettings;
+import org.agorava.core.api.oauth.OAuthSettings;
 import org.agorava.core.api.oauth.OAuthSession;
 import org.agorava.core.cdi.scribe.OAuthProviderScribe;
 import org.agorava.core.utils.AgoravaContext;
@@ -74,7 +74,7 @@ public class OAuthGenericManager {
         return service;
     }
 
-    OAuthServiceSettings settings;
+    OAuthSettings settings;
 
     @Produces
     @ApplyScope
@@ -103,7 +103,7 @@ public class OAuthGenericManager {
         if (!"oob".equals(callback) && (!callback.startsWith("http://") || callback.startsWith("https://")))
             callback = AgoravaContext.webAbsolutePath + callback;
         String scope = app.scope();
-        settings = new OAuthServiceSettingsImpl(qual, apiKey, apiSecret, callback, scope);
+        settings = new OAuthSettingsImpl(qual, apiKey, apiSecret, callback, scope);
     }
 
 }

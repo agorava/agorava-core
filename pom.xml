@@ -34,8 +34,8 @@
     <inceptionYear>2012</inceptionYear>
 
     <modules>
-        <module>api</module>
-        <module>impl-cdi</module>
+        <module>agorava-core-api</module>
+        <module>agorava-core-cdi</module>
     </modules>
 
     <properties>
@@ -80,20 +80,6 @@
         </repository>
     </repositories>
 
-    <profiles>
-        <profile>
-            <id>distribution</id>
-            <activation>
-                <property>
-                    <name>release</name>
-                </property>
-            </activation>
-            <modules>
-                <module>docs</module>
-                <module>dist</module>
-            </modules>
-        </profile>
-    </profiles>
 
     <scm>
         <connection>scm:git:git://github.com/agorava/core.git</connection>

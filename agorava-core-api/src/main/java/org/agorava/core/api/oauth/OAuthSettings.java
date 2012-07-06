@@ -27,7 +27,7 @@ import java.lang.annotation.Annotation;
  * @author Antoine Sabot-Durand
  * @see OAuthService
  */
-public interface OAuthServiceSettings extends Serializable {
+public interface OAuthSettings extends Serializable {
 
     /**
      * @return the key consumer key for the OAuth service

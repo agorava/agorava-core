@@ -19,7 +19,7 @@ package org.agorava.core.cdi.scribe;
 import org.agorava.core.api.exception.AgoravaException;
 import org.agorava.core.api.oauth.OAuthProvider;
 import org.agorava.core.api.oauth.OAuthRequest;
-import org.agorava.core.api.oauth.OAuthServiceSettings;
+import org.agorava.core.api.oauth.OAuthSettings;
 import org.agorava.core.api.oauth.OAuthToken;
 import org.agorava.core.api.rest.RestVerb;
 import org.scribe.builder.ServiceBuilder;
@@ -69,7 +69,7 @@ public class OAuthProviderScribe implements OAuthProvider {
         return getService().getAuthorizationUrl(extractToken(tok));
     }
 
-    public OAuthProviderScribe(OAuthServiceSettings settings) {
+    public OAuthProviderScribe(OAuthSettings settings) {
         super();
         Class<? extends Api> apiClass = getApiClass(settings.getServiceName()); // TODO : should get API class differently !
         ServiceBuilder serviceBuilder = new ServiceBuilder().provider(apiClass).apiKey(settings.getApiKey())
