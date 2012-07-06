@@ -16,9 +16,9 @@
 
 package org.agorava.core.api;
 
-import java.io.Serializable;
-
 import org.agorava.core.api.rest.RestResponse;
+
+import java.io.Serializable;
 
 /**
  * Implementation of this Interface will manage JSON Serialization / De-serialization to and from Object
@@ -39,7 +39,7 @@ public interface JsonMapper extends Serializable {
     /**
      * Transforms an object to a JSON string
      *
-     * @param object : the object to tranform
+     * @param object : the object to transform
      * @return a String representing the object in JSON format
      */
     public String objectToJsonString(Object object);
