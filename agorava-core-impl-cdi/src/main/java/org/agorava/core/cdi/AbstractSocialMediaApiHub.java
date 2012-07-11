@@ -18,15 +18,15 @@
  */
 package org.agorava.core.cdi;
 
-import org.agorava.core.api.SocialNetworkServicesHub;
+import org.agorava.core.api.SocialMediaApiHub;
 import org.agorava.core.api.UserProfile;
 import org.agorava.core.api.oauth.OAuthSession;
 
 /**
  * @author Antoine Sabot-Durand
  */
-public abstract class AbstractSocialNetworkServicesHub extends AbstractOAuthServiceAwareImpl implements
-        SocialNetworkServicesHub {
+public abstract class AbstractSocialMediaApiHub extends AbstractOAuthServiceAwareImpl implements
+        SocialMediaApiHub {
 
     private static final String VERIFIER_PARAM_NAME = "oauth_verifier";
 

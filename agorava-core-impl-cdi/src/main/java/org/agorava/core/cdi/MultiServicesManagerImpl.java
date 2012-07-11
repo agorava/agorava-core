@@ -18,7 +18,7 @@
 package org.agorava.core.cdi;
 
 import org.agorava.core.api.MultiServicesManager;
-import org.agorava.core.api.SocialNetworkServicesHub;
+import org.agorava.core.api.SocialMediaApiHub;
 import org.agorava.core.api.oauth.OAuthService;
 import org.agorava.core.api.oauth.OAuthSession;
 import org.agorava.core.cdi.oauth.OAuthSessionImpl;
@@ -55,7 +55,7 @@ public class MultiServicesManagerImpl implements MultiServicesManager, Serializa
 
     @Inject
     @Any
-    private Instance<SocialNetworkServicesHub> hubInstances;
+    private Instance<SocialMediaApiHub> hubInstances;
 
     @Inject
     private AgoravaExtension socialConfig;
@@ -91,7 +91,7 @@ public class MultiServicesManagerImpl implements MultiServicesManager, Serializa
     }
 
     @Override
-    public SocialNetworkServicesHub getCurrentServiceHub() {
+    public SocialMediaApiHub getCurrentServiceHub() {
         return hubInstances.select(getCurrentSession().getServiceQualifier()).get();
     }
 

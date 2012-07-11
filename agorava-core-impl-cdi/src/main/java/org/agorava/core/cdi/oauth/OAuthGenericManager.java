@@ -16,11 +16,11 @@
 
 package org.agorava.core.cdi.oauth;
 
-import org.agorava.core.api.SocialNetworkServicesHub;
+import org.agorava.core.api.SocialMediaApiHub;
+import org.agorava.core.api.oauth.ApplicationSettings;
 import org.agorava.core.api.oauth.OAuthProvider;
 import org.agorava.core.api.oauth.OAuthService;
 import org.agorava.core.api.oauth.OAuthSession;
-import org.agorava.core.api.oauth.OAuthSettings;
 import org.agorava.core.cdi.scribe.OAuthProviderScribe;
 import org.agorava.core.utils.AgoravaContext;
 import org.jboss.solder.bean.generic.ApplyScope;
@@ -47,7 +47,7 @@ public class OAuthGenericManager {
 
     @Inject
     @Generic
-    SocialNetworkServicesHub servicesHub;
+    SocialMediaApiHub servicesHub;
 
     @Inject
     @Generic
@@ -71,7 +71,7 @@ public class OAuthGenericManager {
         return service;
     }
 
-    OAuthSettings settings;
+    ApplicationSettings settings;
 
     @Produces
     @ApplyScope
@@ -99,7 +99,7 @@ public class OAuthGenericManager {
         if (!"oob".equals(callback) && (!callback.startsWith("http://") || callback.startsWith("https://")))
             callback = AgoravaContext.webAbsolutePath + callback;
         String scope = app.scope();
-        settings = new OAuthSettingsImpl(qual, apiKey, apiSecret, callback, scope);
+        settings = new ApplicationSettingsImpl(servicesHub.getSocialMediaName(), apiKey, apiSecret, callback, scope);
     }
 
 }

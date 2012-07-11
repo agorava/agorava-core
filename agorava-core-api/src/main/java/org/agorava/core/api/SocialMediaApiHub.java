@@ -31,7 +31,7 @@ import org.agorava.core.api.oauth.OAuthSession;
  *
  * @author Antoine Sabot-Durand
  */
-public interface SocialNetworkServicesHub extends OAuthServiceAware, SocialMediaAware {
+public interface SocialMediaApiHub extends OAuthServiceAware, SocialMediaAware {
 
     /**
      * @return the profile of the connected user
@@ -57,5 +57,10 @@ public interface SocialNetworkServicesHub extends OAuthServiceAware, SocialMedia
      * @return the parameter name with which Social Media return verifier to achieve OAuth cycle
      */
     public String getVerifierParamName();
+
+    /**
+     * @return the name of the social media manage by this hub
+     */
+    public String getSocialMediaName();
 
 }

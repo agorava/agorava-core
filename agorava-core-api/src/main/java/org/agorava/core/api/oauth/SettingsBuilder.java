@@ -14,29 +14,16 @@
  * limitations under the License.
  */
 
-package org.agorava.core.cdi.oauth;
-
-import org.agorava.core.api.SocialMediaApiHub;
-import org.jboss.solder.bean.generic.GenericType;
-
-import java.lang.annotation.Retention;
-
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+package org.agorava.core.api.oauth;
 
 /**
+ * Class implementing this interface are builder for OAuth Application Settings
+ *
  * @author Antoine Sabot-Durand
  */
-@Retention(RUNTIME)
-@GenericType(SocialMediaApiHub.class)
-public @interface OAuthApplication {
+public interface SettingsBuilder {
 
+    ApplicationSettings buildSettings();
 
-    String apiKey();
-
-    String apiSecret();
-
-    String callback() default "oob";
-
-    String scope() default "";
 
 }

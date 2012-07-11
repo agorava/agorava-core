@@ -17,7 +17,6 @@
 package org.agorava.core.api.oauth;
 
 import java.io.Serializable;
-import java.lang.annotation.Annotation;
 
 /**
  * Interface for model containing settings needed to access to an OAuth 1.0a and 2.0 service.
@@ -27,7 +26,7 @@ import java.lang.annotation.Annotation;
  * @author Antoine Sabot-Durand
  * @see OAuthService
  */
-public interface OAuthSettings extends Serializable {
+public interface ApplicationSettings extends Serializable {
 
     /**
      * @return the key consumer key for the OAuth service
@@ -72,16 +71,7 @@ public interface OAuthSettings extends Serializable {
     /**
      * @return the name of the service
      */
-    public String getServiceName();
+    public String getSocialMediaName();
 
-    /**
-     * @return the annotation of the Social Media
-     */
-    public Annotation getServiceQualifier();
-
-    /**
-     * @param serviceQualifier
-     */
-    public void setServiceQualifier(Annotation serviceQualifier);
 
 }

@@ -85,6 +85,6 @@ public interface MultiServicesManager extends Serializable {
     /**
      * @return the currentServiceHub
      */
-    SocialNetworkServicesHub getCurrentServiceHub();
+    SocialMediaApiHub getCurrentServiceHub();
 
 }

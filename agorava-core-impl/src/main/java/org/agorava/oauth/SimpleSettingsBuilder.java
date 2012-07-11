@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package org.agorava.core.api.oauth;
+package org.agorava.oauth;
 
 /**
- * Class implementing this interface are builder for OAuth Application Settings
+ * This builder create an {@link org.agorava.core.api.oauth.ApplicationSettings} with OAuth Application params
  *
  * @author Antoine Sabot-Durand
  */
-public interface OAuthSettingsBuilder {
-
-    OAuthSettings buildSettings();
+public class SimpleSettingsBuilder {
 
 
 }

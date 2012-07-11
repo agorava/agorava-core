@@ -17,9 +17,9 @@
 package org.agorava.core.cdi.scribe;
 
 import org.agorava.core.api.exception.AgoravaException;
+import org.agorava.core.api.oauth.ApplicationSettings;
 import org.agorava.core.api.oauth.OAuthProvider;
 import org.agorava.core.api.oauth.OAuthRequest;
-import org.agorava.core.api.oauth.OAuthSettings;
 import org.agorava.core.api.oauth.OAuthToken;
 import org.agorava.core.api.rest.RestVerb;
 import org.scribe.builder.ServiceBuilder;
@@ -69,9 +69,9 @@ public class OAuthProviderScribe implements OAuthProvider {
         return getService().getAuthorizationUrl(extractToken(tok));
     }
 
-    public OAuthProviderScribe(OAuthSettings settings) {
+    public OAuthProviderScribe(ApplicationSettings settings) {
         super();
-        Class<? extends Api> apiClass = getApiClass(settings.getServiceName()); // TODO : should get API class differently !
+        Class<? extends Api> apiClass = getApiClass(settings.getSocialMediaName()); // TODO : should get API class differently !
         ServiceBuilder serviceBuilder = new ServiceBuilder().provider(apiClass).apiKey(settings.getApiKey())
                 .apiSecret(settings.getApiSecret());
         if (settings.getCallback() != null && !("".equals(settings.getCallback())))

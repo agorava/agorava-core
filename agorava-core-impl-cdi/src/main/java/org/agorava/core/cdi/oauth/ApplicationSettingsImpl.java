@@ -16,17 +16,13 @@
 
 package org.agorava.core.cdi.oauth;
 
-import org.agorava.core.api.oauth.OAuthSettings;
-
-import java.lang.annotation.Annotation;
-
-import static org.agorava.core.cdi.AgoravaExtension.getServicesToQualifier;
+import org.agorava.core.api.oauth.ApplicationSettings;
 
 /**
  * @author Antoine Sabot-Durand
  */
 
-public class OAuthSettingsImpl implements OAuthSettings {
+public class ApplicationSettingsImpl implements ApplicationSettings {
 
     private static final long serialVersionUID = -8018722725677732853L;
 
@@ -38,7 +34,7 @@ public class OAuthSettingsImpl implements OAuthSettings {
 
     private String scope;
 
-    private Annotation serviceQualifier;
+    private String name;
 
     public String getApiKey() {
         return apiKey;
@@ -79,39 +75,24 @@ public class OAuthSettingsImpl implements OAuthSettings {
     }
 
     @Override
-    public String getServiceName() {
-        return getServicesToQualifier().get(serviceQualifier);
+    public String getSocialMediaName() {
+        return name;
     }
 
-    OAuthSettingsImpl(Annotation serviceQualifier, String apiKey, String apiSecret, String callback, String scope) {
+    ApplicationSettingsImpl(String name, String apiKey, String apiSecret, String callback, String scope) {
         super();
         this.apiKey = apiKey;
         this.apiSecret = apiSecret;
         this.callback = callback;
         this.scope = scope;
-        this.serviceQualifier = serviceQualifier;
+        this.name = name;
     }
 
     @Override
     public String toString() {
-        return "OAuthSettingsImpl [apiKey=" + apiKey + ", apiSecret=" + apiSecret + ", callback=" + callback
-                + ", scope=" + scope + ", serviceName=" + getServiceName() + "]";
+        return "ApplicationSettingsImpl [apiKey=" + apiKey + ", apiSecret=" + apiSecret + ", callback=" + callback
+                + ", scope=" + scope + ", serviceName=" + getSocialMediaName() + "]";
     }
 
-    /**
-     * @return the serviceQualifier
-     */
-    @Override
-    public Annotation getServiceQualifier() {
-        return serviceQualifier;
-    }
-
-    /**
-     * @param serviceQualifier the serviceQualifier to set
-     */
-    @Override
-    public void setServiceQualifier(Annotation serviceQualifier) {
-        this.serviceQualifier = serviceQualifier;
-    }
 
 }
