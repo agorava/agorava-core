@@ -19,7 +19,7 @@ package org.agorava.core.cdi;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import org.agorava.core.api.ServiceRelated;
-import org.agorava.core.api.SocialNetworkServicesHub;
+import org.agorava.core.api.SocialMediaApiHub;
 import org.agorava.core.cdi.oauth.OAuthApplication;
 import org.apache.commons.lang3.StringUtils;
 import org.jboss.solder.logging.Logger;
@@ -56,9 +56,13 @@ public class AgoravaExtension implements Extension {
      * @param pbean
      * @param beanManager
      */
-    public void processHubProducer(@Observes ProcessProducer<?, SocialNetworkServicesHub> pbean, BeanManager beanManager) {
+    public void processApiHubProducer(@Observes ProcessProducer<?, SocialMediaApiHub> pbean, BeanManager beanManager) {
         Annotated annotated = pbean.getAnnotatedMember();
         log.infof("Found services hub %s", annotated.getBaseType());
+        internalProcessApiHub(annotated);
+    }
+
+    private void internalProcessApiHub(Annotated annotated) {
         Set<Annotation> qualifiers = AnnotationInspector.getAnnotations(annotated, ServiceRelated.class);
         servicesQualifiersAvailable.addAll(qualifiers);
         if (annotated.isAnnotationPresent(OAuthApplication.class)) {
@@ -74,15 +78,10 @@ public class AgoravaExtension implements Extension {
      * @param pbean
      * @param beanManager
      */
-    public void processSettingsBeans(@Observes ProcessBean<SocialNetworkServicesHub> pbean, BeanManager beanManager) {
+    public void processApiHubBeans(@Observes ProcessBean<SocialMediaApiHub> pbean, BeanManager beanManager) {
         Annotated annotated = pbean.getAnnotated();
         log.infof("Found services hub %s", annotated.getBaseType());
-        Set<Annotation> qualifiers = AnnotationInspector.getAnnotations(annotated, ServiceRelated.class);
-        servicesQualifiersAvailable.addAll(qualifiers);
-        if (annotated.isAnnotationPresent(OAuthApplication.class)) {
-            log.debug("Bean is configured");
-            servicesQualifiersConfigured.addAll(AnnotationInspector.getAnnotations(annotated, ServiceRelated.class));
-        }
+        internalProcessApiHub(annotated);
     }
 
     public Set<String> getSocialRelated() {
