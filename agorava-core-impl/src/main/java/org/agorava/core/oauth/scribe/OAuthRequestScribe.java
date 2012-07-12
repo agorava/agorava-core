@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.agorava.core.cdi.scribe;
+package org.agorava.core.oauth.scribe;
 
 import org.agorava.core.api.exception.AgoravaRestException;
 import org.agorava.core.api.oauth.OAuthRequest;

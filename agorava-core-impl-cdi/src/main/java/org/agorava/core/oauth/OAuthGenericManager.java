@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package org.agorava.core.cdi.oauth;
+package org.agorava.core.oauth;
 
 import org.agorava.core.api.SocialMediaApiHub;
 import org.agorava.core.api.oauth.ApplicationSettings;
 import org.agorava.core.api.oauth.OAuthProvider;
 import org.agorava.core.api.oauth.OAuthService;
 import org.agorava.core.api.oauth.OAuthSession;
-import org.agorava.core.cdi.scribe.OAuthProviderScribe;
+import org.agorava.core.oauth.scribe.OAuthProviderScribe;
 import org.agorava.core.utils.AgoravaContext;
 import org.jboss.solder.bean.generic.ApplyScope;
 import org.jboss.solder.bean.generic.Generic;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.agorava.core.cdi.oauth;
+package org.agorava.core.oauth;
 
 import org.agorava.core.api.JsonMapper;
 import org.agorava.core.api.event.OAuthComplete;

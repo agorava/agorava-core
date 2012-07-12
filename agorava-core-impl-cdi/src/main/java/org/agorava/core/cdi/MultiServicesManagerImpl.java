@@ -21,7 +21,7 @@ import org.agorava.core.api.MultiServicesManager;
 import org.agorava.core.api.SocialMediaApiHub;
 import org.agorava.core.api.oauth.OAuthService;
 import org.agorava.core.api.oauth.OAuthSession;
-import org.agorava.core.cdi.oauth.OAuthSessionImpl;
+import org.agorava.core.oauth.OAuthSessionImpl;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;

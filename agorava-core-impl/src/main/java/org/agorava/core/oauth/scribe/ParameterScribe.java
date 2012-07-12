@@ -16,7 +16,7 @@
 /**
  *
  */
-package org.agorava.core.cdi.scribe;
+package org.agorava.core.oauth.scribe;
 
 import org.agorava.core.api.rest.RestParameter;
 import org.scribe.model.Parameter;

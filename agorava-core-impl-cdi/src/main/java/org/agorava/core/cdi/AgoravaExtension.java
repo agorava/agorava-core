@@ -21,7 +21,7 @@ import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Iterables;
 import org.agorava.core.api.ServiceRelated;
 import org.agorava.core.api.SocialMediaApiHub;
-import org.agorava.core.cdi.oauth.OAuthApplication;
+import org.agorava.core.oauth.OAuthApplication;
 import org.jboss.solder.logging.Logger;
 import org.jboss.solder.reflection.AnnotationInspector;
 

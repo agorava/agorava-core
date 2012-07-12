@@ -14,14 +14,29 @@
  * limitations under the License.
  */
 
-package org.agorava.oauth;
+package org.agorava.core.oauth;
+
+import org.agorava.core.api.SocialMediaApiHub;
+import org.jboss.solder.bean.generic.GenericType;
+
+import java.lang.annotation.Retention;
+
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * This builder create an {@link org.agorava.core.api.oauth.ApplicationSettings} with OAuth Application params
- *
  * @author Antoine Sabot-Durand
  */
-public class SimpleSettingsBuilder {
+@Retention(RUNTIME)
+@GenericType(SocialMediaApiHub.class)
+public @interface OAuthApplication {
 
+
+    String apiKey();
+
+    String apiSecret();
+
+    String callback() default "oob";
+
+    String scope() default "";
 
 }

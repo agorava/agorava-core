@@ -14,5 +14,5 @@
  * limitations under the License.
  */
 
-package org.agorava.core.cdi.scribe;
+package org.agorava.core.oauth.scribe;
 

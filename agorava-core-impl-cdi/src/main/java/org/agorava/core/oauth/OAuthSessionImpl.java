@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.agorava.core.cdi.oauth;
+package org.agorava.core.oauth;
 
 import org.agorava.core.api.UserProfile;
 import org.agorava.core.api.oauth.OAuthSession;
