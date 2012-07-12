@@ -2,15 +2,15 @@
 
 
 ##Introduction
-Agorava Provides CDI Beans and extensions to interact with major social network (SN). 
+Agorava Provides CDI Beans and extensions to interact with major social media (SM).
 
-Agorava core contains SN independant services like
+Agorava core contains SN independent services like
 
-+ OAuth connectors to authentify with an OAuth providers
++ OAuth connectors to authenticate with an OAuth providers
 + Support for generic Authentication and user profile
-+ Support for multi-account (multi SN and multi session for the same SN)
++ Support for multi-account (multi SM and multi session for the same SM)
 
-Core also contains provides implemntations for these service.
+Core also contains provides implementations for these service.
 The only implementation is based on CDI right now.
 
 ##CDI implementation
@@ -23,7 +23,7 @@ For more information, see the [Agorava Website](http://agorava.org).
 
 ##Building
 Agorava core relies on [Agorava Parent](https://github.com/agorava/parent) so you should have intalled this resource to your local maven repo
-(Agorava is not availbale in a public maven repo yet). After that you can build (and install in your local maven repo) Agorava Core with the following command
+(Agorava is not available in a public maven repo yet). After that you can build (and install in your local maven repo) Agorava Core with the following command
 
     mvn clean install
 
