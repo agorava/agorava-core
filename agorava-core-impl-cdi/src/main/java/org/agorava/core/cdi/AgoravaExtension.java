@@ -18,19 +18,18 @@ package org.agorava.core.cdi;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import com.google.common.collect.Iterables;
 import org.agorava.core.api.ServiceRelated;
 import org.agorava.core.api.SocialMediaApiHub;
 import org.agorava.core.cdi.oauth.OAuthApplication;
-import org.apache.commons.lang3.StringUtils;
 import org.jboss.solder.logging.Logger;
 import org.jboss.solder.reflection.AnnotationInspector;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.*;
 import java.lang.annotation.Annotation;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newHashSet;
@@ -49,6 +48,21 @@ public class AgoravaExtension implements Extension {
 
     private static final Logger log = Logger.getLogger(AgoravaExtension.class);
 
+    private void internalProcessApiHub(Annotated annotated) {
+        log.infof("Found services hub %s", annotated.getBaseType());
+
+        Set<Annotation> qualifiers = AnnotationInspector.getAnnotations(annotated, ServiceRelated.class);
+        servicesQualifiersAvailable.addAll(qualifiers);
+        if (annotated.isAnnotationPresent(OAuthApplication.class)) {
+            log.debug("Bean is configured");
+            servicesQualifiersConfigured.addAll(qualifiers);
+        }
+    }
+
+    public void launchExtension(@Observes BeforeBeanDiscovery bbd) {
+        log.info("Starting Agorava Framework initialization");
+    }
+
     /**
      * This observer methods build the list of existing Qualifiers having the ServiceRelated meta Annotation on configured
      * service (having the {@link OAuthApplication} Annotation)
@@ -58,18 +72,9 @@ public class AgoravaExtension implements Extension {
      */
     public void processApiHubProducer(@Observes ProcessProducer<?, SocialMediaApiHub> pbean, BeanManager beanManager) {
         Annotated annotated = pbean.getAnnotatedMember();
-        log.infof("Found services hub %s", annotated.getBaseType());
         internalProcessApiHub(annotated);
     }
 
-    private void internalProcessApiHub(Annotated annotated) {
-        Set<Annotation> qualifiers = AnnotationInspector.getAnnotations(annotated, ServiceRelated.class);
-        servicesQualifiersAvailable.addAll(qualifiers);
-        if (annotated.isAnnotationPresent(OAuthApplication.class)) {
-            log.debug("Bean is configured");
-            servicesQualifiersConfigured.addAll(AnnotationInspector.getAnnotations(annotated, ServiceRelated.class));
-        }
-    }
 
     /**
      * This observer methods build the list of existing Qualifiers having the ServiceRelated meta Annotation on configured
@@ -80,7 +85,6 @@ public class AgoravaExtension implements Extension {
      */
     public void processApiHubBeans(@Observes ProcessBean<SocialMediaApiHub> pbean, BeanManager beanManager) {
         Annotated annotated = pbean.getAnnotated();
-        log.infof("Found services hub %s", annotated.getBaseType());
         internalProcessApiHub(annotated);
     }
 
@@ -88,26 +92,22 @@ public class AgoravaExtension implements Extension {
         return servicesNames;
     }
 
-    public void processAfterDeploymentValidation(@Observes AfterDeploymentValidation adv) {
-        log.info("validation phase");
-        for (Annotation qual : servicesQualifiersAvailable) {
-            String path = qual.annotationType().getName();
-            String name = "";
-            log.infof("Found service qualifier : %s", path);
-            try {
-                ResourceBundle bundle = ResourceBundle.getBundle(path);
-                name = bundle.getString("service.name");
-            } catch (MissingResourceException e) {
-                log.warnf("No properties configuration file found for %s creating default service name", path);
-                name = StringUtils.substringAfterLast(path, ".");
-            } finally {
-                servicesToQualifier.put(qual, name);
-            }
+    public void processAfterDeploymentValidation(@Observes AfterDeploymentValidation adv, BeanManager beanManager) {
 
+        CreationalContext ctx = beanManager.createCreationalContext(null);
+
+        for (Annotation qual : servicesQualifiersAvailable) {
+            Bean beanSoc = Iterables.getLast(beanManager.getBeans(SocialMediaApiHub.class, qual));
+            SocialMediaApiHub smah = (SocialMediaApiHub) beanManager.getReference(beanSoc, beanSoc.getBeanClass(), ctx);
+            String name = smah.getSocialMediaName();
+            servicesToQualifier.put(qual, name);
         }
+        ctx.release();
         for (Annotation annot : servicesQualifiersConfigured) {
             servicesNames.add(servicesToQualifier.get(annot));
         }
+
+        log.info("Agorava initialization complete");
 
     }
 
