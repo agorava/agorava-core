@@ -44,26 +44,6 @@ public interface ApplicationSettings extends Serializable {
     public String getCallback();
 
     /**
-     * @param callback call back URL registered for this OAuth service
-     */
-    public void setCallback(String callback);
-
-    /**
-     * @param apiSecret consumer secret for this OAuth service
-     */
-    public void setApiSecret(String apiSecret);
-
-    /**
-     * @param apiKey consumer key for this OAuth service
-     */
-    public void setApiKey(String apiKey);
-
-    /**
-     * @param scope scope requested for this OAuth 2.0 service
-     */
-    public void setScope(String scope);
-
-    /**
      * @return the scope requested
      */
     public String getScope();

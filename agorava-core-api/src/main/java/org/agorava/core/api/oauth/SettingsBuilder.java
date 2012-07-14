@@ -16,14 +16,57 @@
 
 package org.agorava.core.api.oauth;
 
+import org.agorava.core.api.exception.AgoravaException;
+
+import java.lang.reflect.Field;
+
 /**
- * Class implementing this interface are builder for OAuth Application Settings
+ * Abstract builder for {@link ApplicationSettings}
  *
  * @author Antoine Sabot-Durand
  */
-public interface SettingsBuilder {
+public abstract class SettingsBuilder {
 
-    ApplicationSettings buildSettings();
+    private SettingsParam[] params;
+
+    /**
+     * Load builder params with an array of {@link SettingsParam}. This method can be used when params for {@link ApplicationSettings}
+     * are defined through an annotation.
+     *
+     * @param params
+     * @return the current SettingsBuilder
+     */
+    public SettingsBuilder setParams(SettingsParam[] params) {
+        Class clazz = this.getClass();
+        for (SettingsParam param : params) {
+            Field field = null;
+            try {
+                field = clazz.getField(param.name());
+                field.set(this, param.value());
+            } catch (Exception e) {
+                throw new AgoravaException("Unable to set field " + param.name() + " in class " + clazz + " with value "
+                        + param.value(), e);
+            }
+
+        }
+        return this;
+    }
+
+    /**
+     * The name of the Social Media for which the settings are intended
+     *
+     * @param name
+     * @return the current SettingsBuilder
+     */
+    public abstract SettingsBuilder setName(String name);
+
+
+    /**
+     * Builds the {@link ApplicationSettings}
+     *
+     * @return the application settings
+     */
+    public abstract ApplicationSettings build();
 
 
 }

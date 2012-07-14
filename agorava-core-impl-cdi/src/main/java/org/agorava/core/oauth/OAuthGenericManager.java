@@ -17,12 +17,9 @@
 package org.agorava.core.oauth;
 
 import org.agorava.core.api.SocialMediaApiHub;
-import org.agorava.core.api.oauth.ApplicationSettings;
-import org.agorava.core.api.oauth.OAuthProvider;
-import org.agorava.core.api.oauth.OAuthService;
-import org.agorava.core.api.oauth.OAuthSession;
+import org.agorava.core.api.exception.AgoravaException;
+import org.agorava.core.api.oauth.*;
 import org.agorava.core.oauth.scribe.OAuthProviderScribe;
-import org.agorava.core.utils.AgoravaContext;
 import org.jboss.solder.bean.generic.ApplyScope;
 import org.jboss.solder.bean.generic.Generic;
 import org.jboss.solder.bean.generic.GenericConfiguration;
@@ -93,13 +90,15 @@ public class OAuthGenericManager {
     void init() {
         qual = servicesHub.getQualifier();
         log.debugf("in OAuthGenericManager creating Hub for %s", qual.toString());
-        String apiKey = app.apiKey();
-        String apiSecret = app.apiSecret();
-        String callback = app.callback().toLowerCase();
-        if (!"oob".equals(callback) && (!callback.startsWith("http://") || callback.startsWith("https://")))
-            callback = AgoravaContext.webAbsolutePath + callback;
-        String scope = app.scope();
-        settings = new ApplicationSettingsImpl(servicesHub.getSocialMediaName(), apiKey, apiSecret, callback, scope);
+        Class<? extends SettingsBuilder> builderClass = app.builder();
+        SettingsBuilder builder = null;
+        try {
+            builder = builderClass.newInstance();
+        } catch (Exception e) {
+            throw new AgoravaException("Unable to create Settings Builder with class " + builderClass, e);
+        }
+
+        settings = builder.setName(servicesHub.getSocialMediaName()).setParams(app.params()).build();
     }
 
 }

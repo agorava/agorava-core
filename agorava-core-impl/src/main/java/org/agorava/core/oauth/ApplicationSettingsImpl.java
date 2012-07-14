@@ -26,32 +26,23 @@ public class ApplicationSettingsImpl implements ApplicationSettings {
 
     private static final long serialVersionUID = -8018722725677732853L;
 
-    private String apiKey;
+    private final String apiKey;
 
-    private String apiSecret;
+    private final String apiSecret;
 
-    private String callback;
+    private final String callback;
 
-    private String scope;
+    private final String scope;
 
-    private String name;
+    private final String name;
 
     public String getApiKey() {
         return apiKey;
     }
 
     @Override
-    public void setApiKey(String apiKey) {
-        this.apiKey = apiKey;
-    }
-
     public String getApiSecret() {
         return apiSecret;
-    }
-
-    @Override
-    public void setApiSecret(String apiSecret) {
-        this.apiSecret = apiSecret;
     }
 
     @Override
@@ -59,15 +50,6 @@ public class ApplicationSettingsImpl implements ApplicationSettings {
         return callback;
     }
 
-    @Override
-    public void setCallback(String callback) {
-        this.callback = callback;
-    }
-
-    @Override
-    public void setScope(String scope) {
-        this.scope = scope;
-    }
 
     @Override
     public String getScope() {
