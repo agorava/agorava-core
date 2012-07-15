@@ -27,12 +27,17 @@ import org.agorava.core.utils.AgoravaContext;
  */
 public class SimpleSettingsBuilder extends SettingsBuilder {
 
+    public static final String NAME = "name";
+    public static final String API_KEY = "apiKey";
+    public static final String API_SECRET = "apiSecret";
+    public static final String CALLBACK = "callback";
+    public static final String SCOPE = "scope";
 
-    private String name;
-    private String apiKey;
-    private String apiSecret;
-    private String callback = "oob";
-    private String scope = "";
+    protected String name;
+    protected String apiKey;
+    protected String apiSecret;
+    protected String callback = "oob";
+    protected String scope = "";
 
     @Override
     public SimpleSettingsBuilder setName(String name) {

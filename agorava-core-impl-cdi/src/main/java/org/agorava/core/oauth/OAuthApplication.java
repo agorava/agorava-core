@@ -17,8 +17,8 @@
 package org.agorava.core.oauth;
 
 import org.agorava.core.api.SocialMediaApiHub;
+import org.agorava.core.api.oauth.Param;
 import org.agorava.core.api.oauth.SettingsBuilder;
-import org.agorava.core.api.oauth.SettingsParam;
 import org.jboss.solder.bean.generic.GenericType;
 
 import java.lang.annotation.Retention;
@@ -35,6 +35,6 @@ public @interface OAuthApplication {
 
     Class<? extends SettingsBuilder> builder() default SimpleSettingsBuilder.class;
 
-    SettingsParam[] params();
+    Param[] params();
 
 }

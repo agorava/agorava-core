@@ -27,21 +27,22 @@ import java.lang.reflect.Field;
  */
 public abstract class SettingsBuilder {
 
-    private SettingsParam[] params;
+    private Param[] params;
 
     /**
-     * Load builder params with an array of {@link SettingsParam}. This method can be used when params for {@link ApplicationSettings}
+     * Load builder params with an array of {@link Param}. This method can be used when params for {@link ApplicationSettings}
      * are defined through an annotation.
      *
      * @param params
      * @return the current SettingsBuilder
      */
-    public SettingsBuilder setParams(SettingsParam[] params) {
+    public SettingsBuilder setParams(Param[] params) {
         Class clazz = this.getClass();
-        for (SettingsParam param : params) {
+        for (Param param : params) {
             Field field = null;
             try {
-                field = clazz.getField(param.name());
+                field = clazz.getDeclaredField(param.name());
+                field.setAccessible(true);
                 field.set(this, param.value());
             } catch (Exception e) {
                 throw new AgoravaException("Unable to set field " + param.name() + " in class " + clazz + " with value "

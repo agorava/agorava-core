@@ -27,7 +27,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target({})
 @Retention(RUNTIME)
-public @interface SettingsParam {
+public @interface Param {
 
     String name();
 
