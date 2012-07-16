@@ -98,7 +98,7 @@ public class OAuthGenericManager {
             throw new AgoravaException("Unable to create Settings Builder with class " + builderClass, e);
         }
 
-        settings = builder.setName(servicesHub.getSocialMediaName()).setParams(app.params()).build();
+        settings = builder.name(servicesHub.getSocialMediaName()).params(app.params()).build();
     }
 
 }

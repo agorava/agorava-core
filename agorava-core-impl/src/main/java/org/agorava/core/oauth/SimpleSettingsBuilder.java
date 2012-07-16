@@ -34,30 +34,31 @@ public class SimpleSettingsBuilder extends SettingsBuilder {
     protected String scope = "";
 
     @Override
-    public SimpleSettingsBuilder setName(String name) {
+    public SimpleSettingsBuilder name(String name) {
         this.name = name;
         return this;
     }
 
-    public SimpleSettingsBuilder setApiKey(String apiKey) {
+    public SimpleSettingsBuilder apiKey(String apiKey) {
         this.apiKey = apiKey;
         return this;
     }
 
-    public SimpleSettingsBuilder setApiSecret(String apiSecret) {
+    public SimpleSettingsBuilder apiSecret(String apiSecret) {
         this.apiSecret = apiSecret;
         return this;
     }
 
-    public SimpleSettingsBuilder setCallback(String callback) {
+    public SimpleSettingsBuilder callback(String callback) {
         this.callback = callback;
         return this;
     }
 
-    public SimpleSettingsBuilder setScope(String scope) {
+    public SimpleSettingsBuilder scope(String scope) {
         this.scope = scope;
         return this;
     }
+
 
     @Override
     public ApplicationSettings build() {

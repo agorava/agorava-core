@@ -18,7 +18,7 @@ package org.agorava.core.api.oauth;
 
 import org.agorava.core.api.exception.AgoravaException;
 
-import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 /**
  * Abstract builder for {@link ApplicationSettings}
@@ -41,19 +41,10 @@ public abstract class SettingsBuilder {
      * @param params
      * @return the current SettingsBuilder
      */
-    public SettingsBuilder setParams(Param[] params) {
+    public SettingsBuilder params(Param[] params) {
         Class clazz = this.getClass();
         for (Param param : params) {
-            Field field = null;
-            try {
-                field = clazz.getDeclaredField(param.name());
-                field.setAccessible(true);
-                field.set(this, param.value());
-            } catch (Exception e) {
-                throw new AgoravaException("Unable to set field " + param.name() + " in class " + clazz + " with value "
-                        + param.value(), e);
-            }
-
+            invokeSetter(param.name(), param.value());
         }
         return this;
     }
@@ -64,7 +55,7 @@ public abstract class SettingsBuilder {
      * @param name
      * @return the current SettingsBuilder
      */
-    public abstract SettingsBuilder setName(String name);
+    public abstract SettingsBuilder name(String name);
 
 
     /**
@@ -73,6 +64,18 @@ public abstract class SettingsBuilder {
      * @return the application settings
      */
     public abstract ApplicationSettings build();
+
+    protected void invokeSetter(String k, String value) {
+        Method setter;
+        Class clazz = this.getClass();
+        try {
+            setter = clazz.getMethod(k, String.class);
+            setter.invoke(this, value);
+        } catch (Exception e) {
+            throw new AgoravaException("Unable to invoke setter for " + k + " in class " + clazz, e);
+        }
+
+    }
 
 
 }
