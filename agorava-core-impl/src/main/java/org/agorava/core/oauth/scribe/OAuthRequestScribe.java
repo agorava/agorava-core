@@ -70,6 +70,7 @@ public class OAuthRequestScribe implements OAuthRequest {
             throw new AgoravaRestException(request.getUrl(), e);
         }
         if (resp.getCode() >= 400)
+            //FIXME : when no connection the following triggers a NPE
             throw new AgoravaRestException(resp.getCode(), request.getUrl(), resp.getHeaders().toString());
         return resp;
     }
