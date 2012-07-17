@@ -63,7 +63,7 @@ public class OAuthRequestScribe implements OAuthRequest {
     @Override
     public RestResponse send() {
 
-        RestResponse resp = null;
+        RestResponse resp;
         try {
             resp = new RestResponseScribe(request.send(), request.getUrl());
         } catch (OAuthException e) {
@@ -185,7 +185,7 @@ public class OAuthRequestScribe implements OAuthRequest {
     }
 
     @Override
-    public void addBodyParameters(Map<String, ? extends Object> toAdd) {
+    public void addBodyParameters(Map<String, ?> toAdd) {
         for (String key : toAdd.keySet()) {
             addBodyParameter(key, toAdd.get(key).toString());
 

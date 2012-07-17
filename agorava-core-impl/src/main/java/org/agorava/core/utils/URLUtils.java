@@ -27,9 +27,9 @@ import org.agorava.core.api.exception.AgoravaException;
 import org.apache.commons.beanutils.BeanMap;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
 
 import static com.google.common.collect.Maps.newHashMap;
 
@@ -59,18 +59,10 @@ public class URLUtils {
 
     private static final String ERROR_MSG = String.format("Cannot find specified encoding: %s", UTF_8);
 
-    private static final Set<EncodingRule> ENCODING_RULES;
 
     public static Joiner commaJoiner = Joiner.on(MULTI_VALUE_SEPARATOR).skipNulls();
-    private static MapJoiner queryMapJoiner = Joiner.on(PARAM_SEPARATOR).withKeyValueSeparator(PAIR_SEPARATOR);
+    private static final MapJoiner queryMapJoiner = Joiner.on(PARAM_SEPARATOR).withKeyValueSeparator(PAIR_SEPARATOR);
 
-    static {
-        Set<EncodingRule> rules = new HashSet<EncodingRule>();
-        rules.add(new EncodingRule("*", "%2A"));
-        rules.add(new EncodingRule("+", "%20"));
-        rules.add(new EncodingRule("%7E", "~"));
-        ENCODING_RULES = Collections.unmodifiableSet(rules);
-    }
 
     /**
      * Turns a map into a form-urlencoded string
@@ -78,36 +70,23 @@ public class URLUtils {
      * @param parameters any map
      * @return form-url-encoded string
      */
-    public static String formURLEncodeMap(Map<String, ? extends Object> parameters) {
+    private static String formURLEncodeMap(Map<String, ?> parameters) {
         return (parameters.size() <= 0) ? EMPTY_STRING : doFormUrlEncode(parameters);
     }
 
-    public static String doFormUrlEncode(Map<String, ? extends Object> params) {
+    private static String doFormUrlEncode(Map<String, ?> params) {
         Map<String, String> urlEncodeMap = Maps.transformValues(params, new formUrlEncodeFunc());
         return queryMapJoiner.join(urlEncodeMap);
     }
 
-    /**
-     * Percent encodes a string
-     *
-     * @param string plain string
-     * @return percent encoded string
-     */
-    public static String percentEncode(String string) {
-        String encoded = formURLEncode(string);
-        for (EncodingRule rule : ENCODING_RULES) {
-            encoded = rule.apply(encoded);
-        }
-        return encoded;
-    }
 
     /**
      * Translates a string into application/x-www-form-urlencoded format
      *
-     * @param plain
+     * @param string to encode
      * @return form-urlencoded string
      */
-    public static String formURLEncode(String string) {
+    private static String formURLEncode(String string) {
         try {
             return URLEncoder.encode(string, UTF_8);
         } catch (UnsupportedEncodingException uee) {
@@ -115,19 +94,6 @@ public class URLUtils {
         }
     }
 
-    /**
-     * Decodes a application/x-www-form-urlencoded string
-     *
-     * @param string form-urlencoded string
-     * @return plain string
-     */
-    public static String formURLDecode(String string) {
-        try {
-            return URLDecoder.decode(string, UTF_8);
-        } catch (UnsupportedEncodingException uee) {
-            throw new IllegalStateException(ERROR_MSG, uee);
-        }
-    }
 
     /**
      * Append given parameters to the query string of the url
@@ -136,7 +102,7 @@ public class URLUtils {
      * @param parameters any map
      * @return new url with parameters on query string
      */
-    public static String buildUri(String url, Map<String, ? extends Object> parameters) {
+    public static String buildUri(String url, Map<String, ?> parameters) {
         String queryString = URLUtils.formURLEncodeMap(parameters);
         if (queryString.equals(EMPTY_STRING)) {
             return url;
@@ -148,8 +114,8 @@ public class URLUtils {
     }
 
     public static String buildUri(String url, Object pojo) {
-        Multimap<String, Object> pojoMap = pojoToMultiMap(pojo);
-        String queryString = URLUtils.formURLEncodeMap(pojoMap);
+        Multimap<String, Object> pojoMap = copyIntoMultiMap(pojo);
+        String queryString = URLUtils.mapToQueryString(pojoMap);
         if (queryString.equals(EMPTY_STRING)) {
             return url;
         } else {
@@ -159,36 +125,40 @@ public class URLUtils {
         }
     }
 
-    /**
-     * @param pojoMap
-     * @return
-     */
-    private static String formURLEncodeMap(Multimap<String, Object> parameters) {
-        return (parameters.size() <= 0) ? EMPTY_STRING : doFormUrlEncode(parameters);
-    }
 
     /**
-     * @param parameters
-     * @return
+     * @param parameters map to build the query string from
+     * @return a query string corresponding to the map
      */
-    private static String doFormUrlEncode(Multimap<String, Object> parameters) {
+    private static String mapToQueryString(Multimap<String, Object> parameters) {
+        if (parameters.size() == 0)
+            return EMPTY_STRING;
         Multimap<String, String> urlEncodeMap = Multimaps.transformValues(parameters, new formUrlEncodeFunc());
         return queryMapJoiner.join(urlEncodeMap.entries());
     }
 
     /**
-     * @param pojo
-     * @return
+     * Create a {@link Multimap} from a simple bean.
+     * <p/>
+     * All standard properties will become keys in the target map
+     * <p/>
+     * Collection properties will become multi-entries
+     * <p/>
+     * Map properties will trigger an exception
+     *
+     * @param pojo the bean to convert
+     * @return the multimap
+     * @throws AgoravaException if one property is a Map
      */
-    @SuppressWarnings("unchecked")
-    private static Multimap<String, Object> pojoToMultiMap(Object pojo) {
-        Map<String, ? extends Object> pojoMap = new BeanMap(pojo);
+    @SuppressWarnings({"unchecked", "MismatchedQueryAndUpdateOfCollection"})
+    private static Multimap<String, Object> copyIntoMultiMap(Object pojo) {
+        Map<String, ?> pojoMap = new BeanMap(pojo);
         Multimap<String, Object> res = HashMultimap.create();
         for (String key : pojoMap.keySet()) {
             if (!"class".equals(key)) {
                 Object value = pojoMap.get(key);
                 if (value instanceof Map)
-                    throw new IllegalArgumentException("Cannot convert Pojo containing a Map to a Multimap");
+                    throw new AgoravaException("Cannot convert Pojo containing a Map to a Multimap");
                 if (value instanceof Collection) {
                     for (Object elt : (Collection<Object>) value) {
                         res.put(key, elt);
@@ -201,10 +171,11 @@ public class URLUtils {
     }
 
     /**
-     * Append given parameters to the query string of the url
+     * Append given parameter to the query string of the url
      *
-     * @param url    the url to append parameters to
-     * @param params any map
+     * @param url   the url to append parameters to
+     * @param key   name of the parameter ro add
+     * @param value value of the parameter to add
      * @return new url with parameters on query string
      */
     public static String buildUri(String url, String key, String value) {
@@ -217,55 +188,6 @@ public class URLUtils {
         }
     }
 
-    /**
-     * Concats a key-value map into a querystring-like String
-     *
-     * @param params key-value map
-     * @return querystring-like String
-     */
-    // TODO Move to MapUtils
-    public static String concatSortedPercentEncodedParams(Map<String, String> params) {
-        StringBuilder result = new StringBuilder();
-        for (String key : params.keySet()) {
-            result.append(key).append(PAIR_SEPARATOR);
-            result.append(params.get(key)).append(PARAM_SEPARATOR);
-        }
-        return result.toString().substring(0, result.length() - 1);
-    }
-
-    /**
-     * Parses and form-urldecodes a querystring-like string into a map
-     *
-     * @param queryString querystring-like String
-     * @return a map with the form-urldecoded parameters
-     */
-    // TODO Move to MapUtils
-    public static Map<String, String> queryStringToMap(String queryString) {
-        Map<String, String> result = new HashMap<String, String>();
-        if (queryString != null && queryString.length() > 0) {
-            for (String param : queryString.split(PARAM_SEPARATOR)) {
-                String pair[] = param.split(PAIR_SEPARATOR);
-                String key = formURLDecode(pair[0]);
-                String value = pair.length > 1 ? formURLDecode(pair[1]) : EMPTY_STRING;
-                result.put(key, value);
-            }
-        }
-        return result;
-    }
-
-    private static final class EncodingRule {
-        private final String ch;
-        private final String toCh;
-
-        EncodingRule(String ch, String toCh) {
-            this.ch = ch;
-            this.toCh = toCh;
-        }
-
-        String apply(String string) {
-            return string.replace(ch, toCh);
-        }
-    }
 
     public static Map<String, String> buildPagingParametersWithCount(int page, int pageSize, long sinceId, long maxId) {
         Map<String, String> parameters = newHashMap();
@@ -293,34 +215,4 @@ public class URLUtils {
         return parameters;
     }
 
-    /**
-     * This methods looks for place holders with the format {placeholder} in a given String and replace it with the value
-     * associated to the corresponding key in a given map
-     *
-     * @param in
-     * @param values
-     * @return
-     */
-    public static String processPlaceHolders(String in, Map<String, ? extends Object> values) {
-        String out = new String(in);
-
-        for (String key : values.keySet()) {
-            String toLook = "{" + key + "}";
-            String value = values.get(key).toString();
-            try {
-                out.replace(toLook, URLEncoder.encode(value, "UTF-8"));
-            } catch (UnsupportedEncodingException e) {
-                throw new AgoravaException("unable to encode " + value, e);
-            }
-
-        }
-        return out;
-    }
-
-    public static String processPlaceHolders(String in, Object pojo) {
-        @SuppressWarnings("unchecked")
-        Map<String, ? extends Object> paramMap = new BeanMap(pojo);
-        return processPlaceHolders(in, paramMap);
-
-    }
 }

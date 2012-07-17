@@ -51,7 +51,7 @@ public interface RestRequest extends Serializable {
      */
     public void addBodyParameter(String key, String value);
 
-    public void addBodyParameters(Map<String, ? extends Object> toAdd);
+    public void addBodyParameters(Map<String, ?> toAdd);
 
     /**
      * Add a QueryString parameter

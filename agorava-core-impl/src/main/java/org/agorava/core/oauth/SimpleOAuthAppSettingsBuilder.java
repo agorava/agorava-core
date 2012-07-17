@@ -102,7 +102,7 @@ public class SimpleOAuthAppSettingsBuilder implements OAuthAppSettingsBuilder {
      * @param value value to set in the param
      * @throws AgoravaException if the setter can't be found or invoked
      */
-    protected void invokeSetter(String k, String value) {
+    void invokeSetter(String k, String value) {
         Method setter;
         Class<? extends OAuthAppSettingsBuilder> clazz = this.getClass();
         try {

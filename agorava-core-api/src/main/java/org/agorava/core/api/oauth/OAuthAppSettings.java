@@ -19,12 +19,11 @@ package org.agorava.core.api.oauth;
 import java.io.Serializable;
 
 /**
- * Interface for model containing settings needed to access to an OAuth 1.0a and 2.0 service.
- * It's used by {@link OAuthService} to setup
- * connection to OAuth Service
+ * Configuration class containing settings needed to access to an OAuth 1.0a and 2.0 service.
+ * It's used by {@link OAuthProvider} to setup
+ * connection to Social Media
  *
  * @author Antoine Sabot-Durand
- * @see OAuthService
  */
 public interface OAuthAppSettings extends Serializable {
 

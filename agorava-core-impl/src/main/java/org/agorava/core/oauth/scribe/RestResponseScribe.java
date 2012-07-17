@@ -25,7 +25,7 @@ import java.util.Map;
 /**
  * @author Antoine Sabot-Durand
  */
-public class RestResponseScribe implements RestResponse {
+class RestResponseScribe implements RestResponse {
 
     private Response getDelegate() {
         if (delegate == null) {
@@ -41,7 +41,7 @@ public class RestResponseScribe implements RestResponse {
         this.url = url;
     }
 
-    protected RestResponseScribe(Response response, String url) {
+    RestResponseScribe(Response response, String url) {
         delegate = response;
         this.url = url;
     }

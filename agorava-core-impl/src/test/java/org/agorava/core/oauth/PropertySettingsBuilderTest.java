@@ -55,7 +55,7 @@ public class PropertySettingsBuilderTest {
 
         PropertyOAuthAppSettingsBuilder builder = new PropertyOAuthAppSettingsBuilder();
         builder.prefix("test2");
-        OAuthAppSettings settings = builder.build();
+        builder.build();
     }
 
 
@@ -64,7 +64,7 @@ public class PropertySettingsBuilderTest {
 
         PropertyOAuthAppSettingsBuilder builder = new PropertyOAuthAppSettingsBuilder();
         builder.prefix("test3");
-        OAuthAppSettings settings = builder.build();
+        builder.build();
     }
 
     @Test
@@ -86,7 +86,7 @@ public class PropertySettingsBuilderTest {
 
         PropertyOAuthAppSettingsBuilder builder = new PropertyOAuthAppSettingsBuilder();
         builder.bundleName("agorava3");
-        OAuthAppSettings settings = builder.build();
+        builder.build();
 
     }
 }

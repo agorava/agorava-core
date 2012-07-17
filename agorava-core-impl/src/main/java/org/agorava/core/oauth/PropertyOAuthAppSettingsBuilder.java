@@ -39,10 +39,10 @@ import java.util.ResourceBundle;
  */
 public class PropertyOAuthAppSettingsBuilder extends SimpleOAuthAppSettingsBuilder {
 
-    protected String bundleName = "agorava";
-    protected String prefix;
-    protected static final String[] bindingKeys = {API_KEY, API_SECRET};
-    protected static final String[] optionalKeys = {NAME, SCOPE, CALLBACK};
+    private String bundleName = "agorava";
+    private String prefix;
+    private static final String[] bindingKeys = {API_KEY, API_SECRET};
+    private static final String[] optionalKeys = {NAME, SCOPE, CALLBACK};
 
     public static final String BUNDLE_NAME = "bundleName";
     public static final String PREFIX = "prefix";

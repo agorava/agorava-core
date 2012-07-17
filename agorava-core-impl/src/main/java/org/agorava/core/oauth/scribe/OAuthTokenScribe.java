@@ -26,7 +26,7 @@ public class OAuthTokenScribe implements OAuthToken {
 
     private static final long serialVersionUID = 6598671815429418539L;
 
-    protected Token delegate;
+    final Token delegate;
 
     /**
      * @param token
@@ -36,7 +36,7 @@ public class OAuthTokenScribe implements OAuthToken {
         delegate = new Token(token, secret);
     }
 
-    protected OAuthTokenScribe(Token delegate) {
+    OAuthTokenScribe(Token delegate) {
         this.delegate = delegate;
     }
 

@@ -24,7 +24,7 @@ import org.scribe.model.Parameter;
 /**
  * @author Antoine Sabot-Durand
  */
-public class ParameterScribe implements Comparable<ParameterScribe>, RestParameter {
+class ParameterScribe implements Comparable<ParameterScribe>, RestParameter {
 
     private final Parameter delegate;
 

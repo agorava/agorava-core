@@ -27,7 +27,7 @@ import java.util.Map;
 /**
  * @author Antoine Sabot-Durand
  */
-public class ParameterListScribe implements RestParameterList {
+class ParameterListScribe implements RestParameterList {
 
     private final ParameterList delegate;
 

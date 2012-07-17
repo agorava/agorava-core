@@ -19,6 +19,8 @@ package org.agorava.core.oauth;
 import org.agorava.core.api.oauth.OAuthAppSettings;
 
 /**
+ * {@inheritDoc}
+ *
  * @author Antoine Sabot-Durand
  */
 

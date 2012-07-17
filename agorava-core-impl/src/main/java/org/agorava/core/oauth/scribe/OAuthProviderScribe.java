@@ -96,7 +96,7 @@ public class OAuthProviderScribe implements OAuthProvider {
         }
     }
 
-    protected Token extractToken(OAuthToken tok) {
+    Token extractToken(OAuthToken tok) {
         return ((OAuthTokenScribe) tok).delegate;
     }
 
