@@ -26,7 +26,7 @@ import java.io.Serializable;
  * @author Antoine Sabot-Durand
  * @see OAuthService
  */
-public interface ApplicationSettings extends Serializable {
+public interface OAuthAppSettings extends Serializable {
 
     /**
      * @return the key consumer key for the OAuth service

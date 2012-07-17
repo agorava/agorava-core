@@ -17,8 +17,8 @@
 package org.agorava.core.oauth;
 
 import org.agorava.core.api.exception.AgoravaException;
-import org.agorava.core.api.oauth.ApplicationSettings;
-import org.agorava.core.api.oauth.SettingsBuilder;
+import org.agorava.core.api.oauth.OAuthAppSettings;
+import org.agorava.core.api.oauth.OAuthAppSettingsBuilder;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -31,8 +31,8 @@ public class PropertySettingsBuilderTest {
     @Test
     public void testDefaultBuild() {
 
-        SettingsBuilder builder = new PropertySettingsBuilder();
-        ApplicationSettings settings = builder.build();
+        OAuthAppSettingsBuilder builderOAuthApp = new PropertyOAuthAppSettingsBuilder();
+        OAuthAppSettings settings = builderOAuthApp.build();
         Assert.assertEquals(settings.getApiKey(), "dummy");
         Assert.assertEquals(settings.getApiSecret(), "dummySecret");
         Assert.assertEquals(settings.getScope(), "dummyScope");
@@ -43,9 +43,9 @@ public class PropertySettingsBuilderTest {
     @Test
     public void testDefaultBuildWithPrefix() {
 
-        PropertySettingsBuilder builder = new PropertySettingsBuilder();
+        PropertyOAuthAppSettingsBuilder builder = new PropertyOAuthAppSettingsBuilder();
         builder.prefix("test");
-        ApplicationSettings settings = builder.build();
+        OAuthAppSettings settings = builder.build();
         Assert.assertEquals(settings.getApiKey(), "dummy2");
         Assert.assertEquals(settings.getApiSecret(), "dummySecret2");
     }
@@ -53,26 +53,26 @@ public class PropertySettingsBuilderTest {
     @Test(expected = AgoravaException.class)
     public void testDefaultBuildWithIncompletePrefix() {
 
-        PropertySettingsBuilder builder = new PropertySettingsBuilder();
+        PropertyOAuthAppSettingsBuilder builder = new PropertyOAuthAppSettingsBuilder();
         builder.prefix("test2");
-        ApplicationSettings settings = builder.build();
+        OAuthAppSettings settings = builder.build();
     }
 
 
     @Test(expected = AgoravaException.class)
     public void testDefaultBuildWithBadPrefix() {
 
-        PropertySettingsBuilder builder = new PropertySettingsBuilder();
+        PropertyOAuthAppSettingsBuilder builder = new PropertyOAuthAppSettingsBuilder();
         builder.prefix("test3");
-        ApplicationSettings settings = builder.build();
+        OAuthAppSettings settings = builder.build();
     }
 
     @Test
     public void testOtherBundleBuild() {
 
-        PropertySettingsBuilder builder = new PropertySettingsBuilder();
+        PropertyOAuthAppSettingsBuilder builder = new PropertyOAuthAppSettingsBuilder();
         builder.bundleName("agorava2");
-        ApplicationSettings settings = builder.build();
+        OAuthAppSettings settings = builder.build();
         Assert.assertEquals(settings.getApiKey(), "ymmud");
         Assert.assertEquals(settings.getApiSecret(), "ymmudSecret");
         Assert.assertEquals(settings.getScope(), "ymmudScope");
@@ -84,9 +84,9 @@ public class PropertySettingsBuilderTest {
     @Test(expected = MissingResourceException.class)
     public void testBadBundleBuild() {
 
-        PropertySettingsBuilder builder = new PropertySettingsBuilder();
+        PropertyOAuthAppSettingsBuilder builder = new PropertyOAuthAppSettingsBuilder();
         builder.bundleName("agorava3");
-        ApplicationSettings settings = builder.build();
+        OAuthAppSettings settings = builder.build();
 
     }
 }

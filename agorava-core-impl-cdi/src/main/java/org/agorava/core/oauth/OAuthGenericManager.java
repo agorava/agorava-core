@@ -68,7 +68,7 @@ public class OAuthGenericManager {
         return service;
     }
 
-    ApplicationSettings settings;
+    OAuthAppSettings settings;
 
     @Produces
     @ApplyScope
@@ -90,15 +90,15 @@ public class OAuthGenericManager {
     void init() {
         qual = servicesHub.getQualifier();
         log.debugf("in OAuthGenericManager creating Hub for %s", qual.toString());
-        Class<? extends SettingsBuilder> builderClass = app.builder();
-        SettingsBuilder builder = null;
+        Class<? extends OAuthAppSettingsBuilder> builderClass = app.builder();
+        OAuthAppSettingsBuilder builderOAuthApp = null;
         try {
-            builder = builderClass.newInstance();
+            builderOAuthApp = builderClass.newInstance();
         } catch (Exception e) {
             throw new AgoravaException("Unable to create Settings Builder with class " + builderClass, e);
         }
 
-        settings = builder.name(servicesHub.getSocialMediaName()).params(app.params()).build();
+        settings = builderOAuthApp.name(servicesHub.getSocialMediaName()).params(app.params()).build();
     }
 
 }

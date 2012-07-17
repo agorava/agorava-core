@@ -16,13 +16,13 @@
 
 package org.agorava.core.oauth;
 
-import org.agorava.core.api.oauth.ApplicationSettings;
+import org.agorava.core.api.oauth.OAuthAppSettings;
 
 /**
  * @author Antoine Sabot-Durand
  */
 
-public class ApplicationSettingsImpl implements ApplicationSettings {
+public class OAuthAppSettingsImpl implements OAuthAppSettings {
 
     private static final long serialVersionUID = -8018722725677732853L;
 
@@ -61,7 +61,7 @@ public class ApplicationSettingsImpl implements ApplicationSettings {
         return name;
     }
 
-    ApplicationSettingsImpl(String name, String apiKey, String apiSecret, String callback, String scope) {
+    OAuthAppSettingsImpl(String name, String apiKey, String apiSecret, String callback, String scope) {
         super();
         this.apiKey = apiKey;
         this.apiSecret = apiSecret;
@@ -72,7 +72,7 @@ public class ApplicationSettingsImpl implements ApplicationSettings {
 
     @Override
     public String toString() {
-        return "ApplicationSettingsImpl [apiKey=" + apiKey + ", apiSecret=" + apiSecret + ", callback=" + callback
+        return "OAuthAppSettingsImpl [apiKey=" + apiKey + ", apiSecret=" + apiSecret + ", callback=" + callback
                 + ", scope=" + scope + ", serviceName=" + getSocialMediaName() + "]";
     }
 
