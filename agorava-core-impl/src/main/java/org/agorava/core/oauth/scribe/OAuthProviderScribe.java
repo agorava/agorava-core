@@ -26,16 +26,24 @@ import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.Api;
 import org.scribe.model.Token;
 import org.scribe.model.Verifier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 /**
  * @author Antoine Sabot-Durand
  */
 public class OAuthProviderScribe implements OAuthProvider {
 
+    Logger logger = LoggerFactory.getLogger(OAuthProviderScribe.class);
+
     private static final String SCRIBE_API_PREFIX = "org.scribe.builder.api.";
     private static final String SCRIBE_API_SUFFIX = "Api";
 
     private final org.scribe.oauth.OAuthService service;
+    private static final String API_CLASS = "apiClass";
 
     org.scribe.oauth.OAuthService getService() {
         if (service == null)
@@ -71,7 +79,7 @@ public class OAuthProviderScribe implements OAuthProvider {
 
     public OAuthProviderScribe(OAuthAppSettings settings) {
         super();
-        Class<? extends Api> apiClass = getApiClass(settings.getSocialMediaName()); // TODO : should get API class differently !
+        Class<? extends Api> apiClass = getApiClass(settings.getSocialMediaName());
         ServiceBuilder serviceBuilder = new ServiceBuilder().provider(apiClass).apiKey(settings.getApiKey())
                 .apiSecret(settings.getApiSecret());
         if (settings.getCallback() != null && !("".equals(settings.getCallback())))
@@ -88,7 +96,15 @@ public class OAuthProviderScribe implements OAuthProvider {
      */
     @SuppressWarnings("unchecked")
     private Class<? extends Api> getApiClass(String serviceName) {
-        String className = SCRIBE_API_PREFIX + serviceName + SCRIBE_API_SUFFIX;
+        String className;
+
+        try {
+            ResourceBundle rb = ResourceBundle.getBundle(serviceName);
+            className = rb.getString(API_CLASS);
+        } catch (MissingResourceException e) {
+            logger.info("Found no bundle for service {}", serviceName);
+            className = SCRIBE_API_PREFIX + serviceName + SCRIBE_API_SUFFIX;
+        }
         try {
             return (Class<? extends Api>) Class.forName(className);
         } catch (ClassNotFoundException e) {
