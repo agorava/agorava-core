@@ -26,7 +26,7 @@ import org.agorava.core.api.oauth.OAuthSession;
  * <ul>
  * <li>gather all Api families for a given Social Media</li>
  * <li>provide generic services for the underlying Social Media (for instance get user profile) to allow using it without
- * knowing it specificities</li>
+ * knowing it specificity</li>
  * </ul>
  *
  * @author Antoine Sabot-Durand

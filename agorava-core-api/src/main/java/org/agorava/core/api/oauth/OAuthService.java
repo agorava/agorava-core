@@ -16,12 +16,12 @@
 
 package org.agorava.core.api.oauth;
 
-import java.util.Map;
-
 import org.agorava.core.api.SocialMediaAware;
 import org.agorava.core.api.rest.RestResponse;
 import org.agorava.core.api.rest.RestService;
 import org.agorava.core.api.rest.RestVerb;
+
+import java.util.Map;
 
 /**
  * Implementation of this interface is used to manage a generic OAuth Service
@@ -71,7 +71,7 @@ public interface OAuthService extends RestService, SocialMediaAware {
      * @param params a Map of key value parameters to send in the header of the request
      * @return an HttpResponse containing the response. It could be in various format (json, xml, string)
      */
-    public RestResponse sendSignedRequest(RestVerb verb, String uri, Map<String, ? extends Object> params);
+    public RestResponse sendSignedRequest(RestVerb verb, String uri, Map<String, ?> params);
 
     /**
      * Send an OAuth request signed with a single parameter
