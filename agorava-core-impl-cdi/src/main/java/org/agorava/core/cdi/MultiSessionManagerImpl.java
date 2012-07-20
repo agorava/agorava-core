@@ -17,7 +17,7 @@
 
 package org.agorava.core.cdi;
 
-import org.agorava.core.api.MultiServicesManager;
+import org.agorava.core.api.MultiSessionManager;
 import org.agorava.core.api.SocialMediaApiHub;
 import org.agorava.core.api.oauth.OAuthService;
 import org.agorava.core.api.oauth.OAuthSession;
@@ -40,12 +40,12 @@ import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
 
 /**
- * Default implementation of {@link MultiServicesManager}
+ * Default implementation of {@link org.agorava.core.api.MultiSessionManager}
  *
  * @author Antoine Sabot-Durand
  */
 @SessionScoped
-public class MultiServicesManagerImpl implements MultiServicesManager, Serializable {
+public class MultiSessionManagerImpl implements MultiSessionManager, Serializable {
 
     private static final long serialVersionUID = 2681869484541158766L;
 
@@ -80,7 +80,7 @@ public class MultiServicesManagerImpl implements MultiServicesManager, Serializa
         return listOfServices;
     }
 
-    public MultiServicesManagerImpl() {
+    public MultiSessionManagerImpl() {
         super();
         activeSessions = newHashSet();
     }

@@ -24,13 +24,12 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Implementation of this interface allow to manage multiple OAuth Session. The connection to service are backed by a Set to
+ * Allows to manage multiple OAuth Session. The connection to service are backed by a Set to
  * avoid null or duplicate connection. Uniqueness of a connection is based on service type and User name on the service
  *
  * @author Antoine Sabot-Durand
  */
-//fixme name of the class is ambiguous : 'Service' too Generic and in the end impl of this Interface will manage user Session not Social Media
-public interface MultiServicesManager extends Serializable {
+public interface MultiSessionManager extends Serializable {
 
     /**
      * @return List of available service to connect to
