@@ -129,4 +129,5 @@ public interface OAuthService extends RestService, SocialMediaAware {
      */
     public RestResponse sendSignedRequest(OAuthRequest request);
 
+    <T> T get(String uri, Class<T> clazz, boolean signed);
 }

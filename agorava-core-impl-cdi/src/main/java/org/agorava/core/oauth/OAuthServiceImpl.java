@@ -222,6 +222,15 @@ public class OAuthServiceImpl implements OAuthService {
         return jsonService.mapToObject(sendSignedRequest(GET, uri), clazz);
     }
 
+    @Override
+    public <T> T get(String uri, Class<T> clazz, boolean signed) {
+        RestResponse resp;
+        if (signed)
+            resp = sendSignedRequest(GET, uri);
+        else
+            resp = getProvider().requestFactory(GET, uri).send();
+        return jsonService.mapToObject(resp, clazz);
+    }
 
     @Override
     public <T> T get(String uri, Class<T> clazz, Object... urlParams) {
