@@ -18,6 +18,6 @@ package org.agorava.core.utils;
 
 public class AgoravaContext {
 
-    public static String webAbsolutePath = "undefinied";
+    public static String webAbsolutePath = "undefined";
 
 }

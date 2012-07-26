@@ -16,16 +16,17 @@
 
 package org.agorava.core.api.oauth;
 
+import org.agorava.core.api.UserProfile;
+
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 
-import org.agorava.core.api.UserProfile;
-
 /**
- * Instances of this interface contains data for a session connection to a given service.
+ * Contains user data for a session connection to a given {@link OAuthService}.
+ * It completes data in {@link OAuthAppSettings}.
+ * More over it contains status and basic user data when OAuth connexion has been completed
  *
  * @author Antoine Sabot-Durand
- * @see OAuthService
  */
 public interface OAuthSession extends Serializable {
 

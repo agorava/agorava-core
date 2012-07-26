@@ -21,7 +21,7 @@ import org.agorava.core.api.rest.RestResponse;
 import java.io.Serializable;
 
 /**
- * Implementation of this Interface will manage JSON Serialization / De-serialization to and from Object
+ * Manage JSON Serialization / De-serialization to and from Object
  *
  * @author Antoine Sabot-Durand
  */

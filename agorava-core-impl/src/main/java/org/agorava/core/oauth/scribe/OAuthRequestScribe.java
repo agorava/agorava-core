@@ -28,13 +28,12 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * {@inheritDoc}
+ *
  * @author Antoine Sabot-Durand
  */
 public class OAuthRequestScribe implements OAuthRequest {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 6560621737726192278L;
     private final org.scribe.model.OAuthRequest request;
 
@@ -42,15 +41,6 @@ public class OAuthRequestScribe implements OAuthRequest {
         return request;
     }
 
-    OAuthRequestScribe(org.scribe.model.OAuthRequest request) {
-        super();
-        this.request = request;
-    }
-
-    /**
-     * @param verb
-     * @param uri
-     */
     public OAuthRequestScribe(RestVerb verb, String url) {
         request = new org.scribe.model.OAuthRequest(Verb.valueOf(verb.toString()), url);
     }

@@ -20,6 +20,8 @@ import org.agorava.core.api.oauth.OAuthToken;
 import org.scribe.model.Token;
 
 /**
+ * {@inheritDoc}
+ *
  * @author Antoine Sabot-Durand
  */
 public class OAuthTokenScribe implements OAuthToken {
@@ -28,10 +30,7 @@ public class OAuthTokenScribe implements OAuthToken {
 
     final Token delegate;
 
-    /**
-     * @param token
-     * @param secret
-     */
+
     public OAuthTokenScribe(String token, String secret) {
         delegate = new Token(token, secret);
     }

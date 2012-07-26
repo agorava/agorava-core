@@ -15,7 +15,7 @@
  */
 
 /**
- * This package contains all the events used by Agorava CDI implemetation
+ * This package contains all the events used by Agorava CDI implementation
  */
 
 package org.agorava.core.api.event;

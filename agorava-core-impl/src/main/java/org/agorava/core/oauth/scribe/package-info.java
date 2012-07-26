@@ -14,5 +14,11 @@
  * limitations under the License.
  */
 
+/**
+ *
+ * Contains all OAuth implementing class with scribe-java
+ * Classes here are mainly wrappers around scribe class to isolate the framework dependency from Agorava users
+ *
+ */
 package org.agorava.core.oauth.scribe;
 

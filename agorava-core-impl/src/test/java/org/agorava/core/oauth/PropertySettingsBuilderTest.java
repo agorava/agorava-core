@@ -36,7 +36,7 @@ public class PropertySettingsBuilderTest {
         Assert.assertEquals(settings.getApiKey(), "dummy");
         Assert.assertEquals(settings.getApiSecret(), "dummySecret");
         Assert.assertEquals(settings.getScope(), "dummyScope");
-        Assert.assertEquals(settings.getCallback(), "undefinieddummyCallback");
+        Assert.assertEquals(settings.getCallback(), "undefineddummyCallback");
 
     }
 
@@ -76,7 +76,7 @@ public class PropertySettingsBuilderTest {
         Assert.assertEquals(settings.getApiKey(), "ymmud");
         Assert.assertEquals(settings.getApiSecret(), "ymmudSecret");
         Assert.assertEquals(settings.getScope(), "ymmudScope");
-        Assert.assertEquals(settings.getCallback(), "undefiniedymmudCallback");
+        Assert.assertEquals(settings.getCallback(), "undefinedymmudCallback");
 
     }
 

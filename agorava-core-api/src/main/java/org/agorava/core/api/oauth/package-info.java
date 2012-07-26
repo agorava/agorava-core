@@ -15,8 +15,7 @@
  */
 
 /**
- * This package contains API elements to manage interactions with generic OAuth
- * services thru CDI Beans
+ * This package contains API elements to manage basic interactions with generic OAuth services
  */
 
 

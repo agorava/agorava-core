@@ -19,7 +19,7 @@ package org.agorava.core.api.oauth;
 import java.io.Serializable;
 
 /**
- * Configuration class containing settings needed to access to an OAuth 1.0a and 2.0 service.
+ * Configuration settings needed to access to an OAuth 1.0a and 2.0 service.
  * It's used by {@link OAuthProvider} to setup
  * connection to Social Media
  *

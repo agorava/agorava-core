@@ -55,14 +55,15 @@ public class JsonMapperJackson implements JsonMapper {
 
     @Override
     public <T> T mapToObject(RestResponse resp, Class<T> clazz) {
+
+        String msg = resp.getBody();
+        if (resp.getCode() != 200) {
+            throw new AgoravaRestException(resp.getCode(), resp.getUrl(), msg);
+        }
         try {
-            String msg = resp.getBody();
-            if (resp.getCode() != 200) {
-                throw new AgoravaRestException(resp.getCode(), resp.getUrl(), msg);
-            }
             return objectMapper.readValue(msg, clazz);
         } catch (IOException e) {
-            throw new AgoravaException("Unable to map Json response", e);
+            throw new AgoravaException("Unable to map Json response for this response " + msg, e);
         }
     }
 

@@ -22,6 +22,9 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * Support annotation to transport additional parameter for {@link OAuthAppSettingsBuilder} to work
+ * with annotation configuration style
+ *
  * @author Antoine Sabot-Durand
  */
 

@@ -26,12 +26,12 @@ import java.io.Serializable;
 public interface OAuthToken extends Serializable {
 
     /**
-     * @return api key of the OAuth application
+     * @return api key (public part) of the OAuth application
      */
     public String getToken();
 
     /**
-     * @return api secret of the OAuth application
+     * @return api secret (private part) of the OAuth application
      */
     public String getSecret();
 }

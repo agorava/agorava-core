@@ -22,16 +22,13 @@ import org.agorava.core.api.rest.RestParameter;
 import org.scribe.model.Parameter;
 
 /**
+ * {@inheritDoc}
+ *
  * @author Antoine Sabot-Durand
  */
 class ParameterScribe implements Comparable<ParameterScribe>, RestParameter {
 
     private final Parameter delegate;
-
-    public ParameterScribe(String key, String value) {
-        super();
-        delegate = new Parameter(key, value);
-    }
 
     ParameterScribe(Parameter parameter) {
         delegate = parameter;

@@ -29,6 +29,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.*;
+import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.util.Set;
 
@@ -38,7 +39,7 @@ import static com.google.common.collect.Sets.newHashSet;
  * @author Antoine Sabot-Durand
  */
 @ApplicationScoped
-public class AgoravaExtension implements Extension {
+public class AgoravaExtension implements Extension, Serializable {
 
     private final Set<String> servicesNames = newHashSet();
     private final Set<Annotation> servicesQualifiersConfigured = newHashSet();

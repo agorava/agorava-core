@@ -21,8 +21,10 @@ package org.agorava.core.api;
 import org.agorava.core.api.oauth.OAuthServiceAware;
 import org.agorava.core.api.oauth.OAuthSession;
 
+import java.io.Serializable;
+
 /**
- * Beans implementing this interface are the entry point of Social Media interaction. They have 2 roles
+ * This is the entry point of Social Media interaction. Class implementing this interface class haave 2 roles
  * <ul>
  * <li>gather all Api families for a given Social Media</li>
  * <li>provide generic services for the underlying Social Media (for instance get user profile) to allow using it without
@@ -31,7 +33,7 @@ import org.agorava.core.api.oauth.OAuthSession;
  *
  * @author Antoine Sabot-Durand
  */
-public interface SocialMediaApiHub extends OAuthServiceAware, SocialMediaAware {
+public interface SocialMediaApiHub extends OAuthServiceAware, SocialMediaAware, Serializable {
 
     /**
      * @return the profile of the connected user

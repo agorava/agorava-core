@@ -33,6 +33,8 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 /**
+ * {@inheritDoc}
+ *
  * @author Antoine Sabot-Durand
  */
 public class OAuthProviderScribe implements OAuthProvider {
@@ -77,6 +79,10 @@ public class OAuthProviderScribe implements OAuthProvider {
         return getService().getAuthorizationUrl(extractToken(tok));
     }
 
+    /**
+     * @param settings OAuth app settings to construct this Provider
+     * @throws AgoravaException if this provider cannot be build
+     */
     public OAuthProviderScribe(OAuthAppSettings settings) {
         super();
         Class<? extends Api> apiClass = getApiClass(settings.getSocialMediaName());
@@ -91,11 +97,20 @@ public class OAuthProviderScribe implements OAuthProvider {
     }
 
     /**
-     * @param serviceName
-     * @return
+     * This methods tries to get Scribe {@link Api} class from Social Media Name
+     * It tries first to open a bundle with the provided name to look for an apiClass key.
+     * <p/>
+     * If it doesn't found this bundle or key it will try to build class name with the scribe package name for API as prefix
+     * and Api as suffix.
+     * <p/>
+     * If none of the above solution works the method throws an exception
+     *
+     * @param serviceName name od the Social Media
+     * @return Scribe API class
+     * @throws AgoravaException if the class cannot be found
      */
     @SuppressWarnings("unchecked")
-    private Class<? extends Api> getApiClass(String serviceName) {
+    protected Class<? extends Api> getApiClass(String serviceName) {
         String className;
 
         try {
@@ -112,7 +127,7 @@ public class OAuthProviderScribe implements OAuthProvider {
         }
     }
 
-    Token extractToken(OAuthToken tok) {
+    private Token extractToken(OAuthToken tok) {
         return ((OAuthTokenScribe) tok).delegate;
     }
 

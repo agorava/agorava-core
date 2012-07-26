@@ -22,9 +22,9 @@ import org.agorava.core.api.rest.RestParameter;
 import org.agorava.core.api.rest.RestParameterList;
 import org.scribe.model.ParameterList;
 
-import java.util.Map;
-
 /**
+ * {@inheritDoc}
+ *
  * @author Antoine Sabot-Durand
  */
 class ParameterListScribe implements RestParameterList {
@@ -34,14 +34,6 @@ class ParameterListScribe implements RestParameterList {
     ParameterListScribe(ParameterList delegate) {
         super();
         this.delegate = delegate;
-    }
-
-    public ParameterListScribe() {
-        delegate = new ParameterList();
-    }
-
-    public ParameterListScribe(Map<String, String> params) {
-        delegate = new ParameterList(params);
     }
 
     @Override

@@ -19,7 +19,7 @@ package org.agorava.core.api.oauth;
 import org.agorava.core.api.rest.RestVerb;
 
 /**
- * Implementation of this Interface will provide low level services (mainly Token generation and signature) for OAuth
+ * Provides low level services (Request factory, OAuth Token factory and signature) for OAuth
  * management.
  *
  * @author Antoine Sabot-Durand
@@ -35,8 +35,8 @@ public interface OAuthProvider {
     /**
      * Returns the Oauth access token from request token and verifier
      *
-     * @param requestToken
-     * @param verifier
+     * @param requestToken Request token sent to Social Media
+     * @param verifier     Verifier returned by Social Media after sending the Request Token
      * @return an OAuth access token
      */
     public OAuthToken getAccessToken(OAuthToken requestToken, String verifier);
@@ -52,23 +52,23 @@ public interface OAuthProvider {
     /**
      * Gives the OAuth version of the provider
      *
-     * @return the OAuth version used by the provider
+     * @return the OAuth version used by the provider (i.e. 1.0a or 2.0)
      */
     public String getVersion();
 
     /**
      * Generates the OAuth authorization URL from the given request Token. It's the step 2 of OAuth negotiation
      *
-     * @param tok
-     * @return
+     * @param requestToken request token to generate Authorization URL
+     * @return the authorization URL to call to aks user for delegation on her behalf
      */
     public String getAuthorizationUrl(OAuthToken requestToken);
 
     /**
      * Creates an OAuthRequest with the given Rest Verb and uri
      *
-     * @param verb
-     * @param uri
+     * @param verb Rest verb to build the request
+     * @param uri  URI of the request
      * @return the created OAuthRequest
      */
     public OAuthRequest requestFactory(RestVerb verb, String uri);
@@ -76,8 +76,8 @@ public interface OAuthProvider {
     /**
      * Creates an OAuthToken with the given token and given secret
      *
-     * @param token
-     * @param secret
+     * @param token  the public part of the token
+     * @param secret the private part of the token
      * @return then created OAuthToken
      */
     public OAuthToken tokenFactory(String token, String secret);

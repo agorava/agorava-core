@@ -16,12 +16,12 @@
 
 package org.agorava.core.api.oauth;
 
-import java.util.Map;
-
 import org.agorava.core.api.rest.RestRequest;
 
+import java.util.Map;
+
 /**
- * Implementation of this interface represents an OAuth Request
+ * Overload {@link RestRequest} to add specificity of OAuth Request
  *
  * @author Antoine Sabot-Durand
  */
@@ -30,7 +30,7 @@ public interface OAuthRequest extends RestRequest {
     /**
      * Adds an OAuth parameter.
      *
-     * @param key   name of the parameter
+     * @param name  name of the parameter
      * @param value value of the parameter
      */
     public void addOAuthParameter(String name, String value);
