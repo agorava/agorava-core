@@ -16,16 +16,24 @@
 
 package org.agorava.core.oauth.scribe;
 
+import org.agorava.core.api.exception.AgoravaException;
 import org.agorava.core.api.rest.RestResponse;
 import org.scribe.model.Response;
+import org.scribe.utils.StreamUtils;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
+import java.util.zip.GZIPInputStream;
 
 /**
+ * {@inheritDoc}
+ *
  * @author Antoine Sabot-Durand
  */
 class RestResponseScribe implements RestResponse {
+
+    private String body;
 
     private Response getDelegate() {
         if (delegate == null) {
@@ -48,12 +56,26 @@ class RestResponseScribe implements RestResponse {
 
     @Override
     public String getBody() {
-        return getDelegate().getBody();
+        return body != null ? body : parseBodyContents();
+    }
+
+    private String parseBodyContents() {
+        body = StreamUtils.getStreamContents(getStream());
+        return body;
     }
 
     @Override
     public InputStream getStream() {
-        return getDelegate().getStream();
+        InputStream res;
+        if ("gzip".equals(getHeaders().get("Content-Encoding")))
+            try {
+                res = new GZIPInputStream(getDelegate().getStream());
+            } catch (IOException e) {
+                throw new AgoravaException("Unable to create GZIPInputStream", e);
+            }
+        else
+            res = getDelegate().getStream();
+        return res;
     }
 
     @Override
