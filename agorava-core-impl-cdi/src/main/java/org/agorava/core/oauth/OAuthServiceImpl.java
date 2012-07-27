@@ -272,7 +272,7 @@ public class OAuthServiceImpl implements OAuthService {
         sendSignedRequest(RestVerb.DELETE, uri);
     }
 
-    @Override
+
     public Annotation getQualifier() {
         return qualifier;
     }

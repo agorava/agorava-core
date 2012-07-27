@@ -41,6 +41,7 @@ public abstract class AbstractOAuthServiceAwareImpl implements OAuthServiceAware
         return serviceInstances.select(getQualifier()).get();
     }
 
+    @Override
     public OAuthSession getSession() {
         return getService().getSession();
     }
@@ -51,5 +52,6 @@ public abstract class AbstractOAuthServiceAwareImpl implements OAuthServiceAware
      * @return Annotation being a Qualifier
      */
     abstract public Annotation getQualifier();
+
 
 }

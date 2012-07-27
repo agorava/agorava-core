@@ -16,8 +16,18 @@
 
 package org.agorava.core.utils;
 
+/**
+ * Class containing configuration for Agorava.
+ * Static field here are stored here from third parties helper classes.
+ *
+ * @author Antoine Sabot-Durand
+ * @see org.agorava.core.web.CaptureAbsolutePathListener
+ */
 public class AgoravaContext {
 
+    /**
+     * The complete Web Context path (protocol, server, application context) of this Agorava Instance
+     */
     public static String webAbsolutePath = "undefined";
 
 }

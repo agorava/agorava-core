@@ -19,7 +19,6 @@
 package org.agorava.core.api;
 
 import org.agorava.core.api.oauth.OAuthServiceAware;
-import org.agorava.core.api.oauth.OAuthSession;
 
 import java.io.Serializable;
 
@@ -40,10 +39,6 @@ public interface SocialMediaApiHub extends OAuthServiceAware, Serializable {
      */
     public UserProfile getMyProfile();
 
-    /**
-     * @return the oauth session settings of the connected user
-     */
-    public OAuthSession getSession();
 
     /**
      * Close connexion if needed

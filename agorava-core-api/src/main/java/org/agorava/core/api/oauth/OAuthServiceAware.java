@@ -29,6 +29,10 @@ public interface OAuthServiceAware {
     /**
      * @return the underlying OAuthService
      */
-    public OAuthService getService();
+    OAuthService getService();
 
+    /**
+     * @return the current Session with which the service is working
+     */
+    OAuthSession getSession();
 }
