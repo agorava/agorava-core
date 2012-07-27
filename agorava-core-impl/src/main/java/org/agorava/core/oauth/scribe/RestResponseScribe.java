@@ -33,6 +33,8 @@ import java.util.zip.GZIPInputStream;
  */
 class RestResponseScribe implements RestResponse {
 
+    public static final String GZIP_CONTENT_ENCODING = "gzip";
+    public static final String CONTENT_ENCODING = "Content-Encoding";
     private String body;
 
     private Response getDelegate() {
@@ -67,7 +69,7 @@ class RestResponseScribe implements RestResponse {
     @Override
     public InputStream getStream() {
         InputStream res;
-        if ("gzip".equals(getHeaders().get("Content-Encoding")))
+        if (GZIP_CONTENT_ENCODING.equals(getHeaders().get(CONTENT_ENCODING)))
             try {
                 res = new GZIPInputStream(getDelegate().getStream());
             } catch (IOException e) {
