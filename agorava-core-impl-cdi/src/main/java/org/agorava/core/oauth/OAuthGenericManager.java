@@ -16,6 +16,8 @@
 
 package org.agorava.core.oauth;
 
+import com.google.common.collect.Iterables;
+import org.agorava.core.api.ServiceRelated;
 import org.agorava.core.api.SocialMediaApiHub;
 import org.agorava.core.api.exception.AgoravaException;
 import org.agorava.core.api.oauth.*;
@@ -24,6 +26,7 @@ import org.jboss.solder.bean.generic.ApplyScope;
 import org.jboss.solder.bean.generic.Generic;
 import org.jboss.solder.bean.generic.GenericConfiguration;
 import org.jboss.solder.logging.Logger;
+import org.jboss.solder.reflection.AnnotationInspector;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
@@ -88,7 +91,8 @@ public class OAuthGenericManager {
 
     @PostConstruct
     void init() {
-        qual = servicesHub.getQualifier();
+        //qual = servicesHub.getQualifier();
+        qual = Iterables.getLast(AnnotationInspector.getAnnotations(annotatedMember, ServiceRelated.class));
         log.debugf("in OAuthGenericManager creating Hub for %s", qual.toString());
         Class<? extends OAuthAppSettingsBuilder> builderClass = app.builder();
         OAuthAppSettingsBuilder builderOAuthApp = null;
