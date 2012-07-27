@@ -66,6 +66,12 @@ class RestResponseScribe implements RestResponse {
         return body;
     }
 
+    /**
+     * {@inheritDoc}
+     * This implementation support also gzip encoding in the response
+     *
+     * @return
+     */
     @Override
     public InputStream getStream() {
         InputStream res;

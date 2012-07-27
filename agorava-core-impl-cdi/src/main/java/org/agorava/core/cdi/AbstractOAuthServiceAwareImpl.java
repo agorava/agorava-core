@@ -18,7 +18,6 @@
  */
 package org.agorava.core.cdi;
 
-import org.agorava.core.api.SocialMediaAware;
 import org.agorava.core.api.oauth.OAuthService;
 import org.agorava.core.api.oauth.OAuthServiceAware;
 import org.agorava.core.api.oauth.OAuthSession;
@@ -26,11 +25,12 @@ import org.agorava.core.api.oauth.OAuthSession;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
+import java.lang.annotation.Annotation;
 
 /**
  * @author Antoine Sabot-Durand
  */
-public abstract class AbstractOAuthServiceAwareImpl implements OAuthServiceAware, SocialMediaAware {
+public abstract class AbstractOAuthServiceAwareImpl implements OAuthServiceAware {
 
     @Inject
     @Any
@@ -44,5 +44,12 @@ public abstract class AbstractOAuthServiceAwareImpl implements OAuthServiceAware
     public OAuthSession getSession() {
         return getService().getSession();
     }
+
+    /**
+     * Returns the annotation related to the Social Media
+     *
+     * @return Annotation being a Qualifier
+     */
+    abstract public Annotation getQualifier();
 
 }

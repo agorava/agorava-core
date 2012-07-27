@@ -62,7 +62,7 @@ public class MultiSessionManagerImpl implements MultiSessionManager, Serializabl
 
     private List<String> listOfServices;
 
-    private final Set<OAuthSession> activeSessions;
+    private final Set<OAuthSession> activeSessions = newHashSet();
 
     @Produces
     @Named
@@ -78,11 +78,6 @@ public class MultiSessionManagerImpl implements MultiSessionManager, Serializabl
     @Override
     public List<String> getListOfServices() {
         return listOfServices;
-    }
-
-    public MultiSessionManagerImpl() {
-        super();
-        activeSessions = newHashSet();
     }
 
     @Override

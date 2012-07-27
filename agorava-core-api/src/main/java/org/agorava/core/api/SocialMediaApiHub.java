@@ -33,7 +33,7 @@ import java.io.Serializable;
  *
  * @author Antoine Sabot-Durand
  */
-public interface SocialMediaApiHub extends OAuthServiceAware, SocialMediaAware, Serializable {
+public interface SocialMediaApiHub extends OAuthServiceAware, Serializable {
 
     /**
      * @return the profile of the connected user

@@ -16,7 +16,6 @@
 
 package org.agorava.core.api.oauth;
 
-import org.agorava.core.api.SocialMediaAware;
 import org.agorava.core.api.rest.RestResponse;
 import org.agorava.core.api.rest.RestService;
 import org.agorava.core.api.rest.RestVerb;
@@ -28,7 +27,7 @@ import java.util.Map;
  *
  * @author Antoine Sabot-Durand
  */
-public interface OAuthService extends RestService, SocialMediaAware {
+public interface OAuthService extends RestService {
 
     /**
      * @return the access token for the OAuth service
