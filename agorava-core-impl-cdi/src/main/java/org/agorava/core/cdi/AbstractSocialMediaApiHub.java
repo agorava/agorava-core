@@ -23,6 +23,8 @@ import org.agorava.core.api.UserProfile;
 import org.agorava.core.api.oauth.OAuthSession;
 
 /**
+ * {@inheritDoc}
+ *
  * @author Antoine Sabot-Durand
  */
 public abstract class AbstractSocialMediaApiHub extends AbstractOAuthServiceAwareImpl implements

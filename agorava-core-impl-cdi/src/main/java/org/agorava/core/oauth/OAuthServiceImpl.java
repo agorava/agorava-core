@@ -41,7 +41,7 @@ import static org.agorava.core.api.rest.RestVerb.*;
 import static org.agorava.core.cdi.AgoravaExtension.getServicesToQualifier;
 
 /**
- * This Abstract implementation of {@link OAuthService} uses an {@link OAuthProvider} to deal with remote OAuth Services
+ * {@inheritDoc}
  *
  * @author Antoine Sabot-Durand
  */

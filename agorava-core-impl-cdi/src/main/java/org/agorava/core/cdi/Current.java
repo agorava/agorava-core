@@ -30,6 +30,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Documented
 /**
+ *
+ *  Qualifier to mark the current OAuth Session in a multiple Session context
+ *
  * @author Antoine Sabot-Durand
  *
  */

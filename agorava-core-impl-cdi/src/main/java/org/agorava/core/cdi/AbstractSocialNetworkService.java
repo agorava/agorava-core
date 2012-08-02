@@ -23,9 +23,13 @@ import org.agorava.core.utils.URLUtils;
 import java.util.Map;
 
 /**
+ * Abstract base class for all API services class
+ *
  * @author Antoine Sabot-Durand
  */
+//TODO: this class is only a wrapper of static method in URLUtils. Should it be refactored ? Or moved to OauthServiceImpl ?
 public abstract class AbstractSocialNetworkService extends AbstractOAuthServiceAwareImpl {
+
 
     public String buildUri(String url, String key, String value) {
         return URLUtils.buildUri(buildUri(url), key, value);

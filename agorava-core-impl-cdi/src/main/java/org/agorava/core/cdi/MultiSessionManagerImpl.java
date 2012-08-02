@@ -40,7 +40,7 @@ import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
 
 /**
- * Default implementation of {@link MultiSessionManager}
+ * {@inheritDoc}
  *
  * @author Antoine Sabot-Durand
  */

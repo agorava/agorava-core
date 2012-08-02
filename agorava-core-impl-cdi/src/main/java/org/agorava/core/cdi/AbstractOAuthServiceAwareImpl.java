@@ -28,8 +28,12 @@ import javax.inject.Inject;
 import java.lang.annotation.Annotation;
 
 /**
+ * {@inheritDoc}
+ *
  * @author Antoine Sabot-Durand
  */
+
+//TODO:delete this class and inject OAuthService with proper qualifier in each *BaseService and *ServicesHub
 public abstract class AbstractOAuthServiceAwareImpl implements OAuthServiceAware {
 
     @Inject

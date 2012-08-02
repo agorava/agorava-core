@@ -38,6 +38,10 @@ import javax.inject.Inject;
 import java.lang.annotation.Annotation;
 
 /**
+ * This Bean is used by JBoss Solder Generic Bean extension to generate multiple bean from one Bean declaration
+ * should this one have the {@link OAuthApplication} annotation.
+ * All produced beans will have the same Qualifier than the declared bean
+ *
  * @author Antoine Sabot-Durand
  */
 @GenericConfiguration(OAuthApplication.class)
@@ -81,7 +85,6 @@ public class OAuthGenericManager {
 
     @Produces
     @SessionScoped
-    // qualifier is applied thanks to Generic Beans Extension
     public OAuthSession produceSession() {
         return new OAuthSessionImpl(qual);
     }
@@ -91,7 +94,6 @@ public class OAuthGenericManager {
 
     @PostConstruct
     void init() {
-        //qual = servicesHub.getQualifier();
         qual = Iterables.getLast(AnnotationInspector.getAnnotations(annotatedMember, ServiceRelated.class));
         log.debugf("in OAuthGenericManager creating Hub for %s", qual.toString());
         Class<? extends OAuthAppSettingsBuilder> builderClass = app.builder();

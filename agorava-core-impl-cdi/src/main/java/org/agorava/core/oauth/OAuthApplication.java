@@ -26,6 +26,9 @@ import java.lang.annotation.Retention;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * This Annotation is a JBoss Solder Generic annotation to work with {@link OAuthGenericManager}
+ * It'll convey information to initialize an OAuth application connection
+ *
  * @author Antoine Sabot-Durand
  */
 @Retention(RUNTIME)

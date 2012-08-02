@@ -31,9 +31,6 @@ import java.lang.annotation.Annotation;
 //TODO:split in two to put in SE impl
 public class OAuthSessionImpl implements OAuthSession {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = -2526192334215289830L;
 
     private OAuthToken requestToken;

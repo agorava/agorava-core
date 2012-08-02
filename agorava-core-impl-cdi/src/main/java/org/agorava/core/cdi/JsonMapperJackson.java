@@ -36,8 +36,8 @@ import static org.codehaus.jackson.map.DeserializationConfig.Feature.READ_ENUMS_
 import static org.codehaus.jackson.map.SerializationConfig.Feature.WRITE_ENUMS_USING_TO_STRING;
 
 /**
- * This Bean manage the Json Mapper to serialize and de-serialize Json data coming from and sent to services It uses an
- * {@link ObjectMapper} Jackson.
+ * {@inheritDoc}
+ * This CDI implentation uses an Jackson {@link ObjectMapper}.
  *
  * @author Antoine Sabot-Durand
  */
@@ -81,7 +81,7 @@ public class JsonMapperJackson implements JsonMapper {
      *
      * @param module to register
      */
-    public void registerModule(Module module) {
+    private void registerModule(Module module) {
         objectMapper.registerModule(module);
     }
 
