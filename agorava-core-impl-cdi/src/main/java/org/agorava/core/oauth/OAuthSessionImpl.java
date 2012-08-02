@@ -24,8 +24,11 @@ import org.agorava.core.cdi.AgoravaExtension;
 import java.lang.annotation.Annotation;
 
 /**
+ * {@inheritDoc}
+ *
  * @author Antoine Sabot-Durand
  */
+//TODO:split in two to put in SE impl
 public class OAuthSessionImpl implements OAuthSession {
 
     /**

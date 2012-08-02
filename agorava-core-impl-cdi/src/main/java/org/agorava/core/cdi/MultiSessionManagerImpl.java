@@ -57,8 +57,6 @@ public class MultiSessionManagerImpl implements MultiSessionManager, Serializabl
     @Any
     private Instance<SocialMediaApiHub> hubInstances;
 
-    @Inject
-    private AgoravaExtension socialConfig;
 
     private List<String> listOfServices;
 
@@ -71,8 +69,8 @@ public class MultiSessionManagerImpl implements MultiSessionManager, Serializabl
 
     @PostConstruct
     void init() {
-        listOfServices = newArrayList(socialConfig.getSocialRelated());
-        socialConfig.setMultiSession(true);
+        listOfServices = newArrayList(AgoravaExtension.getSocialRelated());
+        AgoravaExtension.setMultiSession(true);
     }
 
     @Override

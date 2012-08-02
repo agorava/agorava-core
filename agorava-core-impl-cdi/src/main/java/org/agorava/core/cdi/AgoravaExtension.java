@@ -25,7 +25,6 @@ import org.agorava.core.oauth.OAuthApplication;
 import org.jboss.solder.logging.Logger;
 import org.jboss.solder.reflection.AnnotationInspector;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.*;
@@ -36,16 +35,17 @@ import java.util.Set;
 import static com.google.common.collect.Sets.newHashSet;
 
 /**
+ * Agorava CDI extension to discover existing module and configured modules
+ *
  * @author Antoine Sabot-Durand
  */
-@ApplicationScoped
 public class AgoravaExtension implements Extension, Serializable {
 
-    private final Set<String> servicesNames = newHashSet();
-    private final Set<Annotation> servicesQualifiersConfigured = newHashSet();
+    private static final Set<String> servicesNames = newHashSet();
+    private static final Set<Annotation> servicesQualifiersConfigured = newHashSet();
     private static Set<Annotation> servicesQualifiersAvailable = newHashSet();
     private static BiMap<Annotation, String> servicesToQualifier = HashBiMap.create();
-    private boolean multiSession = false;
+    private static boolean multiSession = false;
 
     private static final Logger log = Logger.getLogger(AgoravaExtension.class);
 
@@ -60,18 +60,18 @@ public class AgoravaExtension implements Extension, Serializable {
         }
     }
 
+
     public void launchExtension(@Observes BeforeBeanDiscovery bbd) {
         log.info("Starting Agorava Framework initialization");
     }
 
     /**
-     * This observer methods build the list of existing Qualifiers having the ServiceRelated meta Annotation on configured
-     * service (having the {@link OAuthApplication} Annotation)
+     * This observer methods build the list of existing Qualifiers having the ServiceRelated meta Annotation on producers
+     * having the {@link OAuthApplication} Annotation
      *
      * @param pbean
-     * @param beanManager
      */
-    public void processApiHubProducer(@Observes ProcessProducer<?, SocialMediaApiHub> pbean, BeanManager beanManager) {
+    public void processApiHubProducer(@Observes ProcessProducer<?, SocialMediaApiHub> pbean) {
         Annotated annotated = pbean.getAnnotatedMember();
         internalProcessApiHub(annotated);
     }
@@ -82,17 +82,23 @@ public class AgoravaExtension implements Extension, Serializable {
      * service (having the {@link OAuthApplication} Annotation)
      *
      * @param pbean
-     * @param beanManager
      */
-    public void processApiHubBeans(@Observes ProcessBean<SocialMediaApiHub> pbean, BeanManager beanManager) {
+    public void processApiHubBeans(@Observes ProcessBean<SocialMediaApiHub> pbean) {
         Annotated annotated = pbean.getAnnotated();
         internalProcessApiHub(annotated);
     }
 
-    public Set<String> getSocialRelated() {
+    public static Set<String> getSocialRelated() {
         return servicesNames;
     }
 
+    /**
+     * After all {@link SocialMediaApiHub} were discovered we get there bean to retrieve the actual name of Social Media
+     * and associates it with the corresponding Qualifier
+     *
+     * @param adv
+     * @param beanManager
+     */
     public void processAfterDeploymentValidation(@Observes AfterDeploymentValidation adv, BeanManager beanManager) {
 
         CreationalContext ctx = beanManager.createCreationalContext(null);
@@ -120,12 +126,12 @@ public class AgoravaExtension implements Extension, Serializable {
         return servicesQualifiersAvailable;
     }
 
-    public boolean isMultiSession() {
+    public static boolean isMultiSession() {
         return multiSession;
     }
 
-    public void setMultiSession(boolean multiSession) {
-        this.multiSession = multiSession;
+    public static void setMultiSession(boolean ms) {
+        multiSession = ms;
     }
 
 }

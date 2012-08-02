@@ -79,8 +79,6 @@ public class OAuthServiceImpl implements OAuthService {
     @Any
     protected Instance<OAuthSession> sessionInstances;
 
-    @Inject
-    protected AgoravaExtension socialConfig;
 
     private String type;
 
@@ -209,7 +207,7 @@ public class OAuthServiceImpl implements OAuthService {
     @Override
     public OAuthSession getSession() {
         OAuthSession session;
-        if (socialConfig.isMultiSession())
+        if (AgoravaExtension.isMultiSession())
             session = sessionInstances.select(currentLiteral).get();
         else
             session = sessionInstances.select(getQualifier()).get();
