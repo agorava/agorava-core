@@ -81,7 +81,7 @@ public class JsonMapperJackson implements JsonMapper {
      *
      * @param module to register
      */
-    private void registerModule(Module module) {
+    public void registerModule(Module module) {
         objectMapper.registerModule(module);
     }
 
