@@ -141,8 +141,8 @@ public class AgoravaExtension implements Extension, Serializable {
             Bean beanSoc = Iterables.getLast(beanManager.getBeans(SocialMediaApiHub.class, qual));
             SocialMediaApiHub smah = (SocialMediaApiHub) beanManager.getReference(beanSoc, beanSoc.getBeanClass(), ctx);
             String name = smah.getSocialMediaName();
-            if (servicesToQualifier.containsKey(name)) {
-                throw new AgoravaException("This social media name : " + name + " is already registered. Check your modules or you SocialMediaApiHub producers.");
+            if (servicesToQualifier.containsKey(name) && ! servicesToQualifier.get(name).equals(qual)) {
+                throw new AgoravaException("This social media name : " + name + " is already registered with another qualifier. Check your modules or you SocialMediaApiHub producers.");
             }
             servicesToQualifier.put(name, qual);
         }
