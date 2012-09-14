@@ -14,30 +14,24 @@
  * limitations under the License.
  */
 
-package org.agorava.core.oauth;
+package org.agorava.core.cdi;
 
-import org.agorava.core.api.SocialMediaApiHub;
-import org.agorava.core.api.oauth.OAuthAppSettingsBuilder;
-import org.agorava.core.api.oauth.Param;
-import org.jboss.solder.bean.generic.GenericType;
-
+import javax.inject.Qualifier;
+import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
+import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-/**
- * This Annotation is a JBoss Solder Generic annotation to work with {@link OAuthGenericManager}
- * It'll convey information to initialize an OAuth application connection
- *
- * @author Antoine Sabot-Durand
- */
+@Qualifier
+@Target({TYPE, METHOD, PARAMETER, FIELD})
 @Retention(RUNTIME)
-@GenericType(SocialMediaApiHub.class)
-public @interface OAuthApplication {
-
-
-    Class<? extends OAuthAppSettingsBuilder> builder() default SimpleOAuthAppSettingsBuilder.class;
-
-    Param[] params();
+@Documented
+/**
+ * @author Antoine Sabot-Durand
+ *
+ */
+public @interface BadServiceQual {
 
 }

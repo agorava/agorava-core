@@ -20,17 +20,33 @@ package org.agorava.core.cdi;
 
 import org.agorava.core.api.SocialMediaApiHub;
 import org.agorava.core.api.UserProfile;
+import org.agorava.core.api.oauth.OAuthService;
 import org.agorava.core.api.oauth.OAuthSession;
+
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
+import javax.inject.Inject;
+import java.lang.annotation.Annotation;
+
+import static org.agorava.core.cdi.AgoravaExtension.getServicesToQualifier;
 
 /**
  * {@inheritDoc}
  *
  * @author Antoine Sabot-Durand
  */
-public abstract class AbstractSocialMediaApiHub extends AbstractOAuthServiceAwareImpl implements
+public abstract class AbstractSocialMediaApiHub implements
         SocialMediaApiHub {
 
     private static final String VERIFIER_PARAM_NAME = "oauth_verifier";
+
+
+    protected OAuthService service;
+
+    @Inject
+    @Any
+    private Instance<OAuthService> serviceInstances;
+
 
     @Override
     public UserProfile getMyProfile() {
@@ -55,6 +71,23 @@ public abstract class AbstractSocialMediaApiHub extends AbstractOAuthServiceAwar
     @Override
     public String getVerifierParamName() {
         return VERIFIER_PARAM_NAME;
+    }
+
+    @Override
+    public OAuthSession getSession() {
+        return getService().getSession();
+    }
+
+    @Override
+    public OAuthService getService() {
+        if (service == null) {
+            service = serviceInstances.select(getQualifier()).get();
+        }
+        return service;
+    }
+
+    private Annotation getQualifier() {
+        return getServicesToQualifier().get(getSocialMediaName());
     }
 
 }

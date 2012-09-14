@@ -21,7 +21,6 @@ import org.agorava.core.api.MultiSessionManager;
 import org.agorava.core.api.SocialMediaApiHub;
 import org.agorava.core.api.oauth.OAuthService;
 import org.agorava.core.api.oauth.OAuthSession;
-import org.agorava.core.oauth.OAuthSessionImpl;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
@@ -38,6 +37,7 @@ import java.util.Set;
 import static com.google.common.collect.Iterables.getLast;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
+import static org.agorava.core.cdi.AgoravaExtension.getServicesToQualifier;
 
 /**
  * {@inheritDoc}
@@ -101,7 +101,7 @@ public class MultiSessionManagerImpl implements MultiSessionManager, Serializabl
 
     @Override
     public String initNewSession(String servType) {
-        Annotation qualifier = AgoravaExtension.getServicesToQualifier().inverse().get(servType);
+        Annotation qualifier = getServicesToQualifier().get(servType);
         setCurrentSession(new OAuthSessionImpl(qualifier));
         return getCurrentService().getAuthorizationUrl();
 

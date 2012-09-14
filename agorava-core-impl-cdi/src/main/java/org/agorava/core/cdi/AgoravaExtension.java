@@ -21,7 +21,7 @@ import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Iterables;
 import org.agorava.core.api.ServiceRelated;
 import org.agorava.core.api.SocialMediaApiHub;
-import org.agorava.core.oauth.OAuthApplication;
+import org.agorava.core.api.exception.AgoravaException;
 import org.jboss.solder.logging.Logger;
 import org.jboss.solder.reflection.AnnotationInspector;
 
@@ -44,8 +44,9 @@ public class AgoravaExtension implements Extension, Serializable {
     private static final Set<String> servicesNames = newHashSet();
     private static final Set<Annotation> servicesQualifiersConfigured = newHashSet();
     private static Set<Annotation> servicesQualifiersAvailable = newHashSet();
-    private static BiMap<Annotation, String> servicesToQualifier = HashBiMap.create();
+    private static BiMap<String, Annotation> servicesToQualifier = HashBiMap.create();
     private static boolean multiSession = false;
+    private static Set<Annotation> qualifiersOnAuthService = newHashSet();
 
     private static final Logger log = Logger.getLogger(AgoravaExtension.class);
 
@@ -88,6 +89,39 @@ public class AgoravaExtension implements Extension, Serializable {
         internalProcessApiHub(annotated);
     }
 
+/*
+    public void processOAuthServiceBeans(@Observes ProcessBean<OAuthService> pBean) {
+        Set<Annotation> qualifiers = pBean.getBean().getQualifiers();
+        Set<Annotation> serviceQualifiers = Sets.filter(qualifiers, new ServiceRelatedPredicate());
+        if (serviceQualifiers.size() > 0) {
+            try {
+                qualifiersOnAuthService.add(Iterables.getOnlyElement(serviceQualifiers));
+            } catch (Exception e) {
+                throw new AgoravaException("OAuthService should have zero or one Service Related Qualifier", e);
+            }
+        }
+    }
+
+
+    public void registerOAuthServices(@Observes AfterBeanDiscovery abd, BeanManager bm)
+    {
+        BeanBuilder<OAuthServiceImpl> bb;
+        AnnotatedTypeBuilder<OAuthServiceImpl> ab=new AnnotatedTypeBuilder();
+        ab.readFromType(OAuthServiceImpl.class);
+        AnnotatedType<OAuthServiceImpl> at=ab.create();
+        for (Annotation annot : servicesQualifiersAvailable)
+                    {
+            if (! qualifiersOnAuthService.contains(annot))
+            {
+                bb=new BeanBuilder(bm);
+                bb.readFromType(at);
+                bb.addQualifier(annot);
+                abd.addBean(bb.create());
+            }
+        }
+    }
+*/
+
     public static Set<String> getSocialRelated() {
         return servicesNames;
     }
@@ -107,18 +141,21 @@ public class AgoravaExtension implements Extension, Serializable {
             Bean beanSoc = Iterables.getLast(beanManager.getBeans(SocialMediaApiHub.class, qual));
             SocialMediaApiHub smah = (SocialMediaApiHub) beanManager.getReference(beanSoc, beanSoc.getBeanClass(), ctx);
             String name = smah.getSocialMediaName();
-            servicesToQualifier.put(qual, name);
+            if (servicesToQualifier.containsKey(name)) {
+                throw new AgoravaException("This social media name : " + name + " is already registered. Check your modules or you SocialMediaApiHub producers.");
+            }
+            servicesToQualifier.put(name, qual);
         }
         ctx.release();
         for (Annotation annot : servicesQualifiersConfigured) {
-            servicesNames.add(servicesToQualifier.get(annot));
+            servicesNames.add(servicesToQualifier.inverse().get(annot));
         }
 
         log.info("Agorava initialization complete");
 
     }
 
-    public static BiMap<Annotation, String> getServicesToQualifier() {
+    public static BiMap<String, Annotation> getServicesToQualifier() {
         return servicesToQualifier;
     }
 

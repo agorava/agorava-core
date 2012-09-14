@@ -105,7 +105,7 @@ public class OAuthProviderScribe implements OAuthProvider {
      * <p/>
      * If none of the above solution works the method throws an exception
      *
-     * @param serviceName name od the Social Media
+     * @param serviceName name of the Social Media
      * @return Scribe API class
      * @throws AgoravaException if the class cannot be found
      */

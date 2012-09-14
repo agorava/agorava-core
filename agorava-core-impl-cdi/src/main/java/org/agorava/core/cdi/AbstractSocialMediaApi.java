@@ -18,44 +18,39 @@
  */
 package org.agorava.core.cdi;
 
-import org.agorava.core.api.oauth.OAuthService;
 import org.agorava.core.api.oauth.OAuthServiceAware;
 import org.agorava.core.api.oauth.OAuthSession;
+import org.agorava.core.utils.URLUtils;
 
-import javax.enterprise.inject.Any;
-import javax.enterprise.inject.Instance;
-import javax.inject.Inject;
-import java.lang.annotation.Annotation;
+import java.util.Map;
 
 /**
- * {@inheritDoc}
+ * Abstract base class for all API services class
  *
  * @author Antoine Sabot-Durand
  */
+public abstract class AbstractSocialMediaApi implements OAuthServiceAware {
 
-//TODO:delete this class and inject OAuthService with proper qualifier in each *BaseService and *ServicesHub
-public abstract class AbstractOAuthServiceAwareImpl implements OAuthServiceAware {
 
-    @Inject
-    @Any
-    protected Instance<OAuthService> serviceInstances;
+    public String buildUri(String url, String key, String value) {
+        return URLUtils.buildUri(buildUri(url), key, value);
+    }
 
-    @Override
-    public OAuthService getService() {
-        return serviceInstances.select(getQualifier()).get();
+    public String buildUri(String url, Map<String, ? extends Object> parameters) {
+        return URLUtils.buildUri(buildUri(url), parameters);
+    }
+
+    public String buildUri(String url) {
+        return url;
+    }
+
+    public String buildUri(String url, Object pojo) {
+        return URLUtils.buildUri(buildUri(url), pojo);
     }
 
     @Override
     public OAuthSession getSession() {
         return getService().getSession();
     }
-
-    /**
-     * Returns the annotation related to the Social Media
-     *
-     * @return Annotation being a Qualifier
-     */
-    abstract public Annotation getQualifier();
-
 
 }

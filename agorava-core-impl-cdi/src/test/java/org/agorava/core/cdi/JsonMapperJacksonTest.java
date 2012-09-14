@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package org.agorava.core.cdi.test;
+package org.agorava.core.cdi;
 
 import org.agorava.core.api.exception.AgoravaException;
 import org.agorava.core.api.exception.AgoravaRestException;
 import org.agorava.core.api.rest.RestResponse;
-import org.agorava.core.cdi.JsonMapperJackson;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

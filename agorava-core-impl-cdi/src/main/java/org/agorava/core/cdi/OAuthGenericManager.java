@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.agorava.core.oauth;
+package org.agorava.core.cdi;
 
 import com.google.common.collect.Iterables;
 import org.agorava.core.api.ServiceRelated;
@@ -70,8 +70,8 @@ public class OAuthGenericManager {
     @Produces
     @ApplyScope
     protected OAuthService produceService(OAuthServiceImpl service) {
-        service.setQualifier(qual);
-        serviceEventProducer.select(qual).fire(service);
+        service.qualifier = qual;
+        serviceEventProducer.select(qual).fire(service); //Allow an observer to customize service (specific HTTP header for instance)
         return service;
     }
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.agorava.core.oauth;
+package org.agorava.core.cdi;
 
 import org.agorava.core.api.JsonMapper;
 import org.agorava.core.api.event.OAuthComplete;
@@ -22,8 +22,6 @@ import org.agorava.core.api.event.SocialEvent;
 import org.agorava.core.api.oauth.*;
 import org.agorava.core.api.rest.RestResponse;
 import org.agorava.core.api.rest.RestVerb;
-import org.agorava.core.cdi.AgoravaExtension;
-import org.agorava.core.cdi.Current;
 import org.apache.commons.lang3.StringUtils;
 import org.jboss.solder.logging.Logger;
 
@@ -45,7 +43,6 @@ import static org.agorava.core.cdi.AgoravaExtension.getServicesToQualifier;
  *
  * @author Antoine Sabot-Durand
  */
-
 public class OAuthServiceImpl implements OAuthService {
 
     private static final long serialVersionUID = -8423894021913341674L;
@@ -61,13 +58,21 @@ public class OAuthServiceImpl implements OAuthService {
     @Any
     private Event<OAuthComplete> completeEventProducer;
 
-    private Annotation qualifier;
+    protected Annotation qualifier;
 
     private Map<String, String> requestHeader;
 
-    void setQualifier(Annotation qualifier) {
-        this.qualifier = qualifier;
-    }
+
+    /*  @Inject
+    private OAuthServiceImpl(InjectionPoint ip) {
+        Set<Annotation> qualifiers = Sets.filter(ip.getQualifiers(), new ServiceRelatedPredicate());
+        try {
+            qualifier = Iterables.getOnlyElement(qualifiers);
+        } catch (Exception e) {
+            throw new AgoravaException("Bean injecting OAuthService should have one (and only one) Service Related Qualifier", e);
+        }
+
+    }*/
 
     @Inject
     protected JsonMapper jsonService;
@@ -85,7 +90,7 @@ public class OAuthServiceImpl implements OAuthService {
     @Override
     public String getType() {
         if (StringUtils.isEmpty(type))
-            type = getServicesToQualifier().get(getQualifier());
+            type = getServicesToQualifier().inverse().get(getQualifier());
         return type;
     }
 
@@ -271,7 +276,7 @@ public class OAuthServiceImpl implements OAuthService {
     }
 
 
-    public Annotation getQualifier() {
+    protected Annotation getQualifier() {
         return qualifier;
     }
 

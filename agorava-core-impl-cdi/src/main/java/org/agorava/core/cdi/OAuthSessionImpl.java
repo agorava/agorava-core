@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package org.agorava.core.oauth;
+package org.agorava.core.cdi;
 
 import org.agorava.core.api.UserProfile;
 import org.agorava.core.api.oauth.OAuthSession;
 import org.agorava.core.api.oauth.OAuthToken;
-import org.agorava.core.cdi.AgoravaExtension;
 
 import java.lang.annotation.Annotation;
+
+import static org.agorava.core.cdi.AgoravaExtension.getServicesToQualifier;
 
 /**
  * {@inheritDoc}
@@ -47,7 +48,7 @@ public class OAuthSessionImpl implements OAuthSession {
 
     public OAuthSessionImpl(Annotation qualifier) {
         serviceQualifier = qualifier;
-        serviceName = AgoravaExtension.getServicesToQualifier().get(qualifier);
+        serviceName = getServicesToQualifier().inverse().get(qualifier);
     }
 
     @Override
