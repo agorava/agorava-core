@@ -22,8 +22,9 @@ import com.google.common.collect.Iterables;
 import org.agorava.core.api.ServiceRelated;
 import org.agorava.core.api.SocialMediaApiHub;
 import org.agorava.core.api.exception.AgoravaException;
-import org.jboss.solder.logging.Logger;
-import org.jboss.solder.reflection.AnnotationInspector;
+//import org.agorava.utils.solder.logging.Logger;
+import org.agorava.utils.solder.reflection.AnnotationInspector;
+import org.jboss.logging.Logger;
 
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.event.Observes;
