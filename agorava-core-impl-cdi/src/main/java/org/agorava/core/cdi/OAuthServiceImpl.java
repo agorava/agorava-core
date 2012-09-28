@@ -23,7 +23,8 @@ import org.agorava.core.api.oauth.*;
 import org.agorava.core.api.rest.RestResponse;
 import org.agorava.core.api.rest.RestVerb;
 import org.apache.commons.lang3.StringUtils;
-import org.jboss.solder.logging.Logger;
+import org.jboss.logging.Logger;
+//import org.agorava.utils.solder.logging.Logger;
 
 import javax.enterprise.event.Event;
 import javax.enterprise.inject.Any;

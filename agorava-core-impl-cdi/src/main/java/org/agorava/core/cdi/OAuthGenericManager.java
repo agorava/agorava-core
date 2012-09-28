@@ -22,11 +22,12 @@ import org.agorava.core.api.SocialMediaApiHub;
 import org.agorava.core.api.exception.AgoravaException;
 import org.agorava.core.api.oauth.*;
 import org.agorava.core.oauth.scribe.OAuthProviderScribe;
-import org.jboss.solder.bean.generic.ApplyScope;
-import org.jboss.solder.bean.generic.Generic;
-import org.jboss.solder.bean.generic.GenericConfiguration;
-import org.jboss.solder.logging.Logger;
-import org.jboss.solder.reflection.AnnotationInspector;
+import org.agorava.utils.solder.bean.generic.ApplyScope;
+import org.agorava.utils.solder.bean.generic.Generic;
+import org.agorava.utils.solder.bean.generic.GenericConfiguration;
+//import org.agorava.utils.solder.logging.Logger;
+import org.agorava.utils.solder.reflection.AnnotationInspector;
+import org.jboss.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
