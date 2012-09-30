@@ -79,6 +79,12 @@
         </repository>
     </repositories>
 
+	<dependencies>
+		<dependency>
+			<groupId>org.jboss.logging</groupId>
+			<artifactId>jboss-logging</artifactId>
+		</dependency>
+	</dependencies>
 
     <scm>
         <connection>scm:git:git://github.com/agorava/core.git</connection>

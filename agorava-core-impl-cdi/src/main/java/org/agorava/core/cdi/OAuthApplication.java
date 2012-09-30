@@ -20,7 +20,7 @@ import org.agorava.core.api.SocialMediaApiHub;
 import org.agorava.core.api.oauth.OAuthAppSettingsBuilder;
 import org.agorava.core.api.oauth.Param;
 import org.agorava.core.oauth.SimpleOAuthAppSettingsBuilder;
-import org.jboss.solder.bean.generic.GenericType;
+import org.agorava.utils.solder.bean.generic.GenericType;
 
 import java.lang.annotation.Retention;
 

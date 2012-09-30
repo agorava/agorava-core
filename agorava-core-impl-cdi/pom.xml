@@ -52,9 +52,10 @@
 
 
         <dependency>
-            <groupId>org.jboss.solder</groupId>
-            <artifactId>solder-impl</artifactId>
+            <groupId>org.agorava</groupId>
+            <artifactId>solder-generics-impl</artifactId>
             <scope>compile</scope>
+            <version>0.5.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
