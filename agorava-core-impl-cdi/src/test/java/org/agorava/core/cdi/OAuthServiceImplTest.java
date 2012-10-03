@@ -19,7 +19,6 @@ package org.agorava.core.cdi;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.Archive;
-import org.jboss.shrinkwrap.api.GenericArchive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.DependencyResolvers;
@@ -53,11 +52,13 @@ public class OAuthServiceImplTest {
         System.out.println(System.getProperty("arquillian"));
         if (("weld-ee-embedded-1.1".equals(System.getProperty("arquillian")) || System.getProperty("arquillian") == null)) {
             // Don't embed dependencies that are already in the CL in the embedded container from surefire
-            ret.addAsLibraries(DependencyResolvers.use(MavenDependencyResolver.class).loadMetadataFromPom("pom.xml")
-                    .artifact("org.jboss.solder:solder-impl").resolveAs(GenericArchive.class));
+            /*ret.addAsLibraries(DependencyResolvers.use(MavenDependencyResolver.class).loadMetadataFromPom("pom.xml")
+                    //.artifact("org.jboss.solder:solder-impl")
+                    .resolveAs(GenericArchive.class));*/
         } else {
             ret.addAsLibraries(DependencyResolvers.use(MavenDependencyResolver.class).loadMetadataFromPom("pom.xml")
-                    .artifact("org.jboss.solder:solder-impl").artifact("org.scribe:scribe")
+                    //.artifact("org.jboss.solder:solder-impl")
+                    .artifact("org.scribe:scribe")
                     .artifact("org.apache.commons:commons-lang3").artifact("org.codehaus.jackson:jackson-mapper-asl")
                     .artifact("com.google.guava:guava").resolveAsFiles());
         }
