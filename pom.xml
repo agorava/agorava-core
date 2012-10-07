@@ -37,11 +37,6 @@
         <module>agorava-core-impl</module>
     </modules>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    </properties>
-
     <developers>
         <developer>
             <name>Antoine Sabot-Durand</name>
@@ -81,8 +76,8 @@
 
 
     <scm>
-        <connection>scm:git:git://github.com/agorava/core.git</connection>
-        <developerConnection>scm:git:git@github.com:agorava/core.git</developerConnection>
-        <url>http://github.com/agorava/core</url>
+        <connection>scm:git:git://github.com/agorava/agorava-core.git</connection>
+        <developerConnection>scm:git:git@github.com:agorava/agorava-core.git</developerConnection>
+        <url>http://github.com/agorava/agorava-core</url>
     </scm>
 </project>
