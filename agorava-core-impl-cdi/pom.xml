@@ -20,7 +20,7 @@
     <parent>
         <artifactId>agorava-core-parent</artifactId>
         <groupId>org.agorava</groupId>
-        <version>0.5.0</version>
+        <version>0.5.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>agorava-core-impl-cdi</artifactId>

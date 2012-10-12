@@ -24,7 +24,7 @@
     </parent>
 
     <artifactId>agorava-core-parent</artifactId>
-    <version>0.5.0</version>
+    <version>0.5.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Agorava Core</name>
     <description>Java API to ease the use of social media</description>
