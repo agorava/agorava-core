@@ -21,10 +21,11 @@
     <parent>
         <groupId>org.agorava</groupId>
         <artifactId>agorava-parent</artifactId>
-        <version>0.5.0-SNAPSHOT</version>
+        <version>0.5.0</version>
     </parent>
 
     <artifactId>agorava-core-parent</artifactId>
+    <version>0.5.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Agorava Core</name>
     <description>Java API to ease the use of social media</description>
@@ -47,33 +48,6 @@
             </roles>
         </developer>
     </developers>
-    <repositories>
-        <repository>
-            <id>agorava-snapshot-repo</id>
-            <name>Agorava Snapshot Repository</name>
-            <url>http://repository-agorava.forge.cloudbees.com/snapshot/</url>
-            <layout>default</layout>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>agorava-release-repo</id>
-            <name>Agorava Release Repository</name>
-            <url>http://repository-agorava.forge.cloudbees.com/release/</url>
-            <layout>default</layout>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-
 
     <scm>
         <connection>scm:git:git://github.com/agorava/agorava-core.git</connection>
