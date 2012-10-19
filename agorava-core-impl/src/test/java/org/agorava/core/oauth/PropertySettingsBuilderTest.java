@@ -33,10 +33,31 @@ public class PropertySettingsBuilderTest {
 
         OAuthAppSettingsBuilder builderOAuthApp = new PropertyOAuthAppSettingsBuilder();
         OAuthAppSettings settings = builderOAuthApp.build();
+        Assert.assertEquals(settings.getCallback(), "undefineddummyCallback");
+
+    }
+
+    @Test
+    public void testAbsoluteUrlBuild() {
+
+        PropertyOAuthAppSettingsBuilder builderOAuthApp = new PropertyOAuthAppSettingsBuilder();
+        builderOAuthApp.bundleName("agoravahttp");
+        OAuthAppSettings settings = builderOAuthApp.build();
+        Assert.assertEquals(settings.getCallback(), "http://dummyCallback");
+
+    }
+
+
+    @Test
+    public void testSSLBuild() {
+
+        PropertyOAuthAppSettingsBuilder builderOAuthApp = new PropertyOAuthAppSettingsBuilder();
+        builderOAuthApp.bundleName("agoravassl");
+        OAuthAppSettings settings = builderOAuthApp.build();
         Assert.assertEquals(settings.getApiKey(), "dummy");
         Assert.assertEquals(settings.getApiSecret(), "dummySecret");
         Assert.assertEquals(settings.getScope(), "dummyScope");
-        Assert.assertEquals(settings.getCallback(), "undefineddummyCallback");
+        Assert.assertEquals(settings.getCallback(), "https://dummyCallback");
 
     }
 

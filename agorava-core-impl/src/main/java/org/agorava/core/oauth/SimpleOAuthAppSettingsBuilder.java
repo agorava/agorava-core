@@ -75,7 +75,7 @@ public class SimpleOAuthAppSettingsBuilder implements OAuthAppSettingsBuilder {
      */
     @Override
     public SimpleOAuthAppSettingsBuilder callback(String callback) {
-        if (!"oob".equals(callback) && (!callback.startsWith("http://") || callback.startsWith("https://")))
+        if (!"oob".equals(callback) && !callback.startsWith("http://") && !callback.startsWith("https://"))
             this.callback = AgoravaContext.webAbsolutePath + callback;
         else
             this.callback = callback;
