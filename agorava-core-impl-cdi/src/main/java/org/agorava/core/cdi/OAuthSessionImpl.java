@@ -136,4 +136,9 @@ public class OAuthSessionImpl implements OAuthSession {
         return toString();
     }
 
+	@Override
+	public String getServiceName() {
+		return serviceName;
+	}
+
 }
