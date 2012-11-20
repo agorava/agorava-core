@@ -84,4 +84,9 @@ public interface OAuthSession extends Serializable {
      * @return the name of the session to display for user
      */
     public String getName();
+    
+    /**
+     * @return the name of the service
+     */
+    public String getServiceName();
 }
