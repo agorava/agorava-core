@@ -29,7 +29,7 @@ import java.io.IOException;
  * @author Antoine Sabot-Durand
  */
 @WebFilter({"/*"})
-public class CaptureAbsolutePathListener implements Filter {
+public class CaptureAbsolutePathFilter implements Filter {
 
     private boolean first = true;
 
