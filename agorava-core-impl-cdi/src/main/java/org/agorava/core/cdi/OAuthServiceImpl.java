@@ -22,12 +22,13 @@ import org.agorava.core.api.event.SocialEvent;
 import org.agorava.core.api.oauth.*;
 import org.agorava.core.api.rest.RestResponse;
 import org.agorava.core.api.rest.RestVerb;
+import org.agorava.core.utils.AgoravaContext;
 import org.apache.commons.lang3.StringUtils;
 import org.jboss.logging.Logger;
-//import org.agorava.utils.solder.logging.Logger;
 
 import javax.enterprise.event.Event;
 import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Instance;
 import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Inject;
@@ -38,6 +39,8 @@ import java.util.Map.Entry;
 
 import static org.agorava.core.api.rest.RestVerb.*;
 import static org.agorava.core.cdi.AgoravaExtension.getServicesToQualifier;
+
+//import org.agorava.utils.solder.logging.Logger;
 
 /**
  * {@inheritDoc}
@@ -215,8 +218,12 @@ public class OAuthServiceImpl implements OAuthService {
         OAuthSession session;
         if (AgoravaExtension.isMultiSession())
             session = sessionInstances.select(currentLiteral).get();
+        else if (AgoravaContext.isWeb())
+            session = sessionInstances.select(getQualifier(), new AnnotationLiteral<Web>() {
+            }).get();
         else
-            session = sessionInstances.select(getQualifier()).get();
+            session = sessionInstances.select(getQualifier(), new AnnotationLiteral<Default>() {
+            }).get();
         return session;
 
     }

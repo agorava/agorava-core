@@ -25,18 +25,20 @@ import org.agorava.core.oauth.scribe.OAuthProviderScribe;
 import org.agorava.utils.solder.bean.generic.ApplyScope;
 import org.agorava.utils.solder.bean.generic.Generic;
 import org.agorava.utils.solder.bean.generic.GenericConfiguration;
-//import org.agorava.utils.solder.logging.Logger;
 import org.agorava.utils.solder.reflection.AnnotationInspector;
 import org.jboss.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.event.Event;
+import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.AnnotatedMember;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 import java.lang.annotation.Annotation;
+
+//import org.agorava.utils.solder.logging.Logger;
 
 /**
  * This Bean is used by JBoss Solder Generic Bean extension to generate multiple bean from one Bean declaration
@@ -85,7 +87,15 @@ public class OAuthGenericManager {
     }
 
     @Produces
+    @Web
     @SessionScoped
+    public OAuthSession produceWebSession() {
+        return new OAuthSessionImpl(qual);
+    }
+
+    @Produces
+    @Default
+    @ApplyScope
     public OAuthSession produceSession() {
         return new OAuthSessionImpl(qual);
     }

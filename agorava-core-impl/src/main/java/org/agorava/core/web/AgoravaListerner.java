@@ -14,30 +14,25 @@
  * limitations under the License.
  */
 
-package org.agorava.core.utils;
+package org.agorava.core.web;
+
+import org.agorava.core.utils.AgoravaContext;
+
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 
 /**
- * Class containing configuration for Agorava.
- * Static field here are stored here from third parties helper classes.
- *
  * @author Antoine Sabot-Durand
- * @see org.agorava.core.web.CaptureAbsolutePathFilter
  */
-public class AgoravaContext {
-
-    /**
-     * The complete Web Context path (protocol, server, application context) of this Agorava Instance
-     */
-    public static String webAbsolutePath = "undefined";
-
-    private static boolean web = false;
+public class AgoravaListerner implements ServletContextListener {
 
 
-    public static boolean isWeb() {
-        return web;
+    @Override
+    public void contextInitialized(ServletContextEvent sce) {
+        AgoravaContext.setWeb(true);
     }
 
-    public static void setWeb(boolean web) {
-        AgoravaContext.web = web;
+    @Override
+    public void contextDestroyed(ServletContextEvent sce) {
     }
 }

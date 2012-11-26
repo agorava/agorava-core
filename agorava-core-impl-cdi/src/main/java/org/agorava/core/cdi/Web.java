@@ -14,30 +14,28 @@
  * limitations under the License.
  */
 
-package org.agorava.core.utils;
 
+package org.agorava.core.cdi;
+
+import javax.inject.Qualifier;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+@Qualifier
+@Target({TYPE, METHOD, PARAMETER, FIELD})
+@Retention(RUNTIME)
+@Documented
 /**
- * Class containing configuration for Agorava.
- * Static field here are stored here from third parties helper classes.
+ *
+ *  Qualifier to mark OAuth Session as being usable in a Servlet context
  *
  * @author Antoine Sabot-Durand
- * @see org.agorava.core.web.CaptureAbsolutePathFilter
+ *
  */
-public class AgoravaContext {
+public @interface Web {
 
-    /**
-     * The complete Web Context path (protocol, server, application context) of this Agorava Instance
-     */
-    public static String webAbsolutePath = "undefined";
-
-    private static boolean web = false;
-
-
-    public static boolean isWeb() {
-        return web;
-    }
-
-    public static void setWeb(boolean web) {
-        AgoravaContext.web = web;
-    }
 }

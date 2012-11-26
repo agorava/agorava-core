@@ -27,6 +27,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.Produces;
+import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
@@ -56,6 +57,10 @@ public class MultiSessionManagerImpl implements MultiSessionManager, Serializabl
     @Inject
     @Any
     private Instance<SocialMediaApiHub> hubInstances;
+
+    @Inject
+    @Any
+    private Instance<OAuthSession> sessionInstances;
 
 
     private List<String> listOfServices;
@@ -102,7 +107,8 @@ public class MultiSessionManagerImpl implements MultiSessionManager, Serializabl
     @Override
     public String initNewSession(String servType) {
         Annotation qualifier = getServicesToQualifier().get(servType);
-        setCurrentSession(new OAuthSessionImpl(qualifier));
+        setCurrentSession(sessionInstances.select(qualifier, new AnnotationLiteral<Web>() {
+        }).get());
         return getCurrentService().getAuthorizationUrl();
 
     }
