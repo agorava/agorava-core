@@ -16,6 +16,8 @@
 
 package org.agorava.core.cdi;
 
+import org.agorava.core.oauth.SimpleOAuthAppSettingsBuilder;
+
 import javax.enterprise.inject.Produces;
 
 /**
@@ -24,7 +26,7 @@ import javax.enterprise.inject.Produces;
 public class ProduceServiceHub {
 
     @FakeService
-    @OAuthApplication(params = {})
+    @OAuthApplication(builder = SimpleOAuthAppSettingsBuilder.class)
     @Produces
     public FakeServiceHub produceFakeHub(FakeServiceHub hub) {
         return hub;

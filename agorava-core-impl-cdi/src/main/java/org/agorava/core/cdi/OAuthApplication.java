@@ -20,13 +20,11 @@ import org.agorava.core.api.SocialMediaApiHub;
 import org.agorava.core.api.oauth.OAuthAppSettingsBuilder;
 import org.agorava.core.api.oauth.Param;
 import org.agorava.core.oauth.PropertyOAuthAppSettingsBuilder;
-import org.agorava.core.oauth.SimpleOAuthAppSettingsBuilder;
 import org.agorava.utils.solder.bean.generic.GenericType;
 
 import java.lang.annotation.Retention;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import static org.agorava.core.oauth.PropertyOAuthAppSettingsBuilder.PREFIX;
 
 /**
  * This Annotation is a JBoss Solder Generic annotation to work with {@link OAuthGenericManager}
@@ -41,6 +39,6 @@ public @interface OAuthApplication {
 
     Class<? extends OAuthAppSettingsBuilder> builder() default PropertyOAuthAppSettingsBuilder.class;
 
-    Param[] params() default (params = {@Param()});
+    Param[] params() default {};
 
 }
