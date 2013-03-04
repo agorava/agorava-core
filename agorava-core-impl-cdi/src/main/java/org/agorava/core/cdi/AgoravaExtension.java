@@ -31,6 +31,8 @@ import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.*;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newHashSet;
@@ -140,7 +142,19 @@ public class AgoravaExtension implements Extension, Serializable {
 
         for (Annotation qual : servicesQualifiersAvailable) {
             Bean beanSoc = Iterables.getLast(beanManager.getBeans(SocialMediaApiHub.class, qual));
-            SocialMediaApiHub smah = (SocialMediaApiHub) beanManager.getReference(beanSoc, beanSoc.getBeanClass(), ctx);
+            Set<Type> types = beanSoc.getTypes();
+            Class<?> beanClass = null;
+            for (Type type : types) {
+                Class<?> clazz = (Class<?>)type;
+                if (!clazz.isInterface()) {
+                    if (!Modifier.isAbstract(clazz.getModifiers())) {
+                        if (AbstractSocialMediaApiHub.class.isAssignableFrom(clazz)) {
+                            beanClass = clazz;
+            			}
+            		}
+            	}
+            }
+            SocialMediaApiHub smah = (SocialMediaApiHub) beanManager.getReference(beanSoc, beanClass, ctx);
             String name = smah.getSocialMediaName();
             if (servicesToQualifier.containsKey(name) && ! servicesToQualifier.get(name).equals(qual)) {
                 throw new AgoravaException("This social media name : " + name + " is already registered with another qualifier. Check your modules or you SocialMediaApiHub producers.");
