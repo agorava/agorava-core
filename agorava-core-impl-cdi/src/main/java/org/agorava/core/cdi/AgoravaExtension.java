@@ -130,7 +130,7 @@ public class AgoravaExtension implements Extension, Serializable {
     }
 
     /**
-     * After all {@link SocialMediaApiHub} were discovered we get there bean to retrieve the actual name of Social Media
+     * After all {@link SocialMediaApiHub} were discovered we get their bean to retrieve the actual name of Social Media
      * and associates it with the corresponding Qualifier
      *
      * @param adv
@@ -154,6 +154,10 @@ public class AgoravaExtension implements Extension, Serializable {
             		}
             	}
             }
+            if (beanClass==null)  {
+                beanClass=SocialMediaApiHub.class;
+            }
+
             SocialMediaApiHub smah = (SocialMediaApiHub) beanManager.getReference(beanSoc, beanClass, ctx);
             String name = smah.getSocialMediaName();
             if (servicesToQualifier.containsKey(name) && ! servicesToQualifier.get(name).equals(qual)) {
