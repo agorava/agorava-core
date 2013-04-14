@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Agorava
+ * Copyright 2013 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ import com.google.common.collect.Iterables;
 import org.agorava.core.api.ServiceRelated;
 import org.agorava.core.api.SocialMediaApiHub;
 import org.agorava.core.api.exception.AgoravaException;
-//import org.agorava.utils.solder.logging.Logger;
 import org.agorava.utils.solder.reflection.AnnotationInspector;
 import org.jboss.logging.Logger;
 
@@ -31,11 +30,11 @@ import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.*;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Type;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newHashSet;
+
+//import org.agorava.utils.solder.logging.Logger;
 
 /**
  * Agorava CDI extension to discover existing module and configured modules
@@ -142,25 +141,9 @@ public class AgoravaExtension implements Extension, Serializable {
 
         for (Annotation qual : servicesQualifiersAvailable) {
             Bean beanSoc = Iterables.getLast(beanManager.getBeans(SocialMediaApiHub.class, qual));
-            Set<Type> types = beanSoc.getTypes();
-            Class<?> beanClass = null;
-            for (Type type : types) {
-                Class<?> clazz = (Class<?>)type;
-                if (!clazz.isInterface()) {
-                    if (!Modifier.isAbstract(clazz.getModifiers())) {
-                        if (AbstractSocialMediaApiHub.class.isAssignableFrom(clazz)) {
-                            beanClass = clazz;
-            			}
-            		}
-            	}
-            }
-            if (beanClass==null)  {
-                beanClass=SocialMediaApiHub.class;
-            }
-
-            SocialMediaApiHub smah = (SocialMediaApiHub) beanManager.getReference(beanSoc, beanClass, ctx);
+            SocialMediaApiHub smah = (SocialMediaApiHub) beanManager.getReference(beanSoc, SocialMediaApiHub.class, ctx);
             String name = smah.getSocialMediaName();
-            if (servicesToQualifier.containsKey(name) && ! servicesToQualifier.get(name).equals(qual)) {
+            if (servicesToQualifier.containsKey(name) && !servicesToQualifier.get(name).equals(qual)) {
                 throw new AgoravaException("This social media name : " + name + " is already registered with another qualifier. Check your modules or you SocialMediaApiHub producers.");
             }
             servicesToQualifier.put(name, qual);

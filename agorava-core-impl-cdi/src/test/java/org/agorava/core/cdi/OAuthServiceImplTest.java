@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Agorava
+ * Copyright 2013 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package org.agorava.core.cdi;
 
+import org.agorava.core.api.SocialMediaApiHub;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.Archive;
@@ -39,6 +40,9 @@ public class OAuthServiceImplTest {
 
     @Inject
     IncludingBean bean;
+
+    @Inject
+    SocialMediaApiHub hub;
 
 
     @Deployment
@@ -65,8 +69,20 @@ public class OAuthServiceImplTest {
         return ret;
     }
 
+
+    /**
+     * test if {@link OAuthGenericManager} produced the OAuthService with the right qualifier
+     */
     @Test
     public void testGetQualifier() {
         Assert.assertEquals(FakeServiceLiteral.INSTANCE, ((OAuthServiceImpl) bean.getService()).getQualifier());
+    }
+
+    /**
+     * test if {@link AgoravaExtension} prmade the right association between the Qualifier and the socialmedianame
+     */
+    @Test
+    public void testServiceToQualifier() {
+        Assert.assertEquals(AgoravaExtension.getServicesToQualifier().get(hub.getSocialMediaName()), FakeServiceLiteral.INSTANCE);
     }
 }
