@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Agorava
+ * Copyright 2013 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,11 @@
 
 package org.agorava.core.cdi;
 
-import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.jboss.shrinkwrap.resolver.api.DependencyResolvers;
-import org.jboss.shrinkwrap.resolver.api.maven.MavenDependencyResolver;
 import org.junit.Assert;
 import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -35,11 +29,11 @@ import java.io.FileNotFoundException;
 /**
  * @author Antoine Sabot-Durand
  */
-@RunWith(Arquillian.class)
+//@RunWith(Arquillian.class)
 public class BadOAuthServiceImplTest {
 
 
-    @Deployment(testable = false)
+    //@Deployment(testable = false)
     //@ShouldThrowException(AgoravaException.class) //FIXME:due to a bug in Arquillian this test cannot be performed -> https://issues.jboss.org/browse/ARQ-480
     public static Archive<?> createTestArchive() throws FileNotFoundException {
 
@@ -47,23 +41,10 @@ public class BadOAuthServiceImplTest {
                 .create(WebArchive.class, "test.war")
                 .addPackages(true, "org.agorava")
                 .addAsLibraries(new File("../agorava-core-api/target/agorava-core-api.jar"));
-        System.out.println(System.getProperty("arquillian"));
-        if (("weld-ee-embedded-1.1".equals(System.getProperty("arquillian")) || System.getProperty("arquillian") == null)) {
-            // Don't embed dependencies that are already in the CL in the embedded container from surefire
-            /*ret.addAsLibraries(DependencyResolvers.use(MavenDependencyResolver.class).loadMetadataFromPom("pom.xml")
-                    //.artifact("org.jboss.solder:solder-impl")
-                    .resolveAs(GenericArchive.class));*/
-        } else {
-            ret.addAsLibraries(DependencyResolvers.use(MavenDependencyResolver.class).loadMetadataFromPom("pom.xml")
-                    //.artifact("org.jboss.solder:solder-impl")
-                    .artifact("org.scribe:scribe")
-                    .artifact("org.apache.commons:commons-lang3").artifact("org.codehaus.jackson:jackson-mapper-asl")
-                    .artifact("com.google.guava:guava").resolveAsFiles());
-        }
         return ret;
     }
 
-    @Test
+    // @Test
     @Inject
     @Ignore //FIXME:disabled for the reason above
     public void testGetQualifier(@BadServiceQual
