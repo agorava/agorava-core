@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Agorava
+ * Copyright 2013 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import org.agorava.core.api.oauth.OAuthAppSettingsBuilder;
 import org.agorava.core.api.oauth.Param;
 import org.agorava.core.utils.AgoravaContext;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 /**
@@ -36,13 +37,19 @@ public class SimpleOAuthAppSettingsBuilder implements OAuthAppSettingsBuilder {
     private String apiSecret;
     private String callback = "oob";
     private String scope = "";
-
+    private Annotation qualifier;
 
     @Override
     public OAuthAppSettingsBuilder params(Param[] params) {
         for (Param param : params) {
             invokeSetter(param.name(), param.value());
         }
+        return this;
+    }
+
+    @Override
+    public OAuthAppSettingsBuilder qualifier(Annotation qualifier) {
+        this.qualifier = qualifier;
         return this;
     }
 
@@ -88,10 +95,20 @@ public class SimpleOAuthAppSettingsBuilder implements OAuthAppSettingsBuilder {
         return this;
     }
 
-
     @Override
     public OAuthAppSettings build() {
-        return new OAuthAppSettingsImpl(name, apiKey, apiSecret, callback, scope);
+        return new OAuthAppSettingsImpl(name, apiKey, apiSecret, callback, scope, qualifier);
+    }
+
+    @Override
+    public OAuthAppSettingsBuilder readFromSettings(OAuthAppSettings settings) {
+        this.apiKey(settings.getApiKey()).
+                apiSecret(settings.getApiSecret()).
+                callback(settings.getCallback()).
+                scope(settings.getScope()).
+                qualifier(settings.getQualifier()).name(settings.getSocialMediaName());
+
+        return this;
     }
 
     /**

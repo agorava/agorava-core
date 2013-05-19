@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Agorava
+ * Copyright 2013 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 
 package org.agorava.core.oauth.scribe;
 
+import org.agorava.core.api.ApplyQualifier;
+import org.agorava.core.api.Injectable;
 import org.agorava.core.api.exception.AgoravaException;
 import org.agorava.core.api.oauth.OAuthAppSettings;
 import org.agorava.core.api.oauth.OAuthProvider;
@@ -37,6 +39,7 @@ import java.util.ResourceBundle;
  *
  * @author Antoine Sabot-Durand
  */
+@ApplyQualifier
 public class OAuthProviderScribe implements OAuthProvider {
 
     Logger logger = LoggerFactory.getLogger(OAuthProviderScribe.class);
@@ -44,7 +47,7 @@ public class OAuthProviderScribe implements OAuthProvider {
     private static final String SCRIBE_API_PREFIX = "org.scribe.builder.api.";
     private static final String SCRIBE_API_SUFFIX = "Api";
 
-    private final org.scribe.oauth.OAuthService service;
+    private org.scribe.oauth.OAuthService service;
     private static final String API_CLASS = "apiClass";
 
     org.scribe.oauth.OAuthService getService() {
@@ -83,7 +86,8 @@ public class OAuthProviderScribe implements OAuthProvider {
      * @param settings OAuth app settings to construct this Provider
      * @throws AgoravaException if this provider cannot be build
      */
-    public OAuthProviderScribe(OAuthAppSettings settings) {
+    @Injectable
+    public OAuthProviderScribe(@ApplyQualifier OAuthAppSettings settings) {
         super();
         Class<? extends Api> apiClass = getApiClass(settings.getSocialMediaName());
         ServiceBuilder serviceBuilder = new ServiceBuilder().provider(apiClass).apiKey(settings.getApiKey())
@@ -94,6 +98,10 @@ public class OAuthProviderScribe implements OAuthProvider {
             serviceBuilder.scope(settings.getScope());
         }
         service = serviceBuilder.build();
+    }
+
+    protected OAuthProviderScribe() {
+        super();
     }
 
     /**

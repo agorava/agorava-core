@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Agorava
+ * Copyright 2013 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,23 @@
  * limitations under the License.
  */
 
-package org.agorava.core.cdi;
+package org.agorava.core.oauth;
 
+import org.agorava.core.api.ApplyQualifier;
+import org.agorava.core.api.Injectable;
 import org.agorava.core.api.UserProfile;
+import org.agorava.core.api.oauth.OAuthAppSettings;
 import org.agorava.core.api.oauth.OAuthSession;
 import org.agorava.core.api.oauth.OAuthToken;
 
 import java.lang.annotation.Annotation;
-
-import static org.agorava.core.cdi.AgoravaExtension.getServicesToQualifier;
 
 /**
  * {@inheritDoc}
  *
  * @author Antoine Sabot-Durand
  */
-//TODO:split in two to put in SE impl
+@ApplyQualifier
 public class OAuthSessionImpl implements OAuthSession {
 
     private static final long serialVersionUID = -2526192334215289830L;
@@ -42,14 +43,10 @@ public class OAuthSessionImpl implements OAuthSession {
 
     private UserProfile userProfile;
 
-    private final Annotation serviceQualifier;
+    @Injectable
+    @ApplyQualifier
+    private OAuthAppSettings settings;
 
-    private final String serviceName;
-
-    public OAuthSessionImpl(Annotation qualifier) {
-        serviceQualifier = qualifier;
-        serviceName = getServicesToQualifier().inverse().get(qualifier);
-    }
 
     @Override
     public OAuthToken getRequestToken() {
@@ -118,12 +115,13 @@ public class OAuthSessionImpl implements OAuthSession {
 
     @Override
     public Annotation getServiceQualifier() {
-        return serviceQualifier;
+        return settings.getQualifier();
     }
+
 
     @Override
     public String toString() {
-        return serviceName + " - " + (isConnected() ? getUserProfile().getFullName() : "not connected");
+        return getServiceName() + " - " + (isConnected() ? getUserProfile().getFullName() : "not connected");
     }
 
     @Override
@@ -136,9 +134,9 @@ public class OAuthSessionImpl implements OAuthSession {
         return toString();
     }
 
-	@Override
-	public String getServiceName() {
-		return serviceName;
-	}
+    @Override
+    public String getServiceName() {
+        return settings.getSocialMediaName();
+    }
 
 }

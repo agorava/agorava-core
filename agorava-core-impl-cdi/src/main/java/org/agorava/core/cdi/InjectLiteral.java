@@ -16,26 +16,13 @@
 
 package org.agorava.core.cdi;
 
-import org.agorava.core.api.oauth.OAuthAppSettingsBuilder;
-import org.agorava.core.api.oauth.Param;
-import org.agorava.core.oauth.PropertyOAuthAppSettingsBuilder;
-
-import java.lang.annotation.Retention;
-
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import javax.enterprise.util.AnnotationLiteral;
+import javax.inject.Inject;
 
 /**
- * This Annotation is a JBoss Solder Generic annotation to work with {@link OAuthGenericManager}
- * It'll convey information to initialize an OAuth application connection
- *
  * @author Antoine Sabot-Durand
  */
-@Retention(RUNTIME)
-public @interface OAuthApplication {
+public class InjectLiteral extends AnnotationLiteral<Inject> implements Inject {
 
-
-    Class<? extends OAuthAppSettingsBuilder> builder() default PropertyOAuthAppSettingsBuilder.class;
-
-    Param[] params() default {};
-
+    public static InjectLiteral instance = new InjectLiteral();
 }

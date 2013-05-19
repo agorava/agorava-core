@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Agorava
+ * Copyright 2013 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,27 +16,7 @@
 
 package org.agorava.core.cdi;
 
-import com.google.common.collect.Iterables;
-import org.agorava.core.api.ServiceRelated;
-import org.agorava.core.api.SocialMediaApiHub;
-import org.agorava.core.api.exception.AgoravaException;
-import org.agorava.core.api.oauth.*;
-import org.agorava.core.oauth.scribe.OAuthProviderScribe;
-import org.agorava.utils.solder.bean.generic.ApplyScope;
-import org.agorava.utils.solder.bean.generic.Generic;
-import org.agorava.utils.solder.bean.generic.GenericConfiguration;
-import org.agorava.utils.solder.reflection.AnnotationInspector;
-import org.jboss.logging.Logger;
-
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
-import javax.enterprise.event.Event;
-import javax.enterprise.inject.Default;
-import javax.enterprise.inject.Produces;
-import javax.enterprise.inject.spi.AnnotatedMember;
-import javax.enterprise.inject.spi.BeanManager;
-import javax.inject.Inject;
-import java.lang.annotation.Annotation;
+import org.apache.deltaspike.core.api.exclude.annotation.Exclude;
 
 //import org.agorava.utils.solder.logging.Logger;
 
@@ -47,9 +27,10 @@ import java.lang.annotation.Annotation;
  *
  * @author Antoine Sabot-Durand
  */
-@GenericConfiguration(OAuthApplication.class)
+//@GenericConfiguration(OAuthApplication.class)
+@Exclude
 public class OAuthGenericManager {
-
+/*
     Annotation qual;
 
     @Inject
@@ -117,5 +98,5 @@ public class OAuthGenericManager {
 
         settings = builderOAuthApp.name(servicesHub.getSocialMediaName()).params(app.params()).build();
     }
-
+*/
 }

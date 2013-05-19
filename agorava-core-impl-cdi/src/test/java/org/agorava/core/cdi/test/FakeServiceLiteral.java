@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Agorava
+ * Copyright 2013 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,28 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.agorava.core.cdi.test;
 
-package org.agorava.core.cdi;
+import javax.enterprise.util.AnnotationLiteral;
 
-import org.agorava.core.api.ServiceRelated;
-
-import javax.inject.Qualifier;
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
-@Qualifier
-@ServiceRelated
-@Target({TYPE, METHOD, PARAMETER, FIELD})
-@Retention(RUNTIME)
-@Documented
 /**
- * @author Antoine Sabot-Durand
- *
+ * @author antoine
  */
-public @interface FakeService {
+public class FakeServiceLiteral extends AnnotationLiteral<FakeService> implements FakeService {
 
+    public static FakeService INSTANCE = new FakeServiceLiteral();
 }

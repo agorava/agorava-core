@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Agorava
+ * Copyright 2013 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,17 @@
 
 package org.agorava.core.oauth;
 
+import org.agorava.core.api.ApplyQualifier;
 import org.agorava.core.api.oauth.OAuthAppSettings;
+
+import java.lang.annotation.Annotation;
 
 /**
  * {@inheritDoc}
  *
  * @author Antoine Sabot-Durand
  */
-
+@ApplyQualifier
 public class OAuthAppSettingsImpl implements OAuthAppSettings {
 
     private static final long serialVersionUID = -8018722725677732853L;
@@ -37,6 +40,8 @@ public class OAuthAppSettingsImpl implements OAuthAppSettings {
     private final String scope;
 
     private final String name;
+
+    private final Annotation qualifier;
 
     public String getApiKey() {
         return apiKey;
@@ -63,13 +68,19 @@ public class OAuthAppSettingsImpl implements OAuthAppSettings {
         return name;
     }
 
-    OAuthAppSettingsImpl(String name, String apiKey, String apiSecret, String callback, String scope) {
+    @Override
+    public Annotation getQualifier() {
+        return qualifier;
+    }
+
+    OAuthAppSettingsImpl(String name, String apiKey, String apiSecret, String callback, String scope, Annotation qualifier) {
         super();
         this.apiKey = apiKey;
         this.apiSecret = apiSecret;
         this.callback = callback;
         this.scope = scope;
         this.name = name;
+        this.qualifier = qualifier;
     }
 
     @Override

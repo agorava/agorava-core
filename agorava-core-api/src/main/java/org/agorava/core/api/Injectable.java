@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Agorava
+ * Copyright 2013 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,22 @@
  * limitations under the License.
  */
 
-package org.agorava.core.cdi;
+package org.agorava.core.api;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * This interface is used to mark field, method or constructor to indicate that they could support @Inject
+ *
  * @author Antoine Sabot-Durand
  */
-@BadServiceQual
-public class IncludingBean2 {
-
-    //@Inject
-    private OAuthServiceImpl service;
-
-    public OAuthServiceImpl getService() {
-        return service;
-    }
+@Target({METHOD, CONSTRUCTOR, FIELD})
+@Retention(RUNTIME)
+@Documented
+public @interface Injectable {
 }

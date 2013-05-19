@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Agorava
+ * Copyright 2013 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package org.agorava.core.api.oauth;
 
 import java.io.Serializable;
+import java.lang.annotation.Annotation;
 
 /**
  * Configuration settings needed to access to an OAuth 1.0a and 2.0 service.
@@ -51,6 +52,11 @@ public interface OAuthAppSettings extends Serializable {
      * @return the name of the service
      */
     public String getSocialMediaName();
+
+    /**
+     * @return the qualifier associated to the service
+     */
+    public Annotation getQualifier();
 
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Agorava
+ * Copyright 2013 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package org.agorava.core.cdi;
+package org.agorava.core.api;
 
-import javax.inject.Qualifier;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -24,14 +23,13 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Qualifier
-@Target({TYPE, METHOD, PARAMETER, FIELD})
+/**
+ * This interface is used to mark field, method or constructor to indicate that they could support @Inject
+ *
+ * @author Antoine Sabot-Durand
+ */
+@Target({METHOD, CONSTRUCTOR, FIELD, PARAMETER, TYPE})
 @Retention(RUNTIME)
 @Documented
-/**
- * @author Antoine Sabot-Durand
- *
- */
-public @interface BadServiceQual {
-
+public @interface ApplyQualifier {
 }

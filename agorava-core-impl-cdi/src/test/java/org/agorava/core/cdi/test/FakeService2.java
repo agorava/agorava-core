@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Agorava
+ * Copyright 2013 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,27 @@
  * limitations under the License.
  */
 
-package org.agorava.core.cdi;
+package org.agorava.core.cdi.test;
 
-import com.google.common.base.Predicate;
 import org.agorava.core.api.ServiceRelated;
 
-import javax.annotation.Nullable;
-import java.lang.annotation.Annotation;
+import javax.inject.Qualifier;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+@Qualifier
+@ServiceRelated
+@Target({TYPE, METHOD, PARAMETER, FIELD})
+@Retention(RUNTIME)
+@Documented
 /**
- * Created with IntelliJ IDEA.
- * User: antoine
- * Date: 17/08/12
- * Time: 15:09
- * To change this template use File | Settings | File Templates.
+ * @author Antoine Sabot-Durand
+ *
  */
-public class ServiceRelatedPredicate implements Predicate<Annotation> {
+public @interface FakeService2 {
 
-    @Override
-    public boolean apply(@Nullable Annotation input) {
-        return input.annotationType().isAnnotationPresent(ServiceRelated.class);
-    }
 }

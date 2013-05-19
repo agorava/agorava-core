@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Agorava
+ * Copyright 2013 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,29 +16,25 @@
 
 package org.agorava.core.cdi;
 
+import org.agorava.core.api.ApplyQualifier;
+import org.agorava.core.api.Injectable;
 import org.agorava.core.api.JsonMapper;
 import org.agorava.core.api.event.OAuthComplete;
 import org.agorava.core.api.event.SocialEvent;
 import org.agorava.core.api.oauth.*;
 import org.agorava.core.api.rest.RestResponse;
 import org.agorava.core.api.rest.RestVerb;
-import org.agorava.core.utils.AgoravaContext;
 import org.apache.commons.lang3.StringUtils;
 import org.jboss.logging.Logger;
 
 import javax.enterprise.event.Event;
-import javax.enterprise.inject.Any;
-import javax.enterprise.inject.Default;
-import javax.enterprise.inject.Instance;
 import javax.enterprise.util.AnnotationLiteral;
-import javax.inject.Inject;
 import java.lang.annotation.Annotation;
 import java.text.MessageFormat;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import static org.agorava.core.api.rest.RestVerb.*;
-import static org.agorava.core.cdi.AgoravaExtension.getServicesToQualifier;
 
 //import org.agorava.utils.solder.logging.Logger;
 
@@ -47,6 +43,7 @@ import static org.agorava.core.cdi.AgoravaExtension.getServicesToQualifier;
  *
  * @author Antoine Sabot-Durand
  */
+@ApplyQualifier
 public class OAuthServiceImpl implements OAuthService {
 
     private static final long serialVersionUID = -8423894021913341674L;
@@ -54,39 +51,26 @@ public class OAuthServiceImpl implements OAuthService {
         private static final long serialVersionUID = -2929657732814790025L;
     };
 
-    @Inject
-    @Any
-    private Instance<OAuthProvider> providers;
+    @Injectable
+    @ApplyQualifier
+    private OAuthProvider provider;
 
-    @Inject
-    @Any
+    @Injectable
+    @ApplyQualifier
     private Event<OAuthComplete> completeEventProducer;
 
-    protected Annotation qualifier;
 
     private Map<String, String> requestHeader;
 
-
-    /*  @Inject
-    private OAuthServiceImpl(InjectionPoint ip) {
-        Set<Annotation> qualifiers = Sets.filter(ip.getQualifiers(), new ServiceRelatedPredicate());
-        try {
-            qualifier = Iterables.getOnlyElement(qualifiers);
-        } catch (Exception e) {
-            throw new AgoravaException("Bean injecting OAuthService should have one (and only one) Service Related Qualifier", e);
-        }
-
-    }*/
-
-    @Inject
+    @Injectable
     protected JsonMapper jsonService;
 
-    @Inject
+    @Injectable
     private Logger log;
 
-    @Inject
-    @Any
-    protected Instance<OAuthSession> sessionInstances;
+    @Injectable
+    @ApplyQualifier
+    protected OAuthSession session;
 
 
     private String type;
@@ -94,7 +78,7 @@ public class OAuthServiceImpl implements OAuthService {
     @Override
     public String getType() {
         if (StringUtils.isEmpty(type))
-            type = getServicesToQualifier().inverse().get(getQualifier());
+            type = getSession().getServiceName();
         return type;
     }
 
@@ -104,7 +88,7 @@ public class OAuthServiceImpl implements OAuthService {
     }
 
     private OAuthProvider getProvider() {
-        return providers.select(getQualifier()).get();
+        return provider;
     }
 
     protected OAuthToken getRequestToken() {
@@ -121,8 +105,8 @@ public class OAuthServiceImpl implements OAuthService {
             session.setAccessToken(getProvider().getAccessToken(getRequestToken(), session.getVerifier()));
         if (session.getAccessToken() != null) {
             session.setRequestToken(null);
-            log.debug("firing event for " + getQualifier() + " OAuth complete cycle");
-            Event<OAuthComplete> event = completeEventProducer.select(getQualifier());
+            log.debug("firing event for " + getType() + " OAuth complete cycle");
+            Event<OAuthComplete> event = completeEventProducer.select();
             event.fire(new OAuthComplete(SocialEvent.Status.SUCCESS, "", session));
             log.debug("After OAuth cycle completion");
 
@@ -215,16 +199,13 @@ public class OAuthServiceImpl implements OAuthService {
 
     @Override
     public OAuthSession getSession() {
-        OAuthSession session;
-        if (AgoravaExtension.isMultiSession())
-            session = sessionInstances.select(currentLiteral).get();
-        else if (AgoravaContext.isWeb())
-            session = sessionInstances.select(getQualifier(), new AnnotationLiteral<Web>() {
-            }).get();
-        else
-            session = sessionInstances.select(getQualifier(), new AnnotationLiteral<Default>() {
-            }).get();
-        return session;
+        OAuthSession res = null;
+        //  if (AgoravaExtension.isMultiSession())
+        //res = sessionInstances.select(currentLiteral).get();
+        //else if (AgoravaContext.isWeb())
+        //  res=session;
+
+        return res;
 
     }
 
@@ -283,10 +264,6 @@ public class OAuthServiceImpl implements OAuthService {
         sendSignedRequest(RestVerb.DELETE, uri);
     }
 
-
-    protected Annotation getQualifier() {
-        return qualifier;
-    }
 
     protected Map<String, String> getRequestHeader() {
         return requestHeader;

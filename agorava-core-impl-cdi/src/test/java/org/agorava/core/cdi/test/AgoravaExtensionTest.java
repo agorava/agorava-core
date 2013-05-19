@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
-package org.agorava.core.cdi;
+package org.agorava.core.cdi.test;
 
-import org.agorava.core.api.SocialMediaApiHub;
+import junit.framework.Assert;
+import org.agorava.core.api.oauth.OAuthAppSettings;
+import org.agorava.core.api.oauth.OAuthProvider;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.Archive;
+import org.jboss.shrinkwrap.api.ArchivePath;
+import org.jboss.shrinkwrap.api.Filter;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -34,46 +37,68 @@ import java.io.FileNotFoundException;
 /**
  * @author Antoine Sabot-Durand
  */
+
 @RunWith(Arquillian.class)
-public class OAuthServiceImplTest {
+public class AgoravaExtensionTest {
 
     @Inject
-    IncludingBean bean;
+    @FakeService
+    OAuthProvider fakeProvider;
 
     @Inject
-    SocialMediaApiHub hub;
+    @FakeService2
+    OAuthProvider fakeProvider2;
+
+    @Inject
+    @FakeService
+    OAuthAppSettings settings1;
+
+
+    @Inject
+    @FakeService2
+    OAuthAppSettings settings2;
 
 
     @Deployment
     public static Archive<?> createTestArchive() throws FileNotFoundException {
         JavaArchive testJar = ShrinkWrap.create(JavaArchive.class, "all-agorava.jar")
-                .addPackages(true, "org.agorava")
+
+                .addPackages(true, new Filter<ArchivePath>() {
+                    @Override
+                    public boolean include(ArchivePath path) {
+                        return !(path.get().contains("test"));
+                    }
+                }, "org.agorava")
                 .addAsResource("META-INF/services/javax.enterprise.inject.spi.Extension")
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
 
 
         WebArchive ret = ShrinkWrap
                 .create(WebArchive.class, "test.war")
+                .addClasses(AgoravaExtensionTestProducers.class, FakeRoot.class, FakeService.class, FakeService2.class, FakeServiceLiteral.class, FakeService2Literal.class)
                 .addAsLibraries(testJar);
 
         System.out.println(System.getProperty("arquillian"));
         return ret;
     }
 
-
-    /**
-     * test if {@link OAuthGenericManager} produced the OAuthService with the right qualifier
-     */
     @Test
-    public void testGetQualifier() {
-        Assert.assertEquals(FakeServiceLiteral.INSTANCE, ((OAuthServiceImpl) bean.getService()).getQualifier());
+    public void testFakeProvider1Version() {
+        Assert.assertEquals(fakeProvider.getVersion(), "1.0");
     }
 
-    /**
-     * test if {@link AgoravaExtension} prmade the right association between the Qualifier and the socialmedianame
-     */
     @Test
-    public void testServiceToQualifier() {
-        Assert.assertEquals(AgoravaExtension.getServicesToQualifier().get(hub.getSocialMediaName()), FakeServiceLiteral.INSTANCE);
+    public void testFakeProvider2Version() {
+        Assert.assertEquals(fakeProvider2.getVersion(), "2.0");
+    }
+
+    @Test
+    public void testFakeSettings1Qual() {
+        Assert.assertEquals(settings1.getQualifier(), FakeServiceLiteral.INSTANCE);
+    }
+
+    @Test
+    public void testFakeSettings2Qual() {
+        Assert.assertEquals(settings2.getQualifier(), FakeService2Literal.INSTANCE);
     }
 }

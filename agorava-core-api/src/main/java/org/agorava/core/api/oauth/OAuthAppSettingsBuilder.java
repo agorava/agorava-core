@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Agorava
+ * Copyright 2013 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  */
 
 package org.agorava.core.api.oauth;
+
+import java.lang.annotation.Annotation;
 
 /**
  * Builder for an {@link OAuthAppSettings} can be initialized directly from
@@ -32,6 +34,15 @@ public interface OAuthAppSettingsBuilder {
     public static final String API_SECRET = "apiSecret";
     public static final String CALLBACK = "callback";
     public static final String SCOPE = "scope";
+
+
+    /**
+     * Set the qualifier of the Social Media for which the settings are intended.
+     *
+     * @param qualifier the name of the related Social Media
+     * @return the current OAuthAppSettingsBuilder
+     */
+    OAuthAppSettingsBuilder qualifier(Annotation qualifier);
 
 
     /**
@@ -93,6 +104,14 @@ public interface OAuthAppSettingsBuilder {
      * @return the application settings
      */
     OAuthAppSettings build();
+
+    /**
+     * Set builder params from an existing {@link OAuthAppSettings}
+     *
+     * @param settings
+     * @return the current OAuthAppSettingsBuilder
+     */
+    OAuthAppSettingsBuilder readFromSettings(OAuthAppSettings settings);
 
 
 }

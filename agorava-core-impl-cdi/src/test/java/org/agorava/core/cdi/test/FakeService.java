@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Agorava
+ * Copyright 2013 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,27 @@
  * limitations under the License.
  */
 
-package org.agorava.core.cdi;
+package org.agorava.core.cdi.test;
 
-import org.agorava.core.oauth.SimpleOAuthAppSettingsBuilder;
+import org.agorava.core.api.ServiceRelated;
 
-import javax.enterprise.inject.Produces;
+import javax.inject.Qualifier;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+@Qualifier
+@ServiceRelated
+@Target({TYPE, METHOD, PARAMETER, FIELD})
+@Retention(RUNTIME)
+@Documented
 /**
  * @author Antoine Sabot-Durand
+ *
  */
-public class ProduceServiceHub {
+public @interface FakeService {
 
-    @FakeService
-    @OAuthApplication(builder = SimpleOAuthAppSettingsBuilder.class)
-    @Produces
-    public FakeServiceHub produceFakeHub(FakeServiceHub hub) {
-        return hub;
-    }
 }
