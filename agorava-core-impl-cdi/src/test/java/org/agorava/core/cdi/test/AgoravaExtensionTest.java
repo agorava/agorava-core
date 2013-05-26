@@ -76,7 +76,8 @@ public class AgoravaExtensionTest {
         WebArchive ret = ShrinkWrap
                 .create(WebArchive.class, "test.war")
                 .addClasses(AgoravaExtensionTestProducers.class, FakeRoot.class, FakeService.class, FakeService2.class, FakeServiceLiteral.class, FakeService2Literal.class)
-                .addAsLibraries(testJar);
+                .addAsLibraries(testJar)
+                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
 
         System.out.println(System.getProperty("arquillian"));
         return ret;
