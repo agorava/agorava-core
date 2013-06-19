@@ -35,7 +35,6 @@ import org.apache.deltaspike.core.util.metadata.builder.AnnotatedTypeBuilder;
 import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.Dependent;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.*;
@@ -208,9 +207,10 @@ public class AgoravaExtension implements Extension, Serializable {
             // Register, OAuthProvider, OAuthSession, OAuthService if they don't exist (overloaded) yet
             // Register OAuthProvider
             beanRegisterer(OAuthProviderScribe.class, qual, ApplicationScoped.class, abd, beanManager);
-            beanRegisterer(OAuthSessionImpl.class, qual, Dependent.class, abd, beanManager);
+            beanRegisterer(OAuthSessionImpl.class, qual, ApplicationScoped.class, abd, beanManager);
             beanRegisterer(OAuthServiceImpl.class, qual, ApplicationScoped.class, abd, beanManager);
         }
+
 
         if (servicesQualifiersConfigured.size() != servicesToQualifier.size())
             log.warn("Some Service modules present in the application are not configured so won't be available"); //TODO:list the service without config

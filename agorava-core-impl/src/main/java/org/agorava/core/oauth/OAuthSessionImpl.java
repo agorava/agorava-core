@@ -43,9 +43,17 @@ public class OAuthSessionImpl implements OAuthSession {
 
     private UserProfile userProfile;
 
+    private final OAuthAppSettings settings;
+
     @Injectable
-    @ApplyQualifier
-    private OAuthAppSettings settings;
+    public OAuthSessionImpl(@ApplyQualifier OAuthAppSettings settings) {
+        this.settings = settings;
+    }
+
+    protected OAuthSessionImpl() {
+
+        settings = null;
+    }
 
 
     @Override

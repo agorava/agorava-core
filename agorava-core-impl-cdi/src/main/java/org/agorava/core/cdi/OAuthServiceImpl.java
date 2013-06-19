@@ -21,13 +21,14 @@ import org.agorava.core.api.Injectable;
 import org.agorava.core.api.JsonMapper;
 import org.agorava.core.api.event.OAuthComplete;
 import org.agorava.core.api.event.SocialEvent;
+import org.agorava.core.api.exception.AgoravaException;
 import org.agorava.core.api.oauth.*;
 import org.agorava.core.api.rest.RestResponse;
 import org.agorava.core.api.rest.RestVerb;
-import org.apache.commons.lang3.StringUtils;
-import org.jboss.logging.Logger;
 
 import javax.enterprise.event.Event;
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
 import javax.enterprise.util.AnnotationLiteral;
 import java.lang.annotation.Annotation;
 import java.text.MessageFormat;
@@ -50,7 +51,23 @@ public class OAuthServiceImpl implements OAuthService {
     private static Annotation currentLiteral = new AnnotationLiteral<Current>() {
         private static final long serialVersionUID = -2929657732814790025L;
     };
+    private final String socialMediaName;
+    private final Annotation qualifier;
 
+    @Injectable
+    protected JsonMapper jsonService;
+
+
+    @Injectable
+    @Any
+    protected Instance<OAuthSession> sessions;
+
+    //@Inject
+    //private Logger log;
+
+    // @Injectable
+    //@ApplyQualifier
+    //protected Instance<OAuthSession> sessionInstances;
     @Injectable
     @ApplyQualifier
     private OAuthProvider provider;
@@ -58,28 +75,23 @@ public class OAuthServiceImpl implements OAuthService {
     @Injectable
     @ApplyQualifier
     private Event<OAuthComplete> completeEventProducer;
-
-
     private Map<String, String> requestHeader;
 
     @Injectable
-    protected JsonMapper jsonService;
+    public OAuthServiceImpl(@ApplyQualifier OAuthAppSettings settings) {
+        socialMediaName = settings.getSocialMediaName();
+        qualifier = AgoravaExtension.getServicesToQualifier().get(socialMediaName);
+    }
 
-    @Injectable
-    private Logger log;
+    protected OAuthServiceImpl() {
 
-    @Injectable
-    @ApplyQualifier
-    protected OAuthSession session;
-
-
-    private String type;
+        socialMediaName = null;
+        qualifier = null;
+    }
 
     @Override
-    public String getType() {
-        if (StringUtils.isEmpty(type))
-            type = getSession().getServiceName();
-        return type;
+    public String getSocialMediaName() {
+        return socialMediaName;
     }
 
     @Override
@@ -105,11 +117,12 @@ public class OAuthServiceImpl implements OAuthService {
             session.setAccessToken(getProvider().getAccessToken(getRequestToken(), session.getVerifier()));
         if (session.getAccessToken() != null) {
             session.setRequestToken(null);
-            log.debug("firing event for " + getType() + " OAuth complete cycle");
+//            log.debug("firing event for " + getSocialMediaName() + " OAuth complete cycle");
             Event<OAuthComplete> event = completeEventProducer.select();
             event.fire(new OAuthComplete(SocialEvent.Status.SUCCESS, "", session));
-            log.debug("After OAuth cycle completion");
+//            log.debug("After OAuth cycle completion");
 
+            //TODO: reactivate logger
         } else {
             // FIXME Launch an exception !!
         }
@@ -160,21 +173,28 @@ public class OAuthServiceImpl implements OAuthService {
     }
 
     @Override
-    public void setVerifier(String verifierStr) {
-        OAuthSession session = getSession();
-        session.setVerifier(verifierStr);
-    }
-
-    @Override
     public String getVerifier() {
         OAuthSession session = getSession();
         return session.getVerifier();
     }
 
     @Override
+    public void setVerifier(String verifierStr) {
+        OAuthSession session = getSession();
+        session.setVerifier(verifierStr);
+    }
+
+    @Override
     public OAuthToken getAccessToken() {
         OAuthSession session = getSession();
         return session.getAccessToken();
+    }
+
+    @Override
+    public void setAccessToken(OAuthToken token) {
+        OAuthSession session = getSession();
+        session.setAccessToken(token);
+
     }
 
     @Override
@@ -190,21 +210,17 @@ public class OAuthServiceImpl implements OAuthService {
     }
 
     @Override
-    public void setAccessToken(OAuthToken token) {
-        OAuthSession session = getSession();
-        session.setAccessToken(token);
-
-    }
-
-
-    @Override
     public OAuthSession getSession() {
         OAuthSession res = null;
-        //  if (AgoravaExtension.isMultiSession())
-        //res = sessionInstances.select(currentLiteral).get();
-        //else if (AgoravaContext.isWeb())
-        //  res=session;
 
+        Instance<OAuthSession> currentSession = sessions.select(currentLiteral);
+        if (currentSession.isAmbiguous()) {
+            currentSession = currentSession.select(qualifier);
+
+        }
+        res = currentSession.get();
+        if (res.getServiceName() != getSocialMediaName())
+            throw new AgoravaException("Bad remoteService for OAuthSession. Expected : " + getSocialMediaName() + ", but was : " + res.getServiceName());
         return res;
 
     }
@@ -248,7 +264,6 @@ public class OAuthServiceImpl implements OAuthService {
         return response.getHeader("Location");
     }
 
-
     @Override
     public void put(String uri, Object toPut, Object... urlParams) {
         uri = MessageFormat.format(uri, urlParams);
@@ -263,7 +278,6 @@ public class OAuthServiceImpl implements OAuthService {
     public void delete(String uri) {
         sendSignedRequest(RestVerb.DELETE, uri);
     }
-
 
     protected Map<String, String> getRequestHeader() {
         return requestHeader;
