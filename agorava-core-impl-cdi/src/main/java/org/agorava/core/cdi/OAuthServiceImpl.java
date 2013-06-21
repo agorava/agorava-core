@@ -26,6 +26,7 @@ import org.agorava.core.api.oauth.*;
 import org.agorava.core.api.rest.RestResponse;
 import org.agorava.core.api.rest.RestVerb;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.event.Event;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
@@ -51,8 +52,8 @@ public class OAuthServiceImpl implements OAuthService {
     private static Annotation currentLiteral = new AnnotationLiteral<Current>() {
         private static final long serialVersionUID = -2929657732814790025L;
     };
-    private final String socialMediaName;
-    private final Annotation qualifier;
+    private String socialMediaName;
+    private Annotation qualifier;
 
     @Injectable
     protected JsonMapper jsonService;
@@ -62,36 +63,38 @@ public class OAuthServiceImpl implements OAuthService {
     @Any
     protected Instance<OAuthSession> sessions;
 
-    //@Inject
-    //private Logger log;
-
-    // @Injectable
-    //@ApplyQualifier
-    //protected Instance<OAuthSession> sessionInstances;
-    @Injectable
-    @ApplyQualifier
-    private OAuthProvider provider;
 
     @Injectable
     @ApplyQualifier
-    private Event<OAuthComplete> completeEventProducer;
+    protected OAuthProvider provider;
+
+    @Injectable
+    @ApplyQualifier
+    protected Event<OAuthComplete> completeEventProducer;
     private Map<String, String> requestHeader;
 
+    @ApplyQualifier
     @Injectable
-    public OAuthServiceImpl(@ApplyQualifier OAuthAppSettings settings) {
+    protected OAuthAppSettings settings;
+
+
+    @PostConstruct
+    public void init() {
+
         socialMediaName = settings.getSocialMediaName();
         qualifier = AgoravaExtension.getServicesToQualifier().get(socialMediaName);
     }
 
-    protected OAuthServiceImpl() {
-
-        socialMediaName = null;
-        qualifier = null;
-    }
 
     @Override
     public String getSocialMediaName() {
         return socialMediaName;
+    }
+
+
+    @Override
+    public String getVerifierParamName() {
+        return getProvider().getVerifierParamName();
     }
 
     @Override
@@ -215,7 +218,7 @@ public class OAuthServiceImpl implements OAuthService {
 
         Instance<OAuthSession> currentSession = sessions.select(currentLiteral);
         if (currentSession.isAmbiguous()) {
-            currentSession = currentSession.select(qualifier);
+            currentSession = sessions.select(currentLiteral, qualifier);
 
         }
         res = currentSession.get();

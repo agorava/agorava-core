@@ -22,4 +22,6 @@ package org.agorava.core.api;
 public interface RemoteServiceRoot {
 
     public String getServiceName();
+
+    public String getVerifierParamName();
 }

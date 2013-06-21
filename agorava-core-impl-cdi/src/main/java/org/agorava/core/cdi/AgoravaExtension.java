@@ -35,12 +35,16 @@ import org.apache.deltaspike.core.util.metadata.builder.AnnotatedTypeBuilder;
 import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Dependent;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.*;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newHashSet;
@@ -56,6 +60,7 @@ public class AgoravaExtension implements Extension, Serializable {
     private static final Logger log = Logger.getLogger(AgoravaExtension.class);
     private static BiMap<String, Annotation> servicesToQualifier = HashBiMap.create();
     private static boolean multiSession = false;
+    private Map<Annotation, Set<Type>> overridedGenericServices = new HashMap<Annotation, Set<Type>>();
 
     /**
      * @return the set of all service's names present in the application
@@ -177,19 +182,36 @@ public class AgoravaExtension implements Extension, Serializable {
         ctx.release();
     }
 
-    public void processOAuthSessionAT(@Observes ProcessAnnotatedType<OAuthSession> pat) {
-        if (pat.getAnnotatedType().isAnnotationPresent(ApplyQualifier.class))
+    private void processGenericBeanAT(ProcessAnnotatedType<?> pat) {
+        Annotated annotated = pat.getAnnotatedType();
+        if (annotated.isAnnotationPresent(ApplyQualifier.class))
             pat.veto();
+        else {
+            Set<Annotation> qualifiers = AgoravaExtension.getAnnotationsWithMeta(annotated, ServiceRelated.class);
+            if (qualifiers.size() != 0) {
+                if (qualifiers.size() > 1)
+                    throw new AgoravaException("Beans with multiple Service Related Qualifier are not supported");
+                Annotation qual = Iterables.getOnlyElement(qualifiers);
+                if (overridedGenericServices.containsKey(qual))
+                    overridedGenericServices.get(qual).addAll(annotated.getTypeClosure());
+                else
+                    overridedGenericServices.put(qual, new HashSet<Type>(annotated.getTypeClosure()));
+            }
+
+        }
+    }
+
+    public void processOAuthSessionAT(@Observes ProcessAnnotatedType<OAuthSession> pat) {
+        processGenericBeanAT(pat);
+
     }
 
     public void processOAuthServiceAT(@Observes ProcessAnnotatedType<OAuthService> pat) {
-        if (pat.getAnnotatedType().isAnnotationPresent(ApplyQualifier.class))
-            pat.veto();
+        processGenericBeanAT(pat);
     }
 
     public void processOAuthProviderAT(@Observes ProcessAnnotatedType<OAuthProvider> pat) {
-        if (pat.getAnnotatedType().isAnnotationPresent(ApplyQualifier.class))
-            pat.veto();
+        processGenericBeanAT(pat);
     }
 
     /**
@@ -207,7 +229,7 @@ public class AgoravaExtension implements Extension, Serializable {
             // Register, OAuthProvider, OAuthSession, OAuthService if they don't exist (overloaded) yet
             // Register OAuthProvider
             beanRegisterer(OAuthProviderScribe.class, qual, ApplicationScoped.class, abd, beanManager);
-            beanRegisterer(OAuthSessionImpl.class, qual, ApplicationScoped.class, abd, beanManager);
+            beanRegisterer(OAuthSessionImpl.class, qual, Dependent.class, abd, beanManager);
             beanRegisterer(OAuthServiceImpl.class, qual, ApplicationScoped.class, abd, beanManager);
         }
 
@@ -220,7 +242,7 @@ public class AgoravaExtension implements Extension, Serializable {
 
     private <T> void beanRegisterer(Class<T> clazz, Annotation qual, Class<? extends Annotation> scope, AfterBeanDiscovery abd, BeanManager beanManager) {
 
-        if (beanManager.getBeans(clazz, qual).size() == 0) {
+        if (!(overridedGenericServices.containsKey(qual) && overridedGenericServices.get(qual).contains(clazz))) {
 
             AnnotatedType<T> at = beanManager.createAnnotatedType(clazz);
             AnnotatedTypeBuilder<T> atb = new AnnotatedTypeBuilder<T>()
@@ -275,4 +297,37 @@ public class AgoravaExtension implements Extension, Serializable {
 
     }
 
+    public <T extends OAuthServiceImpl> void processOauthServiceSons(@Observes ProcessAnnotatedType<T> pat) {
+        processGenericSons(pat, OAuthServiceImpl.class);
+    }
+
+    public <T extends OAuthProviderScribe> void processOauthProviderSons(@Observes ProcessAnnotatedType<T> pat) {
+        processGenericSons(pat, OAuthProviderScribe.class);
+    }
+
+    public <T extends OAuthSessionImpl> void processOauthSessionSons(@Observes ProcessAnnotatedType<T> pat) {
+        processGenericSons(pat, OAuthSessionImpl.class);
+    }
+
+    private <T> void processGenericSons(ProcessAnnotatedType<T> pat, Class belowClass) {
+        AnnotatedType<T> at = pat.getAnnotatedType();
+        if (!at.getBaseType().equals(belowClass)) {
+
+            Set<Annotation> qualifiers = AgoravaExtension.getAnnotationsWithMeta(at, ServiceRelated.class);
+            if (qualifiers.size() != 0) {
+                if (qualifiers.size() > 1)
+                    throw new AgoravaException("Beans with multiple Service Related Qualifier are not supported");
+                Annotation qual = Iterables.getOnlyElement(qualifiers);
+                Class<T> clazz = (Class) at.getBaseType();
+
+                AnnotatedTypeBuilder<T> atb = new AnnotatedTypeBuilder<T>()
+                        .readFromType(clazz)
+                        .setJavaClass(clazz);
+
+                injectify(qual, atb.create(), atb);
+                pat.setAnnotatedType(atb.create());
+            }
+
+        }
+    }
 }

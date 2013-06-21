@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Agorava
+ * Copyright 2013 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -129,4 +129,6 @@ public interface OAuthService extends RestService {
     public RestResponse sendSignedRequest(OAuthRequest request);
 
     <T> T get(String uri, Class<T> clazz, boolean signed);
+
+    String getVerifierParamName();
 }

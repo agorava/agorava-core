@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package org.agorava.core.cdi.test;
+package org.agorava.core.api.oauth;
 
-import org.agorava.core.api.oauth.DefaultRootOAuth10a;
+import org.agorava.core.api.RemoteServiceRoot;
 
 /**
- * @author Antoine Sabot-Durand
+ * Abstract class for all OAuth 2.0 service root
+ *
+ * @author Anttoine Sabot-Durand
  */
-@FakeService
-public class FakeRoot extends DefaultRootOAuth10a {
+public abstract class DefaultRootOAuth20 implements RemoteServiceRoot {
     @Override
-    public String getServiceName() {
-        return "Twitter";
+    public String getVerifierParamName() {
+        return OAuthConstants.CODE;
     }
 }

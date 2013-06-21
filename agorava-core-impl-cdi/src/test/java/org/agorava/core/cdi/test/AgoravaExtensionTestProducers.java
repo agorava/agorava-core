@@ -17,10 +17,14 @@
 package org.agorava.core.cdi.test;
 
 import org.agorava.core.api.RemoteServiceRoot;
+import org.agorava.core.api.oauth.DefaultRootOAuth20;
 import org.agorava.core.api.oauth.OAuthAppSettings;
+import org.agorava.core.api.oauth.OAuthSession;
+import org.agorava.core.cdi.Current;
 import org.agorava.core.oauth.PropertyOAuthAppSettingsBuilder;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
 
 /**
@@ -32,14 +36,13 @@ public class AgoravaExtensionTestProducers {
     @Produces
     @FakeService2
     public RemoteServiceRoot produceFake2Root() {
-        return new RemoteServiceRoot() {
+        return new DefaultRootOAuth20() {
             @Override
             public String getServiceName() {
                 return "Facebook";
             }
         };
     }
-
 
     @ApplicationScoped
     @Produces
@@ -55,5 +58,14 @@ public class AgoravaExtensionTestProducers {
     public OAuthAppSettings produceSecondSetting() {
         PropertyOAuthAppSettingsBuilder builder = new PropertyOAuthAppSettingsBuilder();
         return builder.prefix("test").build();
+    }
+
+    @ApplicationScoped
+    @Produces
+    @Current
+    @FakeService
+    public OAuthSession produceAppSession(@FakeService @Default OAuthSession session) {
+
+        return session;
     }
 }

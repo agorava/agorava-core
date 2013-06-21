@@ -18,6 +18,7 @@ package org.agorava.core.oauth.scribe;
 
 import org.agorava.core.api.ApplyQualifier;
 import org.agorava.core.api.Injectable;
+import org.agorava.core.api.RemoteServiceRoot;
 import org.agorava.core.api.exception.AgoravaException;
 import org.agorava.core.api.oauth.OAuthAppSettings;
 import org.agorava.core.api.oauth.OAuthProvider;
@@ -31,6 +32,7 @@ import org.scribe.model.Verifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.PostConstruct;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
@@ -42,13 +44,17 @@ import java.util.ResourceBundle;
 @ApplyQualifier
 public class OAuthProviderScribe implements OAuthProvider {
 
-    Logger logger = LoggerFactory.getLogger(OAuthProviderScribe.class);
-
     private static final String SCRIBE_API_PREFIX = "org.scribe.builder.api.";
     private static final String SCRIBE_API_SUFFIX = "Api";
-
-    private org.scribe.oauth.OAuthService service;
     private static final String API_CLASS = "apiClass";
+    Logger logger = LoggerFactory.getLogger(OAuthProviderScribe.class);
+    @ApplyQualifier
+    @Injectable
+    OAuthAppSettings settings;
+    @ApplyQualifier
+    @Injectable
+    RemoteServiceRoot root;
+    private org.scribe.oauth.OAuthService service;
 
     org.scribe.oauth.OAuthService getService() {
         if (service == null)
@@ -82,13 +88,8 @@ public class OAuthProviderScribe implements OAuthProvider {
         return getService().getAuthorizationUrl(extractToken(tok));
     }
 
-    /**
-     * @param settings OAuth app settings to construct this Provider
-     * @throws AgoravaException if this provider cannot be build
-     */
-    @Injectable
-    public OAuthProviderScribe(@ApplyQualifier OAuthAppSettings settings) {
-        super();
+    @PostConstruct
+    public void init() {
         Class<? extends Api> apiClass = getApiClass(settings.getSocialMediaName());
         ServiceBuilder serviceBuilder = new ServiceBuilder().provider(apiClass).apiKey(settings.getApiKey())
                 .apiSecret(settings.getApiSecret());
@@ -100,8 +101,9 @@ public class OAuthProviderScribe implements OAuthProvider {
         service = serviceBuilder.build();
     }
 
-    protected OAuthProviderScribe() {
-        super();
+    @Override
+    public String getVerifierParamName() {
+        return root.getVerifierParamName();
     }
 
     /**

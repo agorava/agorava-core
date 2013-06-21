@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Agorava
+ * Copyright 2013 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
 package org.agorava.core.cdi;
 
 import org.agorava.core.api.MultiSessionManager;
-import org.agorava.core.api.SocialMediaApiHub;
 import org.agorava.core.api.oauth.OAuthService;
 import org.agorava.core.api.oauth.OAuthSession;
 
@@ -27,7 +26,6 @@ import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.Produces;
-import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
@@ -54,9 +52,6 @@ public class MultiSessionManagerImpl implements MultiSessionManager, Serializabl
     @Any
     private Instance<OAuthService> serviceInstances;
 
-    @Inject
-    @Any
-    private Instance<SocialMediaApiHub> hubInstances;
 
     @Inject
     @Any
@@ -88,10 +83,6 @@ public class MultiSessionManagerImpl implements MultiSessionManager, Serializabl
         return serviceInstances.select(getCurrentSession().getServiceQualifier()).get();
     }
 
-    @Override
-    public SocialMediaApiHub getCurrentServiceHub() {
-        return hubInstances.select(getCurrentSession().getServiceQualifier()).get();
-    }
 
     @Override
     public boolean isCurrentServiceConnected() {
@@ -107,8 +98,7 @@ public class MultiSessionManagerImpl implements MultiSessionManager, Serializabl
     @Override
     public String initNewSession(String servType) {
         Annotation qualifier = getServicesToQualifier().get(servType);
-        setCurrentSession(sessionInstances.select(qualifier, new AnnotationLiteral<Web>() {
-        }).get());
+        setCurrentSession(sessionInstances.select(qualifier).get());
         return getCurrentService().getAuthorizationUrl();
 
     }
