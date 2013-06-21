@@ -17,6 +17,7 @@
 package org.agorava.core.oauth.scribe;
 
 import org.agorava.core.api.ApplyQualifier;
+import org.agorava.core.api.GenericRoot;
 import org.agorava.core.api.Injectable;
 import org.agorava.core.api.RemoteServiceRoot;
 import org.agorava.core.api.exception.AgoravaException;
@@ -42,6 +43,7 @@ import java.util.logging.Logger;
  * @author Antoine Sabot-Durand
  */
 @ApplyQualifier
+@GenericRoot
 public class OAuthProviderScribe implements OAuthProvider {
 
     private static final String SCRIBE_API_PREFIX = "org.scribe.builder.api.";

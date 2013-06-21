@@ -17,6 +17,7 @@
 package org.agorava.core.cdi;
 
 import org.agorava.core.api.ApplyQualifier;
+import org.agorava.core.api.GenericRoot;
 import org.agorava.core.api.Injectable;
 import org.agorava.core.api.JsonMapper;
 import org.agorava.core.api.event.OAuthComplete;
@@ -46,6 +47,7 @@ import static org.agorava.core.api.rest.RestVerb.*;
  * @author Antoine Sabot-Durand
  */
 @ApplyQualifier
+@GenericRoot
 public class OAuthServiceImpl implements OAuthService {
 
     private static final long serialVersionUID = -8423894021913341674L;
