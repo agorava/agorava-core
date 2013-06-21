@@ -29,12 +29,12 @@ import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.Api;
 import org.scribe.model.Token;
 import org.scribe.model.Verifier;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * {@inheritDoc}
@@ -47,7 +47,7 @@ public class OAuthProviderScribe implements OAuthProvider {
     private static final String SCRIBE_API_PREFIX = "org.scribe.builder.api.";
     private static final String SCRIBE_API_SUFFIX = "Api";
     private static final String API_CLASS = "apiClass";
-    Logger logger = LoggerFactory.getLogger(OAuthProviderScribe.class);
+    private static Logger logger = Logger.getLogger(OAuthProviderScribe.class.getName());
     @ApplyQualifier
     @Injectable
     OAuthAppSettings settings;
@@ -127,7 +127,7 @@ public class OAuthProviderScribe implements OAuthProvider {
             ResourceBundle rb = ResourceBundle.getBundle(serviceName);
             className = rb.getString(API_CLASS);
         } catch (MissingResourceException e) {
-            logger.info("Found no bundle for service {}", serviceName);
+            logger.log(Level.INFO, "Found no bundle for service {0}", serviceName);
             className = SCRIBE_API_PREFIX + serviceName + SCRIBE_API_SUFFIX;
         }
         try {

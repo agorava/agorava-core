@@ -32,7 +32,6 @@ import org.agorava.core.oauth.OAuthSessionImpl;
 import org.agorava.core.oauth.scribe.OAuthProviderScribe;
 import org.apache.deltaspike.core.util.bean.BeanBuilder;
 import org.apache.deltaspike.core.util.metadata.builder.AnnotatedTypeBuilder;
-import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Dependent;
@@ -46,8 +45,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import static com.google.common.collect.Sets.newHashSet;
+import static java.util.logging.Level.INFO;
+import static java.util.logging.Level.WARNING;
 
 /**
  * Agorava CDI extension to discover existing module and configured modules
@@ -57,7 +59,8 @@ import static com.google.common.collect.Sets.newHashSet;
 public class AgoravaExtension implements Extension, Serializable {
 
     private static final Set<Annotation> servicesQualifiersConfigured = newHashSet();
-    private static final Logger log = Logger.getLogger(AgoravaExtension.class);
+    private static Logger log = Logger.getLogger(AgoravaExtension.class.getName());
+
     private static BiMap<String, Annotation> servicesToQualifier = HashBiMap.create();
     private static boolean multiSession = false;
     private Map<Annotation, Set<Type>> overridedGenericServices = new HashMap<Annotation, Set<Type>>();
@@ -150,7 +153,7 @@ public class AgoravaExtension implements Extension, Serializable {
 
         pp.setProducer(new OAuthAppSettingsProducerDecorator(oldProducer, qual));
 
-        log.infof("Found settings for %s", qual);
+        log.log(INFO, "Found settings for {0}", qual);
         servicesQualifiersConfigured.add(qual);
 
         //settings = builderOAuthApp.name(servicesHub.getSocialMediaName()).params(app.params()).build();
@@ -171,7 +174,7 @@ public class AgoravaExtension implements Extension, Serializable {
         if (qualifiers.size() != 1)
             throw new AgoravaException("A RemoteService bean should have one and only one service related Qualifier : " + pb.getAnnotated().toString());
         Annotation qual = Iterables.getOnlyElement(qualifiers);
-        log.infof("Found new service related qualifier : %s", qual);
+        log.log(INFO, "Found new service related qualifier : {0}", qual);
 
         Bean<?> beanSoc = pb.getBean();
 
@@ -235,7 +238,7 @@ public class AgoravaExtension implements Extension, Serializable {
 
 
         if (servicesQualifiersConfigured.size() != servicesToQualifier.size())
-            log.warn("Some Service modules present in the application are not configured so won't be available"); //TODO:list the service without config
+            log.log(WARNING, "Some Service modules present in the application are not configured so won't be available"); //TODO:list the service without config
         log.info("Agorava initialization complete");
 
     }
