@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Agorava
+ * Copyright 2013 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -86,7 +86,7 @@ public class URLUtils {
      * @param string to encode
      * @return form-urlencoded string
      */
-    private static String formURLEncode(String string) {
+    public static String formURLEncode(String string) {
         try {
             return URLEncoder.encode(string, UTF_8);
         } catch (UnsupportedEncodingException uee) {

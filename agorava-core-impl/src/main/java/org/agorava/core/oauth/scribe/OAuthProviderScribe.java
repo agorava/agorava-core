@@ -66,7 +66,7 @@ public class OAuthProviderScribe implements OAuthProvider {
 
     @Override
     public OAuthToken getRequestToken() {
-        return new OAuthTokenScribe("2.0".equals(getVersion()) ? null : getService().getRequestToken());
+        return new OAuthTokenScribe("1.0".equals(getVersion()) ? getService().getRequestToken() : null);
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Agorava
+ * Copyright 2013 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ public class PropertySettingsBuilderTest {
 
         OAuthAppSettingsBuilder builderOAuthApp = new PropertyOAuthAppSettingsBuilder();
         OAuthAppSettings settings = builderOAuthApp.build();
-        Assert.assertEquals(settings.getCallback(), "undefineddummyCallback");
+        Assert.assertEquals(settings.getCallback(), "/dummyCallback");
 
     }
 
@@ -97,7 +97,7 @@ public class PropertySettingsBuilderTest {
         Assert.assertEquals(settings.getApiKey(), "ymmud");
         Assert.assertEquals(settings.getApiSecret(), "ymmudSecret");
         Assert.assertEquals(settings.getScope(), "ymmudScope");
-        Assert.assertEquals(settings.getCallback(), "undefinedymmudCallback");
+        Assert.assertEquals(settings.getCallback(), "undefined/ymmudCallback");
 
     }
 
