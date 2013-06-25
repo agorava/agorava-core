@@ -77,6 +77,15 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.jboss.shrinkwrap.resolver</groupId>
+            <artifactId>shrinkwrap-resolver-depchain</artifactId>
+            <version>${shrinkwrap-resolver.version}</version>
+            <scope>test</scope>
+            <type>pom</type>
+        </dependency>
+
+
     </dependencies>
 
     <profiles>
