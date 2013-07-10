@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 
-package org.agorava.core.api.oauth;
-
-import org.agorava.core.api.RemoteServiceRoot;
+package org.agorava.core.api;
 
 /**
- * Abstract class for all OAuth 2.0 service root
+ * Root for all the Remote Service. Implementation should store specifics information
+ * about a given service
  *
- * @author Anttoine Sabot-Durand
+ * @author Antoine Sabot-Durand
  */
-public abstract class DefaultRootOAuth20 implements RemoteServiceRoot {
-    @Override
-    public String getVerifierParamName() {
-        return OAuthConstants.CODE;
-    }
+public interface RemoteApi {
+
+    /**
+     * @return the name of the service
+     */
+    public String getServiceName();
+
+
 }

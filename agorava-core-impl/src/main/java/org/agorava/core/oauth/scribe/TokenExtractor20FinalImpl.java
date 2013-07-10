@@ -25,7 +25,9 @@ import org.scribe.utils.Preconditions;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
+/**
+ * @author Antoine Sabot-Durand
+ */
 public class TokenExtractor20FinalImpl implements AccessTokenExtractor {
 
     private static final String TOKEN_REGEX = "\"access_token\":\"([^\"]+)";

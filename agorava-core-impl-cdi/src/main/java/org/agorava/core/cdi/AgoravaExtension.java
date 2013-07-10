@@ -242,7 +242,7 @@ public class AgoravaExtension implements Extension, Serializable {
 
     //----------------- Process Bean Phase ----------------------------------
 
-    private void CommonsProcessRemoteService(ProcessBean<RemoteServiceRoot> pb, BeanManager beanManager) {
+    private void CommonsProcessRemoteService(ProcessBean<RemoteApi> pb, BeanManager beanManager) {
         CreationalContext ctx = beanManager.createCreationalContext(null);
         Annotated annotated = pb.getAnnotated();
         Set<Annotation> qualifiers = AgoravaExtension.getAnnotationsWithMeta(annotated, ServiceRelated.class);
@@ -253,19 +253,19 @@ public class AgoravaExtension implements Extension, Serializable {
 
         Bean<?> beanSoc = pb.getBean();
 
-        final RemoteServiceRoot smah = (RemoteServiceRoot) beanManager.getReference(beanSoc, RemoteServiceRoot.class, ctx);
+        final RemoteApi smah = (RemoteApi) beanManager.getReference(beanSoc, RemoteApi.class, ctx);
         String name = smah.getServiceName();
         servicesToQualifier.put(name, qual);
 
         ctx.release();
     }
 
-    public void processRemoteServiceRoot(@Observes ProcessBean<RemoteServiceRoot> pb, BeanManager beanManager) {
+    public void processRemoteServiceRoot(@Observes ProcessBean<RemoteApi> pb, BeanManager beanManager) {
         CommonsProcessRemoteService(pb, beanManager);
     }
 
-    public void processRemoteServiceRoot(@Observes ProcessProducerMethod<RemoteServiceRoot, ?> pb, BeanManager beanManager) {
-        CommonsProcessRemoteService((ProcessBean<RemoteServiceRoot>) pb, beanManager);
+    public void processRemoteServiceRoot(@Observes ProcessProducerMethod<RemoteApi, ?> pb, BeanManager beanManager) {
+        CommonsProcessRemoteService((ProcessBean<RemoteApi>) pb, beanManager);
     }
 
 

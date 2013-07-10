@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Agorava
+ * Copyright 2013 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,28 +14,19 @@
  * limitations under the License.
  */
 
+package org.agorava.core.api.oauth;
 
-package org.agorava.core.cdi;
+import org.agorava.core.api.RemoteApi;
 
-import javax.inject.Qualifier;
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
-@Qualifier
-@Target({TYPE, METHOD, PARAMETER, FIELD})
-@Retention(RUNTIME)
-@Documented
 /**
- *
- *  Qualifier to mark OAuth Session as being usable in a Servlet context
+ * Root for all OAuth Services. Implementations should store specific information about services
  *
  * @author Antoine Sabot-Durand
- *
  */
-public @interface Web {
+public interface OAuthApi extends RemoteApi {
 
+    /**
+     * @return the OAuth Version used by the service
+     */
+    public String getOAuthVersion();
 }

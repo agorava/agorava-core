@@ -16,13 +16,13 @@
 
 package org.agorava.core.cdi.test;
 
-import org.agorava.core.api.oauth.DefaultRootOAuth10a;
+import org.agorava.core.api.oauth.DefaultOAuth10Api;
 
 /**
  * @author Antoine Sabot-Durand
  */
 @FakeService
-public class FakeRoot extends DefaultRootOAuth10a {
+public class FakeRoot extends DefaultOAuth10Api {
     @Override
     public String getServiceName() {
         return "Twitter";

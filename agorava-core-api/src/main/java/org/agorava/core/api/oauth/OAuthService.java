@@ -35,6 +35,13 @@ public interface OAuthService extends RestService {
     public OAuthToken getAccessToken();
 
     /**
+     * Set the Access Token with for an OAuth access
+     *
+     * @param token the token to set
+     */
+    public void setAccessToken(OAuthToken token);
+
+    /**
      * Returns the url to the OAuth service to ask an authorization to access the service.
      *
      * @return the REST URL to use request access
@@ -47,6 +54,13 @@ public interface OAuthService extends RestService {
      * @return the OAUth verifier
      */
     public String getVerifier();
+
+    /**
+     * Used to initialize verifier code returned by OAuth service
+     *
+     * @param verifierStr
+     */
+    public void setVerifier(String verifierStr);
 
     /**
      * Initialize the OAuth access token after the service gave an authorization with the Verifier
@@ -84,26 +98,12 @@ public interface OAuthService extends RestService {
     public RestResponse sendSignedRequest(RestVerb verb, String uri, String key, Object value);
 
     /**
-     * Used to initialize verifier code returned by OAuth service
-     *
-     * @param verifierStr
-     */
-    public void setVerifier(String verifierStr);
-
-    /**
      * Initialize and set an OAuth access token from its public and private keys
      *
      * @param token  public key
      * @param secret secret keys
      */
     public void setAccessToken(String token, String secret);
-
-    /**
-     * Set the Access Token with for an OAuth access
-     *
-     * @param token the token to set
-     */
-    public void setAccessToken(OAuthToken token);
 
     /**
      * Send an OAuth request signed with an XML Paylad as content
@@ -128,7 +128,22 @@ public interface OAuthService extends RestService {
      */
     public RestResponse sendSignedRequest(OAuthRequest request);
 
+    /**
+     * Perform a conditionally signed REST get command and return an object of the provided class
+     *
+     * @param uri    a string with {@link java.text.MessageFormat} placeholders (i.e. {0}, {1}) style for params. It's the uri to perform the REST get call
+     * @param clazz  class of the returned object
+     * @param signed indicate if the request has to be signed or not
+     * @param <T>    generic type for returned object
+     * @return the answer in the asked class T
+     */
     <T> T get(String uri, Class<T> clazz, boolean signed);
 
+
+    /**
+     * Gives the OAuth verifier parameter name
+     *
+     * @return the verifier name
+     */
     String getVerifierParamName();
 }
