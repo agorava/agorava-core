@@ -16,16 +16,14 @@
 
 package org.agorava.core.api.oauth;
 
-import org.agorava.core.api.RemoteServiceRoot;
-
 /**
- * Abstract class for all OAuth 1.0a service root
+ * Abstract class for all OAuth 2.0 service root
  *
- * @author Anttoine Sabot-Durand
+ * @author Antoine Sabot-Durand
  */
-public abstract class DefaultRootOAuth10a implements RemoteServiceRoot {
+public abstract class DefaultOAuth20Api implements OAuthApi {
     @Override
-    public String getVerifierParamName() {
-        return OAuthConstants.VERIFIER;
+    public String getOAuthVersion() {
+        return "2.0";
     }
 }

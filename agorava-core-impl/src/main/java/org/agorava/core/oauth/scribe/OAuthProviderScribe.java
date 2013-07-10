@@ -19,12 +19,8 @@ package org.agorava.core.oauth.scribe;
 import org.agorava.core.api.ApplyQualifier;
 import org.agorava.core.api.GenericRoot;
 import org.agorava.core.api.Injectable;
-import org.agorava.core.api.RemoteServiceRoot;
 import org.agorava.core.api.exception.AgoravaException;
-import org.agorava.core.api.oauth.OAuthAppSettings;
-import org.agorava.core.api.oauth.OAuthProvider;
-import org.agorava.core.api.oauth.OAuthRequest;
-import org.agorava.core.api.oauth.OAuthToken;
+import org.agorava.core.api.oauth.*;
 import org.agorava.core.api.rest.RestVerb;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.Api;
@@ -55,7 +51,7 @@ public class OAuthProviderScribe implements OAuthProvider {
     OAuthAppSettings settings;
     @ApplyQualifier
     @Injectable
-    RemoteServiceRoot root;
+    OAuthApi api;
     private org.scribe.oauth.OAuthService service;
 
     org.scribe.oauth.OAuthService getService() {
@@ -82,7 +78,7 @@ public class OAuthProviderScribe implements OAuthProvider {
 
     @Override
     public String getVersion() {
-        return getService().getVersion();
+        return api.getOAuthVersion();
     }
 
     @Override
@@ -105,7 +101,7 @@ public class OAuthProviderScribe implements OAuthProvider {
 
     @Override
     public String getVerifierParamName() {
-        return root.getVerifierParamName();
+        return "1.0".equals(getVersion()) ? OAuthConstants.VERIFIER : OAuthConstants.CODE;
     }
 
     /**

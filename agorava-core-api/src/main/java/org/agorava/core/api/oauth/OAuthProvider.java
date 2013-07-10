@@ -83,7 +83,7 @@ public interface OAuthProvider {
     public OAuthToken tokenFactory(String token, String secret);
 
     /**
-     * Gives the verifier paramater name
+     * Gives the OAuth verifier parameter name
      *
      * @return the verifier name
      */

@@ -16,8 +16,8 @@
 
 package org.agorava.core.cdi.test;
 
-import org.agorava.core.api.RemoteServiceRoot;
-import org.agorava.core.api.oauth.DefaultRootOAuth20;
+import org.agorava.core.api.RemoteApi;
+import org.agorava.core.api.oauth.DefaultOAuth20Api;
 import org.agorava.core.api.oauth.OAuthAppSettings;
 import org.agorava.core.api.oauth.OAuthSession;
 import org.agorava.core.cdi.Current;
@@ -35,8 +35,8 @@ public class AgoravaExtensionTestProducers {
 
     @Produces
     @FakeService2
-    public RemoteServiceRoot produceFake2Root() {
-        return new DefaultRootOAuth20() {
+    public RemoteApi produceFake2Root() {
+        return new DefaultOAuth20Api() {
             @Override
             public String getServiceName() {
                 return "Facebook";

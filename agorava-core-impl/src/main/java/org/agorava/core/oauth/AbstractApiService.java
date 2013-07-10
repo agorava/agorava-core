@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Agorava
+ * Copyright 2013 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 /**
  *
  */
-package org.agorava.core.cdi;
+package org.agorava.core.oauth;
 
-import org.agorava.core.api.oauth.OAuthServiceAware;
+import org.agorava.core.api.oauth.OAuthService;
 import org.agorava.core.api.oauth.OAuthSession;
 import org.agorava.core.utils.URLUtils;
 
@@ -29,7 +29,7 @@ import java.util.Map;
  *
  * @author Antoine Sabot-Durand
  */
-public abstract class AbstractSocialMediaApi implements OAuthServiceAware {
+public abstract class AbstractApiService {
 
 
     public String buildUri(String url, String key, String value) {
@@ -48,7 +48,11 @@ public abstract class AbstractSocialMediaApi implements OAuthServiceAware {
         return URLUtils.buildUri(buildUri(url), pojo);
     }
 
-    @Override
+    /**
+     * @return the underlying OAuthService
+     */
+    public abstract OAuthService getService();
+
     public OAuthSession getSession() {
         return getService().getSession();
     }

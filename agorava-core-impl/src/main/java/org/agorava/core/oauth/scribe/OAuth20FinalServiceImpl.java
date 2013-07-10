@@ -20,6 +20,10 @@ import org.scribe.builder.api.DefaultApi20;
 import org.scribe.model.*;
 import org.scribe.oauth.OAuth20ServiceImpl;
 
+
+/**
+ * @author Antoine Sabot-Durand
+ */
 public class OAuth20FinalServiceImpl extends OAuth20ServiceImpl {
 
     private static final String VERSION = "2.0 Final";

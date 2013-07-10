@@ -22,7 +22,9 @@ import org.scribe.model.OAuthConfig;
 import org.scribe.model.Verb;
 import org.scribe.oauth.OAuthService;
 
-
+/**
+ * @author Antoine Sabot-Durand
+ */
 public abstract class DefaultApi20Final extends DefaultApi20 {
 
     @Override
