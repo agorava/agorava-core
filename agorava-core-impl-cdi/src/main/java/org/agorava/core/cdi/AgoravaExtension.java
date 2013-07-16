@@ -312,7 +312,8 @@ public class AgoravaExtension implements Extension, Serializable {
             BeanBuilder<T> providerBuilder = new BeanBuilder<T>(beanManager)
                     .readFromType(atb.create())
                     .addQualifier(qual)
-                    .scope(scope);
+                    .scope(scope)
+                    .passivationCapable(true);
 
             Bean<T> bean = providerBuilder.create();
 
