@@ -16,14 +16,17 @@
 
 package org.agorava.core.cdi.test;
 
+import java.io.FileNotFoundException;
+
 import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.shrinkwrap.api.*;
+import org.jboss.shrinkwrap.api.Archive;
+import org.jboss.shrinkwrap.api.ArchivePath;
+import org.jboss.shrinkwrap.api.Filter;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
-
-import java.io.FileNotFoundException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -45,10 +48,10 @@ public class AgoravaTestDeploy {
                 .addAsResource("META-INF/services/javax.enterprise.inject.spi.Extension")
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
 
-        GenericArchive[] libs = Maven.resolver()
+        JavaArchive[] libs = Maven.resolver()
                 .loadPomFromFile("pom.xml")
                 .resolve("org.apache.deltaspike.core:deltaspike-core-impl")
-                .withTransitivity().as(GenericArchive.class);
+                .withTransitivity().as(JavaArchive.class);
 
 
         WebArchive ret = ShrinkWrap
