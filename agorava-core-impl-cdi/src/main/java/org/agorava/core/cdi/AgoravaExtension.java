@@ -16,10 +16,23 @@
 
 package org.agorava.core.cdi;
 
-import static com.google.common.collect.Sets.newHashSet;
-import static java.util.logging.Level.INFO;
-import static java.util.logging.Level.WARNING;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+import com.google.common.collect.Iterables;
+import org.agorava.core.api.*;
+import org.agorava.core.api.exception.AgoravaException;
+import org.agorava.core.api.oauth.OAuthAppSettings;
+import org.agorava.core.oauth.OAuthSessionImpl;
+import org.agorava.core.oauth.scribe.OAuthProviderScribe;
+import org.apache.deltaspike.core.api.literal.AnyLiteral;
+import org.apache.deltaspike.core.util.bean.BeanBuilder;
+import org.apache.deltaspike.core.util.metadata.builder.AnnotatedTypeBuilder;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Dependent;
+import javax.enterprise.context.spi.CreationalContext;
+import javax.enterprise.event.Observes;
+import javax.enterprise.inject.spi.*;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
@@ -29,45 +42,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.Dependent;
-import javax.enterprise.context.spi.CreationalContext;
-import javax.enterprise.event.Observes;
-import javax.enterprise.inject.Any;
-import javax.enterprise.inject.spi.AfterBeanDiscovery;
-import javax.enterprise.inject.spi.AfterDeploymentValidation;
-import javax.enterprise.inject.spi.Annotated;
-import javax.enterprise.inject.spi.AnnotatedConstructor;
-import javax.enterprise.inject.spi.AnnotatedField;
-import javax.enterprise.inject.spi.AnnotatedMember;
-import javax.enterprise.inject.spi.AnnotatedMethod;
-import javax.enterprise.inject.spi.AnnotatedType;
-import javax.enterprise.inject.spi.Bean;
-import javax.enterprise.inject.spi.BeanManager;
-import javax.enterprise.inject.spi.BeforeBeanDiscovery;
-import javax.enterprise.inject.spi.Extension;
-import javax.enterprise.inject.spi.ProcessAnnotatedType;
-import javax.enterprise.inject.spi.ProcessBean;
-import javax.enterprise.inject.spi.ProcessProducer;
-import javax.enterprise.inject.spi.ProcessProducerMethod;
-import javax.enterprise.inject.spi.Producer;
-import javax.enterprise.util.AnnotationLiteral;
-
-import org.agorava.core.api.ApplyQualifier;
-import org.agorava.core.api.GenericRoot;
-import org.agorava.core.api.Injectable;
-import org.agorava.core.api.RemoteApi;
-import org.agorava.core.api.ServiceRelated;
-import org.agorava.core.api.exception.AgoravaException;
-import org.agorava.core.api.oauth.OAuthAppSettings;
-import org.agorava.core.oauth.OAuthSessionImpl;
-import org.agorava.core.oauth.scribe.OAuthProviderScribe;
-import org.apache.deltaspike.core.util.bean.BeanBuilder;
-import org.apache.deltaspike.core.util.metadata.builder.AnnotatedTypeBuilder;
-
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
-import com.google.common.collect.Iterables;
+import static com.google.common.collect.Sets.newHashSet;
+import static java.util.logging.Level.INFO;
+import static java.util.logging.Level.WARNING;
 
 /**
  * Agorava CDI extension to discover existing module and configured modules
@@ -356,18 +333,16 @@ public class AgoravaExtension implements Extension, Serializable {
     private void registerServiceNames(BeanManager beanManager) {
         Set<Bean<?>> beans = beanManager.getBeans(RemoteApi.class, new AnyLiteral());
 
-        for(Bean<?> bean : beans) {
+        for (Bean<?> bean : beans) {
             Set<Annotation> qualifiers = getAnnotationsWithMeta(bean.getQualifiers(), ServiceRelated.class);
             Annotation qual = Iterables.getOnlyElement(qualifiers);
             CreationalContext<?> ctx = beanManager.createCreationalContext(null);
-            final RemoteApi smah = (RemoteApi) beanManager.getReference(bean, RemoteApi.class, ctx);
-            String name = smah.getServiceName();
+            final RemoteApi remoteApi = (RemoteApi) beanManager.getReference(bean, RemoteApi.class, ctx);
+            String name = remoteApi.getServiceName();
             servicesToQualifier.put(name, qual);
             ctx.release();
         }
     }
 
-    public static class AnyLiteral extends AnnotationLiteral<Any> implements Any {
-        private static final long serialVersionUID = 1L;
-    }
+
 }
