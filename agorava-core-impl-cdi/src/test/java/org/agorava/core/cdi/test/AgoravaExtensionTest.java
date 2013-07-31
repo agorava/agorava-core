@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2013 Agorava                                                  
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package org.agorava.core.cdi.test;
 
 import junit.framework.Assert;
+import org.agorava.core.api.exception.AgoravaException;
 import org.agorava.core.api.oauth.OAuthAppSettings;
 import org.agorava.core.api.oauth.OAuthProvider;
 import org.agorava.core.api.oauth.OAuthService;
@@ -54,6 +55,10 @@ public class AgoravaExtensionTest extends AgoravaTestDeploy {
     @FakeService
     OAuthService service;
 
+    @Inject
+    @FakeService2
+    OAuthService service2;
+
     @Test
     public void testFakeProvider1Version() {
         Assert.assertEquals(fakeProvider.getVersion(), "1.0");
@@ -73,4 +78,17 @@ public class AgoravaExtensionTest extends AgoravaTestDeploy {
     public void testFakeSettings2Qual() {
         Assert.assertEquals(settings2.getQualifier(), FakeService2Literal.INSTANCE);
     }
+
+    @Test
+    public void testServiceWithCurrentSession() {
+        Assert.assertNotNull(service.getSession());
+
+    }
+
+    @Test(expected = AgoravaException.class)
+    public void testServiceWithoutCurrentSession() {
+        service2.getSession();
+
+    }
+
 }

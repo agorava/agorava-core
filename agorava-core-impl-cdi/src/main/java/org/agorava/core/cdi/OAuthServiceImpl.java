@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2013 Agorava                                                  
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -228,10 +228,10 @@ public class OAuthServiceImpl implements OAuthService {
             currentSession = currentSession.select(qualifier);
 
         }
-        res = currentSession.get();
-        if (res == null) {
+        if (currentSession.isUnsatisfied()) {
             throw new AgoravaException("No OAuthSession defined with @Current qualifier");
         }
+        res = currentSession.get();
         if (res.getServiceName() != getSocialMediaName())
             throw new AgoravaException("Bad remoteService for OAuthSession. Expected : " + getSocialMediaName() + ", " +
                     "but was : " + res.getServiceName());
