@@ -23,7 +23,12 @@ import org.agorava.core.api.JsonMapper;
 import org.agorava.core.api.event.OAuthComplete;
 import org.agorava.core.api.event.SocialEvent;
 import org.agorava.core.api.exception.AgoravaException;
-import org.agorava.core.api.oauth.*;
+import org.agorava.core.api.oauth.OAuthAppSettings;
+import org.agorava.core.api.oauth.OAuthProvider;
+import org.agorava.core.api.oauth.OAuthRequest;
+import org.agorava.core.api.oauth.OAuthService;
+import org.agorava.core.api.oauth.OAuthSession;
+import org.agorava.core.api.oauth.OAuthToken;
 import org.agorava.core.api.rest.RestResponse;
 import org.agorava.core.api.rest.RestVerb;
 
@@ -37,7 +42,9 @@ import java.text.MessageFormat;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import static org.agorava.core.api.rest.RestVerb.*;
+import static org.agorava.core.api.rest.RestVerb.GET;
+import static org.agorava.core.api.rest.RestVerb.POST;
+import static org.agorava.core.api.rest.RestVerb.PUT;
 
 //import org.agorava.utils.solder.logging.Logger;
 
@@ -110,8 +117,7 @@ public class OAuthServiceImpl implements OAuthService {
 
     protected OAuthToken getRequestToken() {
         OAuthSession session = getSession();
-        if (session.getRequestToken() == null)
-            session.setRequestToken(getProvider().getRequestToken());
+        if (session.getRequestToken() == null) session.setRequestToken(getProvider().getRequestToken());
         return session.getRequestToken();
     }
 
@@ -136,8 +142,7 @@ public class OAuthServiceImpl implements OAuthService {
 
     @Override
     public RestResponse sendSignedRequest(OAuthRequest request) {
-        if (getRequestHeader() != null)
-            request.getHeaders().putAll(getRequestHeader());
+        if (getRequestHeader() != null) request.getHeaders().putAll(getRequestHeader());
         getProvider().signRequest(getAccessToken(), request);
         return request.send();
     }
@@ -220,12 +225,16 @@ public class OAuthServiceImpl implements OAuthService {
 
         Instance<OAuthSession> currentSession = sessions.select(currentLiteral);
         if (currentSession.isAmbiguous()) {
-            currentSession = sessions.select(currentLiteral, qualifier);
+            currentSession = currentSession.select(qualifier);
 
         }
         res = currentSession.get();
+        if (res == null) {
+            throw new AgoravaException("No OAuthSession defined with @Current qualifier");
+        }
         if (res.getServiceName() != getSocialMediaName())
-            throw new AgoravaException("Bad remoteService for OAuthSession. Expected : " + getSocialMediaName() + ", but was : " + res.getServiceName());
+            throw new AgoravaException("Bad remoteService for OAuthSession. Expected : " + getSocialMediaName() + ", " +
+                    "but was : " + res.getServiceName());
         return res;
 
     }
@@ -238,10 +247,8 @@ public class OAuthServiceImpl implements OAuthService {
     @Override
     public <T> T get(String uri, Class<T> clazz, boolean signed) {
         RestResponse resp;
-        if (signed)
-            resp = sendSignedRequest(GET, uri);
-        else
-            resp = getProvider().requestFactory(GET, uri).send();
+        if (signed) resp = sendSignedRequest(GET, uri);
+        else resp = getProvider().requestFactory(GET, uri).send();
         return jsonService.mapToObject(resp, clazz);
     }
 
