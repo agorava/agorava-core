@@ -54,31 +54,23 @@ public class OAuthServiceImpl implements OAuthService {
     private static Annotation currentLiteral = new AnnotationLiteral<Current>() {
         private static final long serialVersionUID = -2929657732814790025L;
     };
-    private String socialMediaName;
-    private Annotation qualifier;
-
     @Injectable
     protected JsonMapper jsonService;
-
-
     @Injectable
     @Any
     protected Instance<OAuthSession> sessions;
-
-
     @Injectable
     @ApplyQualifier
     protected OAuthProvider provider;
-
     @Injectable
     @ApplyQualifier
     protected Event<OAuthComplete> completeEventProducer;
-    private Map<String, String> requestHeader;
-
     @ApplyQualifier
     @Injectable
     protected OAuthAppSettings settings;
-
+    private String socialMediaName;
+    private Annotation qualifier;
+    private Map<String, String> requestHeader;
 
     @PostConstruct
     public void init() {
@@ -87,12 +79,10 @@ public class OAuthServiceImpl implements OAuthService {
         qualifier = AgoravaExtension.getServicesToQualifier().get(socialMediaName);
     }
 
-
     @Override
     public String getSocialMediaName() {
         return socialMediaName;
     }
-
 
     @Override
     public String getVerifierParamName() {
@@ -291,6 +281,16 @@ public class OAuthServiceImpl implements OAuthService {
     @Override
     public void setRequestHeader(Map<String, String> requestHeader) {
         this.requestHeader = requestHeader;
+    }
+
+    @Override
+    public void resetSession() {
+
+        OAuthSession session = getSession();
+        session.setAccessToken(null);
+        session.setVerifier(null);
+        session.setUserProfile(null);
+
     }
 
 }
