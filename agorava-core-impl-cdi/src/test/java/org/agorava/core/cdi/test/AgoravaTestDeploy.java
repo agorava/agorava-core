@@ -16,8 +16,6 @@
 
 package org.agorava.core.cdi.test;
 
-import java.io.FileNotFoundException;
-
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ArchivePath;
@@ -27,6 +25,8 @@ import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
+
+import java.io.FileNotFoundException;
 
 /**
  * Created with IntelliJ IDEA.

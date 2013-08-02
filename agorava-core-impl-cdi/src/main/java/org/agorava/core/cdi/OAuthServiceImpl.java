@@ -23,12 +23,7 @@ import org.agorava.core.api.JsonMapper;
 import org.agorava.core.api.event.OAuthComplete;
 import org.agorava.core.api.event.SocialEvent;
 import org.agorava.core.api.exception.AgoravaException;
-import org.agorava.core.api.oauth.OAuthAppSettings;
-import org.agorava.core.api.oauth.OAuthProvider;
-import org.agorava.core.api.oauth.OAuthRequest;
-import org.agorava.core.api.oauth.OAuthService;
-import org.agorava.core.api.oauth.OAuthSession;
-import org.agorava.core.api.oauth.OAuthToken;
+import org.agorava.core.api.oauth.*;
 import org.agorava.core.api.rest.RestResponse;
 import org.agorava.core.api.rest.RestVerb;
 
@@ -42,9 +37,7 @@ import java.text.MessageFormat;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import static org.agorava.core.api.rest.RestVerb.GET;
-import static org.agorava.core.api.rest.RestVerb.POST;
-import static org.agorava.core.api.rest.RestVerb.PUT;
+import static org.agorava.core.api.rest.RestVerb.*;
 
 //import org.agorava.utils.solder.logging.Logger;
 
