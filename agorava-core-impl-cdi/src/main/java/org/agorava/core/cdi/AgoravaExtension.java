@@ -54,7 +54,6 @@ import static java.util.logging.Level.WARNING;
 public class AgoravaExtension implements Extension, Serializable {
 
     private static final long serialVersionUID = 1L;
-
     private static final Set<Annotation> servicesQualifiersConfigured = newHashSet();
     private static Logger log = Logger.getLogger(AgoravaExtension.class.getName());
     private static BiMap<String, Annotation> servicesToQualifier = HashBiMap.create();
@@ -273,7 +272,6 @@ public class AgoravaExtension implements Extension, Serializable {
 
     //----------------- Process After Bean Discovery Phase ----------------------------------
 
-
     private <T> void beanRegisterer(Class<T> clazz, Annotation qual, Class<? extends Annotation> scope, AfterBeanDiscovery abd, BeanManager beanManager) {
 
         if (!(overridedGenericServices.containsKey(qual) && overridedGenericServices.get(qual).contains(clazz))) {
@@ -316,8 +314,6 @@ public class AgoravaExtension implements Extension, Serializable {
             beanRegisterer(OAuthServiceImpl.class, qual, ApplicationScoped.class, abd, beanManager);
         }
 
-        if (servicesQualifiersConfigured.size() != servicesToQualifier.size())
-            log.log(WARNING, "Some Service modules present in the application are not configured so won't be available"); //TODO:list the service without config
     }
 
 
@@ -342,6 +338,9 @@ public class AgoravaExtension implements Extension, Serializable {
             servicesToQualifier.put(name, qual);
             ctx.release();
         }
+        if (servicesQualifiersConfigured.size() != servicesToQualifier.size())
+            log.log(WARNING, "Some Service modules present in the application are not configured so won't be available"); //TODO:list the service without config
+
     }
 
 

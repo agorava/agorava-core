@@ -42,7 +42,7 @@ public class AgoravaTestDeploy {
                 .addPackages(true, new Filter<ArchivePath>() {
                     @Override
                     public boolean include(ArchivePath path) {
-                        return !(path.get().contains("test"));
+                        return !((path.get().contains("test") || path.get().contains("web")));
                     }
                 }, "org.agorava")
                 .addAsResource("META-INF/services/javax.enterprise.inject.spi.Extension")
