@@ -92,7 +92,6 @@
 
             <properties>
                 <arquillian>OpenWebBeans</arquillian>
-                <owb.enable>true</owb.enable>
             </properties>
 
 
@@ -139,16 +138,10 @@
 
         <profile>
             <id>weld-1.x</id>
-
             <!-- use this profile to compile and test Agorava with Weld 1 -->
             <activation>
                 <activeByDefault>true</activeByDefault>
-                <property>
-                    <name>arquillian</name>
-                    <value>weld-ee-embedded-1.1</value>
-                </property>
             </activation>
-
             <properties>
                 <arquillian>weld-ee-embedded-1.1</arquillian>
             </properties>
@@ -177,14 +170,6 @@
 
         <profile>
             <id>weld-2.x</id>
-
-            <!-- use this profile to compile and test Agorava with Weld 2 -->
-            <activation>
-                <property>
-                    <name>arquillian</name>
-                    <value>weld-ee-embedded-1.1</value>
-                </property>
-            </activation>
 
             <properties>
                 <arquillian>weld-ee-embedded-1.1</arquillian>
