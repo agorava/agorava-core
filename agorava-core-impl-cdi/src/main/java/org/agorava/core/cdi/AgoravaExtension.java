@@ -24,6 +24,7 @@ import org.agorava.core.api.exception.AgoravaException;
 import org.agorava.core.api.oauth.OAuthAppSettings;
 import org.agorava.core.oauth.OAuthSessionImpl;
 import org.agorava.core.oauth.scribe.OAuthProviderScribe;
+import org.apache.deltaspike.core.api.literal.AnyLiteral;
 import org.apache.deltaspike.core.util.bean.BeanBuilder;
 import org.apache.deltaspike.core.util.metadata.builder.AnnotatedTypeBuilder;
 
@@ -52,6 +53,7 @@ import static java.util.logging.Level.WARNING;
  */
 public class AgoravaExtension implements Extension, Serializable {
 
+    private static final long serialVersionUID = 1L;
     private static final Set<Annotation> servicesQualifiersConfigured = newHashSet();
     private static Logger log = Logger.getLogger(AgoravaExtension.class.getName());
     private static BiMap<String, Annotation> servicesToQualifier = HashBiMap.create();
@@ -104,8 +106,12 @@ public class AgoravaExtension implements Extension, Serializable {
      *         no matching meta-annotation was found.
      */
     public static Set<Annotation> getAnnotationsWithMeta(Annotated element, final Class<? extends Annotation> metaAnnotationType) {
+        return getAnnotationsWithMeta(element.getAnnotations(), metaAnnotationType);
+    }
+
+    public static Set<Annotation> getAnnotationsWithMeta(Set<Annotation> qualifiers, final Class<? extends Annotation> metaAnnotationType) {
         Set<Annotation> annotations = new HashSet<Annotation>();
-        for (Annotation annotation : element.getAnnotations()) {
+        for (Annotation annotation : qualifiers) {
             if (annotation.annotationType().isAnnotationPresent(metaAnnotationType)) {
                 annotations.add(annotation);
             }
@@ -185,19 +191,20 @@ public class AgoravaExtension implements Extension, Serializable {
                 pat.setAnnotatedType(atb.create());
             }
 
-        } else
+        } else {
             pat.veto();
+        }
     }
 
-    public void processGenericOauthService(@Observes ProcessAnnotatedType<OAuthServiceImpl> pat) {
+    public void processGenericOauthService(@Observes ProcessAnnotatedType<? extends OAuthServiceImpl> pat) {
         processGenericAnnotatedType(pat);
     }
 
-    public void processGenericOauthProvider(@Observes ProcessAnnotatedType<OAuthProviderScribe> pat) {
+    public void processGenericOauthProvider(@Observes ProcessAnnotatedType<? extends OAuthProviderScribe> pat) {
         processGenericAnnotatedType(pat);
     }
 
-    public void processGenericSession(@Observes ProcessAnnotatedType<OAuthSessionImpl> pat) {
+    public void processGenericSession(@Observes ProcessAnnotatedType<? extends OAuthSessionImpl> pat) {
         processGenericAnnotatedType(pat);
     }
 
@@ -242,35 +249,28 @@ public class AgoravaExtension implements Extension, Serializable {
 
     //----------------- Process Bean Phase ----------------------------------
 
-    private void CommonsProcessRemoteService(ProcessBean<RemoteApi> pb, BeanManager beanManager) {
-        CreationalContext ctx = beanManager.createCreationalContext(null);
+    /*
+     * This does practically not do much anymore after the discovery was moved
+     * to AfterDeploymentValidation. see https://issues.jboss.org/browse/CDI-274
+     * Kept around to do simple deployment validation of ServiceRelated qualifier.
+     */
+    private void CommonsProcessRemoteService(ProcessBean<? extends RemoteApi> pb) {
         Annotated annotated = pb.getAnnotated();
         Set<Annotation> qualifiers = AgoravaExtension.getAnnotationsWithMeta(annotated, ServiceRelated.class);
         if (qualifiers.size() != 1)
             throw new AgoravaException("A RemoteService bean should have one and only one service related Qualifier : " + pb.getAnnotated().toString());
-        Annotation qual = Iterables.getOnlyElement(qualifiers);
-        log.log(INFO, "Found new service related qualifier : {0}", qual);
-
-        Bean<?> beanSoc = pb.getBean();
-
-        final RemoteApi smah = (RemoteApi) beanManager.getReference(beanSoc, RemoteApi.class, ctx);
-        String name = smah.getServiceName();
-        servicesToQualifier.put(name, qual);
-
-        ctx.release();
     }
 
-    public void processRemoteServiceRoot(@Observes ProcessBean<RemoteApi> pb, BeanManager beanManager) {
-        CommonsProcessRemoteService(pb, beanManager);
+    public void processRemoteServiceRoot(@Observes ProcessBean<? extends RemoteApi> pb) {
+        CommonsProcessRemoteService(pb);
     }
 
-    public void processRemoteServiceRoot(@Observes ProcessProducerMethod<RemoteApi, ?> pb, BeanManager beanManager) {
-        CommonsProcessRemoteService((ProcessBean<RemoteApi>) pb, beanManager);
+    public void processRemoteServiceRoot(@Observes ProcessProducerMethod<? extends RemoteApi, ?> pb) {
+        CommonsProcessRemoteService((ProcessBean<? extends RemoteApi>) pb);
     }
 
 
     //----------------- Process After Bean Discovery Phase ----------------------------------
-
 
     private <T> void beanRegisterer(Class<T> clazz, Annotation qual, Class<? extends Annotation> scope, AfterBeanDiscovery abd, BeanManager beanManager) {
 
@@ -287,7 +287,8 @@ public class AgoravaExtension implements Extension, Serializable {
             BeanBuilder<T> providerBuilder = new BeanBuilder<T>(beanManager)
                     .readFromType(atb.create())
                     .addQualifier(qual)
-                    .scope(scope);
+                    .scope(scope)
+                    .passivationCapable(true);
 
             Bean<T> bean = providerBuilder.create();
 
@@ -313,15 +314,33 @@ public class AgoravaExtension implements Extension, Serializable {
             beanRegisterer(OAuthServiceImpl.class, qual, ApplicationScoped.class, abd, beanManager);
         }
 
-        if (servicesQualifiersConfigured.size() != servicesToQualifier.size())
-            log.log(WARNING, "Some Service modules present in the application are not configured so won't be available"); //TODO:list the service without config
     }
 
 
     //--------------------- After Deployment validation phase
 
-    public void endOfExtension(@Observes AfterDeploymentValidation adv) {
+    public void endOfExtension(@Observes AfterDeploymentValidation adv, BeanManager beanManager) {
+
+        registerServiceNames(beanManager);
+
         log.info("Agorava initialization complete");
+    }
+
+    private void registerServiceNames(BeanManager beanManager) {
+        Set<Bean<?>> beans = beanManager.getBeans(RemoteApi.class, new AnyLiteral());
+
+        for (Bean<?> bean : beans) {
+            Set<Annotation> qualifiers = getAnnotationsWithMeta(bean.getQualifiers(), ServiceRelated.class);
+            Annotation qual = Iterables.getOnlyElement(qualifiers);
+            CreationalContext<?> ctx = beanManager.createCreationalContext(null);
+            final RemoteApi remoteApi = (RemoteApi) beanManager.getReference(bean, RemoteApi.class, ctx);
+            String name = remoteApi.getServiceName();
+            servicesToQualifier.put(name, qual);
+            ctx.release();
+        }
+        if (servicesQualifiersConfigured.size() != servicesToQualifier.size())
+            log.log(WARNING, "Some Service modules present in the application are not configured so won't be available"); //TODO:list the service without config
+
     }
 
 

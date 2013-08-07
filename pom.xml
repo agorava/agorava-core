@@ -20,13 +20,13 @@
     <parent>
         <groupId>org.agorava</groupId>
         <artifactId>agorava-parent</artifactId>
-        <version>0.6.0</version>
+        <version>0.6.1</version>
     </parent>
 
     <artifactId>agorava-core-parent</artifactId>
     <packaging>pom</packaging>
     <name>Agorava Core</name>
-    <version>0.6.0</version>
+    <version>0.6.1</version>
     <description>Java API to ease the use of social media</description>
     <url>http://agorava.org</url>
     <inceptionYear>2012</inceptionYear>
@@ -52,6 +52,6 @@
         <connection>scm:git:git://github.com/agorava/agorava-core.git</connection>
         <developerConnection>scm:git:git@github.com:agorava/agorava-core.git</developerConnection>
         <url>http://github.com/agorava/agorava-core</url>
-        <tag>0.6.0</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
 </project>

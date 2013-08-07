@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2013 Agorava                                                  
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -139,11 +139,15 @@ public interface OAuthService extends RestService {
      */
     <T> T get(String uri, Class<T> clazz, boolean signed);
 
-
     /**
      * Gives the OAuth verifier parameter name
      *
      * @return the verifier name
      */
     String getVerifierParamName();
+
+    /**
+     * Close the connexion to the current Oauth service by resetting the OAuthSession
+     */
+    public void resetSession();
 }

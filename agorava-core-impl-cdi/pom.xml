@@ -20,7 +20,7 @@
     <parent>
         <artifactId>agorava-core-parent</artifactId>
         <groupId>org.agorava</groupId>
-        <version>0.6.0</version>
+        <version>0.6.1</version>
     </parent>
 
     <artifactId>agorava-core-impl-cdi</artifactId>
@@ -91,7 +91,6 @@
 
             <properties>
                 <arquillian>OpenWebBeans</arquillian>
-                <owb.enable>true</owb.enable>
             </properties>
 
 
@@ -137,18 +136,11 @@
         </profile>
 
         <profile>
-            <id>weld</id>
-
-            <!-- use this profile to compile and test Agorava with Weld -->
+            <id>weld-1.x</id>
+            <!-- use this profile to compile and test Agorava with Weld 1 -->
             <activation>
                 <activeByDefault>true</activeByDefault>
-                <property>
-                    <name>arquillian</name>
-                    <value>weld-ee-embedded-1.1</value>
-                </property>
             </activation>
-
-
             <properties>
                 <arquillian>weld-ee-embedded-1.1</arquillian>
             </properties>
@@ -175,6 +167,34 @@
 
         </profile>
 
+        <profile>
+            <id>weld-2.x</id>
+
+            <properties>
+                <arquillian>weld-ee-embedded-1.1</arquillian>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.jboss.spec</groupId>
+                    <artifactId>jboss-javaee-6.0</artifactId>
+                    <type>pom</type>
+                </dependency>
+                <dependency>
+                    <groupId>org.jboss.arquillian.container</groupId>
+                    <artifactId>arquillian-weld-ee-embedded-1.1</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.jboss.weld</groupId>
+                    <artifactId>weld-core</artifactId>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-simple</artifactId>
+                </dependency>
+            </dependencies>
+
+        </profile>
     </profiles>
 
     <build>

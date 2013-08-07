@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Agorava
+ * Copyright 2013 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -84,7 +84,7 @@ public interface OAuthSession extends Serializable {
      * @return the name of the session to display for user
      */
     public String getName();
-    
+
     /**
      * @return the name of the service
      */

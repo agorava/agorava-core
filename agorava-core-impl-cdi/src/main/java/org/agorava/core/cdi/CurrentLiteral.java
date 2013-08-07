@@ -14,23 +14,14 @@
  * limitations under the License.
  */
 
-package org.agorava.core.api;
+package org.agorava.core.cdi;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
-import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import javax.enterprise.util.AnnotationLiteral;
 
 /**
- * This Meta-annotation is used to annotate Social Media annotation
- *
  * @author Antoine Sabot-Durand
  */
-@Target(ANNOTATION_TYPE)
-@Retention(RUNTIME)
-@Documented
-public @interface ServiceRelated {
+public class CurrentLiteral extends AnnotationLiteral<Current> implements Current {
 
+    public static CurrentLiteral INSTANCE = new CurrentLiteral();
 }

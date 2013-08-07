@@ -17,7 +17,10 @@
 package org.agorava.core.cdi.test;
 
 import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.shrinkwrap.api.*;
+import org.jboss.shrinkwrap.api.Archive;
+import org.jboss.shrinkwrap.api.ArchivePath;
+import org.jboss.shrinkwrap.api.Filter;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
@@ -39,16 +42,16 @@ public class AgoravaTestDeploy {
                 .addPackages(true, new Filter<ArchivePath>() {
                     @Override
                     public boolean include(ArchivePath path) {
-                        return !(path.get().contains("test"));
+                        return !((path.get().contains("test") || path.get().contains("web")));
                     }
                 }, "org.agorava")
                 .addAsResource("META-INF/services/javax.enterprise.inject.spi.Extension")
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
 
-        GenericArchive[] libs = Maven.resolver()
+        JavaArchive[] libs = Maven.resolver()
                 .loadPomFromFile("pom.xml")
                 .resolve("org.apache.deltaspike.core:deltaspike-core-impl")
-                .withTransitivity().as(GenericArchive.class);
+                .withTransitivity().as(JavaArchive.class);
 
 
         WebArchive ret = ShrinkWrap

@@ -18,11 +18,14 @@
 package org.agorava.core.cdi;
 
 import org.agorava.core.api.MultiSessionManager;
+import org.agorava.core.api.event.OAuthComplete;
 import org.agorava.core.api.oauth.OAuthService;
 import org.agorava.core.api.oauth.OAuthSession;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
+import javax.enterprise.event.Observes;
+import javax.enterprise.event.Reception;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.Produces;
@@ -92,7 +95,10 @@ public class MultiSessionManagerImpl implements MultiSessionManager, Serializabl
     @Override
     public synchronized void connectCurrentService() {
         getCurrentService().initAccessToken();
-        activeSessions.add(currentSession);
+    }
+
+    private void processOAuthComplete(@Observes(notifyObserver = Reception.IF_EXISTS) OAuthComplete event) {
+        activeSessions.add(event.getEventData());
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2013 Agorava                                                  
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,31 +54,23 @@ public class OAuthServiceImpl implements OAuthService {
     private static Annotation currentLiteral = new AnnotationLiteral<Current>() {
         private static final long serialVersionUID = -2929657732814790025L;
     };
-    private String socialMediaName;
-    private Annotation qualifier;
-
     @Injectable
     protected JsonMapper jsonService;
-
-
     @Injectable
     @Any
     protected Instance<OAuthSession> sessions;
-
-
     @Injectable
     @ApplyQualifier
     protected OAuthProvider provider;
-
     @Injectable
     @ApplyQualifier
     protected Event<OAuthComplete> completeEventProducer;
-    private Map<String, String> requestHeader;
-
     @ApplyQualifier
     @Injectable
     protected OAuthAppSettings settings;
-
+    private String socialMediaName;
+    private Annotation qualifier;
+    private Map<String, String> requestHeader;
 
     @PostConstruct
     public void init() {
@@ -87,12 +79,10 @@ public class OAuthServiceImpl implements OAuthService {
         qualifier = AgoravaExtension.getServicesToQualifier().get(socialMediaName);
     }
 
-
     @Override
     public String getSocialMediaName() {
         return socialMediaName;
     }
-
 
     @Override
     public String getVerifierParamName() {
@@ -110,8 +100,7 @@ public class OAuthServiceImpl implements OAuthService {
 
     protected OAuthToken getRequestToken() {
         OAuthSession session = getSession();
-        if (session.getRequestToken() == null)
-            session.setRequestToken(getProvider().getRequestToken());
+        if (session.getRequestToken() == null) session.setRequestToken(getProvider().getRequestToken());
         return session.getRequestToken();
     }
 
@@ -136,8 +125,7 @@ public class OAuthServiceImpl implements OAuthService {
 
     @Override
     public RestResponse sendSignedRequest(OAuthRequest request) {
-        if (getRequestHeader() != null)
-            request.getHeaders().putAll(getRequestHeader());
+        if (getRequestHeader() != null) request.getHeaders().putAll(getRequestHeader());
         getProvider().signRequest(getAccessToken(), request);
         return request.send();
     }
@@ -220,12 +208,16 @@ public class OAuthServiceImpl implements OAuthService {
 
         Instance<OAuthSession> currentSession = sessions.select(currentLiteral);
         if (currentSession.isAmbiguous()) {
-            currentSession = sessions.select(currentLiteral, qualifier);
+            currentSession = currentSession.select(qualifier);
 
+        }
+        if (currentSession.isUnsatisfied()) {
+            throw new AgoravaException("No OAuthSession defined with @Current qualifier");
         }
         res = currentSession.get();
         if (res.getServiceName() != getSocialMediaName())
-            throw new AgoravaException("Bad remoteService for OAuthSession. Expected : " + getSocialMediaName() + ", but was : " + res.getServiceName());
+            throw new AgoravaException("Bad remoteService for OAuthSession. Expected : " + getSocialMediaName() + ", " +
+                    "but was : " + res.getServiceName());
         return res;
 
     }
@@ -238,10 +230,8 @@ public class OAuthServiceImpl implements OAuthService {
     @Override
     public <T> T get(String uri, Class<T> clazz, boolean signed) {
         RestResponse resp;
-        if (signed)
-            resp = sendSignedRequest(GET, uri);
-        else
-            resp = getProvider().requestFactory(GET, uri).send();
+        if (signed) resp = sendSignedRequest(GET, uri);
+        else resp = getProvider().requestFactory(GET, uri).send();
         return jsonService.mapToObject(resp, clazz);
     }
 
@@ -291,6 +281,16 @@ public class OAuthServiceImpl implements OAuthService {
     @Override
     public void setRequestHeader(Map<String, String> requestHeader) {
         this.requestHeader = requestHeader;
+    }
+
+    @Override
+    public void resetSession() {
+
+        OAuthSession session = getSession();
+        session.setAccessToken(null);
+        session.setVerifier(null);
+        session.setUserProfile(null);
+
     }
 
 }
