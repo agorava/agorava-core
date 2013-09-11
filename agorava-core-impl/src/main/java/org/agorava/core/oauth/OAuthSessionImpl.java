@@ -18,12 +18,12 @@ package org.agorava.core.oauth;
 
 import org.agorava.core.api.ApplyQualifier;
 import org.agorava.core.api.GenericRoot;
-import org.agorava.core.api.Injectable;
-import org.agorava.core.api.UserProfile;
 import org.agorava.core.api.oauth.OAuthAppSettings;
 import org.agorava.core.api.oauth.OAuthSession;
-import org.agorava.core.api.oauth.OAuthToken;
+import org.agorava.core.api.oauth.Token;
+import org.agorava.core.spi.UserProfile;
 
+import javax.inject.Inject;
 import java.lang.annotation.Annotation;
 
 /**
@@ -37,36 +37,36 @@ public class OAuthSessionImpl implements OAuthSession {
 
     private static final long serialVersionUID = -2526192334215289830L;
 
-    private OAuthToken requestToken;
+    private Token requestToken;
 
-    private OAuthToken accessToken;
+    private Token accessToken;
 
     private String verifier;
 
     private UserProfile userProfile;
 
-    @Injectable
+    @Inject
     @ApplyQualifier
     private OAuthAppSettings settings;
 
 
     @Override
-    public OAuthToken getRequestToken() {
+    public Token getRequestToken() {
         return requestToken;
     }
 
     @Override
-    public void setRequestToken(OAuthToken requestToken) {
+    public void setRequestToken(Token requestToken) {
         this.requestToken = requestToken;
     }
 
     @Override
-    public OAuthToken getAccessToken() {
+    public Token getAccessToken() {
         return accessToken;
     }
 
     @Override
-    public void setAccessToken(OAuthToken accessToken) {
+    public void setAccessToken(Token accessToken) {
         this.accessToken = accessToken;
     }
 

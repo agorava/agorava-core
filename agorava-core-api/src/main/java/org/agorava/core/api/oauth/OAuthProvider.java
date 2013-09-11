@@ -16,7 +16,7 @@
 
 package org.agorava.core.api.oauth;
 
-import org.agorava.core.api.rest.RestVerb;
+import org.agorava.core.api.rest.Verb;
 
 /**
  * Provides low level services (Request factory, OAuth Token factory and signature) for OAuth
@@ -30,7 +30,7 @@ public interface OAuthProvider {
      *
      * @return an OAuth request token
      */
-    public OAuthToken getRequestToken();
+    public Token getRequestToken();
 
     /**
      * Returns the Oauth access token from request token and verifier
@@ -39,7 +39,16 @@ public interface OAuthProvider {
      * @param verifier     Verifier returned by Social Media after sending the Request Token
      * @return an OAuth access token
      */
-    public OAuthToken getAccessToken(OAuthToken requestToken, String verifier);
+    public Token getAccessToken(Token requestToken, String verifier);
+
+    /**
+     * Retrieve the access token
+     *
+     * @param requestToken request token (obtained previously)
+     * @param verifier     verifier code
+     * @return access token
+     */
+    public Token getAccessToken(Token requestToken, Verifier verifier);
 
     /**
      * Sign an OAuthRequest in order to make it valid for targeted service
@@ -47,7 +56,7 @@ public interface OAuthProvider {
      * @param accessToken the OAuth access token for the current OAuth session
      * @param request     the OAuth request to sign
      */
-    public void signRequest(OAuthToken accessToken, OAuthRequest request);
+    public void signRequest(Token accessToken, OAuthRequest request);
 
     /**
      * Gives the OAuth version of the provider
@@ -62,7 +71,7 @@ public interface OAuthProvider {
      * @param requestToken request token to generate Authorization URL
      * @return the authorization URL to call to aks user for delegation on her behalf
      */
-    public String getAuthorizationUrl(OAuthToken requestToken);
+    public String getAuthorizationUrl(Token requestToken);
 
     /**
      * Creates an OAuthRequest with the given Rest Verb and uri
@@ -71,16 +80,7 @@ public interface OAuthProvider {
      * @param uri  URI of the request
      * @return the created OAuthRequest
      */
-    public OAuthRequest requestFactory(RestVerb verb, String uri);
-
-    /**
-     * Creates an OAuthToken with the given token and given secret
-     *
-     * @param token  the public part of the token
-     * @param secret the private part of the token
-     * @return then created OAuthToken
-     */
-    public OAuthToken tokenFactory(String token, String secret);
+    public OAuthRequest requestFactory(Verb verb, String uri);
 
     /**
      * Gives the OAuth verifier parameter name
@@ -88,4 +88,6 @@ public interface OAuthProvider {
      * @return the verifier name
      */
     String getVerifierParamName();
+
+
 }

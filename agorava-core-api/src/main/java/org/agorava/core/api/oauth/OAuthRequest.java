@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Agorava
+ * Copyright 2013 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,30 +16,27 @@
 
 package org.agorava.core.api.oauth;
 
-import org.agorava.core.api.rest.RestRequest;
+import org.agorava.core.api.rest.Request;
 
 import java.util.Map;
 
 /**
- * Overload {@link RestRequest} to add specificity of OAuth Request
- *
  * @author Antoine Sabot-Durand
  */
-public interface OAuthRequest extends RestRequest {
-
+public interface OAuthRequest extends Request {
     /**
      * Adds an OAuth parameter.
      *
-     * @param name  name of the parameter
+     * @param key   name of the parameter
      * @param value value of the parameter
+     * @throws IllegalArgumentException if the parameter is not an OAuth parameter
      */
-    public void addOAuthParameter(String name, String value);
+    void addOAuthParameter(String key, String value);
 
     /**
-     * Returns the {@link Map} containing the key-value pair of parameters.
+     * Returns the {@link java.util.Map} containing the key-value pair of parameters.
      *
      * @return parameters as map
      */
-    public Map<String, String> getOauthParameters();
-
+    Map<String, String> getOauthParameters();
 }

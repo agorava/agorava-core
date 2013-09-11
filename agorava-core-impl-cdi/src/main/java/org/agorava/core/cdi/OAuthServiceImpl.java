@@ -17,27 +17,35 @@
 package org.agorava.core.cdi;
 
 import org.agorava.core.api.ApplyQualifier;
+import org.agorava.core.api.Current;
 import org.agorava.core.api.GenericRoot;
-import org.agorava.core.api.Injectable;
 import org.agorava.core.api.JsonMapper;
 import org.agorava.core.api.event.OAuthComplete;
 import org.agorava.core.api.event.SocialEvent;
 import org.agorava.core.api.exception.AgoravaException;
-import org.agorava.core.api.oauth.*;
-import org.agorava.core.api.rest.RestResponse;
-import org.agorava.core.api.rest.RestVerb;
+import org.agorava.core.api.oauth.OAuthAppSettings;
+import org.agorava.core.api.oauth.OAuthProvider;
+import org.agorava.core.api.oauth.OAuthRequest;
+import org.agorava.core.api.oauth.OAuthService;
+import org.agorava.core.api.oauth.OAuthSession;
+import org.agorava.core.api.oauth.Token;
+import org.agorava.core.api.rest.Response;
+import org.agorava.core.api.rest.Verb;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.event.Event;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.enterprise.util.AnnotationLiteral;
+import javax.inject.Inject;
 import java.lang.annotation.Annotation;
 import java.text.MessageFormat;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import static org.agorava.core.api.rest.RestVerb.*;
+import static org.agorava.core.api.rest.Verb.GET;
+import static org.agorava.core.api.rest.Verb.POST;
+import static org.agorava.core.api.rest.Verb.PUT;
 
 //import org.agorava.utils.solder.logging.Logger;
 
@@ -54,19 +62,19 @@ public class OAuthServiceImpl implements OAuthService {
     private static Annotation currentLiteral = new AnnotationLiteral<Current>() {
         private static final long serialVersionUID = -2929657732814790025L;
     };
-    @Injectable
+    @Inject
     protected JsonMapper jsonService;
-    @Injectable
+    @Inject
     @Any
     protected Instance<OAuthSession> sessions;
-    @Injectable
+    @Inject
     @ApplyQualifier
     protected OAuthProvider provider;
-    @Injectable
+    @Inject
     @ApplyQualifier
     protected Event<OAuthComplete> completeEventProducer;
     @ApplyQualifier
-    @Injectable
+    @Inject
     protected OAuthAppSettings settings;
     private String socialMediaName;
     private Annotation qualifier;
@@ -98,7 +106,7 @@ public class OAuthServiceImpl implements OAuthService {
         return provider;
     }
 
-    protected OAuthToken getRequestToken() {
+    protected Token getRequestToken() {
         OAuthSession session = getSession();
         if (session.getRequestToken() == null) session.setRequestToken(getProvider().getRequestToken());
         return session.getRequestToken();
@@ -124,21 +132,21 @@ public class OAuthServiceImpl implements OAuthService {
     }
 
     @Override
-    public RestResponse sendSignedRequest(OAuthRequest request) {
+    public Response sendSignedRequest(OAuthRequest request) {
         if (getRequestHeader() != null) request.getHeaders().putAll(getRequestHeader());
         getProvider().signRequest(getAccessToken(), request);
         return request.send();
     }
 
     @Override
-    public RestResponse sendSignedRequest(RestVerb verb, String uri) {
+    public Response sendSignedRequest(Verb verb, String uri) {
         OAuthRequest request = getProvider().requestFactory(verb, uri);
         return sendSignedRequest(request);
 
     }
 
     @Override
-    public RestResponse sendSignedRequest(RestVerb verb, String uri, String key, Object value) {
+    public Response sendSignedRequest(Verb verb, String uri, String key, Object value) {
         OAuthRequest request = getProvider().requestFactory(verb, uri);
 
         request.addBodyParameter(key, value.toString());
@@ -148,7 +156,7 @@ public class OAuthServiceImpl implements OAuthService {
     }
 
     @Override
-    public RestResponse sendSignedXmlRequest(RestVerb verb, String uri, String payload) {
+    public Response sendSignedXmlRequest(Verb verb, String uri, String payload) {
         OAuthRequest request = getProvider().requestFactory(verb, uri);
         request.addPayload(payload);
         return sendSignedRequest(request);
@@ -156,7 +164,7 @@ public class OAuthServiceImpl implements OAuthService {
     }
 
     @Override
-    public RestResponse sendSignedRequest(RestVerb verb, String uri, Map<String, ? extends Object> params) {
+    public Response sendSignedRequest(Verb verb, String uri, Map<String, ? extends Object> params) {
         OAuthRequest request = getProvider().requestFactory(verb, uri);
         for (Entry<String, ? extends Object> ent : params.entrySet()) {
             request.addBodyParameter(ent.getKey(), ent.getValue().toString());
@@ -178,13 +186,13 @@ public class OAuthServiceImpl implements OAuthService {
     }
 
     @Override
-    public OAuthToken getAccessToken() {
+    public Token getAccessToken() {
         OAuthSession session = getSession();
         return session.getAccessToken();
     }
 
     @Override
-    public void setAccessToken(OAuthToken token) {
+    public void setAccessToken(Token token) {
         OAuthSession session = getSession();
         session.setAccessToken(token);
 
@@ -198,7 +206,7 @@ public class OAuthServiceImpl implements OAuthService {
     @Override
     public void setAccessToken(String token, String secret) {
         OAuthSession session = getSession();
-        session.setAccessToken(getProvider().tokenFactory(token, secret));
+        session.setAccessToken(new Token(token, secret));
 
     }
 
@@ -229,7 +237,7 @@ public class OAuthServiceImpl implements OAuthService {
 
     @Override
     public <T> T get(String uri, Class<T> clazz, boolean signed) {
-        RestResponse resp;
+        Response resp;
         if (signed) resp = sendSignedRequest(GET, uri);
         else resp = getProvider().requestFactory(GET, uri).send();
         return jsonService.mapToObject(resp, clazz);
@@ -255,7 +263,7 @@ public class OAuthServiceImpl implements OAuthService {
         OAuthRequest request = getProvider().requestFactory(POST, uri);
 
         request.addPayload(jsonService.objectToJsonString(toPost));
-        RestResponse response = sendSignedRequest(request);
+        Response response = sendSignedRequest(request);
         return response.getHeader("Location");
     }
 
@@ -271,7 +279,7 @@ public class OAuthServiceImpl implements OAuthService {
 
     @Override
     public void delete(String uri) {
-        sendSignedRequest(RestVerb.DELETE, uri);
+        sendSignedRequest(Verb.DELETE, uri);
     }
 
     protected Map<String, String> getRequestHeader() {

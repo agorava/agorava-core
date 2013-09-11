@@ -90,4 +90,8 @@ public class OAuthAppSettingsImpl implements OAuthAppSettings {
     }
 
 
+    public boolean hasScope() {
+        return (scope != null && !"".equals(scope));
+    }
+
 }

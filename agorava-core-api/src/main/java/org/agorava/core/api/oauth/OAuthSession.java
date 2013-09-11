@@ -16,7 +16,7 @@
 
 package org.agorava.core.api.oauth;
 
-import org.agorava.core.api.UserProfile;
+import org.agorava.core.spi.UserProfile;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
@@ -33,22 +33,22 @@ public interface OAuthSession extends Serializable {
     /**
      * @return the requestToken
      */
-    public OAuthToken getRequestToken();
+    public Token getRequestToken();
 
     /**
      * @param requestToken the requestToken to set
      */
-    public void setRequestToken(OAuthToken requestToken);
+    public void setRequestToken(Token requestToken);
 
     /**
      * @return the accessToken
      */
-    public OAuthToken getAccessToken();
+    public Token getAccessToken();
 
     /**
      * @param accessToken the accessToken to set
      */
-    public void setAccessToken(OAuthToken accessToken);
+    public void setAccessToken(Token accessToken);
 
     /**
      * @return the verifier

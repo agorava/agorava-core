@@ -16,6 +16,8 @@
 
 package org.agorava.core.cdi;
 
+import org.agorava.core.api.Current;
+
 import javax.enterprise.util.AnnotationLiteral;
 
 /**

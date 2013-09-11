@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Agorava
+ * Copyright 2013 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package org.agorava.core.api;
 
-import org.agorava.core.api.rest.RestResponse;
+import org.agorava.core.api.rest.Response;
 
 import java.io.Serializable;
 
@@ -28,13 +28,13 @@ import java.io.Serializable;
 public interface JsonMapper extends Serializable {
 
     /**
-     * Parse the content of the provided {@link RestResponse} to de-serialize to an object of the given Class
+     * Parse the content of the provided {@link org.agorava.core.api.rest.Response} to de-serialize to an object of the given Class
      *
      * @param resp  the response to de-serialize
      * @param clazz the target class of the object
      * @return an object of the given Class with fields coming from the response
      */
-    public <T> T mapToObject(RestResponse resp, Class<T> clazz);
+    public <T> T mapToObject(Response resp, Class<T> clazz);
 
     /**
      * Transforms an object to a JSON string

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Agorava
+ * Copyright 2013 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package org.agorava.core.cdi;
 import org.agorava.core.api.JsonMapper;
 import org.agorava.core.api.exception.AgoravaException;
 import org.agorava.core.api.exception.AgoravaRestException;
-import org.agorava.core.api.rest.RestResponse;
+import org.agorava.core.api.rest.Response;
 import org.codehaus.jackson.map.Module;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
@@ -54,7 +54,7 @@ public class JsonMapperJackson implements JsonMapper {
     protected Instance<Module> moduleInstances;
 
     @Override
-    public <T> T mapToObject(RestResponse resp, Class<T> clazz) {
+    public <T> T mapToObject(Response resp, Class<T> clazz) {
 
         String msg = resp.getBody();
         if (resp.getCode() != 200) {

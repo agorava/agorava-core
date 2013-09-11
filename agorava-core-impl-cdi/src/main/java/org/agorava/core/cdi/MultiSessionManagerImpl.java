@@ -17,6 +17,7 @@
 
 package org.agorava.core.cdi;
 
+import org.agorava.core.api.Current;
 import org.agorava.core.api.MultiSessionManager;
 import org.agorava.core.api.event.OAuthComplete;
 import org.agorava.core.api.oauth.OAuthService;

@@ -16,9 +16,9 @@
 
 package org.agorava.core.api.oauth;
 
-import org.agorava.core.api.rest.RestResponse;
+import org.agorava.core.api.rest.Response;
 import org.agorava.core.api.rest.RestService;
-import org.agorava.core.api.rest.RestVerb;
+import org.agorava.core.api.rest.Verb;
 
 import java.util.Map;
 
@@ -32,14 +32,14 @@ public interface OAuthService extends RestService {
     /**
      * @return the access token for the OAuth service
      */
-    public OAuthToken getAccessToken();
+    public Token getAccessToken();
 
     /**
      * Set the Access Token with for an OAuth access
      *
      * @param token the token to set
      */
-    public void setAccessToken(OAuthToken token);
+    public void setAccessToken(Token token);
 
     /**
      * Returns the url to the OAuth service to ask an authorization to access the service.
@@ -74,7 +74,7 @@ public interface OAuthService extends RestService {
      * @param uri  the REST address of the request
      * @return an HttpResponse containing the response. It could be in various format (json, xml, string)
      */
-    public RestResponse sendSignedRequest(RestVerb verb, String uri);
+    public Response sendSignedRequest(Verb verb, String uri);
 
     /**
      * Send an OAuth request signed with a list a parameter
@@ -84,7 +84,7 @@ public interface OAuthService extends RestService {
      * @param params a Map of key value parameters to send in the header of the request
      * @return an HttpResponse containing the response. It could be in various format (json, xml, string)
      */
-    public RestResponse sendSignedRequest(RestVerb verb, String uri, Map<String, ?> params);
+    public Response sendSignedRequest(Verb verb, String uri, Map<String, ?> params);
 
     /**
      * Send an OAuth request signed with a single parameter
@@ -95,7 +95,7 @@ public interface OAuthService extends RestService {
      * @param value value of the parameter
      * @return an HttpResponse containing the response. It could be in various format (json, xml, string)
      */
-    public RestResponse sendSignedRequest(RestVerb verb, String uri, String key, Object value);
+    public Response sendSignedRequest(Verb verb, String uri, String key, Object value);
 
     /**
      * Initialize and set an OAuth access token from its public and private keys
@@ -113,7 +113,7 @@ public interface OAuthService extends RestService {
      * @param payload the content of the XML payload to send to the service
      * @return an HttpResponse containing the response. It could be in various format (json, xml, string)
      */
-    public RestResponse sendSignedXmlRequest(RestVerb verb, String uri, String payload);
+    public Response sendSignedXmlRequest(Verb verb, String uri, String payload);
 
     /**
      * @return the session settings of the given service
@@ -126,7 +126,7 @@ public interface OAuthService extends RestService {
      * @param request
      * @return an HttpResponse containing the response. It could be in various format (json, xml, string)
      */
-    public RestResponse sendSignedRequest(OAuthRequest request);
+    public Response sendSignedRequest(OAuthRequest request);
 
     /**
      * Perform a conditionally signed REST get command and return an object of the provided class

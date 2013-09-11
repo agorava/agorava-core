@@ -21,7 +21,7 @@ import java.lang.annotation.Annotation;
 
 /**
  * Configuration settings needed to access to an OAuth 1.0a and 2.0 service.
- * It's used by {@link OAuthProvider} to setup
+ * It's used by {@link org.agorava.core.api.oauth.OAuthProvider} to setup
  * connection to Social Media
  *
  * @author Antoine Sabot-Durand
@@ -57,6 +57,8 @@ public interface OAuthAppSettings extends Serializable {
      * @return the qualifier associated to the service
      */
     public Annotation getQualifier();
+
+    public boolean hasScope();
 
 
 }

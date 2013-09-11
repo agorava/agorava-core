@@ -13,18 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.agorava.core.api.oauth;
 
 /**
  * This class contains OAuth constants, used project-wide
  *
  * @author Pablo Fernandez
- * @author Antoine Sabot-Durand
  */
 public class OAuthConstants {
-
-    //OAuth 1.0a
     public static final String TIMESTAMP = "oauth_timestamp";
     public static final String SIGN_METHOD = "oauth_signature_method";
     public static final String SIGNATURE = "oauth_signature";
@@ -39,12 +35,14 @@ public class OAuthConstants {
     public static final String OUT_OF_BAND = "oob";
     public static final String VERIFIER = "oauth_verifier";
     public static final String HEADER = "Authorization";
-    //public static final Token EMPTY_TOKEN = new Token("", "");
+    public static final Token EMPTY_TOKEN = new Token("", "");
     public static final String SCOPE = "scope";
+
     //OAuth 2.0
     public static final String ACCESS_TOKEN = "access_token";
     public static final String CLIENT_ID = "client_id";
     public static final String CLIENT_SECRET = "client_secret";
     public static final String REDIRECT_URI = "redirect_uri";
     public static final String CODE = "code";
+
 }

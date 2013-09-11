@@ -29,6 +29,7 @@ import java.lang.annotation.Annotation;
  */
 public interface OAuthAppSettingsBuilder {
 
+    //TODO: switch to OAuthConstants
     public static final String NAME = "name";
     public static final String API_KEY = "apiKey";
     public static final String API_SECRET = "apiSecret";

@@ -18,7 +18,7 @@ package org.agorava.core.cdi.test;
 
 import org.agorava.core.api.exception.AgoravaException;
 import org.agorava.core.api.exception.AgoravaRestException;
-import org.agorava.core.api.rest.RestResponse;
+import org.agorava.core.api.rest.Response;
 import org.agorava.core.cdi.JsonMapperJackson;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,7 +35,7 @@ public class JsonMapperJacksonTest {
     JsonMapperJackson jm;
 
     @Mock
-    RestResponse resp;
+    Response resp;
 
     @Test(expected = NullPointerException.class)
     public void testReadNullResponse() {

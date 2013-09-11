@@ -19,11 +19,17 @@ package org.agorava.core.cdi;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Iterables;
-import org.agorava.core.api.*;
+import com.google.common.collect.Maps;
+import org.agorava.core.api.ApplyQualifier;
+import org.agorava.core.api.GenericRoot;
+import org.agorava.core.api.OAuth;
+import org.agorava.core.api.OAuthVersion;
+import org.agorava.core.api.ServiceRelated;
 import org.agorava.core.api.exception.AgoravaException;
 import org.agorava.core.api.oauth.OAuthAppSettings;
+import org.agorava.core.api.oauth.OAuthProvider;
 import org.agorava.core.oauth.OAuthSessionImpl;
-import org.agorava.core.oauth.scribe.OAuthProviderScribe;
+import org.agorava.core.spi.TierConfigOauth;
 import org.apache.deltaspike.core.api.literal.AnyLiteral;
 import org.apache.deltaspike.core.util.bean.BeanBuilder;
 import org.apache.deltaspike.core.util.metadata.builder.AnnotatedTypeBuilder;
@@ -32,7 +38,23 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.event.Observes;
-import javax.enterprise.inject.spi.*;
+import javax.enterprise.inject.spi.AfterBeanDiscovery;
+import javax.enterprise.inject.spi.AfterDeploymentValidation;
+import javax.enterprise.inject.spi.Annotated;
+import javax.enterprise.inject.spi.AnnotatedConstructor;
+import javax.enterprise.inject.spi.AnnotatedField;
+import javax.enterprise.inject.spi.AnnotatedMember;
+import javax.enterprise.inject.spi.AnnotatedMethod;
+import javax.enterprise.inject.spi.AnnotatedType;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.BeforeBeanDiscovery;
+import javax.enterprise.inject.spi.Extension;
+import javax.enterprise.inject.spi.ProcessAnnotatedType;
+import javax.enterprise.inject.spi.ProcessBean;
+import javax.enterprise.inject.spi.ProcessProducer;
+import javax.enterprise.inject.spi.Producer;
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
@@ -59,6 +81,8 @@ public class AgoravaExtension implements Extension, Serializable {
     private static BiMap<String, Annotation> servicesToQualifier = HashBiMap.create();
     private static boolean multiSession = false;
     private Map<Annotation, Set<Type>> overridedGenericServices = new HashMap<Annotation, Set<Type>>();
+    private Map<OAuthVersion, Class<? extends OAuthProvider>> genericsOAuthProviders = Maps.newHashMap();
+    private Map<Annotation, OAuthVersion> service2OauthVersion = new HashMap<Annotation, OAuthVersion>();
 
     /**
      * @return the set of all service's names present in the application
@@ -119,20 +143,16 @@ public class AgoravaExtension implements Extension, Serializable {
         return annotations;
     }
 
-    void injectify(Annotation qual, AnnotatedType<?> at, AnnotatedTypeBuilder<?> atb) {
+    void applyQualifier(Annotation qual, AnnotatedType<?> at, AnnotatedTypeBuilder<?> atb) {
         //do a loop on all field to replace annotation mark by CDI annotations
         for (AnnotatedField af : at.getFields())
-            if (af.isAnnotationPresent(Injectable.class)) {
-                atb.addToField(af, InjectLiteral.instance);
-                if (af.isAnnotationPresent(ApplyQualifier.class))
-                    atb.addToField(af, qual);
-            }
+            if (af.isAnnotationPresent(ApplyQualifier.class))
+                atb.addToField(af, qual);
+
 
         //loop on constructors to do the same
         for (AnnotatedConstructor ac : at.getConstructors()) {
-            if (ac.isAnnotationPresent(Injectable.class)) {
-
-                atb.addToConstructor(ac, InjectLiteral.instance);
+            if (ac.isAnnotationPresent(Inject.class)) {
                 Annotation[][] pa = ac.getJavaMember().getParameterAnnotations();
                 //loop on args to detect marked param
                 for (int i = 0; i < pa.length; i++)
@@ -144,11 +164,9 @@ public class AgoravaExtension implements Extension, Serializable {
 
         //loop on other methods (setters)
         for (AnnotatedMethod am : at.getMethods())
-            if (am.isAnnotationPresent(Injectable.class)) {
-                atb.addToMethod(am, InjectLiteral.instance);
-                if (am.isAnnotationPresent(ApplyQualifierLiteral.class))
-                    atb.addToMethod(am, qual);
-            }
+            if (am.isAnnotationPresent(ApplyQualifierLiteral.class))
+                atb.addToMethod(am, qual);
+
 
     }
 
@@ -167,7 +185,7 @@ public class AgoravaExtension implements Extension, Serializable {
 
     //----------------- Process AnnotatedType Phase ----------------------------------
 
-    private <T> void processGenericAnnotatedType(ProcessAnnotatedType<T> pat) {
+    private <T> boolean processGenericAnnotatedType(ProcessAnnotatedType<T> pat) {
         AnnotatedType<T> at = pat.getAnnotatedType();
         if (!at.isAnnotationPresent(GenericRoot.class)) {
             log.log(INFO, "Found a Bean of class {0} overriding generic bean", at.getBaseType());
@@ -187,12 +205,14 @@ public class AgoravaExtension implements Extension, Serializable {
                         .readFromType(clazz)
                         .setJavaClass(clazz);
 
-                injectify(qual, atb.create(), atb);
+                applyQualifier(qual, atb.create(), atb);
                 pat.setAnnotatedType(atb.create());
             }
+            return false;
 
         } else {
             pat.veto();
+            return true;
         }
     }
 
@@ -200,8 +220,15 @@ public class AgoravaExtension implements Extension, Serializable {
         processGenericAnnotatedType(pat);
     }
 
-    public void processGenericOauthProvider(@Observes ProcessAnnotatedType<? extends OAuthProviderScribe> pat) {
-        processGenericAnnotatedType(pat);
+    public void processGenericOauthProvider(@Observes ProcessAnnotatedType<? extends OAuthProvider> pat) {
+        if (processGenericAnnotatedType(pat)) {
+            AnnotatedType<? extends OAuthProvider> at = pat.getAnnotatedType();
+            Class<? extends OAuthProvider> clazz = (Class<? extends OAuthProvider>) at.getBaseType();
+            OAuth qualOauth = at.getAnnotation(OAuth.class);
+            genericsOAuthProviders.put(qualOauth.value(), clazz);
+
+        }
+        ;
     }
 
     public void processGenericSession(@Observes ProcessAnnotatedType<? extends OAuthSessionImpl> pat) {
@@ -254,46 +281,77 @@ public class AgoravaExtension implements Extension, Serializable {
      * to AfterDeploymentValidation. see https://issues.jboss.org/browse/CDI-274
      * Kept around to do simple deployment validation of ServiceRelated qualifier.
      */
-    private void CommonsProcessRemoteService(ProcessBean<? extends RemoteApi> pb) {
+    private void CommonsProcessOAuthTier(ProcessBean<? extends TierConfigOauth> pb) {
+
         Annotated annotated = pb.getAnnotated();
         Set<Annotation> qualifiers = AgoravaExtension.getAnnotationsWithMeta(annotated, ServiceRelated.class);
         if (qualifiers.size() != 1)
             throw new AgoravaException("A RemoteService bean should have one and only one service related Qualifier : " + pb.getAnnotated().toString());
+
+        Class<? extends TierConfigOauth> clazz = (Class<? extends TierConfigOauth>) pb.getBean().getBeanClass();
+        try {
+            service2OauthVersion.put(Iterables.getOnlyElement(qualifiers), clazz.newInstance().getOAuthVersion());
+        } catch (ReflectiveOperationException e) {
+            throw new AgoravaException("Error while retrieving version of OAuth in tier config", e);
+        }
     }
 
-    public void processRemoteServiceRoot(@Observes ProcessBean<? extends RemoteApi> pb) {
-        CommonsProcessRemoteService(pb);
+    public void processRemoteServiceRoot(@Observes ProcessBean<? extends TierConfigOauth> pb) {
+        CommonsProcessOAuthTier(pb);
     }
 
-    public void processRemoteServiceRoot(@Observes ProcessProducerMethod<? extends RemoteApi, ?> pb) {
-        CommonsProcessRemoteService((ProcessBean<? extends RemoteApi>) pb);
+
+  /*  private void captureGenericOAuthService(@Observes ProcessBean<? extends OAuthService> pb) {
+        Bean<? extends OAuthService> bean = pb.getBean();
+        if (bean.getQualifiers().contains(GenericRootLiteral.INSTANCE)) {
+            genericOAuthService = bean;
+        }
     }
+
+    private void captureGenericOauthSession(@Observes ProcessBean<? extends OAuthSession> pb) {
+        Bean<? extends OAuthSession> bean = pb.getBean();
+        if (bean.getQualifiers().contains(GenericRootLiteral.INSTANCE)) {
+            genericOAuthSession = bean;
+        }
+    }
+
+    private void captureGenericOAuthProvider(@Observes ProcessBean<? extends OAuthProvider> pb) {
+        Bean<? extends OAuthProvider> bean = pb.getBean();
+
+        if (bean.getQualifiers().contains(GenericRootLiteral.INSTANCE)) {
+            for (Annotation annotation : bean.getQualifiers()) {
+                if (annotation instanceof OAuth) {
+                    genericsOAuthProviders.put(((OAuth) annotation).value(), bean);
+
+                }
+            }
+        }
+    }*/
 
 
     //----------------- Process After Bean Discovery Phase ----------------------------------
 
-    private <T> void beanRegisterer(Class<T> clazz, Annotation qual, Class<? extends Annotation> scope, AfterBeanDiscovery abd, BeanManager beanManager) {
+    private <T> void beanRegisterer(Class<T> clazz, Annotation qual, Class<? extends Annotation> scope, AfterBeanDiscovery abd,
+                                    BeanManager beanManager, Type... types) {
 
         if (!(overridedGenericServices.containsKey(qual) && overridedGenericServices.get(qual).contains(clazz))) {
 
             AnnotatedType<T> at = beanManager.createAnnotatedType(clazz);
             AnnotatedTypeBuilder<T> atb = new AnnotatedTypeBuilder<T>()
                     .readFromType(clazz)
+                    .addToClass(qual)
                     .setJavaClass(clazz);
 
-            injectify(qual, at, atb);
-
+            applyQualifier(qual, at, atb);
 
             BeanBuilder<T> providerBuilder = new BeanBuilder<T>(beanManager)
                     .readFromType(atb.create())
-                    .addQualifier(qual)
                     .scope(scope)
-                    .passivationCapable(true);
+                    .passivationCapable(true)
+                    .addTypes(types);
 
-            Bean<T> bean = providerBuilder.create();
-
-
-            abd.addBean(bean);
+            Bean<T> newBean = providerBuilder.create();
+            abd.addBean(newBean);
         }
     }
 
@@ -308,8 +366,11 @@ public class AgoravaExtension implements Extension, Serializable {
 
 
         for (Annotation qual : servicesQualifiersConfigured) {
+            OAuthVersion version = service2OauthVersion.get(qual);
 
-            beanRegisterer(OAuthProviderScribe.class, qual, ApplicationScoped.class, abd, beanManager);
+            Class clazz = genericsOAuthProviders.get(version);
+
+            beanRegisterer(clazz, qual, ApplicationScoped.class, abd, beanManager, OAuthProvider.class);
             beanRegisterer(OAuthSessionImpl.class, qual, Dependent.class, abd, beanManager);
             beanRegisterer(OAuthServiceImpl.class, qual, ApplicationScoped.class, abd, beanManager);
         }
@@ -327,14 +388,14 @@ public class AgoravaExtension implements Extension, Serializable {
     }
 
     private void registerServiceNames(BeanManager beanManager) {
-        Set<Bean<?>> beans = beanManager.getBeans(RemoteApi.class, new AnyLiteral());
+        Set<Bean<?>> beans = beanManager.getBeans(TierConfigOauth.class, new AnyLiteral());
 
         for (Bean<?> bean : beans) {
             Set<Annotation> qualifiers = getAnnotationsWithMeta(bean.getQualifiers(), ServiceRelated.class);
             Annotation qual = Iterables.getOnlyElement(qualifiers);
             CreationalContext<?> ctx = beanManager.createCreationalContext(null);
-            final RemoteApi remoteApi = (RemoteApi) beanManager.getReference(bean, RemoteApi.class, ctx);
-            String name = remoteApi.getServiceName();
+            final TierConfigOauth tierConfig = (TierConfigOauth) beanManager.getReference(bean, TierConfigOauth.class, ctx);
+            String name = tierConfig.getServiceName();
             servicesToQualifier.put(name, qual);
             ctx.release();
         }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Agorava
+ * Copyright 2013 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ package org.agorava.core.oauth;
 
 import org.agorava.core.api.exception.AgoravaException;
 import org.agorava.core.utils.URLUtils;
+import org.agorava.core.utils.URLUtilsImpl;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -101,8 +102,10 @@ public class TestURLUtilsTest {
 
     }
 
+    URLUtils urlUtils = new URLUtilsImpl();
+
     /**
-     * Test method for {@link org.agorava.core.utils.URLUtils#formURLEncodeMap(java.util.Map)}.
+     * Test method for {@link org.agorava.core.utils.URLUtilsImpl#formURLEncodeMap(java.util.Map)}.
      */
     @Test
     public final void testFormURLEncodePojo() {
@@ -115,7 +118,7 @@ public class TestURLUtilsTest {
         pojo.setParam2(1234);
         pojo.setParam3(forParam3);
 
-        String res = URLUtils.buildUri("http://service.com/network/updates?format=json", pojo);
+        String res = urlUtils.buildUri("http://service.com/network/updates?format=json", pojo);
         System.out.println(res);
 
         Assert.assertEquals(res,
@@ -133,7 +136,7 @@ public class TestURLUtilsTest {
         pojo.setParam2(1234);
         pojo.setParam3(forParam3);
 
-        String res = URLUtils.buildUri("http://myurl.com", pojo);
+        String res = urlUtils.buildUri("http://myurl.com", pojo);
         System.out.println(res);
 
         Assert.assertEquals(res, "http://myurl.com?param1=%C3%A9za%C3%A8&param2=1234&param3=6789.0&param3=90876.0");

@@ -17,9 +17,9 @@
 package org.agorava.core.cdi.test;
 
 import junit.framework.Assert;
+import org.agorava.core.api.Current;
 import org.agorava.core.api.oauth.OAuthService;
 import org.agorava.core.api.oauth.OAuthSession;
-import org.agorava.core.cdi.Current;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Test;
 import org.junit.runner.RunWith;
