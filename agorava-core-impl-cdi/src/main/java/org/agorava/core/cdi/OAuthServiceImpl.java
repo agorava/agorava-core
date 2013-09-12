@@ -16,9 +16,9 @@
 
 package org.agorava.core.cdi;
 
-import org.agorava.core.api.ApplyQualifier;
 import org.agorava.core.api.Current;
 import org.agorava.core.api.GenericRoot;
+import org.agorava.core.api.InjectWithQualifier;
 import org.agorava.core.api.JsonMapper;
 import org.agorava.core.api.event.OAuthComplete;
 import org.agorava.core.api.event.SocialEvent;
@@ -54,7 +54,7 @@ import static org.agorava.core.api.rest.Verb.PUT;
  *
  * @author Antoine Sabot-Durand
  */
-@ApplyQualifier
+@InjectWithQualifier
 @GenericRoot
 public class OAuthServiceImpl implements OAuthService {
 
@@ -67,14 +67,12 @@ public class OAuthServiceImpl implements OAuthService {
     @Inject
     @Any
     protected Instance<OAuthSession> sessions;
-    @Inject
-    @ApplyQualifier
+
+    @InjectWithQualifier
     protected OAuthProvider provider;
-    @Inject
-    @ApplyQualifier
+    @InjectWithQualifier
     protected Event<OAuthComplete> completeEventProducer;
-    @ApplyQualifier
-    @Inject
+    @InjectWithQualifier
     protected OAuthAppSettings settings;
     private String socialMediaName;
     private Annotation qualifier;

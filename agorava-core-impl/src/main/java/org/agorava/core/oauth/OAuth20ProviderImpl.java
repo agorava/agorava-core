@@ -17,8 +17,8 @@
 package org.agorava.core.oauth;
 
 
-import org.agorava.core.api.ApplyQualifier;
 import org.agorava.core.api.GenericRoot;
+import org.agorava.core.api.InjectWithQualifier;
 import org.agorava.core.api.OAuth;
 import org.agorava.core.api.oauth.OAuthAppSettings;
 import org.agorava.core.api.oauth.OAuthConstants;
@@ -29,20 +29,16 @@ import org.agorava.core.api.rest.Response;
 import org.agorava.core.rest.OAuthRequestImpl;
 import org.agorava.core.spi.TierConfigOauth20;
 
-import javax.inject.Inject;
-
 import static org.agorava.core.api.OAuthVersion.TWO_DRAFT_11;
 
 @GenericRoot
 @OAuth(TWO_DRAFT_11)
 public class OAuth20ProviderImpl extends OAuthProviderBase {
 
-    @Inject
-    @ApplyQualifier
+    @InjectWithQualifier
     TierConfigOauth20 api;
 
-    @Inject
-    @ApplyQualifier
+    @InjectWithQualifier
     OAuthAppSettings config;
 
 

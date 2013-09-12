@@ -16,8 +16,8 @@
 
 package org.agorava.core.oauth;
 
-import org.agorava.core.api.ApplyQualifier;
 import org.agorava.core.api.GenericRoot;
+import org.agorava.core.api.InjectWithQualifier;
 import org.agorava.core.api.OAuth;
 import org.agorava.core.api.oauth.OAuthAppSettings;
 import org.agorava.core.api.oauth.OAuthConstants;
@@ -30,7 +30,6 @@ import org.agorava.core.api.rest.Response;
 import org.agorava.core.api.utils.MapUtils;
 import org.agorava.core.spi.TierConfigOauth10a;
 
-import javax.inject.Inject;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
@@ -48,12 +47,11 @@ import static org.agorava.core.api.OAuthVersion.ONE;
 public class OAuth10aProviderImpl extends OAuthProviderBase {
     private static Logger LOGGER = Logger.getLogger(OAuth10aProviderImpl.class.getName());
 
-    @Inject
-    @ApplyQualifier
+
+    @InjectWithQualifier
     OAuthAppSettings config;
 
-    @Inject
-    @ApplyQualifier
+    @InjectWithQualifier
     TierConfigOauth10a api;
 
     /**

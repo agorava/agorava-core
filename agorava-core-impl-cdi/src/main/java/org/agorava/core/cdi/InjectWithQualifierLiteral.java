@@ -16,14 +16,14 @@
 
 package org.agorava.core.cdi;
 
-import org.agorava.core.api.ApplyQualifier;
+import org.agorava.core.api.InjectWithQualifier;
 
 import javax.enterprise.util.AnnotationLiteral;
 
 /**
  * @author Antoine Sabot-Durand
  */
-public class ApplyQualifierLiteral extends AnnotationLiteral<ApplyQualifierLiteral> implements ApplyQualifier {
+public class InjectWithQualifierLiteral extends AnnotationLiteral<InjectWithQualifierLiteral> implements InjectWithQualifier {
 
-    public static ApplyQualifierLiteral instance = new ApplyQualifierLiteral();
+    public static InjectWithQualifierLiteral instance = new InjectWithQualifierLiteral();
 }

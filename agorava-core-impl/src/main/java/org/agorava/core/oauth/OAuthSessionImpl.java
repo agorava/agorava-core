@@ -16,14 +16,13 @@
 
 package org.agorava.core.oauth;
 
-import org.agorava.core.api.ApplyQualifier;
 import org.agorava.core.api.GenericRoot;
+import org.agorava.core.api.InjectWithQualifier;
 import org.agorava.core.api.oauth.OAuthAppSettings;
 import org.agorava.core.api.oauth.OAuthSession;
 import org.agorava.core.api.oauth.Token;
 import org.agorava.core.spi.UserProfile;
 
-import javax.inject.Inject;
 import java.lang.annotation.Annotation;
 
 /**
@@ -31,7 +30,6 @@ import java.lang.annotation.Annotation;
  *
  * @author Antoine Sabot-Durand
  */
-@ApplyQualifier
 @GenericRoot
 public class OAuthSessionImpl implements OAuthSession {
 
@@ -45,8 +43,8 @@ public class OAuthSessionImpl implements OAuthSession {
 
     private UserProfile userProfile;
 
-    @Inject
-    @ApplyQualifier
+
+    @InjectWithQualifier
     private OAuthAppSettings settings;
 
 

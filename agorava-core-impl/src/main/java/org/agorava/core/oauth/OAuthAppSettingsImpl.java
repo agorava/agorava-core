@@ -16,7 +16,6 @@
 
 package org.agorava.core.oauth;
 
-import org.agorava.core.api.ApplyQualifier;
 import org.agorava.core.api.oauth.OAuthAppSettings;
 
 import java.lang.annotation.Annotation;
@@ -26,7 +25,6 @@ import java.lang.annotation.Annotation;
  *
  * @author Antoine Sabot-Durand
  */
-@ApplyQualifier
 public class OAuthAppSettingsImpl implements OAuthAppSettings {
 
     private static final long serialVersionUID = -8018722725677732853L;

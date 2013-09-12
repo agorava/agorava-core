@@ -20,14 +20,15 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
-import org.agorava.core.api.ApplyQualifier;
 import org.agorava.core.api.GenericRoot;
+import org.agorava.core.api.InjectWithQualifier;
 import org.agorava.core.api.OAuth;
 import org.agorava.core.api.OAuthVersion;
 import org.agorava.core.api.ServiceRelated;
 import org.agorava.core.api.exception.AgoravaException;
 import org.agorava.core.api.oauth.OAuthAppSettings;
 import org.agorava.core.api.oauth.OAuthProvider;
+import org.agorava.core.api.oauth.OAuthService;
 import org.agorava.core.oauth.OAuthSessionImpl;
 import org.agorava.core.spi.TierConfigOauth;
 import org.apache.deltaspike.core.api.literal.AnyLiteral;
@@ -54,7 +55,6 @@ import javax.enterprise.inject.spi.ProcessAnnotatedType;
 import javax.enterprise.inject.spi.ProcessBean;
 import javax.enterprise.inject.spi.ProcessProducer;
 import javax.enterprise.inject.spi.Producer;
-import javax.inject.Inject;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
@@ -146,27 +146,31 @@ public class AgoravaExtension implements Extension, Serializable {
     void applyQualifier(Annotation qual, AnnotatedType<?> at, AnnotatedTypeBuilder<?> atb) {
         //do a loop on all field to replace annotation mark by CDI annotations
         for (AnnotatedField af : at.getFields())
-            if (af.isAnnotationPresent(ApplyQualifier.class))
+            if (af.isAnnotationPresent(InjectWithQualifier.class)) {
+                atb.addToField(af, InjectLiteral.instance);
                 atb.addToField(af, qual);
 
+            }
 
         //loop on constructors to do the same
         for (AnnotatedConstructor ac : at.getConstructors()) {
-            if (ac.isAnnotationPresent(Inject.class)) {
-                Annotation[][] pa = ac.getJavaMember().getParameterAnnotations();
-                //loop on args to detect marked param
-                for (int i = 0; i < pa.length; i++)
-                    for (int j = 0; j < pa[i].length; j++)
-                        if (pa[i][j].equals(ApplyQualifierLiteral.instance))
-                            atb.addToConstructorParameter(ac.getJavaMember(), i, qual);
-            }
+            Annotation[][] pa = ac.getJavaMember().getParameterAnnotations();
+            //loop on args to detect marked param
+            for (int i = 0; i < pa.length; i++)
+                for (int j = 0; j < pa[i].length; j++)
+                    if (pa[i][j].equals(InjectWithQualifierLiteral.instance)) {
+                        atb.addToConstructor(ac, InjectLiteral.instance);
+                        atb.addToConstructorParameter(ac.getJavaMember(), i, qual);
+                    }
+
         }
 
         //loop on other methods (setters)
         for (AnnotatedMethod am : at.getMethods())
-            if (am.isAnnotationPresent(ApplyQualifierLiteral.class))
+            if (am.isAnnotationPresent(InjectWithQualifierLiteral.class)) {
+                atb.addToMethod(am, InjectLiteral.instance);
                 atb.addToMethod(am, qual);
-
+            }
 
     }
 
@@ -301,14 +305,14 @@ public class AgoravaExtension implements Extension, Serializable {
     }
 
 
-  /*  private void captureGenericOAuthService(@Observes ProcessBean<? extends OAuthService> pb) {
+    private void captureGenericOAuthService(@Observes ProcessBean<? extends OAuthService> pb) {
         Bean<? extends OAuthService> bean = pb.getBean();
         if (bean.getQualifiers().contains(GenericRootLiteral.INSTANCE)) {
-            genericOAuthService = bean;
+            log.info("here");
         }
     }
 
-    private void captureGenericOauthSession(@Observes ProcessBean<? extends OAuthSession> pb) {
+    /*private void captureGenericOauthSession(@Observes ProcessBean<? extends OAuthSession> pb) {
         Bean<? extends OAuthSession> bean = pb.getBean();
         if (bean.getQualifiers().contains(GenericRootLiteral.INSTANCE)) {
             genericOAuthSession = bean;
