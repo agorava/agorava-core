@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2013 Agorava                                                  
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -291,7 +291,7 @@ public class AgoravaExtension implements Extension, Serializable {
         Class<? extends TierConfigOauth> clazz = (Class<? extends TierConfigOauth>) pb.getBean().getBeanClass();
         try {
             service2OauthVersion.put(Iterables.getOnlyElement(qualifiers), clazz.newInstance().getOAuthVersion());
-        } catch (ReflectiveOperationException e) {
+        } catch (Exception e) {
             throw new AgoravaException("Error while retrieving version of OAuth in tier config", e);
         }
     }
