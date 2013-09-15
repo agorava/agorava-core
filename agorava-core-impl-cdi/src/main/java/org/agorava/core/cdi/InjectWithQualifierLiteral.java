@@ -16,7 +16,7 @@
 
 package org.agorava.core.cdi;
 
-import org.agorava.core.api.InjectWithQualifier;
+import org.agorava.core.api.atinject.InjectWithQualifier;
 
 import javax.enterprise.util.AnnotationLiteral;
 

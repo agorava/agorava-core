@@ -16,8 +16,8 @@
 
 package org.agorava.core.oauth;
 
-import org.agorava.core.api.GenericRoot;
-import org.agorava.core.api.InjectWithQualifier;
+import org.agorava.core.api.atinject.GenericBean;
+import org.agorava.core.api.atinject.InjectWithQualifier;
 import org.agorava.core.api.oauth.OAuthAppSettings;
 import org.agorava.core.api.oauth.OAuthSession;
 import org.agorava.core.api.oauth.Token;
@@ -30,7 +30,7 @@ import java.lang.annotation.Annotation;
  *
  * @author Antoine Sabot-Durand
  */
-@GenericRoot
+@GenericBean
 public class OAuthSessionImpl implements OAuthSession {
 
     private static final long serialVersionUID = -2526192334215289830L;

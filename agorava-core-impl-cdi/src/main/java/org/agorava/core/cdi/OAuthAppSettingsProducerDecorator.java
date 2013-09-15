@@ -31,6 +31,7 @@ import java.util.Set;
 class OAuthAppSettingsProducerDecorator implements Producer<OAuthAppSettings> {
 
     private Producer<OAuthAppSettings> oldProducer;
+
     private Annotation qual;
 
     OAuthAppSettingsProducerDecorator(Producer<OAuthAppSettings> oldProducer, Annotation qual) {

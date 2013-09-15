@@ -33,60 +33,60 @@ public interface OAuthSession extends Serializable {
     /**
      * @return the requestToken
      */
-    public Token getRequestToken();
+    Token getRequestToken();
 
     /**
      * @param requestToken the requestToken to set
      */
-    public void setRequestToken(Token requestToken);
+    void setRequestToken(Token requestToken);
 
     /**
      * @return the accessToken
      */
-    public Token getAccessToken();
+    Token getAccessToken();
 
     /**
      * @param accessToken the accessToken to set
      */
-    public void setAccessToken(Token accessToken);
+    void setAccessToken(Token accessToken);
 
     /**
      * @return the verifier
      */
-    public String getVerifier();
+    String getVerifier();
 
     /**
      * @param verifier the verifier to set
      */
-    public void setVerifier(String verifier);
+    void setVerifier(String verifier);
 
     /**
      * @param userProfile to set
      */
-    public void setUserProfile(UserProfile userProfile);
+    void setUserProfile(UserProfile userProfile);
 
     /**
      * @return the connected userProfile
      */
-    public UserProfile getUserProfile();
+    UserProfile getUserProfile();
 
     /**
      * @return the annotation for the current Social Media
      */
-    public Annotation getServiceQualifier();
+    Annotation getServiceQualifier();
 
     /**
      * @return true if the session is active
      */
-    public boolean isConnected();
+    boolean isConnected();
 
     /**
      * @return the name of the session to display for user
      */
-    public String getName();
+    String getName();
 
     /**
      * @return the name of the service
      */
-    public String getServiceName();
+    String getServiceName();
 }

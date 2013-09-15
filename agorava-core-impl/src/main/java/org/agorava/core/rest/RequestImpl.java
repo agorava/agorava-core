@@ -16,8 +16,8 @@
 
 package org.agorava.core.rest;
 
-import org.agorava.core.api.exceptions.OAuthConnectionException;
-import org.agorava.core.api.exceptions.OAuthException;
+import org.agorava.core.api.exception.AgoravaException;
+import org.agorava.core.api.exception.ConnectionException;
 import org.agorava.core.api.rest.Request;
 import org.agorava.core.api.rest.RequestTuner;
 import org.agorava.core.api.rest.Verb;
@@ -38,8 +38,12 @@ import java.util.concurrent.TimeUnit;
  * @author Pablo Fernandez
  */
 public class RequestImpl implements Request {
+    private static String DEFAULT_CONTENT_TYPE = "application/x-www-form-urlencoded";
+
     private static final String CONTENT_LENGTH = "Content-Length";
+
     private static final String CONTENT_TYPE = "Content-Type";
+
     private static RequestTuner NOOP = new RequestTuner() {
         @Override
         public void tune(Request _) {
@@ -47,16 +51,31 @@ public class RequestImpl implements Request {
     };
 
     private String url;
+
     private Verb verb;
-    private ParameterListImpl querystringParams;
-    private ParameterListImpl bodyParams;
+
+    private HttpParametersImpl querystringParams;
+
+    private HttpParametersImpl bodyParams;
+
     private Map<String, String> headers;
+
     private String payload = null;
+
+    protected HttpURLConnection getConnection() {
+        return connection;
+    }
+
     private HttpURLConnection connection;
+
     private String charset;
+
     private byte[] bytePayload = null;
+
     private boolean connectionKeepAlive = false;
+
     private Long connectTimeout = null;
+
     private Long readTimeout = null;
 
     /**
@@ -68,8 +87,8 @@ public class RequestImpl implements Request {
     public RequestImpl(Verb verb, String url) {
         this.verb = verb;
         this.url = url;
-        this.querystringParams = new ParameterListImpl();
-        this.bodyParams = new ParameterListImpl();
+        this.querystringParams = new HttpParametersImpl();
+        this.bodyParams = new HttpParametersImpl();
         this.headers = new HashMap<String, String>();
     }
 
@@ -79,7 +98,7 @@ public class RequestImpl implements Request {
             createConnection();
             return doSend(tuner);
         } catch (Exception e) {
-            throw new OAuthConnectionException(e);
+            throw new ConnectionException(e);
         }
     }
 
@@ -98,7 +117,7 @@ public class RequestImpl implements Request {
 
     @Override
     public String getCompleteUrl() {
-        return querystringParams.appendTo(url);
+        return querystringParams.asUrl(url);
     }
 
     ResponseImpl doSend(RequestTuner tuner) throws IOException {
@@ -114,7 +133,7 @@ public class RequestImpl implements Request {
             addBody(connection, getByteBodyContents());
         }
         tuner.tune(this);
-        return new ResponseImpl(connection);
+        return new ResponseImpl(this);
     }
 
     void addHeaders(HttpURLConnection conn) {
@@ -159,20 +178,20 @@ public class RequestImpl implements Request {
     }
 
     @Override
-    public ParameterListImpl getQueryStringParams() {
+    public HttpParametersImpl getQueryStringParams() {
         try {
-            ParameterListImpl result = new ParameterListImpl();
+            HttpParametersImpl result = new HttpParametersImpl();
             String queryString = new URL(url).getQuery();
             result.addQuerystring(queryString);
             result.addAll(querystringParams);
             return result;
         } catch (MalformedURLException mue) {
-            throw new OAuthException("Malformed URL", mue);
+            throw new AgoravaException("Malformed URL : " + url, mue);
         }
     }
 
     @Override
-    public ParameterListImpl getBodyParams() {
+    public HttpParametersImpl getBodyParams() {
         return bodyParams;
     }
 
@@ -191,7 +210,7 @@ public class RequestImpl implements Request {
         try {
             return new String(getByteBodyContents(), getCharset());
         } catch (UnsupportedEncodingException uee) {
-            throw new OAuthException("Unsupported Charset: " + charset, uee);
+            throw new AgoravaException("Unsupported Charset: " + charset, uee);
         }
     }
 
@@ -201,7 +220,7 @@ public class RequestImpl implements Request {
         try {
             return body.getBytes(getCharset());
         } catch (UnsupportedEncodingException uee) {
-            throw new OAuthException("Unsupported Charset: " + getCharset(), uee);
+            throw new AgoravaException("Unsupported Charset: " + getCharset(), uee);
         }
     }
 

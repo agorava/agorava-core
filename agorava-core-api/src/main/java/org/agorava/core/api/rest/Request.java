@@ -21,19 +21,27 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * A REST request
+ *
  * @author Antoine Sabot-Durand
  */
 public interface Request {
-    String DEFAULT_CONTENT_TYPE = "application/x-www-form-urlencoded";
+
 
     /**
-     * Execute the request and return a {@link org.agorava.core.api.model.ResponseImpl}
+     * Execute the request and return a {@link Response}
      *
-     * @return Http Response
+     * @param tuner a tuner to alter request behavior
+     * @return the response from remote tier
      * @throws RuntimeException if the connection cannot be created.
      */
     Response send(RequestTuner tuner);
 
+    /**
+     * Execute the request and return a {@link Response}
+     *
+     * @return the response from remote tier
+     */
     Response send();
 
     /**
@@ -44,7 +52,7 @@ public interface Request {
     String getCompleteUrl();
 
     /**
-     * Add an HTTP Header to the Request
+     * Add an HTTP HEADER to the Request
      *
      * @param key   the header name
      * @param value the header value
@@ -68,39 +76,34 @@ public interface Request {
     void addQuerystringParameter(String key, String value);
 
     /**
-     * Add body payload.
-     * <p/>
-     * This method is used when the HTTP body is not a form-url-encoded string,
-     * but another thing. Like for example XML.
-     * <p/>
-     * Note: The contents are not part of the OAuth signature
+     * Add body payload from a String
      *
-     * @param payload the body of the request
+     * @param payload the payload to add to body
      */
     void addPayload(String payload);
 
     /**
-     * Overloaded version for byte arrays
+     * Add body payload from an Array of bytes
      *
-     * @param payload
+     * @param payload the payload to add to body
      */
     void addPayload(byte[] payload);
 
     /**
-     * Get a {@link org.agorava.core.api.model.ParameterListImpl} with the query string parameters.
+     * Get a {@link HttpParameters} with the query string parameters.
      *
-     * @return a {@link org.agorava.core.api.model.ParameterListImpl} containing the query string parameters.
-     * @throws org.agorava.core.api.exceptions.OAuthException
+     * @return a parameter list containing the query string parameters.
+     * @throws org.agorava.core.api.exception.AgoravaException
      *          if the request URL is not valid.
      */
-    ParameterList getQueryStringParams();
+    HttpParameters getQueryStringParams();
 
     /**
-     * Obtains a {@link org.agorava.core.api.model.ParameterListImpl} of the body parameters.
+     * Obtains a {@link HttpParameters} of the body parameters.
      *
-     * @return a {@link org.agorava.core.api.model.ParameterListImpl}containing the body parameters.
+     * @return a a parameter list containing the query string parameters containing the body parameters.
      */
-    ParameterList getBodyParams();
+    HttpParameters getBodyParams();
 
     /**
      * Obtains the URL of the HTTP Request.
@@ -120,7 +123,7 @@ public interface Request {
      * Returns the body of the request
      *
      * @return form encoded string
-     * @throws org.agorava.core.api.exceptions.OAuthException
+     * @throws org.agorava.core.api.exception.AgoravaException
      *          if the charset chosen is not supported
      */
     String getBodyContents();
@@ -172,10 +175,16 @@ public interface Request {
     /**
      * Sets whether the underlying Http Connection is persistent or not.
      *
-     * @param connectionKeepAlive
-     * @see http://download.oracle.com/javase/1.5.0/docs/guide/net/http-keepalive.html
+     * @param connectionKeepAlive if true the connection is persistent
+     * @see <a href="http://docs.oracle.com/javase/6/docs/technotes/guides/net/http-keepalive.html">JSE doc on http
+     *      keepalive</a>
      */
     void setConnectionKeepAlive(boolean connectionKeepAlive);
 
+    /**
+     * Add Body parameters from a map
+     *
+     * @param params map containing parameters to add
+     */
     void addBodyParameters(Map<String, ? extends Object> params);
 }

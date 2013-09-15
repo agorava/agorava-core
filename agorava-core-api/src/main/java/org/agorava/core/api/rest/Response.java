@@ -55,7 +55,7 @@ public interface Response {
     Map<String, String> getHeaders();
 
     /**
-     * Obtains a single HTTP Header value, or null if undefined
+     * Obtains a single HTTP HEADER value, or null if undefined
      *
      * @param name the header name.
      * @return header value or null.
@@ -63,5 +63,5 @@ public interface Response {
     String getHeader(String name);
 
 
-    String getUrl();
+    Request getRequest();
 }

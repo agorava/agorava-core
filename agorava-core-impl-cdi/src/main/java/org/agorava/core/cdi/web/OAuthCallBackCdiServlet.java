@@ -16,7 +16,7 @@
 
 package org.agorava.core.cdi.web;
 
-import org.agorava.core.api.Current;
+import org.agorava.core.api.atinject.Current;
 import org.agorava.core.api.exception.AgoravaException;
 import org.agorava.core.api.oauth.OAuthService;
 import org.agorava.core.api.oauth.OAuthSession;

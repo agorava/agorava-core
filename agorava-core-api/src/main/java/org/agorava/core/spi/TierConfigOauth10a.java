@@ -16,52 +16,65 @@
 
 package org.agorava.core.spi;
 
-import org.agorava.core.api.ExtractorKind;
-import org.agorava.core.api.OAuthVersion;
-import org.agorava.core.api.extractors.BaseStringExtractor;
-import org.agorava.core.api.extractors.HeaderExtractor;
-import org.agorava.core.api.extractors.TokenExtractor;
-import org.agorava.core.api.oauth.SignatureType;
+import org.agorava.core.api.atinject.ExtractorType;
+import org.agorava.core.api.atinject.SignatureType;
+import org.agorava.core.api.extractor.StringExtractor;
+import org.agorava.core.api.extractor.TokenExtractor;
+import org.agorava.core.api.oauth.SignaturePlace;
 import org.agorava.core.api.oauth.Token;
 import org.agorava.core.api.rest.Verb;
-import org.agorava.core.api.services.HMACSha1SignatureService;
-import org.agorava.core.api.services.SignatureService;
-import org.agorava.core.api.services.TimestampService;
-import org.agorava.core.api.services.TimestampServiceImpl;
+import org.agorava.core.api.service.SignatureService;
+import org.agorava.core.api.service.TimestampService;
 
 import javax.inject.Inject;
 
-import static org.agorava.core.api.ExtractorKind.Kind.BASIC;
-import static org.agorava.core.api.OAuthVersion.ONE;
+import static org.agorava.core.api.atinject.ExtractorType.Type.HEADER;
+import static org.agorava.core.api.atinject.ExtractorType.Type.OAUTH1_BASE_STRING;
+import static org.agorava.core.api.atinject.ExtractorType.Type.TOKEN_STD;
+import static org.agorava.core.api.atinject.OAuth.OAuthVersion;
+import static org.agorava.core.api.atinject.OAuth.OAuthVersion.ONE;
+import static org.agorava.core.api.atinject.SignatureType.Type.HMACSHA1;
 
 /**
- * Default implementation of the OAuth protocol, version 1.0a
+ * Default Tier configuration implementing the OAuth protocol, version 1.0a
  * <p/>
- * This class is meant to be extended by concrete implementations of the API,
+ * This class is meant to be extended by concrete implementations of the Tier configuration,
  * providing the endpoints and endpoint-http-verbs.
  * <p/>
  * If your Api adheres to the 1.0a protocol correctly, you just need to extend
  * this class and define the getters for your endpoints.
  * <p/>
  * If your Api does something a bit different, you can override the different
- * extractors or services, in order to fine-tune the process. Please read the
- * javadocs of the interfaces to get an idea of what to do.
+ * extractors or services, in order to fine-tune the process.
  *
  * @author Pablo Fernandez
+ * @author Antoine Sabot-Durand
  */
 public abstract class TierConfigOauth10a implements TierConfigOauth {
 
     @Inject
-    @ExtractorKind(BASIC)
+    @ExtractorType(TOKEN_STD)
     TokenExtractor tokenExtractor;
 
+    @Inject
+    @ExtractorType(OAUTH1_BASE_STRING)
+    StringExtractor baseStringExtractor;
 
     @Inject
-    BaseStringExtractor baseStringExtractor;
+    @ExtractorType(HEADER)
+    StringExtractor headerExtractor;
 
     @Inject
-    HeaderExtractor headerExtractor;
+    @SignatureType(HMACSHA1)
+    SignatureService signatureService;
 
+    @Inject
+    TimestampService timestampService;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public TokenExtractor getAccessTokenExtractor() {
         return tokenExtractor;
     }
@@ -71,7 +84,7 @@ public abstract class TierConfigOauth10a implements TierConfigOauth {
      *
      * @return base string extractor
      */
-    public BaseStringExtractor getBaseStringExtractor() {
+    public StringExtractor getBaseStringExtractor() {
         return baseStringExtractor;
     }
 
@@ -80,7 +93,7 @@ public abstract class TierConfigOauth10a implements TierConfigOauth {
      *
      * @return header extractor
      */
-    public HeaderExtractor getHeaderExtractor() {
+    public StringExtractor getHeaderExtractor() {
         return headerExtractor;
     }
 
@@ -99,7 +112,7 @@ public abstract class TierConfigOauth10a implements TierConfigOauth {
      * @return signature service
      */
     public SignatureService getSignatureService() {
-        return new HMACSha1SignatureService();
+        return signatureService;
     }
 
     /**
@@ -108,7 +121,7 @@ public abstract class TierConfigOauth10a implements TierConfigOauth {
      * @return timestamp service
      */
     public TimestampService getTimestampService() {
-        return new TimestampServiceImpl();
+        return timestampService;
     }
 
     /**
@@ -152,11 +165,17 @@ public abstract class TierConfigOauth10a implements TierConfigOauth {
      */
     public abstract String getAuthorizationUrl(Token requestToken);
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public SignatureType getSignatureType() {
-        return SignatureType.Header;
+    public SignaturePlace getSignatureType() {
+        return SignaturePlace.HEADER;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public OAuthVersion getOAuthVersion() {
         return ONE;

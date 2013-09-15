@@ -32,6 +32,7 @@ import java.util.Map;
  */
 public class OAuthRequestImpl extends RequestImpl implements OAuthRequest {
     private static final String OAUTH_PREFIX = "oauth_";
+
     private Map<String, String> oauthParameters;
 
     /**
@@ -54,7 +55,8 @@ public class OAuthRequestImpl extends RequestImpl implements OAuthRequest {
         if (key.startsWith(OAUTH_PREFIX) || key.equals(OAuthConstants.SCOPE)) {
             return key;
         } else {
-            throw new IllegalArgumentException(String.format("OAuth parameters must either be '%s' or start with '%s'", OAuthConstants.SCOPE, OAUTH_PREFIX));
+            throw new IllegalArgumentException(String.format("OAuth parameters must either be '%s' or start with '%s'",
+                    OAuthConstants.SCOPE, OAUTH_PREFIX));
         }
     }
 

@@ -21,17 +21,19 @@ import org.agorava.core.api.rest.Request;
 import java.util.Map;
 
 /**
+ * Extends {@link Request} to add OAuth specific
+ *
  * @author Antoine Sabot-Durand
  */
 public interface OAuthRequest extends Request {
     /**
-     * Adds an OAuth parameter.
+     * Adds an OAuth parameter to the request.
      *
      * @param key   name of the parameter
      * @param value value of the parameter
      * @throws IllegalArgumentException if the parameter is not an OAuth parameter
      */
-    void addOAuthParameter(String key, String value);
+    void addOAuthParameter(String key, String value) throws IllegalArgumentException;
 
     /**
      * Returns the {@link java.util.Map} containing the key-value pair of parameters.

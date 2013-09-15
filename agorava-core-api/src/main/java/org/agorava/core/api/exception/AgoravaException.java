@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Agorava
+ * Copyright 2013 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,24 +17,40 @@
 package org.agorava.core.api.exception;
 
 /**
- * Generic exception for Agorava
+ * Default Agorava exception.
+ * Represents a generic problem in the Framework
  *
  * @author Antoine Sabot-Durand
  */
 public class AgoravaException extends RuntimeException {
 
-    private static final long serialVersionUID = 8149354996979746574L;
+    private static final long serialVersionUID = -2374017612010236524L;
 
-    public AgoravaException(String message, Throwable cause) {
+    /**
+     * Default constructor
+     *
+     * @param message message explaining what went wrong
+     * @param cause   original exception
+     */
+    public AgoravaException(String message, Exception cause) {
         super(message, cause);
     }
 
+    /**
+     * No-exception constructor. Used when there is no original exception
+     *
+     * @param message message explaining what went wrong
+     */
     public AgoravaException(String message) {
-        super(message);
+        super(message, null);
     }
 
-    public AgoravaException(Throwable cause) {
+    /**
+     * No-message constructor. Used when there is no obvious message to add
+     *
+     * @param cause original exception
+     */
+    public AgoravaException(Exception cause) {
         super(cause);
     }
-
 }

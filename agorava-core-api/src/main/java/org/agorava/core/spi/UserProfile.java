@@ -25,10 +25,16 @@ import java.io.Serializable;
  */
 public abstract class UserProfile implements Serializable {
 
-    protected final String id;
+    private static final long serialVersionUID = 5367527950121194789L;
 
+    private final String id;
+
+    /**
+     * Default constructor
+     *
+     * @param id identifier of the user
+     */
     protected UserProfile(String id) {
-        super();
         this.id = id;
     }
 

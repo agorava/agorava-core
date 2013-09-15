@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Agorava
+ * Copyright 2013 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * This package contains API elements to manage basic interactions with generic OAuth services
+ * This package contains API elements to manage interactions with generic OAuth services
  */
 
 

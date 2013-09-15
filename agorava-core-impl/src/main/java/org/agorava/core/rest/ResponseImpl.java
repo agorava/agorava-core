@@ -17,9 +17,9 @@
 package org.agorava.core.rest;
 
 import org.agorava.core.api.exception.AgoravaException;
-import org.agorava.core.api.exceptions.OAuthException;
+import org.agorava.core.api.rest.Request;
 import org.agorava.core.api.rest.Response;
-import org.agorava.core.api.utils.StreamUtils;
+import org.agorava.core.utils.StreamUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,15 +37,26 @@ import java.util.zip.GZIPInputStream;
  */
 public class ResponseImpl implements Response {
     public static final String GZIP_CONTENT_ENCODING = "gzip";
+
     public static final String CONTENT_ENCODING = "Content-Encoding";
+
     private static final String EMPTY = "";
+
     private int code;
+
     private String body;
+
     private InputStream stream;
+
     private Map<String, String> headers;
+
     private URL url;
 
-    ResponseImpl(HttpURLConnection connection) throws IOException {
+    private Request request;
+
+    ResponseImpl(RequestImpl request) throws IOException {
+        HttpURLConnection connection = request.getConnection();
+        this.request = request;
         try {
             connection.connect();
             url = connection.getURL();
@@ -61,7 +72,7 @@ public class ResponseImpl implements Response {
             else
                 stream = res;
         } catch (UnknownHostException e) {
-            throw new OAuthException("The IP address of a host could not be determined.", e);
+            throw new AgoravaException("The IP address of a host could not be determined.", e);
         }
     }
 
@@ -108,9 +119,10 @@ public class ResponseImpl implements Response {
         return headers.get(name);
     }
 
+
     @Override
-    public String getUrl() {
-        return url.toString();
+    public Request getRequest() {
+        return request;
     }
 
 }

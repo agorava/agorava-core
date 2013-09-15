@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Agorava
+ * Copyright 2013 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ package org.agorava.core.api.event;
 import org.agorava.core.api.oauth.OAuthSession;
 
 /**
- * Event sent at the end of OAuth authentication cycle
+ * Event sent at the end of OAuth authentication cycle containing the new {@link OAuthSession}
  *
  * @author Antoine Sabot-Durand
  */
@@ -29,8 +29,13 @@ public class OAuthComplete extends SocialEvent<OAuthSession> {
 
     private static final long serialVersionUID = -2428276251131445054L;
 
-    public OAuthComplete(Status status, String message, OAuthSession payload) {
-        super(status, message, payload);
+    /**
+     * @param status  the status of the event
+     * @param message specific message about the event
+     * @param session the OAuth user session that has been completed
+     */
+    public OAuthComplete(Status status, String message, OAuthSession session) {
+        super(status, message, session);
     }
 
 }

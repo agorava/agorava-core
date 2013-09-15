@@ -16,16 +16,27 @@
 
 package org.agorava.core.spi;
 
-import org.agorava.core.api.OAuth;
-import org.agorava.core.api.OAuthVersion;
-import org.agorava.core.api.extractors.TokenExtractor;
+import org.agorava.core.api.atinject.OAuth;
+import org.agorava.core.api.extractor.TokenExtractor;
 import org.agorava.core.api.rest.Verb;
 
 import javax.inject.Inject;
 
-import static org.agorava.core.api.OAuthVersion.TWO_FINAL;
+import static org.agorava.core.api.atinject.OAuth.OAuthVersion;
+import static org.agorava.core.api.atinject.OAuth.OAuthVersion.TWO_FINAL;
 
 /**
+ * Default Tier configuration implementing the OAuth protocol, version 2.0 final
+ * <p/>
+ * This class is meant to be extended by concrete implementations of the API,
+ * providing the endpoints and endpoint-http-verbs.
+ * <p/>
+ * If your Api adheres to the 2.0 final protocol correctly, you just need to extend
+ * this class and define the getters for your endpoints.
+ * <p/>
+ * If your Api does something a bit different, you can override the different
+ * extractors or services, in order to fine-tune the process.
+ *
  * @author Antoine Sabot-Durand
  */
 public abstract class TierConfigOauth20Final extends TierConfigOauth20 {
@@ -34,16 +45,25 @@ public abstract class TierConfigOauth20Final extends TierConfigOauth20 {
     @OAuth(TWO_FINAL)
     TokenExtractor AccessTokenExtractor;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Verb getAccessTokenVerb() {
         return Verb.POST;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public TokenExtractor getAccessTokenExtractor() {
         return AccessTokenExtractor;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public OAuthVersion getOAuthVersion() {
         return TWO_FINAL;

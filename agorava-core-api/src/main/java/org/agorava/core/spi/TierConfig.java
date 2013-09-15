@@ -17,12 +17,14 @@
 package org.agorava.core.spi;
 
 /**
+ * Root of all remote tier service configuration
+ *
  * @author Antoine Sabot-Durand
  */
 public interface TierConfig {
 
     /**
-     * @return the name of the service
+     * @return the name of the tier service
      */
-    public String getServiceName();
+    String getTierName();
 }

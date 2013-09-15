@@ -20,8 +20,8 @@ import java.io.Serializable;
 import java.lang.annotation.Annotation;
 
 /**
- * Configuration settings needed to access to an OAuth 1.0a and 2.0 service.
- * It's used by {@link org.agorava.core.api.oauth.OAuthProvider} to setup
+ * Configuration settings needed to access to an OAuth 1.0a and 2.0 service tier.
+ * Used by {@link org.agorava.core.api.oauth.OAuthProvider} to setup
  * connection to Social Media
  *
  * @author Antoine Sabot-Durand
@@ -31,34 +31,37 @@ public interface OAuthAppSettings extends Serializable {
     /**
      * @return the key consumer key for the OAuth service
      */
-    public String getApiKey();
+    String getApiKey();
 
     /**
      * @return the consumer secret key for the OAuth service
      */
-    public String getApiSecret();
+    String getApiSecret();
 
     /**
      * @return the call back URL for the OAuth service
      */
-    public String getCallback();
+    String getCallback();
 
     /**
      * @return the scope requested
      */
-    public String getScope();
+    String getScope();
 
     /**
      * @return the name of the service
      */
-    public String getSocialMediaName();
+    String getSocialMediaName();
 
     /**
      * @return the qualifier associated to the service
      */
-    public Annotation getQualifier();
+    Annotation getQualifier();
 
-    public boolean hasScope();
+    /**
+     * @return true if this OAuthAppSettings contains a scope
+     */
+    boolean hasScope();
 
 
 }

@@ -20,22 +20,39 @@ import java.lang.annotation.Annotation;
 
 /**
  * Builder for an {@link OAuthAppSettings} can be initialized directly from
- * fields name or from an Array of {@link Param} in case of Annotation configuration.
+ * fields name or from an Array of {@link Param} in case of Annotation configuration with {@link OAuthApplication}.
  * <p/>
  * For this last purpose, the interface {@link OAuthAppSettingsBuilder} contains constants
- * for fields name.
+ * for fields name should the configuration being read from a text file.
  *
  * @author Antoine Sabot-Durand
  */
 public interface OAuthAppSettingsBuilder {
 
-    //TODO: switch to OAuthConstants
-    public static final String NAME = "name";
-    public static final String API_KEY = "apiKey";
-    public static final String API_SECRET = "apiSecret";
-    public static final String CALLBACK = "callback";
-    public static final String SCOPE = "scope";
+    /**
+     * key label for the name of the OAuth service
+     */
+    String NAME = "name";
 
+    /**
+     * key label for the consumer key of the OAuth application
+     */
+    String API_KEY = "apiKey";
+
+    /**
+     * key label for the consumer secret of the OAuth application
+     */
+    String API_SECRET = "apiSecret";
+
+    /**
+     * key label for the call back url to send to of the tier service
+     */
+    String CALLBACK = "callback";
+
+    /**
+     * key label for the scope of the OAuth application
+     */
+    String SCOPE = "scope";
 
     /**
      * Set the qualifier of the Social Media for which the settings are intended.
@@ -44,7 +61,6 @@ public interface OAuthAppSettingsBuilder {
      * @return the current OAuthAppSettingsBuilder
      */
     OAuthAppSettingsBuilder qualifier(Annotation qualifier);
-
 
     /**
      * Set the name of the Social Media for which the settings are intended
@@ -62,7 +78,6 @@ public interface OAuthAppSettingsBuilder {
      */
     OAuthAppSettingsBuilder apiKey(String apiKey);
 
-
     /**
      * Set the Social Media application secret key
      *
@@ -79,7 +94,6 @@ public interface OAuthAppSettingsBuilder {
      */
     OAuthAppSettingsBuilder callback(String callback);
 
-
     /**
      * Set the OAuth 2.0 scope for the application
      *
@@ -87,7 +101,6 @@ public interface OAuthAppSettingsBuilder {
      * @return the current OAuthAppSettingsBuilder
      */
     OAuthAppSettingsBuilder scope(String scope);
-
 
     /**
      * Load builder params with an array of {@link Param}. This method can be used when params for {@link OAuthAppSettings}
@@ -97,7 +110,6 @@ public interface OAuthAppSettingsBuilder {
      * @return the current OAuthAppSettingsBuilder
      */
     OAuthAppSettingsBuilder params(Param[] params);
-
 
     /**
      * Builds the {@link OAuthAppSettings}
@@ -109,7 +121,7 @@ public interface OAuthAppSettingsBuilder {
     /**
      * Set builder params from an existing {@link OAuthAppSettings}
      *
-     * @param settings
+     * @param settings settings to read from
      * @return the current OAuthAppSettingsBuilder
      */
     OAuthAppSettingsBuilder readFromSettings(OAuthAppSettings settings);

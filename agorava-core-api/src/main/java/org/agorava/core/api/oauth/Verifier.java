@@ -16,12 +16,13 @@
 
 package org.agorava.core.api.oauth;
 
-import org.agorava.core.api.utils.Preconditions;
+import org.agorava.core.api.util.Preconditions;
 
 /**
  * Represents an OAuth verifier code.
  *
  * @author Pablo Fernandez
+ * @author Antoine Sabot-Durand
  */
 public class Verifier {
 
@@ -37,6 +38,9 @@ public class Verifier {
         this.value = value;
     }
 
+    /**
+     * @return verifier value
+     */
     public String getValue() {
         return value;
     }

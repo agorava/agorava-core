@@ -31,14 +31,14 @@ public interface RestService extends Serializable {
      *
      * @return true if the connection process is over and successful
      */
-    public boolean isConnected();
+    boolean isConnected();
 
     /**
      * Returns the name/type of the Social Network we're connected to
      *
      * @return name of the service
      */
-    public String getSocialMediaName();
+    String getSocialMediaName();
 
     /**
      * Perform a REST Get command and return an object of the provided class
@@ -47,19 +47,20 @@ public interface RestService extends Serializable {
      * @param clazz class of the returned object
      * @return an object of the asked class
      */
-    public <T> T get(String uri, Class<T> clazz);
+    <T> T get(String uri, Class<T> clazz);
 
 
     /**
      * Perform a REST get command with given parameters to put in the given URI and return an object of the provided class
      *
-     * @param uri       a string with {@link java.text.MessageFormat} placeholders (i.e. {0}, {1}) style for params. It's the uri to perform the REST get call
+     * @param uri       a string with {@link java.text.MessageFormat} placeholders (i.e. {0},
+     *                  {1}) style for params. It's the uri to perform the REST get call
      * @param clazz     class of the returned object
      * @param urlParams list of params to feed the uri with
      * @param <T>       generic type for returned object
      * @return an object of the asked class
      */
-    public <T> T get(String uri, Class<T> clazz, Object... urlParams);
+    <T> T get(String uri, Class<T> clazz, Object... urlParams);
 
 
     /**
@@ -71,13 +72,14 @@ public interface RestService extends Serializable {
      * @param <T>    generic type for returned object
      * @return an object of the asked class
      */
-    public <T> T post(String uri, Map<String, ?> params, Class<T> clazz);
+    <T> T post(String uri, Map<String, ?> params, Class<T> clazz);
 
 
     /**
      * Perform a REST post command with given object and given URI params. Expecting a String (a new URL) as returned data
      *
-     * @param uri       a string with {@link java.text.MessageFormat} placeholders (i.e. {0}, {1}) style for params. It's the uri to perform the REST post call
+     * @param uri       a string with {@link java.text.MessageFormat} placeholders (i.e. {0},
+     *                  {1}) style for params. It's the uri to perform the REST post call
      * @param toPost    the object to post
      * @param urlParams list of params to feed the uri with
      * @return an uri pointing to a resource corresponding to posted object
@@ -87,7 +89,8 @@ public interface RestService extends Serializable {
     /**
      * Perform a REST put command with given object and given URI params
      *
-     * @param uri       a string with {@link java.text.MessageFormat} placeholders (i.e. {0}, {1}) style for params. It's the uri to perform the REST put call
+     * @param uri       a string with {@link java.text.MessageFormat} placeholders (i.e. {0},
+     *                  {1}) style for params. It's the uri to perform the REST put call
      * @param toPut     the object to put
      * @param urlParams list of params to feed the uri with
      */

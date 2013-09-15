@@ -16,7 +16,7 @@
 
 package org.agorava.core.api.oauth;
 
-import org.agorava.core.api.utils.Preconditions;
+import org.agorava.core.api.util.Preconditions;
 
 import java.io.Serializable;
 
@@ -24,13 +24,14 @@ import java.io.Serializable;
  * Represents an OAuth token (either request or access token) and its secret
  *
  * @author Pablo Fernandez
+ * @author Antoine Sabot-Durand
  */
 public class Token implements Serializable {
     private static final long serialVersionUID = 715000866082812683L;
 
     private final String token;
+
     private final String secret;
-    private final String rawResponse;
 
     /**
      * Default constructor
@@ -39,31 +40,24 @@ public class Token implements Serializable {
      * @param secret token secret. Can't be null.
      */
     public Token(String token, String secret) {
-        this(token, secret, null);
-    }
-
-    public Token(String token, String secret, String rawResponse) {
         Preconditions.checkNotNull(token, "Token can't be null");
         Preconditions.checkNotNull(secret, "Secret can't be null");
-
         this.token = token;
         this.secret = secret;
-        this.rawResponse = rawResponse;
     }
 
+    /**
+     * @return public part of the token
+     */
     public String getToken() {
         return token;
     }
 
+    /**
+     * @return secret part of the token
+     */
     public String getSecret() {
         return secret;
-    }
-
-    public String getRawResponse() {
-        if (rawResponse == null) {
-            throw new IllegalStateException("This token object was not constructed by scribe and does not have a rawResponse");
-        }
-        return rawResponse;
     }
 
     @Override
@@ -72,19 +66,10 @@ public class Token implements Serializable {
     }
 
     /**
-     * Returns true if the token is empty (token = "", secret = "")
+     * @return true if the token is empty (token = "", secret = "")
      */
     public boolean isEmpty() {
-        return "".equals(this.token) && "".equals(this.secret);
-    }
-
-    /**
-     * Factory method that returns an empty token (token = "", secret = "").
-     * <p/>
-     * Useful for two legged OAuth.
-     */
-    public static Token empty() {
-        return new Token("", "");
+        return equals(OAuthConstants.EMPTY_TOKEN);
     }
 
     @Override

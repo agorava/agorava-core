@@ -25,7 +25,7 @@ import org.agorava.core.spi.TierConfigOauth20;
 @FakeService2
 public class FakeTier2 extends TierConfigOauth20 {
     @Override
-    public String getServiceName() {
+    public String getTierName() {
         return "Facebook";
     }
 

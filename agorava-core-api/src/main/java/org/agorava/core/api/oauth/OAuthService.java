@@ -23,7 +23,7 @@ import org.agorava.core.api.rest.Verb;
 import java.util.Map;
 
 /**
- * Implementation of this interface is used to manage a generic OAuth Service
+ * Provides high level Oauth Service. Rely on {@link OAuthProvider} for OAuth initialization and signature
  *
  * @author Antoine Sabot-Durand
  */
@@ -32,40 +32,40 @@ public interface OAuthService extends RestService {
     /**
      * @return the access token for the OAuth service
      */
-    public Token getAccessToken();
+    Token getAccessToken();
 
     /**
      * Set the Access Token with for an OAuth access
      *
      * @param token the token to set
      */
-    public void setAccessToken(Token token);
+    void setAccessToken(Token token);
 
     /**
      * Returns the url to the OAuth service to ask an authorization to access the service.
      *
      * @return the REST URL to use request access
      */
-    public String getAuthorizationUrl();
+    String getAuthorizationUrl();
 
     /**
      * Access to OAuth verifier
      *
      * @return the OAUth verifier
      */
-    public String getVerifier();
+    String getVerifier();
 
     /**
      * Used to initialize verifier code returned by OAuth service
      *
-     * @param verifierStr
+     * @param verifierStr verifier code
      */
-    public void setVerifier(String verifierStr);
+    void setVerifier(String verifierStr);
 
     /**
      * Initialize the OAuth access token after the service gave an authorization with the Verifier
      */
-    public void initAccessToken();
+    void initAccessToken();
 
     /**
      * Send an OAuth request signed without any parameter
@@ -74,7 +74,7 @@ public interface OAuthService extends RestService {
      * @param uri  the REST address of the request
      * @return an HttpResponse containing the response. It could be in various format (json, xml, string)
      */
-    public Response sendSignedRequest(Verb verb, String uri);
+    Response sendSignedRequest(Verb verb, String uri);
 
     /**
      * Send an OAuth request signed with a list a parameter
@@ -84,7 +84,7 @@ public interface OAuthService extends RestService {
      * @param params a Map of key value parameters to send in the header of the request
      * @return an HttpResponse containing the response. It could be in various format (json, xml, string)
      */
-    public Response sendSignedRequest(Verb verb, String uri, Map<String, ?> params);
+    Response sendSignedRequest(Verb verb, String uri, Map<String, ?> params);
 
     /**
      * Send an OAuth request signed with a single parameter
@@ -95,15 +95,15 @@ public interface OAuthService extends RestService {
      * @param value value of the parameter
      * @return an HttpResponse containing the response. It could be in various format (json, xml, string)
      */
-    public Response sendSignedRequest(Verb verb, String uri, String key, Object value);
+    Response sendSignedRequest(Verb verb, String uri, String key, Object value);
 
     /**
-     * Initialize and set an OAuth access token from its public and private keys
+     * Initialize and set an OAuth access token from its  and private keys
      *
-     * @param token  public key
+     * @param token  key
      * @param secret secret keys
      */
-    public void setAccessToken(String token, String secret);
+    void setAccessToken(String token, String secret);
 
     /**
      * Send an OAuth request signed with an XML Paylad as content
@@ -113,25 +113,26 @@ public interface OAuthService extends RestService {
      * @param payload the content of the XML payload to send to the service
      * @return an HttpResponse containing the response. It could be in various format (json, xml, string)
      */
-    public Response sendSignedXmlRequest(Verb verb, String uri, String payload);
+    Response sendSignedXmlRequest(Verb verb, String uri, String payload);
 
     /**
      * @return the session settings of the given service
      */
-    public OAuthSession getSession();
+    OAuthSession getSession();
 
     /**
      * Signs and sends a simple request
      *
-     * @param request
-     * @return an HttpResponse containing the response. It could be in various format (json, xml, string)
+     * @param request the request to sign and send
+     * @return the response
      */
-    public Response sendSignedRequest(OAuthRequest request);
+    Response sendSignedRequest(OAuthRequest request);
 
     /**
      * Perform a conditionally signed REST get command and return an object of the provided class
      *
-     * @param uri    a string with {@link java.text.MessageFormat} placeholders (i.e. {0}, {1}) style for params. It's the uri to perform the REST get call
+     * @param uri    a string with {@link java.text.MessageFormat} placeholders (i.e. {0},
+     *               {1}) style for params. It's the uri to perform the REST get call
      * @param clazz  class of the returned object
      * @param signed indicate if the request has to be signed or not
      * @param <T>    generic type for returned object
@@ -149,5 +150,5 @@ public interface OAuthService extends RestService {
     /**
      * Close the connexion to the current Oauth service by resetting the OAuthSession
      */
-    public void resetSession();
+    void resetSession();
 }

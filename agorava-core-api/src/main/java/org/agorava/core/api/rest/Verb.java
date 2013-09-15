@@ -17,10 +17,49 @@
 package org.agorava.core.api.rest;
 
 /**
- * An enumeration containing the most common HTTP Verbs.
+ * An enumeration containing HTTP Verbs.
  *
  * @author Pablo Fernandez
+ * @author Antoine Sabot-Durand
  */
 public enum Verb {
-    GET, POST, PUT, DELETE, HEAD, OPTIONS, TRACE, PATCH
+    /**
+     * get verb
+     */
+    GET,
+
+    /**
+     * post verb
+     */
+    POST,
+
+    /**
+     * put verb
+     */
+    PUT,
+
+    /**
+     * delete verb
+     */
+    DELETE,
+
+    /**
+     * head verb
+     */
+    HEAD,
+
+    /**
+     * options verb
+     */
+    OPTIONS,
+
+    /**
+     * trace verb
+     */
+    TRACE,
+
+    /**
+     * patch verb
+     */
+    PATCH
 }

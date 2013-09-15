@@ -16,9 +16,9 @@
 
 package org.agorava.core.oauth;
 
-import org.agorava.core.api.GenericRoot;
-import org.agorava.core.api.InjectWithQualifier;
-import org.agorava.core.api.OAuth;
+import org.agorava.core.api.atinject.GenericBean;
+import org.agorava.core.api.atinject.InjectWithQualifier;
+import org.agorava.core.api.atinject.OAuth;
 import org.agorava.core.api.oauth.OAuthAppSettings;
 import org.agorava.core.api.oauth.OAuthConstants;
 import org.agorava.core.api.oauth.OAuthRequest;
@@ -27,14 +27,14 @@ import org.agorava.core.api.oauth.Verifier;
 import org.agorava.core.api.rest.Request;
 import org.agorava.core.api.rest.RequestTuner;
 import org.agorava.core.api.rest.Response;
-import org.agorava.core.api.utils.MapUtils;
 import org.agorava.core.spi.TierConfigOauth10a;
+import org.agorava.core.utils.MapUtils;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-import static org.agorava.core.api.OAuthVersion.ONE;
+import static org.agorava.core.api.atinject.OAuth.OAuthVersion.ONE;
 
 /**
  * OAuth 1.0a implementation of {@link org.agorava.core.api.oauth.OAuthProvider}
@@ -42,7 +42,7 @@ import static org.agorava.core.api.OAuthVersion.ONE;
  * @author Pablo Fernandez
  */
 
-@GenericRoot
+@GenericBean
 @OAuth(ONE)
 public class OAuth10aProviderImpl extends OAuthProviderBase {
     private static Logger LOGGER = Logger.getLogger(OAuth10aProviderImpl.class.getName());
@@ -81,6 +81,7 @@ public class OAuth10aProviderImpl extends OAuthProviderBase {
 
         LOGGER.fine("sending request...");
         Response response = request.send(tuner);
+        //todo:should check return code and launch ResponseException if it's not 200
         String body = response.getBody();
 
         LOGGER.fine("response status code: " + response.getCode());
@@ -121,6 +122,7 @@ public class OAuth10aProviderImpl extends OAuthProviderBase {
         addOAuthParams(request, requestToken);
         appendSignature(request);
         Response response = request.send(tuner);
+        //todo:should check return code and launch ResponseException if it's not 200
         return api.getAccessTokenExtractor().extract(response.getBody());
     }
 
@@ -165,13 +167,13 @@ public class OAuth10aProviderImpl extends OAuthProviderBase {
 
     private void appendSignature(OAuthRequest request) {
         switch (api.getSignatureType()) {
-            case Header:
-                LOGGER.fine("using Http Header signature");
+            case HEADER:
+                LOGGER.fine("using Http HEADER signature");
 
                 String oauthHeader = api.getHeaderExtractor().extract(request);
                 request.addHeader(OAuthConstants.HEADER, oauthHeader);
                 break;
-            case QueryString:
+            case QUERY_STRING:
                 LOGGER.fine("using Querystring signature");
 
                 for (Map.Entry<String, String> entry : request.getOauthParameters().entrySet()) {
@@ -183,6 +185,7 @@ public class OAuth10aProviderImpl extends OAuthProviderBase {
 
     private static class TimeoutTuner implements RequestTuner {
         private final int duration;
+
         private final TimeUnit unit;
 
         public TimeoutTuner(int duration, TimeUnit unit) {

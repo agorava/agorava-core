@@ -25,7 +25,7 @@ import org.agorava.core.spi.TierConfigOauth10a;
 @FakeService
 public class FakeTier extends TierConfigOauth10a {
     @Override
-    public String getServiceName() {
+    public String getTierName() {
         return "Twitter";
     }
 

@@ -16,33 +16,118 @@
 package org.agorava.core.api.oauth;
 
 /**
- * This class contains OAuth constants, used project-wide
+ * This interface contains OAuth constants, used project-wide
  *
  * @author Pablo Fernandez
+ * @author Antoine Sabot-Durand
  */
-public class OAuthConstants {
-    public static final String TIMESTAMP = "oauth_timestamp";
-    public static final String SIGN_METHOD = "oauth_signature_method";
-    public static final String SIGNATURE = "oauth_signature";
-    public static final String CONSUMER_SECRET = "oauth_consumer_secret";
-    public static final String CONSUMER_KEY = "oauth_consumer_key";
-    public static final String CALLBACK = "oauth_callback";
-    public static final String VERSION = "oauth_version";
-    public static final String NONCE = "oauth_nonce";
-    public static final String PARAM_PREFIX = "oauth_";
-    public static final String TOKEN = "oauth_token";
-    public static final String TOKEN_SECRET = "oauth_token_secret";
-    public static final String OUT_OF_BAND = "oob";
-    public static final String VERIFIER = "oauth_verifier";
-    public static final String HEADER = "Authorization";
-    public static final Token EMPTY_TOKEN = new Token("", "");
-    public static final String SCOPE = "scope";
+public interface OAuthConstants {
+    /**
+     * Time stamp field name in OAuth request
+     */
+    String TIMESTAMP = "oauth_timestamp";
 
-    //OAuth 2.0
-    public static final String ACCESS_TOKEN = "access_token";
-    public static final String CLIENT_ID = "client_id";
-    public static final String CLIENT_SECRET = "client_secret";
-    public static final String REDIRECT_URI = "redirect_uri";
-    public static final String CODE = "code";
+    /**
+     * Signature method field name in OAuth request
+     */
+    String SIGN_METHOD = "oauth_signature_method";
+
+    /**
+     * Signature field name in OAuth request
+     */
+    String SIGNATURE = "oauth_signature";
+
+    /**
+     * Consumer secret key field name in OAuth request
+     */
+    String CONSUMER_SECRET = "oauth_consumer_secret";
+
+    /**
+     * Consumer key field name in OAuth request
+     */
+    String CONSUMER_KEY = "oauth_consumer_key";
+
+    /**
+     * Call Back Url field name in OAuth request
+     */
+    String CALLBACK = "oauth_callback";
+
+    /**
+     * OAuth Version field name in OAuth request
+     */
+    String VERSION = "oauth_version";
+
+    /**
+     * Unicity stamp to field name in OAuth request
+     */
+    String NONCE = "oauth_nonce";
+
+    /**
+     * Prefix field name in OAuth request
+     */
+    String PARAM_PREFIX = "oauth_";
+
+    /**
+     * Token field name in OAuth request
+     */
+    String TOKEN = "oauth_token";
+
+    /**
+     * Secret token field name in OAuth request
+     */
+    String TOKEN_SECRET = "oauth_token_secret";
+
+    /**
+     * Special "Out Of Band" Call back for non Web app
+     */
+    String OUT_OF_BAND = "oob";
+
+    /**
+     * Returned Verifier field name in OAuth request
+     */
+    String VERIFIER = "oauth_verifier";
+
+    /**
+     * HEADER field name in OAuth request
+     */
+    String HEADER = "Authorization";
+
+    /**
+     * An empty Token
+     */
+    Token EMPTY_TOKEN = new Token("", "");
+
+    /**
+     * Scope field name in OAuth request
+     */
+    String SCOPE = "scope";
+
+    //OAuth 2.0 specific
+
+    /**
+     * Access Toekn field name in OAuth request
+     */
+    String ACCESS_TOKEN = "access_token";
+
+    /**
+     * Client Id field name in OAuth request
+     */
+    String CLIENT_ID = "client_id";
+
+    /**
+     * Client Secret field name in OAuth request
+     */
+    String CLIENT_SECRET = "client_secret";
+
+    /**
+     * Redirect uri field name in OAuth request
+     */
+    String REDIRECT_URI = "redirect_uri";
+
+    /**
+     * Returned code field name in OAuth request
+     */
+    String CODE = "code";
+
 
 }

@@ -16,10 +16,9 @@
 
 package org.agorava.core.cdi;
 
-import org.agorava.core.api.Current;
-import org.agorava.core.api.GenericRoot;
-import org.agorava.core.api.InjectWithQualifier;
-import org.agorava.core.api.JsonMapper;
+import org.agorava.core.api.atinject.Current;
+import org.agorava.core.api.atinject.GenericBean;
+import org.agorava.core.api.atinject.InjectWithQualifier;
 import org.agorava.core.api.event.OAuthComplete;
 import org.agorava.core.api.event.SocialEvent;
 import org.agorava.core.api.exception.AgoravaException;
@@ -31,6 +30,7 @@ import org.agorava.core.api.oauth.OAuthSession;
 import org.agorava.core.api.oauth.Token;
 import org.agorava.core.api.rest.Response;
 import org.agorava.core.api.rest.Verb;
+import org.agorava.core.api.service.JsonMapperService;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.event.Event;
@@ -55,27 +55,35 @@ import static org.agorava.core.api.rest.Verb.PUT;
  * @author Antoine Sabot-Durand
  */
 @InjectWithQualifier
-@GenericRoot
+@GenericBean
 public class OAuthServiceImpl implements OAuthService {
 
     private static final long serialVersionUID = -8423894021913341674L;
+
     private static Annotation currentLiteral = new AnnotationLiteral<Current>() {
         private static final long serialVersionUID = -2929657732814790025L;
     };
+
     @Inject
-    protected JsonMapper jsonService;
+    protected JsonMapperService jsonService;
+
     @Inject
     @Any
     protected Instance<OAuthSession> sessions;
 
     @InjectWithQualifier
     protected OAuthProvider provider;
+
     @InjectWithQualifier
     protected Event<OAuthComplete> completeEventProducer;
+
     @InjectWithQualifier
     protected OAuthAppSettings settings;
+
     private String socialMediaName;
+
     private Annotation qualifier;
+
     private Map<String, String> requestHeader;
 
     @PostConstruct
@@ -133,7 +141,7 @@ public class OAuthServiceImpl implements OAuthService {
     public Response sendSignedRequest(OAuthRequest request) {
         if (getRequestHeader() != null) request.getHeaders().putAll(getRequestHeader());
         getProvider().signRequest(getAccessToken(), request);
-        return request.send();
+        return request.send(); //todo:should check return code and launch ResponseException if it's not 200
     }
 
     @Override
@@ -237,7 +245,9 @@ public class OAuthServiceImpl implements OAuthService {
     public <T> T get(String uri, Class<T> clazz, boolean signed) {
         Response resp;
         if (signed) resp = sendSignedRequest(GET, uri);
-        else resp = getProvider().requestFactory(GET, uri).send();
+        else
+            resp = getProvider().requestFactory(GET, uri).send(); //todo:should check return code and launch
+        // ResponseException if it's not 200
         return jsonService.mapToObject(resp, clazz);
     }
 

@@ -16,19 +16,19 @@
 
 package org.agorava.core.spi;
 
-import org.agorava.core.api.OAuth;
-import org.agorava.core.api.OAuthVersion;
-import org.agorava.core.api.extractors.TokenExtractor;
+import org.agorava.core.api.atinject.OAuth;
+import org.agorava.core.api.extractor.TokenExtractor;
 import org.agorava.core.api.oauth.OAuthAppSettings;
-import org.agorava.core.api.oauth.SignatureType;
+import org.agorava.core.api.oauth.SignaturePlace;
 import org.agorava.core.api.rest.Verb;
 
 import javax.inject.Inject;
 
-import static org.agorava.core.api.OAuthVersion.TWO_DRAFT_11;
+import static org.agorava.core.api.atinject.OAuth.OAuthVersion;
+import static org.agorava.core.api.atinject.OAuth.OAuthVersion.TWO_DRAFT_11;
 
 /**
- * Default implementation of the OAuth protocol, version 2.0 (draft 11)
+ * Default Tier configuration implementing the OAuth protocol, version 2.0 (draft 11)
  * <p/>
  * This class is meant to be extended by concrete implementations of the API,
  * providing the endpoints and endpoint-http-verbs.
@@ -37,8 +37,7 @@ import static org.agorava.core.api.OAuthVersion.TWO_DRAFT_11;
  * this class and define the getters for your endpoints.
  * <p/>
  * If your Api does something a bit different, you can override the different
- * extractors or services, in order to fine-tune the process. Please read the
- * javadocs of the interfaces to get an idea of what to do.
+ * extractors or services, in order to fine-tune the process.
  *
  * @author Diego Silveira
  * @author Antoine Sabot-Durand
@@ -47,14 +46,13 @@ public abstract class TierConfigOauth20 implements TierConfigOauth {
 
 
     @Inject
-    @OAuth(OAuthVersion.TWO_DRAFT_11)
+    @OAuth(TWO_DRAFT_11)
     TokenExtractor AccessTokenExtractor;
 
     /**
-     * Returns the access token extractor.
-     *
-     * @return access token extractor
+     * {@inheritDoc}
      */
+    @Override
     public TokenExtractor getAccessTokenExtractor() {
         return AccessTokenExtractor;
     }
@@ -84,11 +82,17 @@ public abstract class TierConfigOauth20 implements TierConfigOauth {
      */
     public abstract String getAuthorizationUrl(OAuthAppSettings config);
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public SignatureType getSignatureType() {
-        return SignatureType.Header;
+    public SignaturePlace getSignatureType() {
+        return SignaturePlace.HEADER;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public OAuthVersion getOAuthVersion() {
         return TWO_DRAFT_11;

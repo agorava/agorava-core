@@ -19,18 +19,17 @@ package org.agorava.core.api.oauth;
 import org.agorava.core.api.rest.Verb;
 
 /**
- * Provides low level services (Request factory, OAuth Token factory and signature) for OAuth
- * management.
+ * Provides low level services and OAuth initialisation (methods for OAuth Dance).
  *
  * @author Antoine Sabot-Durand
  */
 public interface OAuthProvider {
     /**
-     * Returns an OAuth request token to initiate an OAuth connection. It's the the first step of OAuth negotiation connection
+     * Returns an OAuth request token to initiate an OAuth connection. It's the the first step of OAuth negotiation connexion
      *
      * @return an OAuth request token
      */
-    public Token getRequestToken();
+    Token getRequestToken();
 
     /**
      * Returns the Oauth access token from request token and verifier
@@ -39,7 +38,7 @@ public interface OAuthProvider {
      * @param verifier     Verifier returned by Social Media after sending the Request Token
      * @return an OAuth access token
      */
-    public Token getAccessToken(Token requestToken, String verifier);
+    Token getAccessToken(Token requestToken, String verifier);
 
     /**
      * Retrieve the access token
@@ -48,7 +47,7 @@ public interface OAuthProvider {
      * @param verifier     verifier code
      * @return access token
      */
-    public Token getAccessToken(Token requestToken, Verifier verifier);
+    Token getAccessToken(Token requestToken, Verifier verifier);
 
     /**
      * Sign an OAuthRequest in order to make it valid for targeted service
@@ -56,14 +55,14 @@ public interface OAuthProvider {
      * @param accessToken the OAuth access token for the current OAuth session
      * @param request     the OAuth request to sign
      */
-    public void signRequest(Token accessToken, OAuthRequest request);
+    void signRequest(Token accessToken, OAuthRequest request);
 
     /**
      * Gives the OAuth version of the provider
      *
      * @return the OAuth version used by the provider (i.e. 1.0a or 2.0)
      */
-    public String getVersion();
+    String getVersion();
 
     /**
      * Generates the OAuth authorization URL from the given request Token. It's the step 2 of OAuth negotiation
@@ -71,7 +70,7 @@ public interface OAuthProvider {
      * @param requestToken request token to generate Authorization URL
      * @return the authorization URL to call to aks user for delegation on her behalf
      */
-    public String getAuthorizationUrl(Token requestToken);
+    String getAuthorizationUrl(Token requestToken);
 
     /**
      * Creates an OAuthRequest with the given Rest Verb and uri
@@ -80,7 +79,7 @@ public interface OAuthProvider {
      * @param uri  URI of the request
      * @return the created OAuthRequest
      */
-    public OAuthRequest requestFactory(Verb verb, String uri);
+    OAuthRequest requestFactory(Verb verb, String uri);
 
     /**
      * Gives the OAuth verifier parameter name

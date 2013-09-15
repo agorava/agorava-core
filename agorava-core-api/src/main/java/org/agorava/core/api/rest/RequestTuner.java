@@ -16,6 +16,16 @@
 
 package org.agorava.core.api.rest;
 
+/**
+ * A Request Tuner to alter Rest request behaviour
+ */
 public interface RequestTuner {
-    public void tune(Request request);
+
+
+    /**
+     * the tuning command
+     *
+     * @param request to tune
+     */
+    void tune(Request request);
 }

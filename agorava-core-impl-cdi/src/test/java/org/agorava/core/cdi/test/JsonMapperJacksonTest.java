@@ -17,9 +17,9 @@
 package org.agorava.core.cdi.test;
 
 import org.agorava.core.api.exception.AgoravaException;
-import org.agorava.core.api.exception.AgoravaRestException;
+import org.agorava.core.api.exception.ResponseException;
 import org.agorava.core.api.rest.Response;
-import org.agorava.core.cdi.JsonMapperJackson;
+import org.agorava.core.cdi.JsonMapperServiceJackson;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -32,7 +32,7 @@ import static org.mockito.Mockito.when;
 public class JsonMapperJacksonTest {
 
     @InjectMocks
-    JsonMapperJackson jm;
+    JsonMapperServiceJackson jm;
 
     @Mock
     Response resp;
@@ -50,7 +50,7 @@ public class JsonMapperJacksonTest {
         jm.mapToObject(resp, Object.class);
     }
 
-    @Test(expected = AgoravaRestException.class)
+    @Test(expected = ResponseException.class)
     public void testErrorReturnCode() {
         when(resp.getBody()).thenReturn("");
         when(resp.getCode()).thenReturn(400);

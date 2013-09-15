@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Agorava
+ * Copyright 2013 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,8 +25,14 @@ public class StatusUpdated extends SocialEvent<Object> {
 
     private static final long serialVersionUID = -2757535195468162752L;
 
-    public StatusUpdated(Status status, String message, Object payload) {
-        super(status, message, payload);
+    /**
+     * @param status    Status of the event
+     * @param message   message related tot he event
+     * @param eventData specific data returned by status update call
+     */
+
+    public StatusUpdated(Status status, String message, Object eventData) {
+        super(status, message, eventData);
     }
 
 }

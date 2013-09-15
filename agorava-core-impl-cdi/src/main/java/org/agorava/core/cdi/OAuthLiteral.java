@@ -16,8 +16,7 @@
 
 package org.agorava.core.cdi;
 
-import org.agorava.core.api.OAuth;
-import org.agorava.core.api.OAuthVersion;
+import org.agorava.core.api.atinject.OAuth;
 
 import javax.enterprise.util.AnnotationLiteral;
 

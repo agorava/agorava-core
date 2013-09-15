@@ -16,14 +16,14 @@
 
 package org.agorava.core.spi;
 
-import org.agorava.core.api.OAuthVersion;
-import org.agorava.core.api.extractors.TokenExtractor;
-import org.agorava.core.api.oauth.SignatureType;
+import org.agorava.core.api.extractor.TokenExtractor;
+import org.agorava.core.api.oauth.SignaturePlace;
+
+import static org.agorava.core.api.atinject.OAuth.OAuthVersion;
 
 /**
- * Contains all the configuration needed to instantiate a valid {@link org.agorava.core.api.oauth.OAuthProvider}
+ * Root of all OAuth tier service configuration
  *
- * @author Pablo Fernandez
  * @author Antoine Sabot-Durand
  */
 public interface TierConfigOauth extends TierConfig {
@@ -32,7 +32,7 @@ public interface TierConfigOauth extends TierConfig {
     /**
      * @return the type of the OAuth signature
      */
-    public SignatureType getSignatureType();
+    SignaturePlace getSignatureType();
 
     /**
      * Returns the access token extractor.
@@ -41,6 +41,9 @@ public interface TierConfigOauth extends TierConfig {
      */
     TokenExtractor getAccessTokenExtractor();
 
+    /**
+     * @return the OAuth version supported by the tier
+     */
     OAuthVersion getOAuthVersion();
 
 }

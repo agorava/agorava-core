@@ -33,10 +33,15 @@ import java.lang.reflect.Method;
 public class SimpleOAuthAppSettingsBuilder implements OAuthAppSettingsBuilder {
 
     private String name;
+
     private String apiKey;
+
     private String apiSecret;
+
     private String callback = "oob";
+
     private String scope = "";
+
     private Annotation qualifier;
 
     @Override
@@ -82,7 +87,8 @@ public class SimpleOAuthAppSettingsBuilder implements OAuthAppSettingsBuilder {
      */
     @Override
     public SimpleOAuthAppSettingsBuilder callback(String callback) {
-        if (!"oob".equals(callback) && !callback.startsWith("http://") && !callback.startsWith("https://") && !callback.startsWith("/"))
+        if (!"oob".equals(callback) && !callback.startsWith("http://") && !callback.startsWith("https://") && !callback
+                .startsWith("/"))
             this.callback = AgoravaContext.webAbsolutePath + "/" + callback;
         else
             this.callback = callback;

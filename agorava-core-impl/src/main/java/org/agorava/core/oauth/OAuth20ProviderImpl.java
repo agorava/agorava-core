@@ -17,9 +17,9 @@
 package org.agorava.core.oauth;
 
 
-import org.agorava.core.api.GenericRoot;
-import org.agorava.core.api.InjectWithQualifier;
-import org.agorava.core.api.OAuth;
+import org.agorava.core.api.atinject.GenericBean;
+import org.agorava.core.api.atinject.InjectWithQualifier;
+import org.agorava.core.api.atinject.OAuth;
 import org.agorava.core.api.oauth.OAuthAppSettings;
 import org.agorava.core.api.oauth.OAuthConstants;
 import org.agorava.core.api.oauth.OAuthRequest;
@@ -29,9 +29,9 @@ import org.agorava.core.api.rest.Response;
 import org.agorava.core.rest.OAuthRequestImpl;
 import org.agorava.core.spi.TierConfigOauth20;
 
-import static org.agorava.core.api.OAuthVersion.TWO_DRAFT_11;
+import static org.agorava.core.api.atinject.OAuth.OAuthVersion.TWO_DRAFT_11;
 
-@GenericRoot
+@GenericBean
 @OAuth(TWO_DRAFT_11)
 public class OAuth20ProviderImpl extends OAuthProviderBase {
 
@@ -52,7 +52,7 @@ public class OAuth20ProviderImpl extends OAuthProviderBase {
         request.addQuerystringParameter(OAuthConstants.CODE, verifier.getValue());
         request.addQuerystringParameter(OAuthConstants.REDIRECT_URI, config.getCallback());
         if (config.hasScope()) request.addQuerystringParameter(OAuthConstants.SCOPE, config.getScope());
-        Response response = request.send();
+        Response response = request.send(); //todo:should check return code and launch ResponseException if it's not 200
         return api.getAccessTokenExtractor().extract(response.getBody());
     }
 
@@ -60,7 +60,8 @@ public class OAuth20ProviderImpl extends OAuthProviderBase {
      * {@inheritDoc}
      */
     public Token getRequestToken() {
-        throw new UnsupportedOperationException("Unsupported operation, please use 'getAuthorizationUrl' and redirect your users there");
+        throw new UnsupportedOperationException("Unsupported operation, please use 'getAuthorizationUrl' and redirect your " +
+                "users there");
     }
 
     /**
