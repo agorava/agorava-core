@@ -27,7 +27,7 @@
     <artifactId>agorava-core-impl</artifactId>
     <packaging>jar</packaging>
 
-    <name>Agorava Core Java SE implementation</name>
+    <name>Agorava Core abstract JSR-330 implementation</name>
 
     <dependencies>
         <dependency>
@@ -53,8 +53,6 @@
         <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
-            <version>1</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 
