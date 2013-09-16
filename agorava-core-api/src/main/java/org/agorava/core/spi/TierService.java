@@ -26,7 +26,7 @@ import javax.inject.Inject;
 import java.util.Map;
 
 /**
- * Abstract base class for all Tier high level RESST API calls.
+ * Abstract base class for all Tier high level REST API calls.
  * <p/>
  * Concrete class must implement some or API of the remote service
  *
