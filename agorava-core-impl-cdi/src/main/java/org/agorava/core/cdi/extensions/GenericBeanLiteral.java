@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package org.agorava.core.cdi;
+package org.agorava.core.cdi.extensions;
 
-import org.agorava.core.api.atinject.InjectWithQualifier;
+import org.agorava.core.api.atinject.GenericBean;
 
 import javax.enterprise.util.AnnotationLiteral;
 
 /**
  * @author Antoine Sabot-Durand
  */
-public class InjectWithQualifierLiteral extends AnnotationLiteral<InjectWithQualifierLiteral> implements InjectWithQualifier {
-
-    public static InjectWithQualifierLiteral instance = new InjectWithQualifierLiteral();
+class GenericBeanLiteral extends AnnotationLiteral<GenericBean> implements GenericBean {
+    public static GenericBeanLiteral INSTANCE = new GenericBeanLiteral();
 }

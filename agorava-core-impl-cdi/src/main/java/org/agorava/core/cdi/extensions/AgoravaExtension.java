@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.agorava.core.cdi;
+package org.agorava.core.cdi.extensions;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
@@ -26,9 +26,11 @@ import org.agorava.core.api.atinject.OAuth;
 import org.agorava.core.api.atinject.TierServiceRelated;
 import org.agorava.core.api.exception.AgoravaException;
 import org.agorava.core.api.oauth.OAuthAppSettings;
+import org.agorava.core.api.oauth.OAuthAppSettingsBuilder;
 import org.agorava.core.api.oauth.OAuthApplication;
 import org.agorava.core.api.oauth.OAuthProvider;
 import org.agorava.core.api.oauth.OAuthService;
+import org.agorava.core.cdi.OAuthServiceImpl;
 import org.agorava.core.oauth.OAuthSessionImpl;
 import org.agorava.core.spi.TierConfigOauth;
 import org.apache.deltaspike.core.api.literal.AnyLiteral;
@@ -61,6 +63,7 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -260,32 +263,53 @@ public class AgoravaExtension implements Extension, Serializable {
      */
     public void processOAuthSettingsProducer(@Observes final ProcessProducer<?, OAuthAppSettings> pp) {
         final AnnotatedMember<OAuthAppSettings> annotatedMember = (AnnotatedMember<OAuthAppSettings>) pp.getAnnotatedMember();
-        final Annotation qual = Iterables.getLast(AgoravaExtension.getAnnotationsWithMeta(annotatedMember,
-                TierServiceRelated.class));
-        final Producer<OAuthAppSettings> oldProducer = pp.getProducer();
+
+        Annotation qual = null;
+        try {
+            qual = Iterables.getLast(AgoravaExtension.getAnnotationsWithMeta(annotatedMember,
+                    TierServiceRelated.class));
+        } catch (NoSuchElementException e) {
+            pp.addDefinitionError(new AgoravaException("OAuthAppSettings producers should be annotated with a Service " +
+                    "Provider on " + annotatedMember.getJavaMember().getName() + " in " + annotatedMember.getJavaMember()
+                    .getDeclaringClass()));
+        }
+
 
         if (annotatedMember.isAnnotationPresent(OAuthApplication.class)) {
-     /* TODO:CODE below for future support of OAuthAppSettings creation via annotation
+            if (annotatedMember instanceof AnnotatedField) {
 
-     final OAuthApplication app = annotatedMember.getAnnotation(OAuthApplication.class);
+                final OAuthApplication app = annotatedMember.getAnnotation(OAuthApplication.class);
 
-        Class<? extends OAuthAppSettingsBuilder> builderClass = app.builder();
-        OAuthAppSettingsBuilder builderOAuthApp = null;
-        try {
-            builderOAuthApp = builderClass.newInstance();
-        } catch (Exception e) {
-            throw new AgoravaException("Unable to create Settings Builder with class " + builderClass, e);
+                Class<? extends OAuthAppSettingsBuilder> builderClass = null;
+                try {
+                    builderClass = (Class<? extends OAuthAppSettingsBuilder>) Class.forName(app.builder());
+                } catch (Exception e) {
+                    pp.addDefinitionError(e);
+                }
+                OAuthAppSettingsBuilder builderOAuthApp = null;
+                try {
+                    builderOAuthApp = builderClass.newInstance();
+                } catch (Exception e) {
+                    pp.addDefinitionError(new AgoravaException("Unable to create Settings Builder with class " +
+                            builderClass, e));
+                }
+
+                builderOAuthApp.qualifier(qual)
+                        .params(app.params());
+
+                pp.setProducer(new OAuthAppSettingsProducerWithBuilder(builderOAuthApp, qual));
+            } else
+                pp.addDefinitionError(new AgoravaException("@OAuthApplication are only supported on Field. Agorava cannot " +
+                        "process producer " + annotatedMember.getJavaMember().getName() + " in class " + annotatedMember
+                        .getJavaMember().getDeclaringClass()));
+        } else {
+            final Producer<OAuthAppSettings> oldProducer = pp.getProducer();
+            pp.setProducer(new OAuthAppSettingsProducerDecorator(oldProducer, qual));
         }
 
-        final OAuthAppSettingsBuilder finalBuilderOAuthApp = builderOAuthApp; */
-        }
-
-        pp.setProducer(new OAuthAppSettingsProducerDecorator(oldProducer, qual));
 
         log.log(INFO, "Found settings for {0}", qual);
         servicesQualifiersConfigured.add(qual);
-
-        //settings = builderOAuthApp.name(servicesHub.getSocialMediaName()).params(app.params()).build();
     }
 
 
@@ -315,7 +339,6 @@ public class AgoravaExtension implements Extension, Serializable {
     public void processRemoteServiceRoot(@Observes ProcessBean<? extends TierConfigOauth> pb) {
         CommonsProcessOAuthTier(pb);
     }
-
 
     private void captureGenericOAuthService(@Observes ProcessBean<? extends OAuthService> pb) {
         Bean<? extends OAuthService> bean = pb.getBean();

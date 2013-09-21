@@ -14,48 +14,49 @@
  * limitations under the License.
  */
 
-package org.agorava.core.cdi;
+package org.agorava.core.cdi.extensions;
 
 import org.agorava.core.api.oauth.OAuthAppSettings;
-import org.agorava.core.oauth.SimpleOAuthAppSettingsBuilder;
+import org.agorava.core.api.oauth.OAuthAppSettingsBuilder;
 
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.enterprise.inject.spi.Producer;
 import java.lang.annotation.Annotation;
+import java.util.HashSet;
 import java.util.Set;
+
+import static org.agorava.core.cdi.extensions.AgoravaExtension.getServicesToQualifier;
 
 /**
  * @author Antoine Sabot-Durand
  */
-class OAuthAppSettingsProducerDecorator implements Producer<OAuthAppSettings> {
+class OAuthAppSettingsProducerWithBuilder implements Producer<OAuthAppSettings> {
 
-    private Producer<OAuthAppSettings> oldProducer;
+    private OAuthAppSettingsBuilder builder;
 
     private Annotation qual;
 
-    OAuthAppSettingsProducerDecorator(Producer<OAuthAppSettings> oldProducer, Annotation qual) {
-        this.oldProducer = oldProducer;
+
+    OAuthAppSettingsProducerWithBuilder(OAuthAppSettingsBuilder builder, Annotation qual) {
+        this.builder = builder;
         this.qual = qual;
     }
 
     @Override
     public OAuthAppSettings produce(CreationalContext<OAuthAppSettings> ctx) {
-        OAuthAppSettings settings = oldProducer.produce(ctx);
-        OAuthAppSettings newSettings = new SimpleOAuthAppSettingsBuilder().readFromSettings(settings).
-                qualifier(qual).
-                name(AgoravaExtension.getServicesToQualifier().inverse().get(qual)).build();
+        builder.name(getServicesToQualifier().inverse().get(qual));
+        OAuthAppSettings newSettings = builder.build();
         ctx.push(newSettings);
         return newSettings;
     }
 
     @Override
     public void dispose(OAuthAppSettings instance) {
-        oldProducer.dispose(instance);
     }
 
     @Override
     public Set<InjectionPoint> getInjectionPoints() {
-        return oldProducer.getInjectionPoints();
+        return new HashSet<InjectionPoint>();
     }
 }

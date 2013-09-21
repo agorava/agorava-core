@@ -16,7 +16,6 @@
 
 package org.agorava.core.cdi;
 
-import org.agorava.core.api.atinject.Current;
 import org.agorava.core.api.atinject.GenericBean;
 import org.agorava.core.api.atinject.InjectWithQualifier;
 import org.agorava.core.api.event.OAuthComplete;
@@ -31,12 +30,12 @@ import org.agorava.core.api.oauth.Token;
 import org.agorava.core.api.rest.Response;
 import org.agorava.core.api.rest.Verb;
 import org.agorava.core.api.service.JsonMapperService;
+import org.agorava.core.cdi.extensions.AgoravaExtension;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.event.Event;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
-import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Inject;
 import java.lang.annotation.Annotation;
 import java.text.MessageFormat;
@@ -60,9 +59,6 @@ public class OAuthServiceImpl implements OAuthService {
 
     private static final long serialVersionUID = -8423894021913341674L;
 
-    private static Annotation currentLiteral = new AnnotationLiteral<Current>() {
-        private static final long serialVersionUID = -2929657732814790025L;
-    };
 
     @Inject
     protected JsonMapperService jsonService;
@@ -220,7 +216,7 @@ public class OAuthServiceImpl implements OAuthService {
     public OAuthSession getSession() {
         OAuthSession res = null;
 
-        Instance<OAuthSession> currentSession = sessions.select(currentLiteral);
+        Instance<OAuthSession> currentSession = sessions.select(CurrentLiteral.INSTANCE);
         if (currentSession.isAmbiguous()) {
             currentSession = currentSession.select(qualifier);
 

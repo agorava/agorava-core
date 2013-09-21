@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package org.agorava.core.cdi;
-
-import org.agorava.core.api.atinject.GenericBean;
+package org.agorava.core.cdi.extensions;
 
 import javax.enterprise.util.AnnotationLiteral;
+import javax.inject.Inject;
 
 /**
  * @author Antoine Sabot-Durand
  */
-public class GenericBeanLiteral extends AnnotationLiteral<GenericBean> implements GenericBean {
-    public static GenericBeanLiteral INSTANCE = new GenericBeanLiteral();
+class InjectLiteral extends AnnotationLiteral<Inject> implements Inject {
+
+    public static InjectLiteral instance = new InjectLiteral();
 }
