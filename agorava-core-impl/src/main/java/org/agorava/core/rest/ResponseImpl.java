@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
@@ -54,9 +53,8 @@ public class ResponseImpl implements Response {
 
     private Request request;
 
-    ResponseImpl(RequestImpl request) throws IOException {
-        HttpURLConnection connection = request.getConnection();
-        this.request = request;
+    ResponseImpl(HttpURLConnection connection) {
+
         try {
             connection.connect();
             url = connection.getURL();
@@ -71,9 +69,14 @@ public class ResponseImpl implements Response {
                 }
             else
                 stream = res;
-        } catch (UnknownHostException e) {
+        } catch (IOException e) {
             throw new AgoravaException("The IP address of a host could not be determined.", e);
         }
+    }
+
+    ResponseImpl(RequestImpl request) throws IOException {
+        this(request.getConnection());
+        this.request = request;
     }
 
     private String parseBodyContents() {
@@ -118,7 +121,6 @@ public class ResponseImpl implements Response {
     public String getHeader(String name) {
         return headers.get(name);
     }
-
 
     @Override
     public Request getRequest() {

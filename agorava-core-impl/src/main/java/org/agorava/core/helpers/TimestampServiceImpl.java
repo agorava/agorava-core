@@ -24,6 +24,7 @@ import java.util.Random;
  * Implementation of {@link org.agorava.core.api.service.TimestampService} using plain java classes.
  *
  * @author Pablo Fernandez
+ * @author Antoine Sabot-Durand
  */
 public class TimestampServiceImpl implements TimestampService {
     private Timer timer;

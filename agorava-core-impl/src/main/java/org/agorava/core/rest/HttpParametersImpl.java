@@ -38,7 +38,12 @@ public class HttpParametersImpl implements HttpParameters {
 
     private static final String EMPTY_STRING = "";
 
+    List<Parameter> getParams() {
+        return params;
+    }
+
     private final List<Parameter> params;
+
 
     public HttpParametersImpl() {
         params = new ArrayList<Parameter>();
@@ -119,13 +124,20 @@ public class HttpParametersImpl implements HttpParameters {
         return this;
     }
 
+    @Override
+    public int size() {
+
+        return getParams().size();
+    }
+
+
     /**
      * Represents a parameter in a REST request
      *
      * @author Pablo Fernandez
      * @author Antoine Sabot-Durand
      */
-    private static class Parameter implements Comparable<Parameter> {
+    static class Parameter implements Comparable<Parameter> {
 
         private final String key;
 

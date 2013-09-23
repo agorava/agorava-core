@@ -38,7 +38,7 @@ import java.util.concurrent.TimeUnit;
  * @author Pablo Fernandez
  */
 public class RequestImpl implements Request {
-    private static String DEFAULT_CONTENT_TYPE = "application/x-www-form-urlencoded";
+    private static final String DEFAULT_CONTENT_TYPE = "application/x-www-form-urlencoded";
 
     private static final String CONTENT_LENGTH = "Content-Length";
 
