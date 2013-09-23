@@ -58,7 +58,7 @@ public interface OAuthConstants {
     String VERSION = "oauth_version";
 
     /**
-     * Unicity stamp to field name in OAuth request
+     * Unique stamp to field name in OAuth request
      */
     String NONCE = "oauth_nonce";
 
@@ -105,7 +105,7 @@ public interface OAuthConstants {
     //OAuth 2.0 specific
 
     /**
-     * Access Toekn field name in OAuth request
+     * Access Token field name in OAuth request
      */
     String ACCESS_TOKEN = "access_token";
 

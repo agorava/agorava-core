@@ -46,7 +46,7 @@ public class ResponseException extends AgoravaException {
     }
 
     /**
-     * @return the reponse
+     * @return the response
      */
     public Response getResponse() {
         return response;

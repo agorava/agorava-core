@@ -67,7 +67,7 @@ public abstract class TierService {
     }
 
     /**
-     * Build an URI. This method should be overrided to build complete URI from relative URI
+     * Build an URI. This method should be overridden to build complete URI from relative URI
      * By default it returns the value in parameter to work with absolute uri
      *
      * @param uri to transform in absolute version

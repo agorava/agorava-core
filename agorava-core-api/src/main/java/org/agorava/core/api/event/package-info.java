@@ -15,7 +15,7 @@
  */
 
 /**
- * This package contains all the events used by Agorava CDI implementation but could be used elswhere since it doens.t have
+ * This package contains all the events used by Agorava CDI implementation but could be used elsewhere since it doesn't have
  * CDI or JSR 330 dependency
  */
 

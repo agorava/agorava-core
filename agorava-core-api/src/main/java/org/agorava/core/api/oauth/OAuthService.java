@@ -106,7 +106,7 @@ public interface OAuthService extends RestService {
     void setAccessToken(String token, String secret);
 
     /**
-     * Send an OAuth request signed with an XML Paylad as content
+     * Send an OAuth request signed with an XML Payload as content
      *
      * @param verb    the REST verb of the request
      * @param uri     the url of the remote request

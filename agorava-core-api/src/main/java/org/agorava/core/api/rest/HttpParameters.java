@@ -76,5 +76,8 @@ public interface HttpParameters {
      */
     String asFormUrlEncodedString();
 
+    /**
+     * @return number of parameters
+     */
     int size();
 }

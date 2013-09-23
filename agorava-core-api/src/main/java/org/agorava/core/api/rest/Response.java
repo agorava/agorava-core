@@ -23,6 +23,10 @@ import java.util.Map;
  * @author Antoine Sabot-Durand
  */
 public interface Response {
+
+    /**
+     * @return true if response was successful (i.e. http is in 200 range)
+     */
     boolean isSuccessful();
 
     /**
@@ -63,5 +67,9 @@ public interface Response {
     String getHeader(String name);
 
 
+    /**
+     *
+     * @return the request that originated this response
+     */
     Request getRequest();
 }
