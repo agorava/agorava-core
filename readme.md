@@ -16,8 +16,7 @@ The only implementation is based on CDI right now.
 ##CDI implementation
 It is independent of CDI implementation and fully portable between
 Java EE 6 and Servlet environments enhanced with CDI. It can be also used 
-with CDI in JSE (desktop application). It is build on top of [scribe-java
-from fernandezpablo85](https://github.com/fernandezpablo85/scribe-java)
+with CDI in JSE (desktop application).
 
 For more information, see the [Agorava Website](http://agorava.org).
 
