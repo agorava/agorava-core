@@ -53,7 +53,6 @@ import static org.agorava.core.api.rest.Verb.PUT;
  *
  * @author Antoine Sabot-Durand
  */
-@InjectWithQualifier
 @GenericBean
 public class OAuthServiceImpl implements OAuthService {
 
