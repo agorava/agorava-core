@@ -24,10 +24,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>agorava-core-impl</artifactId>
+    <artifactId>agorava-core-api-web</artifactId>
     <packaging>jar</packaging>
 
-    <name>Agorava Core abstract JSR-330 implementation</name>
+    <name>Agorava Core Implementation Web specific resources</name>
 
     <dependencies>
         <dependency>
@@ -35,12 +35,8 @@
             <artifactId>agorava-core-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

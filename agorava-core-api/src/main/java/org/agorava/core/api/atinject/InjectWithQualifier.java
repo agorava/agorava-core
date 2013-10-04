@@ -27,19 +27,19 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * Annotation used in Generic Bean (qualified with {@link GenericBean})to mark injection point that should be modified by
- * framework bootstrap to bear the same {@link TierServiceRelated} qualifier than the containing bean.
+ * framework bootstrap to bear the same {@link ProviderRelated} qualifier than the containing bean.
  * <p>For example:
  * <pre>
  *   &#064;org.agorava.core.api.atinject.GenericBean
  *   public OAuthServiceImpl extends OAuthService {
  *
  *       &#064;InjectWithQualifier
- *       protected OAuthProvider provider; // Will inject provider with the same TierServiceRelated Qualifier than the bean
+ *       protected OAuthProvider provider; // Will inject provider with the same ProviderRelated Qualifier than the bean
  *
  *   }</pre>
  *
  * @author Antoine Sabot-Durand
- * @see TierServiceRelated
+ * @see ProviderRelated
  * @see GenericBean
  */
 @Target({METHOD, FIELD, PARAMETER})

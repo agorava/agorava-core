@@ -14,23 +14,29 @@
  * limitations under the License.
  */
 
-package org.agorava.core.api.atinject;
+package org.agorava.core.api;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
-import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.io.Serializable;
+import java.util.Collection;
 
 /**
- * This Meta-annotation is used to annotate Tier Services (i.e. Social Media) Qualifiers
- *
  * @author Antoine Sabot-Durand
  */
-@Target(ANNOTATION_TYPE)
-@Retention(RUNTIME)
-@Documented
-public @interface TierServiceRelated {
+public interface Repository<T> extends Serializable, Iterable<T> {
+
+    T getCurrent();
+
+    Collection<T> getAll();
+
+    void setCurrent(T elt);
+
+    T get(String id);
+
+    boolean removeCurrent();
+
+    boolean remove(String id);
+
+    boolean remove(T element);
+
 
 }

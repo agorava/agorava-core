@@ -28,7 +28,7 @@ import static org.agorava.core.api.atinject.OAuth.OAuthVersion;
 import static org.agorava.core.api.atinject.OAuth.OAuthVersion.TWO_DRAFT_11;
 
 /**
- * Default Tier configuration implementing the OAuth protocol, version 2.0 (draft 11)
+ * Default Provider configuration implementing the OAuth protocol, version 2.0 (draft 11)
  * <p/>
  * This class is meant to be extended by concrete implementations of the API,
  * providing the endpoints and endpoint-http-verbs.
@@ -42,7 +42,7 @@ import static org.agorava.core.api.atinject.OAuth.OAuthVersion.TWO_DRAFT_11;
  * @author Diego Silveira
  * @author Antoine Sabot-Durand
  */
-public abstract class TierConfigOauth20 implements TierConfigOauth {
+public abstract class ProviderConfigOauth20 extends ProviderConfigOauth {
 
 
     @Inject

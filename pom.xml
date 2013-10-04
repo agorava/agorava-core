@@ -34,9 +34,12 @@
 
     <modules>
         <module>agorava-core-api</module>
-        <module>agorava-core-impl-cdi</module>
+        <module>agorava-core-api-web</module>
         <module>agorava-core-impl</module>
+        <module>agorava-core-impl-cdi</module>
+        <module>agorava-core-impl-cdi-web</module>
     </modules>
+
 
     <developers>
         <developer>

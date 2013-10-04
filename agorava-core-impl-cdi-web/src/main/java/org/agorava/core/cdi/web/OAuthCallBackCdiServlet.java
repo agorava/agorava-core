@@ -20,7 +20,7 @@ import org.agorava.core.api.atinject.Current;
 import org.agorava.core.api.exception.AgoravaException;
 import org.agorava.core.api.oauth.OAuthService;
 import org.agorava.core.api.oauth.OAuthSession;
-import org.agorava.core.web.OAuthCallbackServlet;
+import org.agorava.web.spi.OAuthCallbackServlet;
 
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;

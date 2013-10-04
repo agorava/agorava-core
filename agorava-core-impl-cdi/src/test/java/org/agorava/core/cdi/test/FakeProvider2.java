@@ -14,28 +14,30 @@
  * limitations under the License.
  */
 
-package org.agorava.core.oauth;
+package org.agorava.core.cdi.test;
 
-import org.agorava.core.api.oauth.OAuthProvider;
-import org.agorava.core.api.oauth.OAuthRequest;
-import org.agorava.core.api.oauth.Token;
-import org.agorava.core.api.oauth.Verifier;
-import org.agorava.core.api.rest.Verb;
-import org.agorava.core.rest.OAuthRequestImpl;
+import org.agorava.core.api.oauth.OAuthAppSettings;
+import org.agorava.core.spi.ProviderConfigOauth20;
 
 /**
  * @author Antoine Sabot-Durand
  */
-public abstract class OAuthProviderBase implements OAuthProvider {
+@FakeService2
+public class FakeProvider2 extends ProviderConfigOauth20 {
     @Override
-    public OAuthRequest requestFactory(Verb verb, String uri) {
-        OAuthRequest res = new OAuthRequestImpl(verb, uri);
-        return res;
+    public String getProviderName() {
+        return "Facebook";
     }
 
-    public Token getAccessToken(Token requestToken, String verifier) {
 
-        return getAccessToken(requestToken, new Verifier(verifier));
+    @Override
+    public String getAccessTokenEndpoint() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
+    @Override
+    public String getAuthorizationUrl(OAuthAppSettings config) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 }
+

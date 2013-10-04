@@ -23,16 +23,14 @@ import com.google.common.collect.Maps;
 import org.agorava.core.api.atinject.GenericBean;
 import org.agorava.core.api.atinject.InjectWithQualifier;
 import org.agorava.core.api.atinject.OAuth;
-import org.agorava.core.api.atinject.TierServiceRelated;
+import org.agorava.core.api.atinject.ProviderRelated;
 import org.agorava.core.api.exception.AgoravaException;
 import org.agorava.core.api.oauth.OAuthAppSettings;
 import org.agorava.core.api.oauth.OAuthAppSettingsBuilder;
 import org.agorava.core.api.oauth.OAuthApplication;
-import org.agorava.core.api.oauth.OAuthProvider;
 import org.agorava.core.api.oauth.OAuthService;
-import org.agorava.core.cdi.OAuthServiceImpl;
 import org.agorava.core.oauth.OAuthSessionImpl;
-import org.agorava.core.spi.TierConfigOauth;
+import org.agorava.core.spi.ProviderConfigOauth;
 import org.apache.deltaspike.core.api.literal.AnyLiteral;
 import org.apache.deltaspike.core.util.bean.BeanBuilder;
 import org.apache.deltaspike.core.util.metadata.builder.AnnotatedTypeBuilder;
@@ -90,7 +88,7 @@ public class AgoravaExtension implements Extension, Serializable {
 
     private Map<Annotation, Set<Type>> overridedGenericServices = new HashMap<Annotation, Set<Type>>();
 
-    private Map<OAuth.OAuthVersion, Class<? extends OAuthProvider>> genericsOAuthProviders = Maps.newHashMap();
+    private Map<OAuth.OAuthVersion, Class<? extends OAuthService>> genericsOAuthProviders = Maps.newHashMap();
 
     private Map<Annotation, OAuth.OAuthVersion> service2OauthVersion = new HashMap<Annotation, OAuth.OAuthVersion>();
 
@@ -103,7 +101,7 @@ public class AgoravaExtension implements Extension, Serializable {
 
     /**
      * @return a {@link BiMap} associating service annotations (annotation bearing {@link org.agorava.core.api.atinject
-     *         .TierServiceRelated} meta-annotation) and their name present in the application
+     * .ProviderRelated} meta-annotation) and their name present in the application
      */
     public static BiMap<String, Annotation> getServicesToQualifier() {
         return servicesToQualifier;
@@ -129,32 +127,6 @@ public class AgoravaExtension implements Extension, Serializable {
 
 
     //-------------------- Utilities -------------------------------------
-
-    /**
-     * Inspects an annotated element for any annotations with the given meta
-     * annotation. This should only be used for user defined meta annotations,
-     * where the annotation must be physically present.
-     *
-     * @param element            The element to inspect
-     * @param metaAnnotationType The meta annotation to search for
-     * @return The annotation instances found on this element or an empty set if
-     *         no matching meta-annotation was found.
-     */
-    public static Set<Annotation> getAnnotationsWithMeta(Annotated element, final Class<? extends Annotation>
-            metaAnnotationType) {
-        return getAnnotationsWithMeta(element.getAnnotations(), metaAnnotationType);
-    }
-
-    public static Set<Annotation> getAnnotationsWithMeta(Set<Annotation> qualifiers, final Class<? extends Annotation>
-            metaAnnotationType) {
-        Set<Annotation> annotations = new HashSet<Annotation>();
-        for (Annotation annotation : qualifiers) {
-            if (annotation.annotationType().isAnnotationPresent(metaAnnotationType)) {
-                annotations.add(annotation);
-            }
-        }
-        return annotations;
-    }
 
     void applyQualifier(Annotation qual, AnnotatedType<?> at, AnnotatedTypeBuilder<?> atb) {
         //do a loop on all field to replace annotation mark by CDI annotations
@@ -206,11 +178,8 @@ public class AgoravaExtension implements Extension, Serializable {
         AnnotatedType<T> at = pat.getAnnotatedType();
         if (!at.isAnnotationPresent(GenericBean.class)) {
             log.log(INFO, "Found a Bean of class {0} overriding generic bean", at.getBaseType());
-            Set<Annotation> qualifiers = AgoravaExtension.getAnnotationsWithMeta(at, TierServiceRelated.class);
-            if (qualifiers.size() != 0) {
-                if (qualifiers.size() > 1)
-                    throw new AgoravaException("Beans with multiple Service Related Qualifier are not supported");
-                Annotation qual = Iterables.getOnlyElement(qualifiers);
+            Annotation qual = AnnotationUtils.getSingleProviderRelatedQualifier(at.getAnnotations(), true);
+            if (qual != null) {
                 if (overridedGenericServices.containsKey(qual))
                     overridedGenericServices.get(qual).addAll(at.getTypeClosure());
                 else
@@ -233,14 +202,11 @@ public class AgoravaExtension implements Extension, Serializable {
         }
     }
 
-    public void processGenericOauthService(@Observes ProcessAnnotatedType<? extends OAuthServiceImpl> pat) {
-        processGenericAnnotatedType(pat);
-    }
 
-    public void processGenericOauthProvider(@Observes ProcessAnnotatedType<? extends OAuthProvider> pat) {
+    public void processGenericOauthProvider(@Observes ProcessAnnotatedType<? extends OAuthService> pat) {
         if (processGenericAnnotatedType(pat)) {
-            AnnotatedType<? extends OAuthProvider> at = pat.getAnnotatedType();
-            Class<? extends OAuthProvider> clazz = (Class<? extends OAuthProvider>) at.getBaseType();
+            AnnotatedType<? extends OAuthService> at = pat.getAnnotatedType();
+            Class<? extends OAuthService> clazz = (Class<? extends OAuthService>) at.getBaseType();
             OAuth qualOauth = at.getAnnotation(OAuth.class);
             genericsOAuthProviders.put(qualOauth.value(), clazz);
 
@@ -257,7 +223,7 @@ public class AgoravaExtension implements Extension, Serializable {
 
     /**
      * This observer decorates the produced {@link OAuthAppSettings} by injecting its own qualifier and service name
-     * and build the list of Qualifiers bearing the TierServiceRelated meta annotation (configured services)
+     * and build the list of Qualifiers bearing the ProviderRelated meta annotation (configured services)
      *
      * @param pp the Process producer event
      */
@@ -266,8 +232,8 @@ public class AgoravaExtension implements Extension, Serializable {
 
         Annotation qual = null;
         try {
-            qual = Iterables.getLast(AgoravaExtension.getAnnotationsWithMeta(annotatedMember,
-                    TierServiceRelated.class));
+            qual = Iterables.getLast(AnnotationUtils.getAnnotationsWithMeta(annotatedMember,
+                    ProviderRelated.class));
         } catch (NoSuchElementException e) {
             pp.addDefinitionError(new AgoravaException("OAuthAppSettings producers should be annotated with a Service " +
                     "Provider on " + annotatedMember.getJavaMember().getName() + " in " + annotatedMember.getJavaMember()
@@ -318,17 +284,17 @@ public class AgoravaExtension implements Extension, Serializable {
     /*
      * This does practically not do much anymore after the discovery was moved
      * to AfterDeploymentValidation. see https://issues.jboss.org/browse/CDI-274
-     * Kept around to do simple deployment validation of TierServiceRelated qualifier.
+     * Kept around to do simple deployment validation of ProviderRelated qualifier.
      */
-    private void CommonsProcessOAuthTier(ProcessBean<? extends TierConfigOauth> pb) {
+    private void CommonsProcessOAuthTier(ProcessBean<? extends ProviderConfigOauth> pb) {
 
         Annotated annotated = pb.getAnnotated();
-        Set<Annotation> qualifiers = AgoravaExtension.getAnnotationsWithMeta(annotated, TierServiceRelated.class);
+        Set<Annotation> qualifiers = AnnotationUtils.getAnnotationsWithMeta(annotated, ProviderRelated.class);
         if (qualifiers.size() != 1)
             throw new AgoravaException("A RemoteService bean should have one and only one service related Qualifier : " + pb
                     .getAnnotated().toString());
 
-        Class<? extends TierConfigOauth> clazz = (Class<? extends TierConfigOauth>) pb.getBean().getBeanClass();
+        Class<? extends ProviderConfigOauth> clazz = (Class<? extends ProviderConfigOauth>) pb.getBean().getBeanClass();
         try {
             service2OauthVersion.put(Iterables.getOnlyElement(qualifiers), clazz.newInstance().getOAuthVersion());
         } catch (Exception e) {
@@ -336,7 +302,7 @@ public class AgoravaExtension implements Extension, Serializable {
         }
     }
 
-    public void processRemoteServiceRoot(@Observes ProcessBean<? extends TierConfigOauth> pb) {
+    public void processRemoteServiceRoot(@Observes ProcessBean<? extends ProviderConfigOauth> pb) {
         CommonsProcessOAuthTier(pb);
     }
 
@@ -409,9 +375,8 @@ public class AgoravaExtension implements Extension, Serializable {
 
             Class clazz = genericsOAuthProviders.get(version);
 
-            beanRegisterer(clazz, qual, ApplicationScoped.class, abd, beanManager, OAuthProvider.class);
+            beanRegisterer(clazz, qual, ApplicationScoped.class, abd, beanManager, OAuthService.class);
             beanRegisterer(OAuthSessionImpl.class, qual, Dependent.class, abd, beanManager);
-            beanRegisterer(OAuthServiceImpl.class, qual, ApplicationScoped.class, abd, beanManager);
         }
 
     }
@@ -427,14 +392,15 @@ public class AgoravaExtension implements Extension, Serializable {
     }
 
     private void registerServiceNames(BeanManager beanManager) {
-        Set<Bean<?>> beans = beanManager.getBeans(TierConfigOauth.class, new AnyLiteral());
+        Set<Bean<?>> beans = beanManager.getBeans(ProviderConfigOauth.class, new AnyLiteral());
 
         for (Bean<?> bean : beans) {
-            Set<Annotation> qualifiers = getAnnotationsWithMeta(bean.getQualifiers(), TierServiceRelated.class);
+            Set<Annotation> qualifiers = AnnotationUtils.getAnnotationsWithMeta(bean.getQualifiers(), ProviderRelated.class);
             Annotation qual = Iterables.getOnlyElement(qualifiers);
             CreationalContext<?> ctx = beanManager.createCreationalContext(null);
-            final TierConfigOauth tierConfig = (TierConfigOauth) beanManager.getReference(bean, TierConfigOauth.class, ctx);
-            String name = tierConfig.getTierName();
+            final ProviderConfigOauth tierConfig = (ProviderConfigOauth) beanManager.getReference(bean,
+                    ProviderConfigOauth.class, ctx);
+            String name = tierConfig.getProviderName();
             servicesToQualifier.put(name, qual);
             ctx.release();
         }

@@ -24,32 +24,41 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>agorava-core-impl</artifactId>
+    <artifactId>agorava-core-impl-cdi-web</artifactId>
     <packaging>jar</packaging>
 
-    <name>Agorava Core abstract JSR-330 implementation</name>
+    <name>Agorava Core Implementation CDI and Web specific resources</name>
 
     <dependencies>
         <dependency>
             <groupId>org.agorava</groupId>
-            <artifactId>agorava-core-api</artifactId>
+            <artifactId>agorava-core-impl-cdi</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
+            <groupId>org.agorava</groupId>
+            <artifactId>agorava-core-api-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
         <dependency>
-            <groupId>javax.inject</groupId>
-            <artifactId>javax.inject</artifactId>
+            <groupId>javax.enterprise</groupId>
+            <artifactId>cdi-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.deltaspike.modules</groupId>
+            <artifactId>deltaspike-servlet-module-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.deltaspike.modules</groupId>
+            <artifactId>deltaspike-servlet-module-impl</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

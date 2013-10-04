@@ -16,19 +16,23 @@
 
 package org.agorava.core.cdi.test;
 
-import org.agorava.core.api.oauth.OAuthAppSettings;
-import org.agorava.core.spi.TierConfigOauth20;
+import org.agorava.core.api.oauth.Token;
+import org.agorava.core.spi.ProviderConfigOauth10a;
 
 /**
  * @author Antoine Sabot-Durand
  */
-@FakeService2
-public class FakeTier2 extends TierConfigOauth20 {
+@FakeService
+public class FakeProvider extends ProviderConfigOauth10a {
     @Override
-    public String getTierName() {
-        return "Facebook";
+    public String getProviderName() {
+        return "Twitter";
     }
 
+    @Override
+    public String getRequestTokenEndpoint() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 
     @Override
     public String getAccessTokenEndpoint() {
@@ -36,8 +40,7 @@ public class FakeTier2 extends TierConfigOauth20 {
     }
 
     @Override
-    public String getAuthorizationUrl(OAuthAppSettings config) {
+    public String getAuthorizationUrl(Token requestToken) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }
-

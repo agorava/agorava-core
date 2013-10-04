@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package org.agorava.core.api.service;
+package org.agorava.core.api;
 
 import org.agorava.core.api.oauth.OAuthService;
 import org.agorava.core.api.oauth.OAuthSession;
 
-import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Allows to manage multiple OAuth Session. The connection to service are backed by a Set to
@@ -29,7 +27,7 @@ import java.util.Set;
  *
  * @author Antoine Sabot-Durand
  */
-public interface MultiSessionService extends Serializable {
+public interface UserSessionRepository extends Repository<OAuthSession> {
 
     /**
      * @return List of available service to connect to
@@ -58,28 +56,5 @@ public interface MultiSessionService extends Serializable {
      * @return the authorization url to call to start the OAuth process
      */
     String initNewSession(String type);
-
-    /**
-     * Disconnect the current OAuth session and remove it from Set of managed session. Reset the currentSession to null
-     */
-    void destroyCurrentSession();
-
-    /**
-     * @return the current OAuthSession
-     */
-    OAuthSession getCurrentSession();
-
-    /**
-     * Change the current Session
-     *
-     * @param currentSession the OAuthSession to set
-     */
-    void setCurrentSession(OAuthSession currentSession);
-
-    /**
-     * @return the set of managed session
-     */
-    Set<OAuthSession> getActiveSessions();
-
 
 }

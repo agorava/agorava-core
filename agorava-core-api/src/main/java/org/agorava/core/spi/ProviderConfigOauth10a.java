@@ -36,9 +36,9 @@ import static org.agorava.core.api.atinject.OAuth.OAuthVersion.ONE;
 import static org.agorava.core.api.atinject.SignatureType.Type.HMACSHA1;
 
 /**
- * Default Tier configuration implementing the OAuth protocol, version 1.0a
+ * Default Provider configuration implementing the OAuth protocol, version 1.0a
  * <p/>
- * This class is meant to be extended by concrete implementations of the Tier configuration,
+ * This class is meant to be extended by concrete implementations of the Provider configuration,
  * providing the endpoints and endpoint-http-verbs.
  * <p/>
  * If your Api adheres to the 1.0a protocol correctly, you just need to extend
@@ -50,7 +50,7 @@ import static org.agorava.core.api.atinject.SignatureType.Type.HMACSHA1;
  * @author Pablo Fernandez
  * @author Antoine Sabot-Durand
  */
-public abstract class TierConfigOauth10a implements TierConfigOauth {
+public abstract class ProviderConfigOauth10a extends ProviderConfigOauth {
 
     @Inject
     @ExtractorType(TOKEN_STD)

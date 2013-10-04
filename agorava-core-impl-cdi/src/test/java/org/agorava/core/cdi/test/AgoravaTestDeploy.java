@@ -56,7 +56,7 @@ public class AgoravaTestDeploy {
 
         WebArchive ret = ShrinkWrap
                 .create(WebArchive.class, "test.war")
-                .addClasses(AgoravaExtensionTestProducers.class, FakeTier.class, FakeTier2.class,
+                .addClasses(AgoravaExtensionTestProducers.class, FakeProvider.class, FakeProvider2.class,
                         FakeService.class, FakeService2.class,
                         FakeServiceLiteral.class, FakeService2Literal.class, FakeServiceImpl.class)
                 .addAsLibraries(testJar)

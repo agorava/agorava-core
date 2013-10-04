@@ -19,6 +19,7 @@ package org.agorava.core.api.oauth;
 import org.agorava.core.api.rest.Response;
 import org.agorava.core.api.rest.RestService;
 import org.agorava.core.api.rest.Verb;
+import org.agorava.core.api.service.JsonMapperService;
 
 import java.util.Map;
 
@@ -151,4 +152,68 @@ public interface OAuthService extends RestService {
      * Close the connexion to the current Oauth service by resetting the OAuthSession
      */
     void resetSession();
+
+    /*------------------------*/
+
+    /**
+     * Returns an OAuth request token to initiate an OAuth connection. It's the the first step of OAuth negotiation connexion
+     *
+     * @return an OAuth request token
+     */
+    Token getRequestToken();
+
+    /**
+     * Returns the Oauth access token from request token and verifier
+     *
+     * @param requestToken Request token sent to Social Media
+     * @param verifier     Verifier returned by Social Media after sending the Request Token
+     * @return an OAuth access token
+     */
+    Token getAccessToken(Token requestToken, String verifier);
+
+    /**
+     * Retrieve the access token
+     *
+     * @param requestToken request token (obtained previously)
+     * @param verifier     verifier code
+     * @return access token
+     */
+    Token getAccessToken(Token requestToken, Verifier verifier);
+
+    /**
+     * Sign an OAuthRequest in order to make it valid for targeted service
+     *
+     * @param accessToken the OAuth access token for the current OAuth session
+     * @param request     the OAuth request to sign
+     */
+    void signRequest(Token accessToken, OAuthRequest request);
+
+    /**
+     * Gives the OAuth version of the provider
+     *
+     * @return the OAuth version used by the provider (i.e. 1.0a or 2.0)
+     */
+    String getVersion();
+
+    /**
+     * Generates the OAuth authorization URL from the given request Token. It's the step 2 of OAuth negotiation
+     *
+     * @param requestToken request token to generate Authorization URL
+     * @return the authorization URL to call to aks user for delegation on her behalf
+     */
+    String getAuthorizationUrl(Token requestToken);
+
+    /**
+     * Creates an OAuthRequest with the given Rest Verb and uri
+     *
+     * @param verb Rest verb to build the request
+     * @param uri  URI of the request
+     * @return the created OAuthRequest
+     */
+    OAuthRequest requestFactory(Verb verb, String uri);
+
+
+    JsonMapperService getJsonMapper();
+
+
 }

@@ -29,13 +29,14 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * This qualifier is used to mark Class to indicate that they hare the default implementation for a Generic bean
- * For a given {@link TierServiceRelated} Qualifier.
+ * For a given {@link ProviderRelated} Qualifier.
  * <p/>
- * Tier services (i.e. Social Media) are dynamically discovered when Agorava is bootstrapped thanks to Tier services qualifiers
- * defined in each module and bearing the {@link TierServiceRelated} annotation.
+ * Provider services (i.e. Social Media) are dynamically discovered when Agorava is bootstrapped thanks to Provider services
+ * qualifiers
+ * defined in each module and bearing the {@link ProviderRelated} annotation.
  * <p/>
  * Bootstrap process retrieve Generic Beans (thanks to this qualifier) and produces qualified versions with {@link
- * TierServiceRelated} qualifiers discovered previously except if specific implementation bearing concrete service related
+ * ProviderRelated} qualifiers discovered previously except if specific implementation bearing concrete service related
  * qualifier is found.
  * <p/>
  * In any case (whether the bean is automatically produced from generic or specifically by third party developer) the
@@ -43,7 +44,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * qualifier
  *
  * @author Antoine Sabot-Durand
- * @see TierServiceRelated
+ * @see ProviderRelated
  * @see InjectWithQualifier
  */
 @Qualifier

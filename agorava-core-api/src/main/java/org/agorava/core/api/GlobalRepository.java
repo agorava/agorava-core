@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package org.agorava.core.spi;
+package org.agorava.core.api;
+
+import org.agorava.core.api.oauth.OAuthSession;
 
 /**
- * Root of all remote tier service configuration
- *
  * @author Antoine Sabot-Durand
  */
-public interface TierConfig {
+public interface GlobalRepository extends Repository<UserSessionRepository> {
 
-    /**
-     * @return the name of the tier service
-     */
-    String getTierName();
+
+    Repository<OAuthSession> getMergedUserSessionRepositories();
+
+
 }

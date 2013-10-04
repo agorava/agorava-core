@@ -17,30 +17,28 @@
 
 package org.agorava.core.cdi;
 
-import org.agorava.core.api.atinject.Current;
+import org.agorava.core.api.UserSessionRepository;
 import org.agorava.core.api.event.OAuthComplete;
 import org.agorava.core.api.oauth.OAuthService;
 import org.agorava.core.api.oauth.OAuthSession;
-import org.agorava.core.api.service.MultiSessionService;
 import org.agorava.core.cdi.extensions.AgoravaExtension;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
 import javax.enterprise.event.Observes;
 import javax.enterprise.event.Reception;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
-import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
-import javax.inject.Named;
-import java.io.Serializable;
 import java.lang.annotation.Annotation;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import static com.google.common.collect.Iterables.getLast;
 import static com.google.common.collect.Lists.newArrayList;
-import static com.google.common.collect.Sets.newHashSet;
 import static org.agorava.core.cdi.extensions.AgoravaExtension.getServicesToQualifier;
 
 /**
@@ -48,29 +46,77 @@ import static org.agorava.core.cdi.extensions.AgoravaExtension.getServicesToQual
  *
  * @author Antoine Sabot-Durand
  */
-@SessionScoped
-public class MultiSessionServiceImpl implements MultiSessionService, Serializable {
+
+public class UserSessionRepositoryImpl implements UserSessionRepository {
 
     private static final long serialVersionUID = 2681869484541158766L;
+
+    private final Set<OAuthSession> activeSessions = new HashSet<OAuthSession>();
 
     @Inject
     @Any
     private Instance<OAuthService> serviceInstances;
 
-
     @Inject
     @Any
     private Instance<OAuthSession> sessionInstances;
 
-
     private List<String> listOfServices;
 
-    private final Set<OAuthSession> activeSessions = newHashSet();
 
-    @Produces
-    @Named
-    @Current
     private OAuthSession currentSession;
+
+    @Override
+    public OAuthSession getCurrent() {
+        return currentSession;
+    }
+
+    @Override
+    public void setCurrent(OAuthSession currentSession) {
+        this.currentSession = currentSession;
+    }
+
+    @Override
+    public Collection<OAuthSession> getAll() {
+        return Collections.unmodifiableCollection(activeSessions);
+    }
+
+    @Override
+    public OAuthSession get(String id) {
+        for (OAuthSession session : activeSessions) {
+            if (id.equals(session.getId()))
+                return session;
+        }
+        return null;
+    }
+
+    @Override
+    public boolean removeCurrent() {
+        if (getCurrent() != null) {
+            activeSessions.remove(getCurrent());
+            setCurrent(activeSessions.size() > 0 ? getLast(activeSessions) : null);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean remove(String id) {
+        OAuthSession elt = get(id);
+        if (elt != null) {
+            return remove(elt);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean remove(OAuthSession element) {
+        if (element.equals(getCurrent())) {
+            return removeCurrent();
+        } else {
+            return activeSessions.remove(element);
+        }
+    }
 
     @PostConstruct
     void init() {
@@ -85,9 +131,8 @@ public class MultiSessionServiceImpl implements MultiSessionService, Serializabl
 
     @Override
     public OAuthService getCurrentService() {
-        return serviceInstances.select(getCurrentSession().getServiceQualifier()).get();
+        return serviceInstances.select(getCurrent().getServiceQualifier()).get();
     }
-
 
     @Override
     public boolean isCurrentServiceConnected() {
@@ -106,32 +151,33 @@ public class MultiSessionServiceImpl implements MultiSessionService, Serializabl
     @Override
     public String initNewSession(String servType) {
         Annotation qualifier = getServicesToQualifier().get(servType);
-        setCurrentSession(sessionInstances.select(qualifier).get());
+        setCurrent(sessionInstances.select(qualifier).get());
         return getCurrentService().getAuthorizationUrl();
 
     }
 
     @Override
-    public void destroyCurrentSession() {
-        if (getCurrentSession() != null) {
-            activeSessions.remove(getCurrentSession());
-            setCurrentSession(activeSessions.size() > 0 ? getLast(activeSessions) : null);
-        }
-    }
+    public Iterator<OAuthSession> iterator() {
+        return new Iterator<OAuthSession>() {
 
-    @Override
-    public void setCurrentSession(OAuthSession currentSession) {
-        this.currentSession = currentSession;
-    }
+            Iterator<OAuthSession> wrapped = getAll().iterator();
 
-    @Override
-    public OAuthSession getCurrentSession() {
-        return currentSession;
-    }
+            @Override
+            public boolean hasNext() {
+                return wrapped.hasNext();
+            }
 
-    @Override
-    public Set<OAuthSession> getActiveSessions() {
-        return activeSessions;
-    }
+            @Override
+            public OAuthSession next() {
+                currentSession = wrapped.next();
+                return currentSession;
+            }
 
+            @Override
+            public void remove() {
+                wrapped.remove();
+
+            }
+        };
+    }
 }

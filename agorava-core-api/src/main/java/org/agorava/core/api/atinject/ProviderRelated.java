@@ -14,36 +14,28 @@
  * limitations under the License.
  */
 
-package org.agorava.core.spi;
+package org.agorava.core.api.atinject;
 
-import org.agorava.core.api.extractor.TokenExtractor;
-import org.agorava.core.api.oauth.SignaturePlace;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-import static org.agorava.core.api.atinject.OAuth.OAuthVersion;
+import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Root of all OAuth tier service configuration
+ * This Meta-annotation is used to annotate Service Providers (i.e. Social Media) Qualifiers
  *
  * @author Antoine Sabot-Durand
  */
-public interface TierConfigOauth extends TierConfig {
-
-
-    /**
-     * @return the type of the OAuth signature
-     */
-    SignaturePlace getSignatureType();
+@Target(ANNOTATION_TYPE)
+@Retention(RUNTIME)
+@Documented
+public @interface ProviderRelated {
 
     /**
-     * Returns the access token extractor.
-     *
-     * @return access token extractor
+     * @return name of the service provider
      */
-    TokenExtractor getAccessTokenExtractor();
-
-    /**
-     * @return the OAuth version supported by the tier
-     */
-    OAuthVersion getOAuthVersion();
+    String value();
 
 }

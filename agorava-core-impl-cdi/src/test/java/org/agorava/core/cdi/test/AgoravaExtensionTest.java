@@ -19,7 +19,6 @@ package org.agorava.core.cdi.test;
 import junit.framework.Assert;
 import org.agorava.core.api.exception.AgoravaException;
 import org.agorava.core.api.oauth.OAuthAppSettings;
-import org.agorava.core.api.oauth.OAuthProvider;
 import org.agorava.core.api.oauth.OAuthService;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Test;
@@ -36,11 +35,11 @@ public class AgoravaExtensionTest extends AgoravaTestDeploy {
 
     @Inject
     @FakeService
-    OAuthProvider fakeProvider;
+    OAuthService fakeProvider;
 
     @Inject
     @FakeService2
-    OAuthProvider fakeProvider2;
+    OAuthService fakeProvider2;
 
     @Inject
     @FakeService

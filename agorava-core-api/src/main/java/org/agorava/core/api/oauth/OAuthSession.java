@@ -30,6 +30,9 @@ import java.lang.annotation.Annotation;
  */
 public interface OAuthSession extends Serializable {
 
+    String getId();
+
+
     /**
      * @return the requestToken
      */

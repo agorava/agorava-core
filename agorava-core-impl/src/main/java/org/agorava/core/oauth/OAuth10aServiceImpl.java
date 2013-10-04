@@ -19,7 +19,6 @@ package org.agorava.core.oauth;
 import org.agorava.core.api.atinject.GenericBean;
 import org.agorava.core.api.atinject.InjectWithQualifier;
 import org.agorava.core.api.atinject.OAuth;
-import org.agorava.core.api.oauth.OAuthAppSettings;
 import org.agorava.core.api.oauth.OAuthConstants;
 import org.agorava.core.api.oauth.OAuthRequest;
 import org.agorava.core.api.oauth.Token;
@@ -27,7 +26,7 @@ import org.agorava.core.api.oauth.Verifier;
 import org.agorava.core.api.rest.Request;
 import org.agorava.core.api.rest.RequestTuner;
 import org.agorava.core.api.rest.Response;
-import org.agorava.core.spi.TierConfigOauth10a;
+import org.agorava.core.spi.ProviderConfigOauth10a;
 import org.agorava.core.utils.MapUtils;
 
 import java.util.Map;
@@ -44,15 +43,12 @@ import static org.agorava.core.api.atinject.OAuth.OAuthVersion.ONE;
 
 @GenericBean
 @OAuth(ONE)
-public class OAuth10aProviderImpl extends OAuthProviderBase {
-    private static Logger LOGGER = Logger.getLogger(OAuth10aProviderImpl.class.getName());
+public class OAuth10aServiceImpl extends OAuthServiceBase {
+    private static Logger LOGGER = Logger.getLogger(OAuth10aServiceImpl.class.getName());
 
 
     @InjectWithQualifier
-    OAuthAppSettings config;
-
-    @InjectWithQualifier
-    TierConfigOauth10a api;
+    ProviderConfigOauth10a api;
 
     /**
      * {@inheritDoc}

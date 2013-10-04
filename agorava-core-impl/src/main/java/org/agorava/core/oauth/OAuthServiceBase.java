@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava                                                  
+ * Copyright 2013 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,11 @@
  * limitations under the License.
  */
 
-package org.agorava.core.cdi;
+package org.agorava.core.oauth;
 
-import org.agorava.core.api.atinject.GenericBean;
+import org.agorava.core.api.atinject.Current;
 import org.agorava.core.api.atinject.InjectWithQualifier;
-import org.agorava.core.api.event.OAuthComplete;
-import org.agorava.core.api.event.SocialEvent;
-import org.agorava.core.api.exception.AgoravaException;
 import org.agorava.core.api.oauth.OAuthAppSettings;
-import org.agorava.core.api.oauth.OAuthProvider;
 import org.agorava.core.api.oauth.OAuthRequest;
 import org.agorava.core.api.oauth.OAuthService;
 import org.agorava.core.api.oauth.OAuthSession;
@@ -30,100 +26,58 @@ import org.agorava.core.api.oauth.Token;
 import org.agorava.core.api.rest.Response;
 import org.agorava.core.api.rest.Verb;
 import org.agorava.core.api.service.JsonMapperService;
-import org.agorava.core.cdi.extensions.AgoravaExtension;
+import org.agorava.core.rest.OAuthRequestImpl;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.event.Event;
-import javax.enterprise.inject.Any;
-import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
-import java.lang.annotation.Annotation;
 import java.text.MessageFormat;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import static org.agorava.core.api.rest.Verb.GET;
 import static org.agorava.core.api.rest.Verb.POST;
 import static org.agorava.core.api.rest.Verb.PUT;
 
-//import org.agorava.utils.solder.logging.Logger;
-
 /**
- * {@inheritDoc}
- *
  * @author Antoine Sabot-Durand
  */
-@GenericBean
-public class OAuthServiceImpl implements OAuthService {
-
-    private static final long serialVersionUID = -8423894021913341674L;
+public abstract class OAuthServiceBase implements OAuthService {
 
 
     @Inject
-    protected JsonMapperService jsonService;
+    @Current
+    OAuthSession session;
 
     @Inject
-    @Any
-    protected Instance<OAuthSession> sessions;
+    JsonMapperService mapperService;
 
     @InjectWithQualifier
-    protected OAuthProvider provider;
-
-    @InjectWithQualifier
-    protected Event<OAuthComplete> completeEventProducer;
-
-    @InjectWithQualifier
-    protected OAuthAppSettings settings;
-
-    private String socialMediaName;
-
-    private Annotation qualifier;
+    OAuthAppSettings config;
 
     private Map<String, String> requestHeader;
 
-    @PostConstruct
-    public void init() {
-
-        socialMediaName = settings.getSocialMediaName();
-        qualifier = AgoravaExtension.getServicesToQualifier().get(socialMediaName);
+    @Override
+    public OAuthRequest requestFactory(Verb verb, String uri) {
+        OAuthRequest res = new OAuthRequestImpl(verb, uri);
+        return res;
     }
 
     @Override
-    public String getSocialMediaName() {
-        return socialMediaName;
-    }
-
-    @Override
-    public String getVerifierParamName() {
-        return getProvider().getVerifierParamName();
+    public JsonMapperService getJsonMapper() {
+        return mapperService;
     }
 
     @Override
     public String getAuthorizationUrl() {
-        return getProvider().getAuthorizationUrl(getRequestToken());
-    }
-
-    private OAuthProvider getProvider() {
-        return provider;
-    }
-
-    protected Token getRequestToken() {
-        OAuthSession session = getSession();
-        if (session.getRequestToken() == null) session.setRequestToken(getProvider().getRequestToken());
-        return session.getRequestToken();
+        return getAuthorizationUrl(getRequestToken());
     }
 
     @Override
     public synchronized void initAccessToken() {
         OAuthSession session = getSession();
         if (session.getAccessToken() == null)
-            session.setAccessToken(getProvider().getAccessToken(getRequestToken(), session.getVerifier()));
+            session.setAccessToken(getAccessToken(getRequestToken(), session.getVerifier()));
         if (session.getAccessToken() != null) {
             session.setRequestToken(null);
-//            log.debug("firing event for " + getSocialMediaName() + " OAuth complete cycle");
-            Event<OAuthComplete> event = completeEventProducer.select();
-            event.fire(new OAuthComplete(SocialEvent.Status.SUCCESS, "", session));
-//            log.debug("After OAuth cycle completion");
+
 
             //TODO: reactivate logger
         } else {
@@ -135,20 +89,20 @@ public class OAuthServiceImpl implements OAuthService {
     @Override
     public Response sendSignedRequest(OAuthRequest request) {
         if (getRequestHeader() != null) request.getHeaders().putAll(getRequestHeader());
-        getProvider().signRequest(getAccessToken(), request);
+        signRequest(getAccessToken(), request);
         return request.send(); //todo:should check return code and launch ResponseException if it's not 200
     }
 
     @Override
     public Response sendSignedRequest(Verb verb, String uri) {
-        OAuthRequest request = getProvider().requestFactory(verb, uri);
+        OAuthRequest request = requestFactory(verb, uri);
         return sendSignedRequest(request);
 
     }
 
     @Override
     public Response sendSignedRequest(Verb verb, String uri, String key, Object value) {
-        OAuthRequest request = getProvider().requestFactory(verb, uri);
+        OAuthRequest request = requestFactory(verb, uri);
 
         request.addBodyParameter(key, value.toString());
 
@@ -158,16 +112,21 @@ public class OAuthServiceImpl implements OAuthService {
 
     @Override
     public Response sendSignedXmlRequest(Verb verb, String uri, String payload) {
-        OAuthRequest request = getProvider().requestFactory(verb, uri);
+        OAuthRequest request = requestFactory(verb, uri);
         request.addPayload(payload);
         return sendSignedRequest(request);
 
     }
 
     @Override
+    public OAuthSession getSession() {
+        return session;
+    }
+
+    @Override
     public Response sendSignedRequest(Verb verb, String uri, Map<String, ? extends Object> params) {
-        OAuthRequest request = getProvider().requestFactory(verb, uri);
-        for (Entry<String, ? extends Object> ent : params.entrySet()) {
+        OAuthRequest request = requestFactory(verb, uri);
+        for (Map.Entry<String, ? extends Object> ent : params.entrySet()) {
             request.addBodyParameter(ent.getKey(), ent.getValue().toString());
         }
         return sendSignedRequest(request);
@@ -205,6 +164,11 @@ public class OAuthServiceImpl implements OAuthService {
     }
 
     @Override
+    public String getSocialMediaName() {
+        return config.getSocialMediaName();
+    }
+
+    @Override
     public void setAccessToken(String token, String secret) {
         OAuthSession session = getSession();
         session.setAccessToken(new Token(token, secret));
@@ -212,28 +176,8 @@ public class OAuthServiceImpl implements OAuthService {
     }
 
     @Override
-    public OAuthSession getSession() {
-        OAuthSession res = null;
-
-        Instance<OAuthSession> currentSession = sessions.select(CurrentLiteral.INSTANCE);
-        if (currentSession.isAmbiguous()) {
-            currentSession = currentSession.select(qualifier);
-
-        }
-        if (currentSession.isUnsatisfied()) {
-            throw new AgoravaException("No OAuthSession defined with @Current qualifier");
-        }
-        res = currentSession.get();
-        if (res.getServiceName() != getSocialMediaName())
-            throw new AgoravaException("Bad remoteService for OAuthSession. Expected : " + getSocialMediaName() + ", " +
-                    "but was : " + res.getServiceName());
-        return res;
-
-    }
-
-    @Override
     public <T> T get(String uri, Class<T> clazz) {
-        return jsonService.mapToObject(sendSignedRequest(GET, uri), clazz);
+        return getJsonMapper().mapToObject(sendSignedRequest(GET, uri), clazz);
     }
 
     @Override
@@ -241,31 +185,31 @@ public class OAuthServiceImpl implements OAuthService {
         Response resp;
         if (signed) resp = sendSignedRequest(GET, uri);
         else
-            resp = getProvider().requestFactory(GET, uri).send(); //todo:should check return code and launch
+            resp = requestFactory(GET, uri).send(); //todo:should check return code and launch
         // ResponseException if it's not 200
-        return jsonService.mapToObject(resp, clazz);
+        return getJsonMapper().mapToObject(resp, clazz);
     }
 
     @Override
     public <T> T get(String uri, Class<T> clazz, Object... urlParams) {
         String url = MessageFormat.format(uri, urlParams);
-        return jsonService.mapToObject(sendSignedRequest(GET, url), clazz);
+        return getJsonMapper().mapToObject(sendSignedRequest(GET, url), clazz);
     }
 
     @Override
     public <T> T post(String uri, Map<String, ? extends Object> params, Class<T> clazz) {
-        OAuthRequest request = getProvider().requestFactory(POST, uri);
+        OAuthRequest request = requestFactory(POST, uri);
         request.addBodyParameters(params);
-        return jsonService.mapToObject(sendSignedRequest(request), clazz);
+        return getJsonMapper().mapToObject(sendSignedRequest(request), clazz);
     }
 
     @Override
     public String post(String uri, Object toPost, Object... urlParams) {
 
         uri = MessageFormat.format(uri, urlParams);
-        OAuthRequest request = getProvider().requestFactory(POST, uri);
+        OAuthRequest request = requestFactory(POST, uri);
 
-        request.addPayload(jsonService.objectToJsonString(toPost));
+        request.addPayload(getJsonMapper().objectToJsonString(toPost));
         Response response = sendSignedRequest(request);
         return response.getHeader("Location");
     }
@@ -273,9 +217,9 @@ public class OAuthServiceImpl implements OAuthService {
     @Override
     public void put(String uri, Object toPut, Object... urlParams) {
         uri = MessageFormat.format(uri, urlParams);
-        OAuthRequest request = getProvider().requestFactory(PUT, uri);
+        OAuthRequest request = requestFactory(PUT, uri);
 
-        request.addPayload(jsonService.objectToJsonString(toPut));
+        request.addPayload(getJsonMapper().objectToJsonString(toPut));
         sendSignedRequest(request);
 
     }
@@ -303,5 +247,11 @@ public class OAuthServiceImpl implements OAuthService {
         session.setUserProfile(null);
 
     }
+
+    @Override
+    public Token getAccessToken(Token requestToken, String verifier) {
+        return null;
+    }
+
 
 }

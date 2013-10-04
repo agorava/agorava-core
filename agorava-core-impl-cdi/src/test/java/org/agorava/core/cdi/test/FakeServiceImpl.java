@@ -16,14 +16,14 @@
 
 package org.agorava.core.cdi.test;
 
-import org.agorava.core.cdi.OAuthServiceImpl;
+import org.agorava.core.oauth.OAuth10aServiceImpl;
 
 import javax.enterprise.context.ApplicationScoped;
 
 
 @FakeService
 @ApplicationScoped
-public class FakeServiceImpl extends OAuthServiceImpl {
+public class FakeServiceImpl extends OAuth10aServiceImpl {
 
 
     @Override

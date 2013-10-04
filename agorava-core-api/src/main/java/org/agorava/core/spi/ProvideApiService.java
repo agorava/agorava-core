@@ -26,13 +26,13 @@ import javax.inject.Inject;
 import java.util.Map;
 
 /**
- * Abstract base class for all Tier high level REST API calls.
+ * Abstract base class for all Provider high level REST API calls.
  * <p/>
  * Concrete class must implement some or API of the remote service
  *
  * @author Antoine Sabot-Durand
  */
-public abstract class TierService {
+public abstract class ProvideApiService {
 
 
     /**
@@ -79,7 +79,7 @@ public abstract class TierService {
 
 
     /**
-     * @return the underlying service to communicate with Tier Service
+     * @return the underlying service to communicate with Provider Service
      */
     protected abstract OAuthService getService();
 

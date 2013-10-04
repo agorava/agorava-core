@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.agorava.core.web;
+package org.agorava.web;
 
 import org.agorava.core.utils.AgoravaContext;
 

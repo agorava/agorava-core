@@ -16,7 +16,7 @@
 
 package org.agorava.core.cdi.test;
 
-import org.agorava.core.api.atinject.TierServiceRelated;
+import org.agorava.core.api.atinject.ProviderRelated;
 
 import javax.inject.Qualifier;
 import java.lang.annotation.Documented;
@@ -30,7 +30,7 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Qualifier
-@TierServiceRelated
+@ProviderRelated("Twitter")
 @Target({TYPE, METHOD, PARAMETER, FIELD})
 @Retention(RUNTIME)
 @Documented

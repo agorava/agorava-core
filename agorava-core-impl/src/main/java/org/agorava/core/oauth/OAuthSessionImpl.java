@@ -24,6 +24,7 @@ import org.agorava.core.api.oauth.Token;
 import org.agorava.core.spi.UserProfile;
 
 import java.lang.annotation.Annotation;
+import java.util.UUID;
 
 /**
  * {@inheritDoc}
@@ -43,10 +44,15 @@ public class OAuthSessionImpl implements OAuthSession {
 
     private UserProfile userProfile;
 
+    private String id = UUID.randomUUID().toString();
 
     @InjectWithQualifier
     private OAuthAppSettings settings;
 
+    @Override
+    public String getId() {
+        return id;
+    }
 
     @Override
     public Token getRequestToken() {
@@ -117,7 +123,6 @@ public class OAuthSessionImpl implements OAuthSession {
     public Annotation getServiceQualifier() {
         return settings.getQualifier();
     }
-
 
     @Override
     public String toString() {
