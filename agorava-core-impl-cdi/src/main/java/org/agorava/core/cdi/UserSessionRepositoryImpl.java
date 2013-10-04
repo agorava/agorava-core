@@ -25,7 +25,6 @@ import org.agorava.core.cdi.extensions.AgoravaExtension;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.event.Observes;
-import javax.enterprise.event.Reception;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
@@ -144,7 +143,7 @@ public class UserSessionRepositoryImpl implements UserSessionRepository {
         getCurrentService().initAccessToken();
     }
 
-    private void processOAuthComplete(@Observes(notifyObserver = Reception.IF_EXISTS) OAuthComplete event) {
+    private void processOAuthComplete(@Observes OAuthComplete event) {
         activeSessions.add(event.getEventData());
     }
 

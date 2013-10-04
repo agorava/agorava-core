@@ -21,6 +21,7 @@ import org.agorava.core.api.exception.AgoravaException;
 import org.agorava.core.api.oauth.OAuthAppSettings;
 import org.agorava.core.api.oauth.OAuthService;
 import org.jboss.arquillian.junit.Arquillian;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -84,6 +85,7 @@ public class AgoravaExtensionTest extends AgoravaTestDeploy {
 
     }
 
+    @Ignore
     @Test(expected = AgoravaException.class)
     public void testServiceWithoutCurrentSession() {
         service2.getSession();
