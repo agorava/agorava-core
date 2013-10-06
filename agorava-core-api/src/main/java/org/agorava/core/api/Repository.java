@@ -39,4 +39,5 @@ public interface Repository<T> extends Serializable, Iterable<T> {
     boolean remove(T element);
 
 
+    void add(T elt);
 }

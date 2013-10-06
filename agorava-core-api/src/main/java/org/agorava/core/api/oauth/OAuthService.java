@@ -195,13 +195,6 @@ public interface OAuthService extends RestService {
      */
     String getVersion();
 
-    /**
-     * Generates the OAuth authorization URL from the given request Token. It's the step 2 of OAuth negotiation
-     *
-     * @param requestToken request token to generate Authorization URL
-     * @return the authorization URL to call to aks user for delegation on her behalf
-     */
-    String getAuthorizationUrl(Token requestToken);
 
     /**
      * Creates an OAuthRequest with the given Rest Verb and uri

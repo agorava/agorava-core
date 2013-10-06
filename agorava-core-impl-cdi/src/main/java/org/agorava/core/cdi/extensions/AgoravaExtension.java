@@ -35,7 +35,6 @@ import org.apache.deltaspike.core.api.literal.AnyLiteral;
 import org.apache.deltaspike.core.util.bean.BeanBuilder;
 import org.apache.deltaspike.core.util.metadata.builder.AnnotatedTypeBuilder;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.event.Observes;
@@ -375,7 +374,7 @@ public class AgoravaExtension implements Extension, Serializable {
 
             Class clazz = genericsOAuthProviders.get(version);
 
-            beanRegisterer(clazz, qual, ApplicationScoped.class, abd, beanManager, OAuthService.class);
+            beanRegisterer(clazz, qual, Dependent.class, abd, beanManager, OAuthService.class);
             beanRegisterer(OAuthSessionImpl.class, qual, Dependent.class, abd, beanManager);
         }
 

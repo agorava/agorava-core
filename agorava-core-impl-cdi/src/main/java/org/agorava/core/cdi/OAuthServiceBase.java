@@ -14,20 +14,25 @@
  * limitations under the License.
  */
 
-package org.agorava.core.oauth;
+package org.agorava.core.cdi;
 
 import org.agorava.core.api.atinject.Current;
 import org.agorava.core.api.atinject.InjectWithQualifier;
+import org.agorava.core.api.event.OAuthComplete;
+import org.agorava.core.api.event.SocialEvent;
 import org.agorava.core.api.oauth.OAuthAppSettings;
 import org.agorava.core.api.oauth.OAuthRequest;
 import org.agorava.core.api.oauth.OAuthService;
 import org.agorava.core.api.oauth.OAuthSession;
 import org.agorava.core.api.oauth.Token;
+import org.agorava.core.api.oauth.Verifier;
 import org.agorava.core.api.rest.Response;
 import org.agorava.core.api.rest.Verb;
 import org.agorava.core.api.service.JsonMapperService;
 import org.agorava.core.rest.OAuthRequestImpl;
 
+import javax.enterprise.event.Event;
+import javax.enterprise.inject.Any;
 import javax.inject.Inject;
 import java.text.MessageFormat;
 import java.util.Map;
@@ -41,6 +46,10 @@ import static org.agorava.core.api.rest.Verb.PUT;
  */
 public abstract class OAuthServiceBase implements OAuthService {
 
+
+    @Inject
+    @Any
+    Event<OAuthComplete> completeEvt;
 
     @Inject
     @Current
@@ -65,19 +74,16 @@ public abstract class OAuthServiceBase implements OAuthService {
         return mapperService;
     }
 
-    @Override
-    public String getAuthorizationUrl() {
-        return getAuthorizationUrl(getRequestToken());
-    }
 
     @Override
     public synchronized void initAccessToken() {
         OAuthSession session = getSession();
         if (session.getAccessToken() == null)
-            session.setAccessToken(getAccessToken(getRequestToken(), session.getVerifier()));
+            session.setAccessToken(getAccessToken(session.getRequestToken(), session.getVerifier()));
         if (session.getAccessToken() != null) {
             session.setRequestToken(null);
-
+            completeEvt.select(session.getServiceQualifier()).fire(new OAuthComplete(SocialEvent.Status.SUCCESS, "",
+                    session));
 
             //TODO: reactivate logger
         } else {
@@ -250,7 +256,7 @@ public abstract class OAuthServiceBase implements OAuthService {
 
     @Override
     public Token getAccessToken(Token requestToken, String verifier) {
-        return null;
+        return getAccessToken(requestToken, new Verifier(verifier));
     }
 
 

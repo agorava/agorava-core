@@ -57,4 +57,6 @@ public interface UserSessionRepository extends Repository<OAuthSession> {
      */
     String initNewSession(String type);
 
+    String getId();
+
 }

@@ -16,6 +16,7 @@
 
 package org.agorava.core.api.oauth;
 
+import org.agorava.core.api.UserSessionRepository;
 import org.agorava.core.spi.UserProfile;
 
 import java.io.Serializable;
@@ -31,6 +32,10 @@ import java.lang.annotation.Annotation;
 public interface OAuthSession extends Serializable {
 
     String getId();
+
+    UserSessionRepository getRepo();
+
+    void setRepo(UserSessionRepository repo);
 
 
     /**

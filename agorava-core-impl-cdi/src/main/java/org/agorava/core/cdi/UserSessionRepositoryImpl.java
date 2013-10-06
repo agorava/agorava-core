@@ -22,6 +22,7 @@ import org.agorava.core.api.event.OAuthComplete;
 import org.agorava.core.api.oauth.OAuthService;
 import org.agorava.core.api.oauth.OAuthSession;
 import org.agorava.core.cdi.extensions.AgoravaExtension;
+import org.agorava.core.oauth.OAuthSessionImpl;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.event.Observes;
@@ -35,6 +36,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import static com.google.common.collect.Iterables.getLast;
 import static com.google.common.collect.Lists.newArrayList;
@@ -62,8 +64,13 @@ public class UserSessionRepositoryImpl implements UserSessionRepository {
 
     private List<String> listOfServices;
 
+    private OAuthSession currentSession = new OAuthSessionImpl();
 
-    private OAuthSession currentSession;
+    private String id = UUID.randomUUID().toString();
+
+    public String getId() {
+        return id;
+    }
 
     @Override
     public OAuthSession getCurrent() {
@@ -117,6 +124,11 @@ public class UserSessionRepositoryImpl implements UserSessionRepository {
         }
     }
 
+    @Override
+    public void add(OAuthSession elt) {
+        activeSessions.add(elt);
+    }
+
     @PostConstruct
     void init() {
         listOfServices = newArrayList(AgoravaExtension.getSocialRelated());
@@ -144,13 +156,19 @@ public class UserSessionRepositoryImpl implements UserSessionRepository {
     }
 
     private void processOAuthComplete(@Observes OAuthComplete event) {
-        activeSessions.add(event.getEventData());
+        OAuthSession session = event.getEventData();
+        UserSessionRepository repository = session.getRepo();
+        repository.add(session);
     }
 
     @Override
     public String initNewSession(String servType) {
+        OAuthSession res;
         Annotation qualifier = getServicesToQualifier().get(servType);
-        setCurrent(sessionInstances.select(qualifier).get());
+        res = sessionInstances.select(qualifier).get();
+        res.setRepo(this);
+        setCurrent(res);
+
         return getCurrentService().getAuthorizationUrl();
 
     }

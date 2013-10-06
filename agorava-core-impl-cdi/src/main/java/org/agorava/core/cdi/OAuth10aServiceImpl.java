@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.agorava.core.oauth;
+package org.agorava.core.cdi;
 
 import org.agorava.core.api.atinject.GenericBean;
 import org.agorava.core.api.atinject.InjectWithQualifier;
@@ -66,7 +66,15 @@ public class OAuth10aServiceImpl extends OAuthServiceBase {
         return OAuthConstants.VERIFIER;
     }
 
+    @Override
+    public String getAuthorizationUrl() {
+        Token req = getRequestToken();
+        getSession().setRequestToken(req);
+        return getAuthorizationUrl(req);
+    }
+
     public Token getRequestToken(RequestTuner tuner) {
+
         LOGGER.fine("obtaining request token from " + api.getRequestTokenEndpoint());
         OAuthRequest request = requestFactory(api.getRequestTokenVerb(), api.getRequestTokenEndpoint());
 

@@ -16,6 +16,7 @@
 
 package org.agorava.core.oauth;
 
+import org.agorava.core.api.UserSessionRepository;
 import org.agorava.core.api.atinject.GenericBean;
 import org.agorava.core.api.atinject.InjectWithQualifier;
 import org.agorava.core.api.oauth.OAuthAppSettings;
@@ -43,6 +44,16 @@ public class OAuthSessionImpl implements OAuthSession {
     private String verifier;
 
     private UserProfile userProfile;
+
+    public UserSessionRepository getRepo() {
+        return repo;
+    }
+
+    public void setRepo(UserSessionRepository repo) {
+        this.repo = repo;
+    }
+
+    private UserSessionRepository repo;
 
     private String id = UUID.randomUUID().toString();
 
