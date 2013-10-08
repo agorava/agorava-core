@@ -27,7 +27,7 @@ import java.util.List;
  *
  * @author Antoine Sabot-Durand
  */
-public interface UserSessionRepository extends Repository<OAuthSession> {
+public interface UserSessionRepository extends Repository<OAuthSession>, Identifiable {
 
     /**
      * @return List of available service to connect to
@@ -57,6 +57,5 @@ public interface UserSessionRepository extends Repository<OAuthSession> {
      */
     String initNewSession(String type);
 
-    String getId();
 
 }

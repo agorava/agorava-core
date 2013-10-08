@@ -14,22 +14,19 @@
  * limitations under the License.
  */
 
-package org.agorava.core.utils;
+package org.agorava.core.api;
+
+import java.io.Serializable;
 
 /**
- * Class containing configuration for Agorava.
- * Static field here are stored here from third parties helper classes.
+ * Provides String id to implementations
  *
  * @author Antoine Sabot-Durand
  */
-public class AgoravaContext {
+public interface Identifiable extends Serializable {
 
     /**
-     * The complete Web Context path (protocol, server, application context) of this Agorava Instance
+     * @return a unique id
      */
-    public static String webAbsolutePath = "undefined";
-
-
-    private AgoravaContext() {
-    }
+    String getId();
 }

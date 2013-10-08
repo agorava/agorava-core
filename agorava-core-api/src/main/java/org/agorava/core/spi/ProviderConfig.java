@@ -32,6 +32,10 @@ public abstract class ProviderConfig {
 
     private final Annotation providerAnnotation;
 
+    /**
+     * Default constructor used to find Provider's name in {@link org.agorava.core.api.atinject.ProviderRelated} meta
+     * annotation that must be present on mandatory annotation on all concrete ProviderConfig descendants
+     */
     protected ProviderConfig() {
 
         Annotation res = null;
@@ -52,10 +56,16 @@ public abstract class ProviderConfig {
 
     }
 
+    /**
+     * @return the name of the provider that was resolved at construction time
+     */
     public String getProviderName() {
         return providerName;
     }
 
+    /**
+     * @return the Annotation of the provider
+     */
     public Annotation getProviderAnnotation() {
         return providerAnnotation;
     }

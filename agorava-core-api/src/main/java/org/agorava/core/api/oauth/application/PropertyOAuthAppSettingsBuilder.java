@@ -38,8 +38,17 @@ import java.util.ResourceBundle;
  */
 public class PropertyOAuthAppSettingsBuilder extends SimpleOAuthAppSettingsBuilder {
 
+
+    /**
+     * Global constant to give type safe name for the bundleName property when used in {@link org.agorava.core.api.oauth
+     * .application.OAuthApplication}
+     */
     public static final String BUNDLE_NAME = "bundleName";
 
+    /**
+     * Global constant to give type safe name for the prefix property when used in {@link org.agorava.core.api.oauth
+     * .application.OAuthApplication}
+     */
     public static final String PREFIX = "prefix";
 
     private static final String[] bindingKeys = {API_KEY, API_SECRET};

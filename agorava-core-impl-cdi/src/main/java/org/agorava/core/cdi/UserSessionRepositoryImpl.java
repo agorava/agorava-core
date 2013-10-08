@@ -83,6 +83,15 @@ public class UserSessionRepositoryImpl implements UserSessionRepository {
     }
 
     @Override
+    public OAuthSession setCurrent(String id) throws IllegalArgumentException {
+        OAuthSession res = get(id);
+        if (res == null)
+            throw new IllegalArgumentException("There is no session with id " + id + " in the repository");
+        else
+            return res;
+    }
+
+    @Override
     public Collection<OAuthSession> getAll() {
         return Collections.unmodifiableCollection(activeSessions);
     }

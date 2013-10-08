@@ -24,7 +24,7 @@ import org.agorava.core.api.service.JsonMapperService;
 import java.util.Map;
 
 /**
- * Provides high level Oauth Service. Rely on {@link OAuthProvider} for OAuth initialization and signature
+ * Provides all Oauth Services
  *
  * @author Antoine Sabot-Durand
  */
@@ -195,7 +195,6 @@ public interface OAuthService extends RestService {
      */
     String getVersion();
 
-
     /**
      * Creates an OAuthRequest with the given Rest Verb and uri
      *
@@ -205,7 +204,9 @@ public interface OAuthService extends RestService {
      */
     OAuthRequest requestFactory(Verb verb, String uri);
 
-
+    /**
+     * @return a service to map Json to POJO
+     */
     JsonMapperService getJsonMapper();
 
 

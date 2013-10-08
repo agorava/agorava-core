@@ -16,10 +16,10 @@
 
 package org.agorava.core.api.oauth;
 
+import org.agorava.core.api.Identifiable;
 import org.agorava.core.api.UserSessionRepository;
 import org.agorava.core.spi.UserProfile;
 
-import java.io.Serializable;
 import java.lang.annotation.Annotation;
 
 /**
@@ -29,14 +29,20 @@ import java.lang.annotation.Annotation;
  *
  * @author Antoine Sabot-Durand
  */
-public interface OAuthSession extends Serializable {
+public interface OAuthSession extends Identifiable {
 
-    String getId();
 
+    /**
+     * @return the repository which contains this session
+     */
     UserSessionRepository getRepo();
 
+    /**
+     * Attach this Session the given Repository
+     *
+     * @param repo the repository that will contain this session
+     */
     void setRepo(UserSessionRepository repo);
-
 
     /**
      * @return the requestToken
@@ -69,14 +75,14 @@ public interface OAuthSession extends Serializable {
     void setVerifier(String verifier);
 
     /**
-     * @param userProfile to set
-     */
-    void setUserProfile(UserProfile userProfile);
-
-    /**
      * @return the connected userProfile
      */
     UserProfile getUserProfile();
+
+    /**
+     * @param userProfile to set
+     */
+    void setUserProfile(UserProfile userProfile);
 
     /**
      * @return the annotation for the current Social Media

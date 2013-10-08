@@ -20,24 +20,77 @@ import java.io.Serializable;
 import java.util.Collection;
 
 /**
+ * A repository containing a collection of element that can be iterated
+ *
+ * @param <T> the type of element contained in repo
  * @author Antoine Sabot-Durand
  */
-public interface Repository<T> extends Serializable, Iterable<T> {
+public interface Repository<T extends Identifiable> extends Serializable, Iterable<T> {
 
+    /**
+     * @return the current element
+     */
     T getCurrent();
 
+    /**
+     * @return all elements in this Repository
+     */
     Collection<T> getAll();
 
-    void setCurrent(T elt);
+    /**
+     * Set the current element
+     *
+     * @param element to set as current
+     */
+    void setCurrent(T element);
 
+    /**
+     * Look for element with the given id, set it as current and return it
+     *
+     * @param id od the element to set as current
+     * @return the element with the given id
+     * @throws IllegalArgumentException if no element with the given id is found
+     */
+    T setCurrent(String id) throws IllegalArgumentException;
+
+    /**
+     * Return element with the given id
+     *
+     * @param id a String id for the element
+     * @return the element with the given id or null if it doesn't exist
+     */
     T get(String id);
 
+
+    /**
+     * Remove the current Element
+     *
+     * @return true if it was removed correctly
+     */
     boolean removeCurrent();
 
+    /**
+     * Remove the element with the given id
+     *
+     * @param id of the element to remove
+     * @return true if it was removed correctly
+     */
     boolean remove(String id);
 
+
+    /**
+     * Remove the given element
+     *
+     * @param element to remove
+     * @return true if it was removed correctly
+     */
     boolean remove(T element);
 
 
-    void add(T elt);
+    /**
+     * Add the given element
+     *
+     * @param element to add
+     */
+    void add(T element);
 }

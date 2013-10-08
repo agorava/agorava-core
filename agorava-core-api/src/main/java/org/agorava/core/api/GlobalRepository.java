@@ -18,13 +18,20 @@ package org.agorava.core.api;
 
 import org.agorava.core.api.oauth.OAuthSession;
 
+import java.util.Collection;
+
 /**
+ * Represents a Repository containing data for all OAuth connexion in the application
+ *
  * @author Antoine Sabot-Durand
  */
 public interface GlobalRepository extends Repository<UserSessionRepository> {
 
 
-    Repository<OAuthSession> getMergedUserSessionRepositories();
+    /**
+     * @return a collection containing all existing OAuthSession contained in the application
+     */
+    Collection<OAuthSession> getAllSessions();
 
 
 }

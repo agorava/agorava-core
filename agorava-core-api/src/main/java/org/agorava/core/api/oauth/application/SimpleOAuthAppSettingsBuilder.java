@@ -105,7 +105,7 @@ public class SimpleOAuthAppSettingsBuilder implements OAuthAppSettingsBuilder {
 
     @Override
     public OAuthAppSettingsBuilder readFromSettings(OAuthAppSettings settings) {
-        this.apiKey(settings.getApiKey()).
+        apiKey(settings.getApiKey()).
                 apiSecret(settings.getApiSecret()).
                 callback(settings.getCallback()).
                 scope(settings.getScope()).
@@ -124,7 +124,7 @@ public class SimpleOAuthAppSettingsBuilder implements OAuthAppSettingsBuilder {
      */
     void invokeSetter(String k, String value) {
         Method setter;
-        Class<? extends OAuthAppSettingsBuilder> clazz = this.getClass();
+        Class<? extends OAuthAppSettingsBuilder> clazz = getClass();
         try {
             setter = clazz.getMethod(k, String.class);
             setter.invoke(this, value);
