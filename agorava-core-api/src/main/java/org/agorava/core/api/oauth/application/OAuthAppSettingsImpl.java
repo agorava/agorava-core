@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package org.agorava.core.oauth;
-
-import org.agorava.core.api.oauth.OAuthAppSettings;
+package org.agorava.core.api.oauth.application;
 
 import java.lang.annotation.Annotation;
 
 /**
- * {@inheritDoc}
+ * Configuration settings needed to access to an OAuth 1.0a and 2.0 service tier.
+ * Used by {@link org.agorava.core.api.oauth.OAuthService} to setup
+ * connection to Social Media
  *
  * @author Antoine Sabot-Durand
  */
@@ -41,6 +41,17 @@ public class OAuthAppSettingsImpl implements OAuthAppSettings {
 
     private final Annotation qualifier;
 
+
+    OAuthAppSettingsImpl(String name, String apiKey, String apiSecret, String callback, String scope, Annotation qualifier) {
+        this.apiKey = apiKey;
+        this.apiSecret = apiSecret;
+        this.callback = callback;
+        this.scope = scope;
+        this.name = name;
+        this.qualifier = qualifier;
+    }
+
+    @Override
     public String getApiKey() {
         return apiKey;
     }
@@ -54,7 +65,6 @@ public class OAuthAppSettingsImpl implements OAuthAppSettings {
     public String getCallback() {
         return callback;
     }
-
 
     @Override
     public String getScope() {
@@ -71,25 +81,16 @@ public class OAuthAppSettingsImpl implements OAuthAppSettings {
         return qualifier;
     }
 
-    OAuthAppSettingsImpl(String name, String apiKey, String apiSecret, String callback, String scope, Annotation qualifier) {
-        super();
-        this.apiKey = apiKey;
-        this.apiSecret = apiSecret;
-        this.callback = callback;
-        this.scope = scope;
-        this.name = name;
-        this.qualifier = qualifier;
-    }
-
     @Override
     public String toString() {
-        return "OAuthAppSettingsImpl [apiKey=" + apiKey + ", apiSecret=" + apiSecret + ", callback=" + callback
+        return "OAuthAppSettings [apiKey=" + apiKey + ", apiSecret=" + apiSecret + ", callback=" + callback
                 + ", scope=" + scope + ", serviceName=" + getSocialMediaName() + "]";
     }
 
-
+    @Override
     public boolean hasScope() {
         return (scope != null && !"".equals(scope));
     }
+
 
 }

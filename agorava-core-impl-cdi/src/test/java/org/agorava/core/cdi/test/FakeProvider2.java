@@ -16,7 +16,7 @@
 
 package org.agorava.core.cdi.test;
 
-import org.agorava.core.api.oauth.OAuthAppSettings;
+import org.agorava.core.api.oauth.application.OAuthAppSettings;
 import org.agorava.core.spi.ProviderConfigOauth20;
 
 /**

@@ -16,8 +16,8 @@
 
 package org.agorava.core.cdi.extensions;
 
-import org.agorava.core.api.oauth.OAuthAppSettings;
-import org.agorava.core.oauth.SimpleOAuthAppSettingsBuilder;
+import org.agorava.core.api.oauth.application.OAuthAppSettings;
+import org.agorava.core.api.oauth.application.SimpleOAuthAppSettingsBuilder;
 
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.InjectionPoint;

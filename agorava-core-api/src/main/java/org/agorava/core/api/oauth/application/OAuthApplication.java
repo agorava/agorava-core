@@ -14,33 +14,34 @@
  * limitations under the License.
  */
 
-package org.agorava.core.api.oauth;
+package org.agorava.core.api.oauth.application;
 
-import java.lang.annotation.ElementType;
+import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Support annotation to transport additional parameter for {@link OAuthApplication} annotation helping configuring the final
- * {@link OAuthAppSettingsBuilder}
+ * This annotation is used to produce {@link OAuthAppSettingsImpl} in code
  *
  * @author Antoine Sabot-Durand
  */
-@Target({ElementType.ANNOTATION_TYPE})
+@Target({METHOD, FIELD})
 @Retention(RUNTIME)
-public @interface Param {
+@Documented
+public @interface OAuthApplication {
 
     /**
-     * @return name of the param
+     * @return the builder class name used to build the final {@link OAuthAppSettingsImpl}
      */
-    String name();
+    Class<? extends OAuthAppSettingsBuilder> builder() default PropertyOAuthAppSettingsBuilder.class;
 
     /**
-     * @return value for the param
+     * @return a list of optional {@link Param} to configure the builder
      */
-    String value();
-
+    Param[] params() default {};
 
 }

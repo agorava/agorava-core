@@ -19,9 +19,9 @@ package org.agorava.core.oauth;
 import org.agorava.core.api.UserSessionRepository;
 import org.agorava.core.api.atinject.GenericBean;
 import org.agorava.core.api.atinject.InjectWithQualifier;
-import org.agorava.core.api.oauth.OAuthAppSettings;
 import org.agorava.core.api.oauth.OAuthSession;
 import org.agorava.core.api.oauth.Token;
+import org.agorava.core.api.oauth.application.OAuthAppSettings;
 import org.agorava.core.spi.UserProfile;
 
 import java.lang.annotation.Annotation;

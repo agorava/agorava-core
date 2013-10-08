@@ -18,8 +18,8 @@ package org.agorava.core.spi;
 
 import org.agorava.core.api.atinject.OAuth;
 import org.agorava.core.api.extractor.TokenExtractor;
-import org.agorava.core.api.oauth.OAuthAppSettings;
 import org.agorava.core.api.oauth.SignaturePlace;
+import org.agorava.core.api.oauth.application.OAuthAppSettings;
 import org.agorava.core.api.rest.Verb;
 
 import javax.inject.Inject;

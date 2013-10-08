@@ -17,8 +17,9 @@
 package org.agorava.core.oauth;
 
 import org.agorava.core.api.exception.AgoravaException;
-import org.agorava.core.api.oauth.OAuthAppSettings;
-import org.agorava.core.api.oauth.OAuthAppSettingsBuilder;
+import org.agorava.core.api.oauth.application.OAuthAppSettings;
+import org.agorava.core.api.oauth.application.OAuthAppSettingsBuilder;
+import org.agorava.core.api.oauth.application.PropertyOAuthAppSettingsBuilder;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -18,9 +18,9 @@ package org.agorava.core.cdi.test;
 
 import org.agorava.core.api.atinject.Current;
 import org.agorava.core.api.atinject.GenericBean;
-import org.agorava.core.api.oauth.OAuthAppSettings;
 import org.agorava.core.api.oauth.OAuthSession;
-import org.agorava.core.oauth.PropertyOAuthAppSettingsBuilder;
+import org.agorava.core.api.oauth.application.OAuthAppSettings;
+import org.agorava.core.api.oauth.application.PropertyOAuthAppSettingsBuilder;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;

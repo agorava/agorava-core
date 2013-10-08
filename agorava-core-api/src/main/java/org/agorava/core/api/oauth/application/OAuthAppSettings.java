@@ -14,20 +14,15 @@
  * limitations under the License.
  */
 
-package org.agorava.core.api.oauth;
+package org.agorava.core.api.oauth.application;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 
 /**
- * Configuration settings needed to access to an OAuth 1.0a and 2.0 service tier.
- * Used by {@link org.agorava.core.api.oauth.OAuthProvider} to setup
- * connection to Social Media
- *
  * @author Antoine Sabot-Durand
  */
 public interface OAuthAppSettings extends Serializable {
-
     /**
      * @return the key consumer key for the OAuth service
      */
@@ -36,6 +31,7 @@ public interface OAuthAppSettings extends Serializable {
     /**
      * @return the consumer secret key for the OAuth service
      */
+
     String getApiSecret();
 
     /**
@@ -62,6 +58,4 @@ public interface OAuthAppSettings extends Serializable {
      * @return true if this OAuthAppSettings contains a scope
      */
     boolean hasScope();
-
-
 }

@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package org.agorava.core.oauth;
+package org.agorava.core.api.oauth.application;
 
-import com.google.common.base.Joiner;
 import org.agorava.core.api.exception.AgoravaException;
-import org.agorava.core.api.oauth.OAuthAppSettings;
 
 import java.util.ResourceBundle;
 
 /**
- * This Builder creates a {@link OAuthAppSettings} from a {@link ResourceBundle}
+ * This Builder creates a {@link OAuthAppSettingsImpl} from a {@link ResourceBundle}
  * The bundle name is "agorava" ("agorava.properties" filename) by default but can be customized through {@link #bundleName
  * (String)}
  * keys in the file must be :
@@ -40,18 +38,17 @@ import java.util.ResourceBundle;
  */
 public class PropertyOAuthAppSettingsBuilder extends SimpleOAuthAppSettingsBuilder {
 
-    private String bundleName = "agorava";
+    public static final String BUNDLE_NAME = "bundleName";
 
-    private String prefix;
+    public static final String PREFIX = "prefix";
 
     private static final String[] bindingKeys = {API_KEY, API_SECRET};
 
     private static final String[] optionalKeys = {NAME, SCOPE, CALLBACK};
 
-    public static final String BUNDLE_NAME = "bundleName";
+    private String bundleName = "agorava";
 
-    public static final String PREFIX = "prefix";
-
+    private String prefix = "";
 
     /**
      * Set the bundle name to read settings from.
@@ -73,14 +70,13 @@ public class PropertyOAuthAppSettingsBuilder extends SimpleOAuthAppSettingsBuild
      * @return this builder
      */
     public PropertyOAuthAppSettingsBuilder prefix(String prefix) {
-        this.prefix = prefix;
+        this.prefix = prefix.trim();
         return this;
     }
 
-
     /**
      * {@inheritDoc} <p/>
-     * This implementation will build the {@link OAuthAppSettings} from a {@link ResourceBundle}
+     * This implementation will build the {@link OAuthAppSettingsImpl} from a {@link ResourceBundle}
      * <p/>
      * It'll first try to load all binding (mandatory) fields from the bundle by looking for the key prefix.fieldName (or
      * fieldName if prefix is empty)
@@ -90,21 +86,19 @@ public class PropertyOAuthAppSettingsBuilder extends SimpleOAuthAppSettingsBuild
      * If they are not present it'll try to load them without prefix
      *
      * @return the built OAuthAppSettings
-     * @throws java.util.MissingResourceException
-     *                          if the bundle can't be open
-     * @throws AgoravaException if a binding field is missing in the bundle
+     * @throws java.util.MissingResourceException if the bundle can't be open
+     * @throws AgoravaException                   if a binding field is missing in the bundle
      */
     @Override
     public OAuthAppSettings build() {
         String key;
         String value;
-        Joiner kj = Joiner.on('.').skipNulls();
-
         ResourceBundle rb = ResourceBundle.getBundle(bundleName);
+        String pref = "".equals(prefix) ? "" : prefix + ".";
 
 
         for (String k : bindingKeys) {
-            key = kj.join(prefix, k);
+            key = pref + k;
             if (!rb.containsKey(key)) {
                 throw new AgoravaException("Unable to find binding key: " + key + " in bundle " + bundleName + " to build " +
                         "settings");
@@ -115,7 +109,7 @@ public class PropertyOAuthAppSettingsBuilder extends SimpleOAuthAppSettingsBuild
         }
 
         for (String k : optionalKeys) {
-            key = kj.join(prefix, k);
+            key = pref + k;
             if (rb.containsKey(key)) {
                 value = rb.getString(key);
                 invokeSetter(k, value);

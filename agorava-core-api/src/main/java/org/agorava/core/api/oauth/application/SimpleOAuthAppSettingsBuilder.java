@@ -14,12 +14,9 @@
  * limitations under the License.
  */
 
-package org.agorava.core.oauth;
+package org.agorava.core.api.oauth.application;
 
 import org.agorava.core.api.exception.AgoravaException;
-import org.agorava.core.api.oauth.OAuthAppSettings;
-import org.agorava.core.api.oauth.OAuthAppSettingsBuilder;
-import org.agorava.core.api.oauth.Param;
 import org.agorava.core.utils.AgoravaContext;
 
 import java.lang.annotation.Annotation;

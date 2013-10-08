@@ -25,12 +25,11 @@ import org.agorava.core.api.atinject.InjectWithQualifier;
 import org.agorava.core.api.atinject.OAuth;
 import org.agorava.core.api.atinject.ProviderRelated;
 import org.agorava.core.api.exception.AgoravaException;
-import org.agorava.core.api.oauth.OAuthAppSettings;
-import org.agorava.core.api.oauth.OAuthAppSettingsBuilder;
-import org.agorava.core.api.oauth.OAuthApplication;
 import org.agorava.core.api.oauth.OAuthService;
+import org.agorava.core.api.oauth.application.OAuthAppSettings;
+import org.agorava.core.api.oauth.application.OAuthAppSettingsBuilder;
+import org.agorava.core.api.oauth.application.OAuthApplication;
 import org.agorava.core.oauth.OAuthSessionImpl;
-import org.agorava.core.oauth.PropertyOAuthAppSettingsBuilder;
 import org.agorava.core.spi.ProviderConfigOauth;
 import org.apache.deltaspike.core.api.literal.AnyLiteral;
 import org.apache.deltaspike.core.util.bean.BeanBuilder;
@@ -221,7 +220,8 @@ public class AgoravaExtension implements Extension, Serializable {
     //----------------- Process Producer Phase ----------------------------------
 
     /**
-     * This observer decorates the produced {@link OAuthAppSettings} by injecting its own qualifier and service name
+     * This observer decorates the produced {@link org.agorava.core.api.oauth.application.OAuthAppSettingsImpl} by injecting
+     * its own qualifier and service name
      * and build the list of Qualifiers bearing the ProviderRelated meta annotation (configured services)
      *
      * @param pp the Process producer event
@@ -245,15 +245,12 @@ public class AgoravaExtension implements Extension, Serializable {
 
                 final OAuthApplication app = annotatedMember.getAnnotation(OAuthApplication.class);
 
-                Class<? extends OAuthAppSettingsBuilder> builderClass = (app.builder() == OAuthAppSettingsBuilder.class ?
-                        PropertyOAuthAppSettingsBuilder.class : app.builder());
-
                 OAuthAppSettingsBuilder builderOAuthApp = null;
                 try {
-                    builderOAuthApp = builderClass.newInstance();
+                    builderOAuthApp = app.builder().newInstance();
                 } catch (Exception e) {
                     pp.addDefinitionError(new AgoravaException("Unable to create Settings Builder with class " +
-                            builderClass, e));
+                            app.builder(), e));
                 }
 
                 builderOAuthApp.qualifier(qual)
@@ -357,7 +354,8 @@ public class AgoravaExtension implements Extension, Serializable {
     }
 
     /**
-     * After all {@link OAuthAppSettings} were discovered we get their bean to retrieve the actual name of Social Media
+     * After all {@link org.agorava.core.api.oauth.application.OAuthAppSettingsImpl} were discovered we get their bean to
+     * retrieve the actual name of Social Media
      * and associates it with the corresponding Qualifier
      *
      * @param abd
