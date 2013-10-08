@@ -126,7 +126,7 @@ public class UserSessionRepositoryImpl implements UserSessionRepository {
 
     @Override
     public void add(OAuthSession elt) {
-        activeSessions.add(elt);
+        activeSessions.add(elt); //TODO : elt could be a proxy : we should test and copy it.
     }
 
     @PostConstruct

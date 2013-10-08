@@ -37,7 +37,7 @@ public @interface OAuthApplication {
     /**
      * @return the builder class name used to build the final {@link OAuthAppSettings}
      */
-    String builder() default "org.agorava.core.oauth.PropertyOAuthAppSettingsBuilder";
+    Class<? extends OAuthAppSettingsBuilder> builder() default OAuthAppSettingsBuilder.class;
 
     /**
      * @return a list of optional {@link Param} to configure the builder

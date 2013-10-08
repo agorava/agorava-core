@@ -30,6 +30,7 @@ import org.agorava.core.api.oauth.OAuthAppSettingsBuilder;
 import org.agorava.core.api.oauth.OAuthApplication;
 import org.agorava.core.api.oauth.OAuthService;
 import org.agorava.core.oauth.OAuthSessionImpl;
+import org.agorava.core.oauth.PropertyOAuthAppSettingsBuilder;
 import org.agorava.core.spi.ProviderConfigOauth;
 import org.apache.deltaspike.core.api.literal.AnyLiteral;
 import org.apache.deltaspike.core.util.bean.BeanBuilder;
@@ -201,7 +202,6 @@ public class AgoravaExtension implements Extension, Serializable {
         }
     }
 
-
     public void processGenericOauthProvider(@Observes ProcessAnnotatedType<? extends OAuthService> pat) {
         if (processGenericAnnotatedType(pat)) {
             AnnotatedType<? extends OAuthService> at = pat.getAnnotatedType();
@@ -245,12 +245,9 @@ public class AgoravaExtension implements Extension, Serializable {
 
                 final OAuthApplication app = annotatedMember.getAnnotation(OAuthApplication.class);
 
-                Class<? extends OAuthAppSettingsBuilder> builderClass = null;
-                try {
-                    builderClass = (Class<? extends OAuthAppSettingsBuilder>) Class.forName(app.builder());
-                } catch (Exception e) {
-                    pp.addDefinitionError(e);
-                }
+                Class<? extends OAuthAppSettingsBuilder> builderClass = (app.builder() == OAuthAppSettingsBuilder.class ?
+                        PropertyOAuthAppSettingsBuilder.class : app.builder());
+
                 OAuthAppSettingsBuilder builderOAuthApp = null;
                 try {
                     builderOAuthApp = builderClass.newInstance();
