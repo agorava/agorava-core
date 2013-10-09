@@ -21,8 +21,8 @@ import org.agorava.core.api.UserSessionRepository;
 import org.agorava.core.api.event.OAuthComplete;
 import org.agorava.core.api.oauth.OAuthService;
 import org.agorava.core.api.oauth.OAuthSession;
-import org.agorava.core.cdi.extensions.AgoravaExtension;
 import org.agorava.core.oauth.OAuthSessionImpl;
+import org.agorava.core.utils.AgoravaContext;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.event.Observes;
@@ -30,6 +30,7 @@ import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -38,9 +39,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import static com.google.common.collect.Iterables.getLast;
-import static com.google.common.collect.Lists.newArrayList;
-import static org.agorava.core.cdi.extensions.AgoravaExtension.getServicesToQualifier;
+import static org.agorava.core.utils.AgoravaContext.getServicesToQualifier;
 
 /**
  * {@inheritDoc}
@@ -109,7 +108,7 @@ public class UserSessionRepositoryImpl implements UserSessionRepository {
     public boolean removeCurrent() {
         if (getCurrent() != null) {
             activeSessions.remove(getCurrent());
-            setCurrent(activeSessions.size() > 0 ? getLast(activeSessions) : null);
+            setCurrent(activeSessions.size() > 0 ? activeSessions.iterator().next() : null);
             return true;
         }
         return false;
@@ -140,8 +139,7 @@ public class UserSessionRepositoryImpl implements UserSessionRepository {
 
     @PostConstruct
     void init() {
-        listOfServices = newArrayList(AgoravaExtension.getSocialRelated());
-        AgoravaExtension.setMultiSession(true);
+        listOfServices = new ArrayList<String>(AgoravaContext.getSocialRelated());
     }
 
     @Override

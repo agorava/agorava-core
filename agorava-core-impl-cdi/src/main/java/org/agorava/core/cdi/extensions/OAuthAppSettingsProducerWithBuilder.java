@@ -26,7 +26,8 @@ import java.lang.annotation.Annotation;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.agorava.core.cdi.extensions.AgoravaExtension.getServicesToQualifier;
+import static org.agorava.core.utils.AgoravaContext.getQualifierToService;
+
 
 /**
  * @author Antoine Sabot-Durand
@@ -45,7 +46,7 @@ class OAuthAppSettingsProducerWithBuilder implements Producer<OAuthAppSettings> 
 
     @Override
     public OAuthAppSettings produce(CreationalContext<OAuthAppSettings> ctx) {
-        builder.name(getServicesToQualifier().inverse().get(qual));
+        builder.name(getQualifierToService().get(qual));
         OAuthAppSettings newSettings = builder.build();
         ctx.push(newSettings);
         return newSettings;

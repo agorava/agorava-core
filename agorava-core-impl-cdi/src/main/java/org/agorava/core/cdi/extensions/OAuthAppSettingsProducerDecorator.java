@@ -18,6 +18,7 @@ package org.agorava.core.cdi.extensions;
 
 import org.agorava.core.api.oauth.application.OAuthAppSettings;
 import org.agorava.core.api.oauth.application.SimpleOAuthAppSettingsBuilder;
+import org.agorava.core.utils.AgoravaContext;
 
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.InjectionPoint;
@@ -44,7 +45,7 @@ class OAuthAppSettingsProducerDecorator implements Producer<OAuthAppSettings> {
         OAuthAppSettings settings = oldProducer.produce(ctx);
         OAuthAppSettings newSettings = new SimpleOAuthAppSettingsBuilder().readFromSettings(settings).
                 qualifier(qual).
-                name(AgoravaExtension.getServicesToQualifier().inverse().get(qual)).build();
+                name(AgoravaContext.getQualifierToService().get(qual)).build();
         ctx.push(newSettings);
         return newSettings;
     }

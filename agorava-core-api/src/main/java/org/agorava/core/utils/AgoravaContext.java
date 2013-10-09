@@ -16,6 +16,11 @@
 
 package org.agorava.core.utils;
 
+import java.lang.annotation.Annotation;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
 /**
  * Class containing configuration for Agorava.
  * Static field here are stored here from third parties helper classes.
@@ -29,7 +34,36 @@ public class AgoravaContext {
      */
     public static String webAbsolutePath = "undefined";
 
+    protected static Map<String, Annotation> servicesToQualifier = new HashMap<String, Annotation>();
 
-    private AgoravaContext() {
+    protected static Map<Annotation, String> qualifierToService = new HashMap<Annotation, String>();
+
+
+    protected AgoravaContext() {
+    }
+
+    /**
+     * @return a {@link BiMap} associating service annotations (annotation bearing {@link org.agorava.core.api.atinject
+     * .ProviderRelated} meta-annotation) and their name present in the application
+     */
+    public static Map<String, Annotation> getServicesToQualifier() {
+        return servicesToQualifier;
+    }
+
+    public static Map<Annotation, String> getQualifierToService() {
+        if (qualifierToService.isEmpty()) {
+            for (String s : servicesToQualifier.keySet()) {
+                if (qualifierToService.put(servicesToQualifier.get(s), s) != null)
+                    throw new IllegalStateException("There's more than one qualifier for name " + s);
+            }
+        }
+        return qualifierToService;
+    }
+
+    /**
+     * @return the set of all service's names present in the application
+     */
+    public static Set<String> getSocialRelated() {
+        return getServicesToQualifier().keySet();
     }
 }

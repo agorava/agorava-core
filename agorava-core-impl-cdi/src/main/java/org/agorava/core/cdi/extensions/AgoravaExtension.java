@@ -16,8 +16,6 @@
 
 package org.agorava.core.cdi.extensions;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import org.agorava.core.api.atinject.GenericBean;
@@ -31,6 +29,7 @@ import org.agorava.core.api.oauth.application.OAuthAppSettingsBuilder;
 import org.agorava.core.api.oauth.application.OAuthApplication;
 import org.agorava.core.oauth.OAuthSessionImpl;
 import org.agorava.core.spi.ProviderConfigOauth;
+import org.agorava.core.utils.AgoravaContext;
 import org.apache.deltaspike.core.api.literal.AnyLiteral;
 import org.apache.deltaspike.core.util.bean.BeanBuilder;
 import org.apache.deltaspike.core.util.metadata.builder.AnnotatedTypeBuilder;
@@ -57,6 +56,7 @@ import javax.enterprise.inject.spi.Producer;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -73,7 +73,7 @@ import static java.util.logging.Level.WARNING;
  *
  * @author Antoine Sabot-Durand
  */
-public class AgoravaExtension implements Extension, Serializable {
+public class AgoravaExtension extends AgoravaContext implements Extension, Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -81,47 +81,18 @@ public class AgoravaExtension implements Extension, Serializable {
 
     private static Logger log = Logger.getLogger(AgoravaExtension.class.getName());
 
-    private static BiMap<String, Annotation> servicesToQualifier = HashBiMap.create();
-
-    private static boolean multiSession = false;
-
     private Map<Annotation, Set<Type>> overridedGenericServices = new HashMap<Annotation, Set<Type>>();
 
     private Map<OAuth.OAuthVersion, Class<? extends OAuthService>> genericsOAuthProviders = Maps.newHashMap();
 
     private Map<Annotation, OAuth.OAuthVersion> service2OauthVersion = new HashMap<Annotation, OAuth.OAuthVersion>();
 
-    /**
-     * @return the set of all service's names present in the application
-     */
-    public static Set<String> getSocialRelated() {
-        return servicesToQualifier.keySet();
-    }
-
-    /**
-     * @return a {@link BiMap} associating service annotations (annotation bearing {@link org.agorava.core.api.atinject
-     * .ProviderRelated} meta-annotation) and their name present in the application
-     */
-    public static BiMap<String, Annotation> getServicesToQualifier() {
-        return servicesToQualifier;
-    }
 
     /**
      * @return the set of all service's qualifiers present in the application
      */
-    public static Set<Annotation> getServicesQualifiersAvailable() {
-        return servicesToQualifier.values();
-    }
-
-    /**
-     * @return a boolean indicating if the application uses multi sessions or not
-     */
-    public static boolean isMultiSession() {
-        return multiSession;
-    }
-
-    public static void setMultiSession(boolean ms) {
-        multiSession = ms;
+    public static Collection<Annotation> getServicesQualifiersAvailable() {
+        return getServicesToQualifier().values();
     }
 
 
@@ -395,10 +366,10 @@ public class AgoravaExtension implements Extension, Serializable {
             final ProviderConfigOauth tierConfig = (ProviderConfigOauth) beanManager.getReference(bean,
                     ProviderConfigOauth.class, ctx);
             String name = tierConfig.getProviderName();
-            servicesToQualifier.put(name, qual);
+            getServicesToQualifier().put(name, qual);
             ctx.release();
         }
-        if (servicesQualifiersConfigured.size() != servicesToQualifier.size())
+        if (servicesQualifiersConfigured.size() != getServicesToQualifier().size())
             log.log(WARNING, "Some Service modules present in the application are not configured so won't be available");
         //TODO:list the service without config
 
