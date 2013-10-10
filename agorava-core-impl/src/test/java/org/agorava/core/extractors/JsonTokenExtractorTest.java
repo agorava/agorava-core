@@ -16,8 +16,8 @@
 
 package org.agorava.core.extractors;
 
-import org.agorava.core.api.oauth.Token;
-import org.agorava.core.helpers.extractors.JsonTokenExtractor;
+import org.agorava.api.oauth.Token;
+import org.agorava.helpers.extractors.JsonTokenExtractor;
 import org.junit.Assert;
 import org.junit.Test;
 

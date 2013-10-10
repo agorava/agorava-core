@@ -17,10 +17,10 @@
 package org.agorava.core.mock;
 
 
-import org.agorava.core.api.oauth.OAuthConstants;
-import org.agorava.core.api.oauth.OAuthRequest;
-import org.agorava.core.api.rest.Verb;
-import org.agorava.core.rest.OAuthRequestImpl;
+import org.agorava.api.oauth.OAuthConstants;
+import org.agorava.api.oauth.OAuthRequest;
+import org.agorava.api.rest.Verb;
+import org.agorava.rest.OAuthRequestImpl;
 
 public class ObjectMother {
 

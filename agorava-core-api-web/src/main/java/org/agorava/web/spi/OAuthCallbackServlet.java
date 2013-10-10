@@ -16,7 +16,7 @@
 
 package org.agorava.web.spi;
 
-import org.agorava.core.api.oauth.OAuthService;
+import org.agorava.api.oauth.OAuthService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

@@ -16,6 +16,6 @@
   -->
 <beans xmlns="http://java.sun.com/xml/ns/javaee">
     <!--<decorators>
-        <class>org.agorava.core.cdi.decorators.OAuthServiceDecorator</class>
+        <class>org.agorava.cdi.decorators.OAuthServiceDecorator</class>
     </decorators>-->
 </beans>

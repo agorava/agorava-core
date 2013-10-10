@@ -16,12 +16,12 @@
 
 package org.agorava.core.extractors;
 
-import org.agorava.core.api.exception.OAuthParametersMissingException;
-import org.agorava.core.api.oauth.OAuthRequest;
-import org.agorava.core.api.rest.Verb;
-import org.agorava.core.helpers.extractors.BaseStringExtractor;
+import org.agorava.api.exception.OAuthParametersMissingException;
+import org.agorava.api.oauth.OAuthRequest;
+import org.agorava.api.rest.Verb;
 import org.agorava.core.mock.ObjectMother;
-import org.agorava.core.rest.OAuthRequestImpl;
+import org.agorava.helpers.extractors.BaseStringExtractor;
+import org.agorava.rest.OAuthRequestImpl;
 import org.junit.Before;
 import org.junit.Test;
 
