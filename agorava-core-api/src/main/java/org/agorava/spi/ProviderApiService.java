@@ -33,7 +33,7 @@ import java.util.Map;
  *
  * @author Antoine Sabot-Durand
  */
-public abstract class ProvideApiService {
+public abstract class ProviderApiService {
 
 
     /**
