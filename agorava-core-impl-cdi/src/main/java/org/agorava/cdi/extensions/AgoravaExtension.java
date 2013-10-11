@@ -28,7 +28,6 @@ import org.agorava.api.oauth.OAuthService;
 import org.agorava.api.oauth.application.OAuthAppSettings;
 import org.agorava.api.oauth.application.OAuthAppSettingsBuilder;
 import org.agorava.api.oauth.application.OAuthApplication;
-import org.agorava.oauth.OAuthSessionImpl;
 import org.agorava.spi.ProviderConfigOauth;
 import org.apache.deltaspike.core.api.literal.AnyLiteral;
 import org.apache.deltaspike.core.util.bean.BeanBuilder;
@@ -183,10 +182,6 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
         ;
     }
 
-    public void processGenericSession(@Observes ProcessAnnotatedType<? extends OAuthSessionImpl> pat) {
-        processGenericAnnotatedType(pat);
-    }
-
 
     //----------------- Process Producer Phase ----------------------------------
 
@@ -277,13 +272,7 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
         }
     }
 
-    /*private void captureGenericOauthSession(@Observes ProcessBean<? extends OAuthSession> pb) {
-        Bean<? extends OAuthSession> bean = pb.getBean();
-        if (bean.getQualifiers().contains(GenericBeanLiteral.INSTANCE)) {
-            genericOAuthSession = bean;
-        }
-    }
-
+    /*
     private void captureGenericOAuthProvider(@Observes ProcessBean<? extends OAuthProvider> pb) {
         Bean<? extends OAuthProvider> bean = pb.getBean();
 
@@ -341,7 +330,6 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
             Class clazz = genericsOAuthProviders.get(version);
 
             beanRegisterer(clazz, qual, Dependent.class, abd, beanManager, OAuthService.class);
-            beanRegisterer(OAuthSessionImpl.class, qual, Dependent.class, abd, beanManager);
         }
 
     }

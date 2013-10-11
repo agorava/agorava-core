@@ -57,13 +57,9 @@ public class UserSessionRepositoryImpl implements UserSessionRepository {
     @Any
     private Instance<OAuthService> serviceInstances;
 
-    @Inject
-    @Any
-    private Instance<OAuthSession> sessionInstances;
-
     private List<String> listOfServices;
 
-    private OAuthSession currentSession = new OAuthSessionImpl();
+    private OAuthSession currentSession = OAuthSessionImpl.NULL;
 
     private String id = UUID.randomUUID().toString();
 
@@ -134,6 +130,8 @@ public class UserSessionRepositoryImpl implements UserSessionRepository {
 
     @Override
     public void add(OAuthSession elt) {
+        if (elt.getClass() != OAuthSessionImpl.class)
+            elt = get(elt.getId());
         activeSessions.add(elt); //TODO : elt could be a proxy : we should test and copy it.
     }
 
@@ -172,7 +170,7 @@ public class UserSessionRepositoryImpl implements UserSessionRepository {
     public String initNewSession(String servType) {
         OAuthSession res;
         Annotation qualifier = getServicesToQualifier().get(servType);
-        res = sessionInstances.select(qualifier).get();
+        res = new OAuthSessionImpl(servType);
         res.setRepo(this);
         setCurrent(res);
 

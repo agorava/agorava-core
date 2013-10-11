@@ -16,11 +16,9 @@
 
 package org.agorava.oauth;
 
-import org.agorava.api.atinject.GenericBean;
-import org.agorava.api.atinject.InjectWithQualifier;
+import org.agorava.AgoravaContext;
 import org.agorava.api.oauth.OAuthSession;
 import org.agorava.api.oauth.Token;
-import org.agorava.api.oauth.application.OAuthAppSettings;
 import org.agorava.api.storage.UserSessionRepository;
 import org.agorava.spi.UserProfile;
 
@@ -32,10 +30,15 @@ import java.util.UUID;
  *
  * @author Antoine Sabot-Durand
  */
-@GenericBean
 public class OAuthSessionImpl implements OAuthSession {
 
+    public static OAuthSession NULL = new OAuthSessionImpl();
+
     private static final long serialVersionUID = -2526192334215289830L;
+
+    private final String providerName;
+
+    private final Annotation qualifier;
 
     private Token requestToken;
 
@@ -45,6 +48,25 @@ public class OAuthSessionImpl implements OAuthSession {
 
     private UserProfile userProfile;
 
+    private UserSessionRepository repo;
+
+    private String id = UUID.randomUUID().toString();
+
+    OAuthSessionImpl() {
+        qualifier = null;
+        providerName = "";
+    }
+
+    public OAuthSessionImpl(Annotation qualifier) {
+        this.qualifier = qualifier;
+        this.providerName = AgoravaContext.getQualifierToService().get(qualifier);
+    }
+
+    public OAuthSessionImpl(String providerName) {
+        this.providerName = providerName;
+        this.qualifier = AgoravaContext.getServicesToQualifier().get(providerName);
+    }
+
     public UserSessionRepository getRepo() {
         return repo;
     }
@@ -52,13 +74,6 @@ public class OAuthSessionImpl implements OAuthSession {
     public void setRepo(UserSessionRepository repo) {
         this.repo = repo;
     }
-
-    private UserSessionRepository repo;
-
-    private String id = UUID.randomUUID().toString();
-
-    @InjectWithQualifier
-    private OAuthAppSettings settings;
 
     @Override
     public String getId() {
@@ -132,7 +147,7 @@ public class OAuthSessionImpl implements OAuthSession {
 
     @Override
     public Annotation getServiceQualifier() {
-        return settings.getQualifier();
+        return qualifier;
     }
 
     @Override
@@ -152,7 +167,7 @@ public class OAuthSessionImpl implements OAuthSession {
 
     @Override
     public String getServiceName() {
-        return settings.getSocialMediaName();
+        return providerName;
     }
 
 }
