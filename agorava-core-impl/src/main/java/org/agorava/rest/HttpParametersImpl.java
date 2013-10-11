@@ -17,8 +17,8 @@
 package org.agorava.rest;
 
 import org.agorava.api.rest.HttpParameters;
-import org.agorava.api.util.OAuthEncoder;
-import org.agorava.api.util.Preconditions;
+import org.agorava.api.service.OAuthEncoder;
+import org.agorava.api.service.Preconditions;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -16,24 +16,23 @@
 
 package org.agorava.spi;
 
-import org.agorava.api.atinject.ExtractorType;
-import org.agorava.api.atinject.SignatureType;
+import org.agorava.api.extractor.ExtractorType;
 import org.agorava.api.extractor.StringExtractor;
 import org.agorava.api.extractor.TokenExtractor;
-import org.agorava.api.oauth.SignaturePlace;
 import org.agorava.api.oauth.Token;
 import org.agorava.api.rest.Verb;
 import org.agorava.api.service.SignatureService;
+import org.agorava.api.service.SignatureType;
 import org.agorava.api.service.TimestampService;
 
 import javax.inject.Inject;
 
-import static org.agorava.api.atinject.ExtractorType.Type.HEADER;
-import static org.agorava.api.atinject.ExtractorType.Type.OAUTH1_BASE_STRING;
-import static org.agorava.api.atinject.ExtractorType.Type.TOKEN_STD;
-import static org.agorava.api.atinject.OAuth.OAuthVersion;
-import static org.agorava.api.atinject.OAuth.OAuthVersion.ONE;
-import static org.agorava.api.atinject.SignatureType.Type.HMACSHA1;
+import static org.agorava.api.extractor.ExtractorType.Type.HEADER;
+import static org.agorava.api.extractor.ExtractorType.Type.OAUTH1_BASE_STRING;
+import static org.agorava.api.extractor.ExtractorType.Type.TOKEN_STD;
+import static org.agorava.api.oauth.OAuth.OAuthVersion;
+import static org.agorava.api.oauth.OAuth.OAuthVersion.ONE;
+import static org.agorava.api.service.SignatureType.Type.HMACSHA1;
 
 /**
  * Default Provider configuration implementing the OAuth protocol, version 1.0a
@@ -165,13 +164,6 @@ public abstract class ProviderConfigOauth10a extends ProviderConfigOauth {
      */
     public abstract String getAuthorizationUrl(Token requestToken);
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public SignaturePlace getSignatureType() {
-        return SignaturePlace.HEADER;
-    }
 
     /**
      * {@inheritDoc}

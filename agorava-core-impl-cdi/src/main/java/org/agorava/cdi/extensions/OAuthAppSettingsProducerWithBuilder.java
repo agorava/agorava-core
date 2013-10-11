@@ -26,7 +26,7 @@ import java.lang.annotation.Annotation;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.agorava.utils.AgoravaContext.getQualifierToService;
+import static org.agorava.AgoravaContext.getQualifierToService;
 
 
 /**

@@ -16,14 +16,14 @@
 
 package org.agorava.spi;
 
-import org.agorava.api.atinject.OAuth;
 import org.agorava.api.extractor.TokenExtractor;
+import org.agorava.api.oauth.OAuth;
 import org.agorava.api.rest.Verb;
 
 import javax.inject.Inject;
 
-import static org.agorava.api.atinject.OAuth.OAuthVersion;
-import static org.agorava.api.atinject.OAuth.OAuthVersion.TWO_FINAL;
+import static org.agorava.api.oauth.OAuth.OAuthVersion;
+import static org.agorava.api.oauth.OAuth.OAuthVersion.TWO_FINAL;
 
 /**
  * Default Provider configuration implementing the OAuth protocol, version 2.0 final

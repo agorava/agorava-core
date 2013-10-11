@@ -16,7 +16,7 @@
 
 package org.agorava.utils;
 
-import org.agorava.api.util.Preconditions;
+import org.agorava.api.service.Preconditions;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -16,16 +16,16 @@
 
 package org.agorava.helpers.extractors;
 
-import org.agorava.api.atinject.ExtractorType;
 import org.agorava.api.exception.AgoravaException;
+import org.agorava.api.extractor.ExtractorType;
 import org.agorava.api.extractor.TokenExtractor;
 import org.agorava.api.oauth.Token;
-import org.agorava.api.util.Preconditions;
+import org.agorava.api.service.Preconditions;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.agorava.api.atinject.ExtractorType.Type.TOKEN_JSON;
+import static org.agorava.api.extractor.ExtractorType.Type.TOKEN_JSON;
 
 @ExtractorType(TOKEN_JSON)
 public class JsonTokenExtractor implements TokenExtractor {

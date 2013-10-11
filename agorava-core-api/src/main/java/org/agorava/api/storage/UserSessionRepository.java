@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.agorava.api;
+package org.agorava.api.storage;
 
 import org.agorava.api.oauth.OAuthService;
 import org.agorava.api.oauth.OAuthSession;

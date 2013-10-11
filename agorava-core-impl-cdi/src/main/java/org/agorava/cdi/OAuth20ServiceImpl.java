@@ -19,7 +19,7 @@ package org.agorava.cdi;
 
 import org.agorava.api.atinject.GenericBean;
 import org.agorava.api.atinject.InjectWithQualifier;
-import org.agorava.api.atinject.OAuth;
+import org.agorava.api.oauth.OAuth;
 import org.agorava.api.oauth.OAuthConstants;
 import org.agorava.api.oauth.OAuthRequest;
 import org.agorava.api.oauth.Token;
@@ -29,7 +29,7 @@ import org.agorava.api.rest.Response;
 import org.agorava.rest.OAuthRequestImpl;
 import org.agorava.spi.ProviderConfigOauth20;
 
-import static org.agorava.api.atinject.OAuth.OAuthVersion.TWO_DRAFT_11;
+import static org.agorava.api.oauth.OAuth.OAuthVersion.TWO_DRAFT_11;
 
 @GenericBean
 @OAuth(TWO_DRAFT_11)

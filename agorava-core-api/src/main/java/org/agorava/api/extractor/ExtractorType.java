@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.agorava.api.atinject;
+package org.agorava.api.extractor;
 
 import javax.inject.Qualifier;
 import java.lang.annotation.Documented;
@@ -28,7 +28,7 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Qualifier to distinguish different implementations of services or helpers regarding OAuth version or OAuth 2.0 flavor
+ * Qualifier to distinguish different {@link org.agorava.api.extractor.Extractor} implementations
  *
  * @author Antoine Sabot-Durand
  */
@@ -36,58 +36,45 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({TYPE, METHOD, PARAMETER, FIELD})
 @Retention(RUNTIME)
 @Documented
-public @interface OAuth {
+public @interface ExtractorType {
 
     /**
-     * @return flavor of OAuth to distinguish
+     * @return type of extractor
      */
-    OAuthVersion value();
+    Type value();
+
 
     /**
-     * The different values of OAuth
+     * Different types of  Extractor
      *
      * @author Antoine Sabot-Durand
      */
-    enum OAuthVersion {
+    enum Type {
+        /**
+         * standard token extractor
+         */
+        TOKEN_STD,
 
         /**
-         * Value for OAuth 1.0a
-         *
-         * @see <a href="https://datatracker.ietf.org/doc/rfc5849/">OAuth 1.0a RFC</a>
+         * JSON token extractor
          */
-        ONE("1.0"),
+        TOKEN_JSON,
 
         /**
-         * Value for OAuth 2.0 draft 11
-         * Implementation used in code coming from Scribe
-         *
-         * @see <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-11">OAuth 2.0 RFC draft 11</a>
+         * HEADER extractor
          */
-        TWO_DRAFT_11("2.0"),
+        HEADER,
 
         /**
-         * Value OAuth 2.0 final, RFC 6749
+         * OAuth 1.0a base string extractor (string being signed)
          *
-         * @see <a href="https://datatracker.ietf.org/doc/rfc6749/">OAuth 2.0 RFC</a>
+         * @see <a href="http://oauth.net/core/1.0/#anchor14">Base string info in OAuth 1.0a spec</a>
          */
-        TWO_FINAL("2.0"),
+        OAUTH1_BASE_STRING,
 
         /**
          * available for third party developer
          */
-        OTHER("other");
-
-        private final String label;
-
-        OAuthVersion(String label) {
-            this.label = label;
-        }
-
-        /**
-         * @return label associated with current value
-         */
-        public String getLabel() {
-            return label;
-        }
+        OTHER
     }
 }

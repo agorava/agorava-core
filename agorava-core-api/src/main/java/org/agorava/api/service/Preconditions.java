@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.agorava.api.util;
+package org.agorava.api.service;
 
 import org.agorava.api.oauth.OAuthConstants;
 

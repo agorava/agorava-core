@@ -16,8 +16,8 @@
 
 package org.agorava.api.oauth;
 
-import org.agorava.api.Identifiable;
-import org.agorava.api.UserSessionRepository;
+import org.agorava.api.storage.Identifiable;
+import org.agorava.api.storage.UserSessionRepository;
 import org.agorava.spi.UserProfile;
 
 import java.lang.annotation.Annotation;

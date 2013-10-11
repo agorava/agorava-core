@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.agorava.api.atinject;
+package org.agorava.api.service;
 
 import javax.inject.Qualifier;
 import java.lang.annotation.Documented;
@@ -28,7 +28,7 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Qualifier to distinguish different {@link org.agorava.api.extractor.Extractor} implementations
+ * Qualifier to distinguish different {@link org.agorava.api.service.SignatureService} implementations
  *
  * @author Antoine Sabot-Durand
  */
@@ -36,41 +36,37 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({TYPE, METHOD, PARAMETER, FIELD})
 @Retention(RUNTIME)
 @Documented
-public @interface ExtractorType {
+public @interface SignatureType {
 
     /**
-     * @return type of extractor
+     * @return type of signature
      */
     Type value();
 
 
     /**
-     * Different types of  Extractor
-     *
      * @author Antoine Sabot-Durand
      */
     enum Type {
         /**
-         * standard token extractor
-         */
-        TOKEN_STD,
-
-        /**
-         * JSON token extractor
-         */
-        TOKEN_JSON,
-
-        /**
-         * HEADER extractor
-         */
-        HEADER,
-
-        /**
-         * OAuth 1.0a base string extractor (string being signed)
+         * For signature based on HMAC-SHA1
          *
-         * @see <a href="http://oauth.net/core/1.0/#anchor14">Base string info in OAuth 1.0a spec</a>
+         * @see <a href="http://tools.ietf.org/html/rfc2104">HMAC RFC</a>
          */
-        OAUTH1_BASE_STRING,
+        HMACSHA1,
+
+        /**
+         * For signature in plain text
+         */
+        PLAINTEXT,
+
+        /**
+         * For signature based on RSA-SHA1
+         *
+         * @see <a href=http://www.w3.org/PICS/DSig/RSA-SHA1_1_0.html">w3c documentation on RSA SHA1</a>
+         */
+        RSASHA1,
+
 
         /**
          * available for third party developer

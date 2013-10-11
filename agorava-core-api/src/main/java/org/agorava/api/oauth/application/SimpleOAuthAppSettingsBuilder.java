@@ -16,8 +16,8 @@
 
 package org.agorava.api.oauth.application;
 
+import org.agorava.AgoravaContext;
 import org.agorava.api.exception.AgoravaException;
-import org.agorava.utils.AgoravaContext;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;

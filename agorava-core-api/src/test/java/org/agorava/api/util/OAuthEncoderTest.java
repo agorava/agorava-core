@@ -16,6 +16,7 @@
 
 package org.agorava.api.util;
 
+import org.agorava.api.service.OAuthEncoder;
 import org.junit.Assert;
 import org.junit.Test;
 

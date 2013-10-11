@@ -16,12 +16,12 @@
 
 package org.agorava.oauth;
 
-import org.agorava.api.UserSessionRepository;
 import org.agorava.api.atinject.GenericBean;
 import org.agorava.api.atinject.InjectWithQualifier;
 import org.agorava.api.oauth.OAuthSession;
 import org.agorava.api.oauth.Token;
 import org.agorava.api.oauth.application.OAuthAppSettings;
+import org.agorava.api.storage.UserSessionRepository;
 import org.agorava.spi.UserProfile;
 
 import java.lang.annotation.Annotation;

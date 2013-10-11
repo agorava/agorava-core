@@ -16,13 +16,13 @@
 
 package org.agorava.helpers.signatures;
 
-import org.agorava.api.atinject.SignatureType;
 import org.agorava.api.exception.OAuthSignatureException;
+import org.agorava.api.service.OAuthEncoder;
+import org.agorava.api.service.Preconditions;
 import org.agorava.api.service.SignatureService;
-import org.agorava.api.util.OAuthEncoder;
-import org.agorava.api.util.Preconditions;
+import org.agorava.api.service.SignatureType;
 
-import static org.agorava.api.atinject.SignatureType.Type.PLAINTEXT;
+import static org.agorava.api.service.SignatureType.Type.PLAINTEXT;
 
 /**
  * plaintext implementation of {@SignatureService}

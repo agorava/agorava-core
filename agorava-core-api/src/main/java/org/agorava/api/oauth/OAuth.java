@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.agorava.api.atinject;
+package org.agorava.api.oauth;
 
 import javax.inject.Qualifier;
 import java.lang.annotation.Documented;
@@ -28,7 +28,7 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Qualifier to distinguish different {@link org.agorava.api.service.SignatureService} implementations
+ * Qualifier to distinguish different implementations of services or helpers regarding OAuth version or OAuth 2.0 flavor
  *
  * @author Antoine Sabot-Durand
  */
@@ -36,41 +36,58 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({TYPE, METHOD, PARAMETER, FIELD})
 @Retention(RUNTIME)
 @Documented
-public @interface SignatureType {
+public @interface OAuth {
 
     /**
-     * @return type of signature
+     * @return flavor of OAuth to distinguish
      */
-    Type value();
-
+    OAuthVersion value();
 
     /**
+     * The different values of OAuth
+     *
      * @author Antoine Sabot-Durand
      */
-    enum Type {
+    enum OAuthVersion {
+
         /**
-         * For signature based on HMAC-SHA1
+         * Value for OAuth 1.0a
          *
-         * @see <a href="http://tools.ietf.org/html/rfc2104">HMAC RFC</a>
+         * @see <a href="https://datatracker.ietf.org/doc/rfc5849/">OAuth 1.0a RFC</a>
          */
-        HMACSHA1,
+        ONE("1.0"),
 
         /**
-         * For signature in plain text
-         */
-        PLAINTEXT,
-
-        /**
-         * For signature based on RSA-SHA1
+         * Value for OAuth 2.0 draft 11
+         * Implementation used in code coming from Scribe
          *
-         * @see <a href=http://www.w3.org/PICS/DSig/RSA-SHA1_1_0.html">w3c documentation on RSA SHA1</a>
+         * @see <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-11">OAuth 2.0 RFC draft 11</a>
          */
-        RSASHA1,
+        TWO_DRAFT_11("2.0"),
 
+        /**
+         * Value OAuth 2.0 final, RFC 6749
+         *
+         * @see <a href="https://datatracker.ietf.org/doc/rfc6749/">OAuth 2.0 RFC</a>
+         */
+        TWO_FINAL("2.0"),
 
         /**
          * available for third party developer
          */
-        OTHER
+        OTHER("other");
+
+        private final String label;
+
+        OAuthVersion(String label) {
+            this.label = label;
+        }
+
+        /**
+         * @return label associated with current value
+         */
+        public String getLabel() {
+            return label;
+        }
     }
 }

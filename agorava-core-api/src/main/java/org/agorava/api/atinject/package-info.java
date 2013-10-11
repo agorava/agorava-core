@@ -15,7 +15,7 @@
  */
 
 /**
- * This package contains specific JSR 330 Qualifier and associated. It allows to connect seamlessly this API to its
+ * This package contains general JSR 330 Qualifier and associated annotations. It allows to connect seamlessly this API to its
  * implementation
  */
 

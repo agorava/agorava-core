@@ -16,16 +16,16 @@
 
 package org.agorava.helpers.extractors;
 
-import org.agorava.api.atinject.ExtractorType;
 import org.agorava.api.exception.OAuthParametersMissingException;
+import org.agorava.api.extractor.ExtractorType;
 import org.agorava.api.extractor.StringExtractor;
 import org.agorava.api.oauth.OAuthRequest;
-import org.agorava.api.util.OAuthEncoder;
-import org.agorava.api.util.Preconditions;
+import org.agorava.api.service.OAuthEncoder;
+import org.agorava.api.service.Preconditions;
 
 import java.util.Map;
 
-import static org.agorava.api.atinject.ExtractorType.Type.HEADER;
+import static org.agorava.api.extractor.ExtractorType.Type.HEADER;
 
 /**
  * Extracts HEADER. Conforms to OAuth 1.0a

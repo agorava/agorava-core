@@ -18,7 +18,7 @@ package org.agorava.cdi;
 
 import org.agorava.api.atinject.GenericBean;
 import org.agorava.api.atinject.InjectWithQualifier;
-import org.agorava.api.atinject.OAuth;
+import org.agorava.api.oauth.OAuth;
 import org.agorava.api.oauth.OAuthConstants;
 import org.agorava.api.oauth.OAuthRequest;
 import org.agorava.api.oauth.Token;
@@ -33,7 +33,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-import static org.agorava.api.atinject.OAuth.OAuthVersion.ONE;
+import static org.agorava.api.oauth.OAuth.OAuthVersion.ONE;
 
 /**
  * OAuth 1.0a implementation of {@link org.agorava.api.oauth.OAuthProvider}
@@ -170,7 +170,7 @@ public class OAuth10aServiceImpl extends OAuthServiceBase {
     }
 
     private void appendSignature(OAuthRequest request) {
-        switch (api.getSignatureType()) {
+        switch (api.getSignaturePlace()) {
             case HEADER:
                 LOGGER.fine("using Http HEADER signature");
 

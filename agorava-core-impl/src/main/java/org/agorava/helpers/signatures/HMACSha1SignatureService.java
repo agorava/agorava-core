@@ -16,17 +16,17 @@
 
 package org.agorava.helpers.signatures;
 
-import org.agorava.api.atinject.SignatureType;
 import org.agorava.api.exception.OAuthSignatureException;
+import org.agorava.api.service.OAuthEncoder;
+import org.agorava.api.service.Preconditions;
 import org.agorava.api.service.SignatureService;
-import org.agorava.api.util.OAuthEncoder;
-import org.agorava.api.util.Preconditions;
+import org.agorava.api.service.SignatureType;
 import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-import static org.agorava.api.atinject.SignatureType.Type.HMACSHA1;
+import static org.agorava.api.service.SignatureType.Type.HMACSHA1;
 
 /**
  * HMAC-SHA1 implementation of {@SignatureService}

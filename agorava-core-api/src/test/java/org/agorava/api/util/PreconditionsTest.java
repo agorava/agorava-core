@@ -16,6 +16,7 @@
 
 package org.agorava.api.util;
 
+import org.agorava.api.service.Preconditions;
 import org.junit.Test;
 
 public class PreconditionsTest {

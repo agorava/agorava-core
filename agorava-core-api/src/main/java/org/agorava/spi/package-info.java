@@ -14,24 +14,9 @@
  * limitations under the License.
  */
 
-package org.agorava.api;
-
-import org.agorava.api.oauth.OAuthSession;
-
-import java.util.Collection;
-
 /**
- * Represents a Repository containing data for all OAuth connexion in the application
- *
- * @author Antoine Sabot-Durand
+ * Contains all Agorava's Service Provider Interface that has to be extended for each provider module
  */
-public interface GlobalRepository extends Repository<UserSessionRepository> {
 
 
-    /**
-     * @return a collection containing all existing OAuthSession contained in the application
-     */
-    Collection<OAuthSession> getAllSessions();
-
-
-}
+package org.agorava.spi;

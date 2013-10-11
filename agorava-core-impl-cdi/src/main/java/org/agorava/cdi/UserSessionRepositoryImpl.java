@@ -17,12 +17,12 @@
 
 package org.agorava.cdi;
 
-import org.agorava.api.UserSessionRepository;
+import org.agorava.AgoravaContext;
 import org.agorava.api.event.OAuthComplete;
 import org.agorava.api.oauth.OAuthService;
 import org.agorava.api.oauth.OAuthSession;
+import org.agorava.api.storage.UserSessionRepository;
 import org.agorava.oauth.OAuthSessionImpl;
-import org.agorava.utils.AgoravaContext;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.event.Observes;
@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import static org.agorava.utils.AgoravaContext.getServicesToQualifier;
+import static org.agorava.AgoravaContext.getServicesToQualifier;
 
 /**
  * {@inheritDoc}

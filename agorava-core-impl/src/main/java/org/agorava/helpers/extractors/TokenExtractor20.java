@@ -16,17 +16,17 @@
 
 package org.agorava.helpers.extractors;
 
-import org.agorava.api.atinject.OAuth;
 import org.agorava.api.exception.AgoravaException;
 import org.agorava.api.extractor.TokenExtractor;
+import org.agorava.api.oauth.OAuth;
 import org.agorava.api.oauth.Token;
-import org.agorava.api.util.OAuthEncoder;
-import org.agorava.api.util.Preconditions;
+import org.agorava.api.service.OAuthEncoder;
+import org.agorava.api.service.Preconditions;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.agorava.api.atinject.OAuth.OAuthVersion.TWO_DRAFT_11;
+import static org.agorava.api.oauth.OAuth.OAuthVersion.TWO_DRAFT_11;
 
 /**
  * Default implementation of {@AccessTokenExtractor}. Conforms to OAuth 2.0

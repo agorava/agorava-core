@@ -17,9 +17,8 @@
 package org.agorava.spi;
 
 import org.agorava.api.extractor.TokenExtractor;
-import org.agorava.api.oauth.SignaturePlace;
 
-import static org.agorava.api.atinject.OAuth.OAuthVersion;
+import static org.agorava.api.oauth.OAuth.OAuthVersion;
 
 /**
  * Root of all OAuth tier service configuration
@@ -32,7 +31,9 @@ public abstract class ProviderConfigOauth extends ProviderConfig {
     /**
      * @return the type of the OAuth signature
      */
-    public abstract SignaturePlace getSignatureType();
+    public SignaturePlace getSignaturePlace() {
+        return SignaturePlace.HEADER;
+    }
 
     /**
      * Returns the access token extractor.
@@ -47,4 +48,23 @@ public abstract class ProviderConfigOauth extends ProviderConfig {
     public abstract OAuthVersion getOAuthVersion();
 
 
+    /**
+     * Places where signature could be stored in {@link org.agorava.api.oauth.OAuthRequest} for OAuth 1.0a
+     */
+    public static enum SignaturePlace {
+        /**
+         * in Request header
+         */
+        HEADER,
+
+        /**
+         * in request query
+         */
+        QUERY_STRING,
+
+        /**
+         * in body
+         */
+        BODY
+    }
 }

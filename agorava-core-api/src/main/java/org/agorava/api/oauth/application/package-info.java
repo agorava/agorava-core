@@ -14,19 +14,9 @@
  * limitations under the License.
  */
 
-package org.agorava.api;
-
-import java.io.Serializable;
-
 /**
- * Provides String id to implementations
- *
- * @author Antoine Sabot-Durand
+ * This package contains all class related to OAuth application settings
  */
-public interface Identifiable extends Serializable {
 
-    /**
-     * @return a unique id
-     */
-    String getId();
-}
+
+package org.agorava.api.oauth.application;

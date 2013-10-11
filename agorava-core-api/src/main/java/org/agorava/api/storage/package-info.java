@@ -14,24 +14,9 @@
  * limitations under the License.
  */
 
-package org.agorava.api.oauth;
 
 /**
- * Places where signature could be stored in {@link OAuthRequest} for OAuth 1.0a
+ * This package contains storage API for Agorava
  */
-public enum SignaturePlace {
-    /**
-     * in Request header
-     */
-    HEADER,
 
-    /**
-     * in request query
-     */
-    QUERY_STRING,
-
-    /**
-     * in body
-     */
-    BODY
-}
+package org.agorava.api.storage;

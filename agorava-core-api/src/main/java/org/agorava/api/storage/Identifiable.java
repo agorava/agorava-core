@@ -14,9 +14,19 @@
  * limitations under the License.
  */
 
+package org.agorava.api.storage;
+
+import java.io.Serializable;
 
 /**
- * This package contains generic API elements for Social Media
+ * Provides String id to implementations
+ *
+ * @author Antoine Sabot-Durand
  */
+public interface Identifiable extends Serializable {
 
-package org.agorava.api;
+    /**
+     * @return a unique id
+     */
+    String getId();
+}

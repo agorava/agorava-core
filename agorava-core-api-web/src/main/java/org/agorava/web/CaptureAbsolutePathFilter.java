@@ -16,7 +16,7 @@
 
 package org.agorava.web;
 
-import org.agorava.utils.AgoravaContext;
+import org.agorava.AgoravaContext;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;

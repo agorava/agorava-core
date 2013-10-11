@@ -14,34 +14,24 @@
  * limitations under the License.
  */
 
-package org.agorava.api.oauth;
+package org.agorava.api.storage;
 
-import org.agorava.api.service.Preconditions;
+import org.agorava.api.oauth.OAuthSession;
+
+import java.util.Collection;
 
 /**
- * Represents an OAuth verifier code.
+ * Represents a Repository containing data for all OAuth connexion in the application
  *
- * @author Pablo Fernandez
  * @author Antoine Sabot-Durand
  */
-public class Verifier {
+public interface GlobalRepository extends Repository<UserSessionRepository> {
 
-    private final String value;
-
-    /**
-     * Default constructor.
-     *
-     * @param value verifier value
-     */
-    public Verifier(String value) {
-        Preconditions.checkNotNull(value, "Must provide a valid string as verifier");
-        this.value = value;
-    }
 
     /**
-     * @return verifier value
+     * @return a collection containing all existing OAuthSession contained in the application
      */
-    public String getValue() {
-        return value;
-    }
+    Collection<OAuthSession> getAllSessions();
+
+
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.agorava.api;
+package org.agorava.api.storage;
 
 import java.io.Serializable;
 import java.util.Collection;

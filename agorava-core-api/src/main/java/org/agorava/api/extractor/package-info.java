@@ -14,34 +14,8 @@
  * limitations under the License.
  */
 
-package org.agorava.api.oauth;
-
-import org.agorava.api.service.Preconditions;
-
 /**
- * Represents an OAuth verifier code.
- *
- * @author Pablo Fernandez
- * @author Antoine Sabot-Durand
+ * This package contains different {@link org.agorava.api.extractor.Extractor} used in Agorava
  */
-public class Verifier {
 
-    private final String value;
-
-    /**
-     * Default constructor.
-     *
-     * @param value verifier value
-     */
-    public Verifier(String value) {
-        Preconditions.checkNotNull(value, "Must provide a valid string as verifier");
-        this.value = value;
-    }
-
-    /**
-     * @return verifier value
-     */
-    public String getValue() {
-        return value;
-    }
-}
+package org.agorava.api.extractor;

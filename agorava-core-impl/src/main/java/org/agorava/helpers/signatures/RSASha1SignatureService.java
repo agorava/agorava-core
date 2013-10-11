@@ -16,15 +16,15 @@
 
 package org.agorava.helpers.signatures;
 
-import org.agorava.api.atinject.SignatureType;
 import org.agorava.api.exception.OAuthSignatureException;
 import org.agorava.api.service.SignatureService;
+import org.agorava.api.service.SignatureType;
 import org.apache.commons.codec.binary.Base64;
 
 import java.security.PrivateKey;
 import java.security.Signature;
 
-import static org.agorava.api.atinject.SignatureType.Type.RSASHA1;
+import static org.agorava.api.service.SignatureType.Type.RSASHA1;
 
 /**
  * A signature service that uses the RSA-SHA1 algorithm.

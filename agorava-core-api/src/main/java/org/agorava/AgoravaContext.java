@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.agorava.utils;
+package org.agorava;
 
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
@@ -34,22 +34,29 @@ public class AgoravaContext {
      */
     public static String webAbsolutePath = "undefined";
 
-    protected static Map<String, Annotation> servicesToQualifier = new HashMap<String, Annotation>();
+    private static Map<String, Annotation> servicesToQualifier = new HashMap<String, Annotation>();
 
-    protected static Map<Annotation, String> qualifierToService = new HashMap<Annotation, String>();
+    private static Map<Annotation, String> qualifierToService = new HashMap<Annotation, String>();
 
 
+    /**
+     * Default protected constructor to prevent instantiation of this class
+     */
     protected AgoravaContext() {
     }
 
     /**
-     * @return a {@link BiMap} associating service annotations (annotation bearing {@link org.agorava.api.atinject
-     * .ProviderRelated} meta-annotation) and their name present in the application
+     * @return a map associating provider names to provider qualifiers (qualifiers bearing {@link org.agorava.api.atinject
+     * .ProviderRelated} meta-annotation)
      */
     public static Map<String, Annotation> getServicesToQualifier() {
         return servicesToQualifier;
     }
 
+    /**
+     * @return a map associating provider qualifiers (qualifiers bearing {@link org.agorava.api.atinject
+     * .ProviderRelated} meta-annotation) to provider names
+     */
     public static Map<Annotation, String> getQualifierToService() {
         if (qualifierToService.isEmpty()) {
             for (String s : servicesToQualifier.keySet()) {
