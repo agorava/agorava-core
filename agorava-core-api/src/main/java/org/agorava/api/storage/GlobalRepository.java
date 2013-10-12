@@ -34,4 +34,12 @@ public interface GlobalRepository extends Repository<UserSessionRepository> {
     Collection<OAuthSession> getAllSessions();
 
 
+    /**
+     * Create a new element and set it as current
+     *
+     * @return the created element
+     */
+    UserSessionRepository createNew();
+
+
 }
