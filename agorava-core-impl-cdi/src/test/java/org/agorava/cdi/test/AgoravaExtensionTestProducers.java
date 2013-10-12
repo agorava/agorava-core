@@ -17,10 +17,10 @@
 package org.agorava.cdi.test;
 
 import org.agorava.api.atinject.Current;
-import org.agorava.api.atinject.GenericBean;
 import org.agorava.api.oauth.OAuthSession;
 import org.agorava.api.oauth.application.OAuthAppSettings;
 import org.agorava.api.oauth.application.PropertyOAuthAppSettingsBuilder;
+import org.agorava.oauth.OAuthSessionImpl;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
@@ -51,8 +51,8 @@ public class AgoravaExtensionTestProducers {
     @Produces
     @Current
     @FakeService
-    public OAuthSession produceAppSession(@FakeService @GenericBean OAuthSession session) {
+    public OAuthSession produceAppSession() {
 
-        return session;
+        return new OAuthSessionImpl(FakeServiceLiteral.INSTANCE);
     }
 }

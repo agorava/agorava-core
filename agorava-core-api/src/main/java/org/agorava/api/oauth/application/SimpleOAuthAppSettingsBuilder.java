@@ -100,7 +100,7 @@ public class SimpleOAuthAppSettingsBuilder implements OAuthAppSettingsBuilder {
 
     @Override
     public OAuthAppSettings build() {
-        return new OAuthAppSettingsImpl(name, apiKey, apiSecret, callback, scope, qualifier);
+        return new OAuthAppSettings(name, apiKey, apiSecret, callback, scope, qualifier);
     }
 
     @Override

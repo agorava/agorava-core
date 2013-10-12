@@ -24,7 +24,7 @@ import java.lang.annotation.Annotation;
 
 /**
  * Contains user data for a session connection to a given {@link OAuthService}.
- * It completes data in {@link org.agorava.api.oauth.application.OAuthAppSettingsImpl}.
+ * It completes data in {@link org.agorava.api.oauth.application.OAuthAppSettings}.
  * More over it contains status and basic user data when OAuth connexion has been completed
  *
  * @author Antoine Sabot-Durand

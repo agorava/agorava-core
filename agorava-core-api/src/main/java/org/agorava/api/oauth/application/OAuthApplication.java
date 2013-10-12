@@ -25,7 +25,7 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * This annotation is used to produce {@link OAuthAppSettingsImpl} in code
+ * This annotation is used to produce {@link OAuthAppSettings} in code
  *
  * @author Antoine Sabot-Durand
  */
@@ -35,7 +35,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface OAuthApplication {
 
     /**
-     * @return the builder class name used to build the final {@link OAuthAppSettingsImpl}
+     * @return the builder class name used to build the final {@link OAuthAppSettings}
      */
     Class<? extends OAuthAppSettingsBuilder> builder() default PropertyOAuthAppSettingsBuilder.class;
 

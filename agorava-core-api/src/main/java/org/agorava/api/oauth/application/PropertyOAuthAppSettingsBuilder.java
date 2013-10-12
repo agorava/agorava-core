@@ -21,7 +21,7 @@ import org.agorava.api.exception.AgoravaException;
 import java.util.ResourceBundle;
 
 /**
- * This Builder creates a {@link OAuthAppSettingsImpl} from a {@link ResourceBundle}
+ * This Builder creates a {@link OAuthAppSettings} from a {@link ResourceBundle}
  * The bundle name is "agorava" ("agorava.properties" filename) by default but can be customized through {@link #bundleName
  * (String)}
  * keys in the file must be :
@@ -85,7 +85,7 @@ public class PropertyOAuthAppSettingsBuilder extends SimpleOAuthAppSettingsBuild
 
     /**
      * {@inheritDoc} <p/>
-     * This implementation will build the {@link OAuthAppSettingsImpl} from a {@link ResourceBundle}
+     * This implementation will build the {@link OAuthAppSettings} from a {@link ResourceBundle}
      * <p/>
      * It'll first try to load all binding (mandatory) fields from the bundle by looking for the key prefix.fieldName (or
      * fieldName if prefix is empty)

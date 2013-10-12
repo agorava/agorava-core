@@ -20,42 +20,94 @@ import java.io.Serializable;
 import java.lang.annotation.Annotation;
 
 /**
+ * Configuration settings needed to access to an OAuth 1.0a and 2.0 service tier.
+ * Used by {@link org.agorava.api.oauth.OAuthService} to setup
+ * connection to Social Media
+ *
  * @author Antoine Sabot-Durand
  */
-public interface OAuthAppSettings extends Serializable {
+public class OAuthAppSettings implements Serializable {
+
+    private static final long serialVersionUID = -8018722725677732853L;
+
+    private String apiKey;
+
+    private String apiSecret;
+
+    private String callback;
+
+    private String scope;
+
+    private String name;
+
+    private Annotation qualifier;
+
+    OAuthAppSettings() {
+    }
+
+    OAuthAppSettings(String name, String apiKey, String apiSecret, String callback, String scope, Annotation qualifier) {
+        this.apiKey = apiKey;
+        this.apiSecret = apiSecret;
+        this.callback = callback;
+        this.scope = scope;
+        this.name = name;
+        this.qualifier = qualifier;
+    }
+
     /**
      * @return the key consumer key for the OAuth service
      */
-    String getApiKey();
+    public String getApiKey() {
+        return apiKey;
+    }
 
     /**
      * @return the consumer secret key for the OAuth service
      */
-
-    String getApiSecret();
+    public String getApiSecret() {
+        return apiSecret;
+    }
 
     /**
      * @return the call back URL for the OAuth service
      */
-    String getCallback();
+    public String getCallback() {
+        return callback;
+    }
 
     /**
      * @return the scope requested
      */
-    String getScope();
+    public String getScope() {
+        return scope;
+    }
 
     /**
      * @return the name of the service
      */
-    String getSocialMediaName();
+    public String getSocialMediaName() {
+        return name;
+    }
 
     /**
      * @return the qualifier associated to the service
      */
-    Annotation getQualifier();
+    public Annotation getQualifier() {
+        return qualifier;
+    }
+
+    @Override
+    public String toString() {
+        return "OAuthAppSettings [apiKey=" + apiKey + ", apiSecret=" + apiSecret + ", callback=" + callback
+                + ", scope=" + scope + ", serviceName=" + getSocialMediaName() + "]";
+    }
 
     /**
      * @return true if this OAuthAppSettings contains a scope
      */
-    boolean hasScope();
+    public boolean hasScope() {
+        return (scope != null && !"".equals(scope));
+    }
+
+
 }

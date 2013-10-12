@@ -19,7 +19,7 @@ package org.agorava.api.oauth.application;
 import java.lang.annotation.Annotation;
 
 /**
- * Builder for an {@link OAuthAppSettingsImpl} can be initialized directly from
+ * Builder for an {@link OAuthAppSettings} can be initialized directly from
  * fields name or from an Array of {@link Param} in case of Annotation configuration with {@link OAuthApplication}.
  * <p/>
  * For this last purpose, the interface {@link OAuthAppSettingsBuilder} contains constants
@@ -103,7 +103,7 @@ public interface OAuthAppSettingsBuilder {
     OAuthAppSettingsBuilder scope(String scope);
 
     /**
-     * Load builder params with an array of {@link Param}. This method can be used when params for {@link OAuthAppSettingsImpl}
+     * Load builder params with an array of {@link Param}. This method can be used when params for {@link OAuthAppSettings}
      * are defined through an annotation.
      *
      * @param params parameters collection to configure the builder
@@ -112,14 +112,14 @@ public interface OAuthAppSettingsBuilder {
     OAuthAppSettingsBuilder params(Param[] params);
 
     /**
-     * Builds the {@link OAuthAppSettingsImpl}
+     * Builds the {@link OAuthAppSettings}
      *
      * @return the application settings
      */
     OAuthAppSettings build();
 
     /**
-     * Set builder params from an existing {@link OAuthAppSettingsImpl}
+     * Set builder params from an existing {@link OAuthAppSettings}
      *
      * @param settings settings to read from
      * @return the current OAuthAppSettingsBuilder
