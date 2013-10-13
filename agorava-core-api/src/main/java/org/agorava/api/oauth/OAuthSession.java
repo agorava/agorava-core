@@ -16,6 +16,7 @@
 
 package org.agorava.api.oauth;
 
+import org.agorava.AgoravaContext;
 import org.agorava.api.storage.Identifiable;
 import org.agorava.api.storage.UserSessionRepository;
 import org.agorava.spi.UserProfile;
@@ -29,78 +30,184 @@ import java.lang.annotation.Annotation;
  *
  * @author Antoine Sabot-Durand
  */
-public interface OAuthSession extends Identifiable {
+public class OAuthSession implements Identifiable {
 
+    private static final long serialVersionUID = -2526192334215289830L;
+
+    /**
+     * A null OAuthSession used to avoid NPE
+     */
+    public static OAuthSession NULL = new OAuthSession();
+
+    private final Annotation qualifier;
+
+    private final String id;
+
+    private Token requestToken;
+
+    private Token accessToken;
+
+    private String verifier;
+
+    private UserProfile userProfile;
+
+    private UserSessionRepository repo;
+
+
+    OAuthSession(Annotation qualifier, Token requestToken, Token accessToken, String verifier,
+                 UserProfile userProfile, UserSessionRepository repo, String id) {
+
+        this.qualifier = qualifier;
+        this.requestToken = requestToken;
+        this.accessToken = accessToken;
+        this.verifier = verifier;
+        this.userProfile = userProfile;
+        this.repo = repo;
+        this.id = id;
+    }
+
+    OAuthSession() {
+        qualifier = null;
+        id = "NULL";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getId() {
+        return id;
+    }
 
     /**
      * @return the repository which contains this session
      */
-    UserSessionRepository getRepo();
+    public UserSessionRepository getRepo() {
+        return repo;
+    }
 
     /**
      * Attach this Session the given Repository
      *
      * @param repo the repository that will contain this session
      */
-    void setRepo(UserSessionRepository repo);
+    public void setRepo(UserSessionRepository repo) {
+        this.repo = repo;
+    }
 
     /**
      * @return the requestToken
      */
-    Token getRequestToken();
+    public Token getRequestToken() {
+        return requestToken;
+    }
 
     /**
      * @param requestToken the requestToken to set
      */
-    void setRequestToken(Token requestToken);
+    public void setRequestToken(Token requestToken) {
+        this.requestToken = requestToken;
+    }
 
     /**
      * @return the accessToken
      */
-    Token getAccessToken();
+    public Token getAccessToken() {
+        return accessToken;
+    }
 
     /**
      * @param accessToken the accessToken to set
      */
-    void setAccessToken(Token accessToken);
+    public void setAccessToken(Token accessToken) {
+        this.accessToken = accessToken;
+    }
 
     /**
      * @return the verifier
      */
-    String getVerifier();
+    public String getVerifier() {
+        return verifier;
+    }
 
     /**
      * @param verifier the verifier to set
      */
-    void setVerifier(String verifier);
+    public void setVerifier(String verifier) {
+        this.verifier = verifier;
+    }
 
     /**
      * @return the connected userProfile
      */
-    UserProfile getUserProfile();
+    public UserProfile getUserProfile() {
+        return userProfile;
+    }
 
     /**
      * @param userProfile to set
      */
-    void setUserProfile(UserProfile userProfile);
+    public void setUserProfile(UserProfile userProfile) {
+        this.userProfile = userProfile;
+    }
 
     /**
      * @return the annotation for the current Social Media
      */
-    Annotation getServiceQualifier();
+    public Annotation getServiceQualifier() {
+        return qualifier;
+    }
 
     /**
      * @return true if the session is active
      */
-    boolean isConnected();
+    public boolean isConnected() {
+        return accessToken != null;
+    }
 
     /**
      * @return the name of the session to display for user
      */
-    String getName();
+    public String getName() {
+        return toString();
+    }
+
+    @Override
+    public String toString() {
+        return getServiceName() + " - " + (isConnected() ? getUserProfile().getFullName() : "not connected");
+    }
 
     /**
      * @return the name of the service
      */
-    String getServiceName();
+    public String getServiceName() {
+        return AgoravaContext.getQualifierToService().get(getServiceQualifier());
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((userProfile == null) ? 0 : userProfile.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        OAuthSession other = (OAuthSession) obj;
+        if (userProfile == null) {
+            if (other.userProfile != null)
+                return false;
+        } else if (!userProfile.equals(other.userProfile))
+            return false;
+        return true;
+    }
+
+
 }

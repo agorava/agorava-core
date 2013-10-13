@@ -20,7 +20,6 @@ import org.agorava.api.atinject.Current;
 import org.agorava.api.oauth.OAuthSession;
 import org.agorava.api.storage.UserSessionRepository;
 
-import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
@@ -46,7 +45,6 @@ public class InSessionProducer implements Serializable {
 
     @Produces
     @Current
-    @RequestScoped
     @Named
     public OAuthSession getCurrentSession() {
         return repository.getCurrent();

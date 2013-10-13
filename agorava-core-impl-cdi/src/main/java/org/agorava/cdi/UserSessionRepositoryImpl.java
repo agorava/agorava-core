@@ -21,8 +21,8 @@ import org.agorava.AgoravaContext;
 import org.agorava.api.event.OAuthComplete;
 import org.agorava.api.oauth.OAuthService;
 import org.agorava.api.oauth.OAuthSession;
+import org.agorava.api.oauth.OAuthSessionBuilder;
 import org.agorava.api.storage.UserSessionRepository;
-import org.agorava.oauth.OAuthSessionImpl;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.event.Observes;
@@ -59,7 +59,7 @@ public class UserSessionRepositoryImpl implements UserSessionRepository {
 
     private List<String> listOfServices;
 
-    private OAuthSession currentSession = OAuthSessionImpl.NULL;
+    private OAuthSession currentSession = OAuthSession.NULL;
 
     private String id = UUID.randomUUID().toString();
 
@@ -130,8 +130,8 @@ public class UserSessionRepositoryImpl implements UserSessionRepository {
 
     @Override
     public void add(OAuthSession elt) {
-        if (elt.getClass() != OAuthSessionImpl.class)
-            elt = get(elt.getId());
+        if (elt.getClass() != OAuthSession.class)
+            elt = new OAuthSessionBuilder().readFromOAuthSession(elt).build();
         activeSessions.add(elt); //TODO : elt could be a proxy : we should test and copy it.
     }
 
@@ -170,8 +170,7 @@ public class UserSessionRepositoryImpl implements UserSessionRepository {
     public String initNewSession(String servType) {
         OAuthSession res;
         Annotation qualifier = getServicesToQualifier().get(servType);
-        res = new OAuthSessionImpl(servType);
-        res.setRepo(this);
+        res = new OAuthSessionBuilder().providerName(servType).repo(this).build();
         setCurrent(res);
 
         return getCurrentService().getAuthorizationUrl();
