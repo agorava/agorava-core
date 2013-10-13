@@ -162,7 +162,7 @@ public class OAuthSession implements Identifiable {
      * @return true if the session is active
      */
     public boolean isConnected() {
-        return accessToken != null;
+        return userProfile != null;
     }
 
     /**
@@ -206,6 +206,8 @@ public class OAuthSession implements Identifiable {
                 return false;
         } else if (!userProfile.equals(other.userProfile))
             return false;
+        if (id != null)
+            return id.equals(other.getId());
         return true;
     }
 
