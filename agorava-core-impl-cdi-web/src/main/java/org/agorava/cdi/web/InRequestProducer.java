@@ -32,25 +32,27 @@ import javax.inject.Named;
  */
 
 @SessionScoped
-@Exclude(onExpression = "producerScope!=session")
-public class InSessionProducer extends OauthSessionProducer {
+@Exclude(onExpression = "producerScope!=request")
+public class InRequestProducer extends OauthSessionProducer {
 
     @Inject
     UserSessionRepository repository;
 
+    @Override
     @Produces
     @Current
     @SessionScoped
     protected UserSessionRepository getCurrentRepo() {
-        System.out.println("I'm here");
+        System.out.println("here");
         return repository;
     }
 
+    @Override
     @Produces
     @Current
     @Named
     protected OAuthSession getCurrentSession() {
-        System.out.println("I'm there");
+        System.out.println("there");
         return repository.getCurrent();
     }
 

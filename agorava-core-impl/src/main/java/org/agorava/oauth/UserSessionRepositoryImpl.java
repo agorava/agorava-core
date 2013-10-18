@@ -15,31 +15,18 @@
  */
 
 
-package org.agorava.cdi;
+package org.agorava.oauth;
 
-import org.agorava.AgoravaContext;
-import org.agorava.api.event.OAuthComplete;
-import org.agorava.api.oauth.OAuthService;
 import org.agorava.api.oauth.OAuthSession;
 import org.agorava.api.oauth.OAuthSessionBuilder;
 import org.agorava.api.storage.UserSessionRepository;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.event.Observes;
-import javax.enterprise.inject.Any;
-import javax.enterprise.inject.Instance;
-import javax.inject.Inject;
-import java.lang.annotation.Annotation;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-
-import static org.agorava.AgoravaContext.getServicesToQualifier;
 
 /**
  * {@inheritDoc}
@@ -53,11 +40,6 @@ public class UserSessionRepositoryImpl implements UserSessionRepository {
 
     private final Set<OAuthSession> activeSessions = new HashSet<OAuthSession>();
 
-    @Inject
-    @Any
-    private Instance<OAuthService> serviceInstances;
-
-    private List<String> listOfServices;
 
     private OAuthSession currentSession = OAuthSession.NULL;
 
@@ -132,49 +114,7 @@ public class UserSessionRepositoryImpl implements UserSessionRepository {
     public void add(OAuthSession elt) {
         if (elt.getClass() != OAuthSession.class)
             elt = new OAuthSessionBuilder().readFromOAuthSession(elt).build();
-        activeSessions.add(elt); //TODO : elt could be a proxy : we should test and copy it.
-    }
-
-    @PostConstruct
-    void init() {
-        listOfServices = new ArrayList<String>(AgoravaContext.getSocialRelated());
-    }
-
-    @Override
-    public List<String> getListOfServices() {
-        return listOfServices;
-    }
-
-    @Override
-    public OAuthService getCurrentService() {
-        return serviceInstances.select(getCurrent().getServiceQualifier()).get();
-    }
-
-    @Override
-    public boolean isCurrentServiceConnected() {
-        return getCurrentService() != null && getCurrentService().isConnected();
-    }
-
-    @Override
-    public synchronized void connectCurrentService() {
-        getCurrentService().initAccessToken();
-    }
-
-    private void processOAuthComplete(@Observes OAuthComplete event) {
-        OAuthSession session = event.getEventData();
-        UserSessionRepository repository = session.getRepo();
-        repository.add(session);
-    }
-
-    @Override
-    public String initNewSession(String servType) {
-        OAuthSession res;
-        Annotation qualifier = getServicesToQualifier().get(servType);
-        res = new OAuthSessionBuilder().providerName(servType).repo(this).build();
-        setCurrent(res);
-
-        return getCurrentService().getAuthorizationUrl();
-
+        activeSessions.add(elt);
     }
 
     @Override

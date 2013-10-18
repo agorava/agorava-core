@@ -188,7 +188,7 @@ public class OAuthSession implements Identifiable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((userProfile == null) ? 0 : userProfile.hashCode());
+        result = prime * result + ((userProfile == null) ? id.hashCode() : userProfile.hashCode());
         return result;
     }
 
@@ -201,14 +201,10 @@ public class OAuthSession implements Identifiable {
         if (getClass() != obj.getClass())
             return false;
         OAuthSession other = (OAuthSession) obj;
-        if (userProfile == null) {
-            if (other.userProfile != null)
-                return false;
-        } else if (!userProfile.equals(other.userProfile))
-            return false;
-        if (id != null)
+        if (userProfile != null)
+            return userProfile.equals(other.userProfile);
+        else
             return id.equals(other.getId());
-        return true;
     }
 
 

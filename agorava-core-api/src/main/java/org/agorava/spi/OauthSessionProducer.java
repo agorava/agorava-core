@@ -14,17 +14,21 @@
  * limitations under the License.
  */
 
-package org.agorava.api.storage;
+package org.agorava.spi;
 
 import org.agorava.api.oauth.OAuthSession;
+import org.agorava.api.storage.UserSessionRepository;
+
+import java.io.Serializable;
 
 /**
- * Allows to manage multiple OAuth Session. The connection to service are backed by a Set to
- * avoid null or duplicate connection. Uniqueness of a connection is based on service type and User name on the service
- *
  * @author Antoine Sabot-Durand
  */
-public interface UserSessionRepository extends Repository<OAuthSession>, Identifiable {
+public abstract class OauthSessionProducer implements Serializable {
+    protected OauthSessionProducer() {
+    }
 
+    protected abstract UserSessionRepository getCurrentRepo();
 
+    protected abstract OAuthSession getCurrentSession();
 }

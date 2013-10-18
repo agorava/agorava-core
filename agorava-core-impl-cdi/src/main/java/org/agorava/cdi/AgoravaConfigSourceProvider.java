@@ -14,17 +14,29 @@
  * limitations under the License.
  */
 
-package org.agorava.api.storage;
+package org.agorava.cdi;
 
-import org.agorava.api.oauth.OAuthSession;
+import org.apache.deltaspike.core.spi.config.ConfigSource;
+import org.apache.deltaspike.core.spi.config.ConfigSourceProvider;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Allows to manage multiple OAuth Session. The connection to service are backed by a Set to
- * avoid null or duplicate connection. Uniqueness of a connection is based on service type and User name on the service
- *
  * @author Antoine Sabot-Durand
  */
-public interface UserSessionRepository extends Repository<OAuthSession>, Identifiable {
+public class AgoravaConfigSourceProvider implements ConfigSourceProvider {
+
+    private List<ConfigSource> sources = new ArrayList<ConfigSource>();
 
 
+    public AgoravaConfigSourceProvider() {
+        getConfigSources().add(new AgoravaPropertyFileConfigSource("agorava"));
+
+    }
+
+    @Override
+    public List<ConfigSource> getConfigSources() {
+        return sources;
+    }
 }

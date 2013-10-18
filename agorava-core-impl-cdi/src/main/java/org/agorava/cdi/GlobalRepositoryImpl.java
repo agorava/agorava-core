@@ -19,6 +19,7 @@ package org.agorava.cdi;
 import org.agorava.api.oauth.OAuthSession;
 import org.agorava.api.storage.GlobalRepository;
 import org.agorava.api.storage.UserSessionRepository;
+import org.agorava.oauth.UserSessionRepositoryImpl;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.util.Collection;
