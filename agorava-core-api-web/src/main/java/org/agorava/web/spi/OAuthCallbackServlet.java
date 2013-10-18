@@ -16,30 +16,50 @@
 
 package org.agorava.web.spi;
 
-import org.agorava.api.oauth.OAuthService;
+import org.agorava.api.exception.AgoravaException;
+import org.agorava.api.service.SessionService;
 
+import javax.inject.Inject;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
+impcxccxort javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
  * @author Antoine Sabot-Durand
  */
+@WebServlet(value = "/callback", name = "OAuthCallBackCdi")
+public  class OAuthCallbackServlet extends HttpServlet {
 
-public abstract class OAuthCallbackServlet extends HttpServlet {
+    @Inject
+    SessionService sessionService;
 
-    protected abstract OAuthService getOAuthService();
+    protected void renderResponse(HttpServletRequest req, HttpServletResponse resp) {
+           ServletOutputStream os = null;
+           try {
+               os = resp.getOutputStream();
+               os.println("<script type=\"text/javascript\">");
+               os.println("function moveOn() {\n" +
+                       "            window.opener.location.reload();\n" +
+                       "            window.close();\n" +
+                       "        }\n" +
+                       "moveOn();");
+               os.println("</script>");
+               os.flush();
+               os.close();
+           } catch (IOException e) {
+               throw new AgoravaException(e);
+           }
 
-    protected abstract void renderResponse(HttpServletRequest req, HttpServletResponse resp);
+       }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        OAuthService service = getOAuthService();
-        String verifier = req.getParameter(service.getVerifierParamName());
-        service.setVerifier(verifier);
-        service.initAccessToken();
+        String verifier = req.getParameter(sessionService.getCurrentService().getVerifierParamName());
+        sessionService.completeSession(verifier);
         renderResponse(req, resp);
     }
 }

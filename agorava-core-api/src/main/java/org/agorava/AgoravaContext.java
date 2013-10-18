@@ -17,7 +17,9 @@
 package org.agorava;
 
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -37,6 +39,8 @@ public class AgoravaContext {
     private static Map<String, Annotation> servicesToQualifier = new HashMap<String, Annotation>();
 
     private static Map<Annotation, String> qualifierToService = new HashMap<Annotation, String>();
+
+    private static List<String> listOfServices = null;
 
 
     /**
@@ -72,5 +76,15 @@ public class AgoravaContext {
      */
     public static Set<String> getSocialRelated() {
         return getServicesToQualifier().keySet();
+    }
+
+    /**
+     *
+     * @return the list of all service's names present in the application
+     */
+    public static List<String> getListOfServices() {
+        if(listOfServices == null)
+            listOfServices = new ArrayList<String>(getSocialRelated());
+        return listOfServices;
     }
 }

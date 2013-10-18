@@ -63,11 +63,11 @@ public interface OAuthService extends RestService {
      */
     void setVerifier(String verifierStr);
 
-    /**
+  /*  *//**
      * Initialize the OAuth access token after the service gave an authorization with the Verifier
-     */
+     *//*
     void initAccessToken();
-
+*/
     /**
      * Send an OAuth request signed without any parameter
      *

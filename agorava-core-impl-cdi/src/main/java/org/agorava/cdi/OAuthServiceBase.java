@@ -18,8 +18,7 @@ package org.agorava.cdi;
 
 import org.agorava.api.atinject.Current;
 import org.agorava.api.atinject.InjectWithQualifier;
-import org.agorava.api.event.OAuthComplete;
-import org.agorava.api.event.SocialEvent;
+import org.agorava.api.exception.AgoravaException;
 import org.agorava.api.oauth.OAuthRequest;
 import org.agorava.api.oauth.OAuthService;
 import org.agorava.api.oauth.OAuthSession;
@@ -31,8 +30,6 @@ import org.agorava.api.rest.Verb;
 import org.agorava.api.service.JsonMapperService;
 import org.agorava.rest.OAuthRequestImpl;
 
-import javax.enterprise.event.Event;
-import javax.enterprise.inject.Any;
 import javax.inject.Inject;
 import java.text.MessageFormat;
 import java.util.Map;
@@ -46,10 +43,6 @@ import static org.agorava.api.rest.Verb.PUT;
  */
 public abstract class OAuthServiceBase implements OAuthService {
 
-
-    @Inject
-    @Any
-    Event<OAuthComplete> completeEvt;
 
     @Inject
     @Current
@@ -72,24 +65,6 @@ public abstract class OAuthServiceBase implements OAuthService {
     @Override
     public JsonMapperService getJsonMapper() {
         return mapperService;
-    }
-
-
-    @Override
-    public synchronized void initAccessToken() {
-        OAuthSession session = getSession();
-        if (session.getAccessToken() == null)
-            session.setAccessToken(getAccessToken(session.getRequestToken(), session.getVerifier()));
-        if (session.getAccessToken() != null) {
-            session.setRequestToken(null);
-            completeEvt.select(session.getServiceQualifier()).fire(new OAuthComplete(SocialEvent.Status.SUCCESS, "",
-                    session));
-
-            //TODO: reactivate logger
-        } else {
-            // FIXME Launch an exception !!
-        }
-
     }
 
     @Override
@@ -126,7 +101,11 @@ public abstract class OAuthServiceBase implements OAuthService {
 
     @Override
     public OAuthSession getSession() {
-        return session;
+        if (session.getServiceQualifier().equals(config.getQualifier()))
+            return session;
+        else
+            throw new AgoravaException("Inconsistent sate in OauthService. Session provider is " + session.getServiceName()
+                    + " while service provider is " + getSocialMediaName());
     }
 
     @Override
