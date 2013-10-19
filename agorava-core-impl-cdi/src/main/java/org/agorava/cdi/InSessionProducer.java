@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package org.agorava.cdi.web;
+package org.agorava.cdi;
 
 import org.agorava.api.atinject.Current;
 import org.agorava.api.oauth.OAuthSession;
 import org.agorava.api.storage.UserSessionRepository;
-import org.agorava.spi.OauthSessionProducer;
 import org.apache.deltaspike.core.api.exclude.Exclude;
 
 import javax.enterprise.context.SessionScoped;
+import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Produces;
-import javax.inject.Inject;
+import javax.enterprise.inject.spi.InjectionPoint;
 import javax.inject.Named;
 
 /**
@@ -32,18 +32,14 @@ import javax.inject.Named;
  */
 
 @SessionScoped
-@Exclude(onExpression = "producerScope!=request")
-public class InRequestProducer extends OauthSessionProducer {
-
-    @Inject
-    UserSessionRepository repository;
+@Exclude(onExpression = "producerScope!=session")
+public class InSessionProducer extends InRequestProducer {
 
     @Override
     @Produces
     @Current
     @SessionScoped
     protected UserSessionRepository getCurrentRepo() {
-        System.out.println("here");
         return repository;
     }
 
@@ -52,9 +48,13 @@ public class InRequestProducer extends OauthSessionProducer {
     @Current
     @Named
     protected OAuthSession getCurrentSession() {
-        System.out.println("there");
-        return repository.getCurrent();
+        return super.getCurrentSession();
     }
 
-
+    @Override
+    @Produces
+    @Any
+    protected OAuthSession getCurrentTypedSession(InjectionPoint ip) {
+        return super.getCurrentTypedSession(ip);
+    }
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.agorava.web.spi;
+package org.agorava.web;
 
 import org.agorava.api.exception.AgoravaException;
 import org.agorava.api.service.SessionService;
@@ -32,29 +32,29 @@ import java.io.IOException;
  * @author Antoine Sabot-Durand
  */
 @WebServlet(value = "/callback", name = "OAuthCallBackCdi")
-public  class OAuthCallbackServlet extends HttpServlet {
+public class OAuthCallbackServlet extends HttpServlet {
 
     @Inject
     SessionService sessionService;
 
     protected void renderResponse(HttpServletRequest req, HttpServletResponse resp) {
-           ServletOutputStream os = null;
-           try {
-               os = resp.getOutputStream();
-               os.println("<script type=\"text/javascript\">");
-               os.println("function moveOn() {\n" +
-                       "            window.opener.location.reload();\n" +
-                       "            window.close();\n" +
-                       "        }\n" +
-                       "moveOn();");
-               os.println("</script>");
-               os.flush();
-               os.close();
-           } catch (IOException e) {
-               throw new AgoravaException(e);
-           }
+        ServletOutputStream os = null;
+        try {
+            os = resp.getOutputStream();
+            os.println("<script type=\"text/javascript\">");
+            os.println("function moveOn() {\n" +
+                    "            window.opener.location.reload();\n" +
+                    "            window.close();\n" +
+                    "        }\n" +
+                    "moveOn();");
+            os.println("</script>");
+            os.flush();
+            os.close();
+        } catch (IOException e) {
+            throw new AgoravaException(e);
+        }
 
-       }
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
