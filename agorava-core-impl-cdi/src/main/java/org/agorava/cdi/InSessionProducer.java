@@ -22,10 +22,8 @@ import org.agorava.api.storage.UserSessionRepository;
 import org.apache.deltaspike.core.api.exclude.Exclude;
 
 import javax.enterprise.context.SessionScoped;
-import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
-import javax.inject.Named;
 
 /**
  * @author Antoine Sabot-Durand
@@ -39,22 +37,14 @@ public class InSessionProducer extends InRequestProducer {
     @Produces
     @Current
     @SessionScoped
-    protected UserSessionRepository getCurrentRepo() {
+    public UserSessionRepository getCurrentRepo() {
         return repository;
     }
 
-    @Override
-    @Produces
-    @Current
-    @Named
-    protected OAuthSession getCurrentSession() {
-        return super.getCurrentSession();
-    }
 
     @Override
     @Produces
-    @Any
-    protected OAuthSession getCurrentTypedSession(InjectionPoint ip) {
-        return super.getCurrentTypedSession(ip);
+    public OAuthSession getCurrentSession(InjectionPoint ip) {
+        return super.getCurrentSession(ip);
     }
 }

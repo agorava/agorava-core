@@ -19,6 +19,7 @@ package org.agorava.cdi;
 import org.agorava.api.atinject.Current;
 import org.agorava.api.event.OAuthComplete;
 import org.agorava.api.event.SocialEvent;
+import org.agorava.api.exception.AgoravaException;
 import org.agorava.api.oauth.OAuthService;
 import org.agorava.api.oauth.OAuthSession;
 import org.agorava.api.oauth.OAuthSessionBuilder;
@@ -65,7 +66,7 @@ public class SessionServiceImpl implements SessionService {
     @Inject
     SessionServiceImpl(@Current Instance<UserSessionRepository> repositories) {
         if (repositories.isUnsatisfied())
-            repository = fakerepo;
+            throw new AgoravaException("No User repo available, you should activate a producer bean");
         else
             repository = repositories.get();
     }
@@ -88,7 +89,8 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public synchronized void completeSession() {
         if (getCurrentSession().getAccessToken() == null)
-            getCurrentSession().setAccessToken(getCurrentService().getAccessToken(getCurrentSession().getRequestToken(), getCurrentSession().getVerifier()));
+            getCurrentSession().setAccessToken(getCurrentService().getAccessToken(getCurrentSession().getRequestToken(),
+                    getCurrentSession().getVerifier()));
         if (getCurrentSession().getAccessToken() != null) {
             getCurrentSession().setRequestToken(null);
             getCurrentSession().setUserProfile(getCurrentUserProfileService().getUserProfile());

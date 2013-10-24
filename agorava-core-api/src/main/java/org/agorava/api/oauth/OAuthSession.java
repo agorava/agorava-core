@@ -37,7 +37,7 @@ public class OAuthSession implements Identifiable {
     /**
      * A null OAuthSession used to avoid NPE
      */
-    public static OAuthSession NULL = new OAuthSession();
+    public static OAuthSession NULL = new OAuthSession("NULL");
 
     private final Annotation qualifier;
 
@@ -66,9 +66,9 @@ public class OAuthSession implements Identifiable {
         this.id = id;
     }
 
-    OAuthSession() {
+    OAuthSession(String id) {
         qualifier = null;
-        id = "NULL";
+        this.id = id;
     }
 
     /**

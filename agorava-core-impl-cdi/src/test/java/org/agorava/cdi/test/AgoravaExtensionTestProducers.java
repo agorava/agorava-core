@@ -16,9 +16,6 @@
 
 package org.agorava.cdi.test;
 
-import org.agorava.api.atinject.Current;
-import org.agorava.api.oauth.OAuthSession;
-import org.agorava.api.oauth.OAuthSessionBuilder;
 import org.agorava.api.oauth.application.OAuthAppSettings;
 import org.agorava.api.oauth.application.PropertyOAuthAppSettingsBuilder;
 
@@ -47,12 +44,12 @@ public class AgoravaExtensionTestProducers {
         return builder.prefix("test").build();
     }
 
-    @ApplicationScoped
+ /*   @ApplicationScoped
     @Produces
     @Current
     @FakeService
     public OAuthSession produceAppSession() {
 
         return new OAuthSessionBuilder().qualifier(FakeServiceLiteral.INSTANCE).build();
-    }
+    }*/
 }

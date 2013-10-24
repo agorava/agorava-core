@@ -31,6 +31,7 @@ import org.agorava.api.service.JsonMapperService;
 import org.agorava.rest.OAuthRequestImpl;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 import java.text.MessageFormat;
 import java.util.Map;
 
@@ -44,9 +45,9 @@ import static org.agorava.api.rest.Verb.PUT;
 public abstract class OAuthServiceBase implements OAuthService {
 
 
-    @Inject
+    @InjectWithQualifier
     @Current
-    OAuthSession session;
+    Provider<OAuthSession> sessions;
 
     @Inject
     JsonMapperService mapperService;
@@ -101,6 +102,7 @@ public abstract class OAuthServiceBase implements OAuthService {
 
     @Override
     public OAuthSession getSession() {
+        OAuthSession session = sessions.get();
         if (session.getServiceQualifier().equals(config.getQualifier()))
             return session;
         else

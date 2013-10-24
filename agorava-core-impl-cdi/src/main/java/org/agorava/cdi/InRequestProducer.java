@@ -24,12 +24,10 @@ import org.agorava.api.oauth.OAuthSessionBuilder;
 import org.agorava.api.storage.UserSessionRepository;
 import org.apache.deltaspike.core.api.exclude.Exclude;
 
-import javax.enterprise.context.SessionScoped;
-import javax.enterprise.inject.Any;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.util.Set;
@@ -38,9 +36,11 @@ import java.util.Set;
  * @author Antoine Sabot-Durand
  */
 
-@SessionScoped
+@RequestScoped
 @Exclude(onExpression = "producerScope!=request")
 public class InRequestProducer implements Serializable {
+
+    private static final long serialVersionUID = 6446160199657772110L;
 
     @Inject
     UserSessionRepository repository;
@@ -48,24 +48,18 @@ public class InRequestProducer implements Serializable {
 
     @Produces
     @Current
-    @SessionScoped
-    protected UserSessionRepository getCurrentRepo() {
+    @RequestScoped
+    public UserSessionRepository getCurrentRepo() {
         return repository;
     }
 
 
     @Produces
-    @Current
-    @Named
-    protected OAuthSession getCurrentSession() {
-        return repository.getCurrent();
-    }
-
-
-    @Produces
-    @Any
-    protected OAuthSession getCurrentTypedSession(InjectionPoint ip) {
+    public OAuthSession getCurrentSession(InjectionPoint ip) {
+        if (ip == null)
+            return repository.getCurrent();
         Set<Annotation> quals = ip.getQualifiers();
+        OAuthSession res;
 
         Annotation service = null;
         boolean iscurrent = false;
@@ -79,12 +73,15 @@ public class InRequestProducer implements Serializable {
             if (qual.annotationType().equals(Current.class))
                 iscurrent = true;
         }
-        if (service != null)
-            return new OAuthSessionBuilder().qualifier(service).repo(repository).build();
-        else if (iscurrent)
+        if (iscurrent) {
+            if (service != null) {
+                if (!service.equals(repository.getCurrent().getServiceQualifier())) {
+                    repository.setCurrent(new OAuthSessionBuilder().qualifier(service).repo(repository).build());
+                }
+            }
             return repository.getCurrent();
-        else
-            return null;
+        }
+        throw new UnsupportedOperationException("Cannot inject session whitout Current Qualifier in " + ip);
     }
 
 

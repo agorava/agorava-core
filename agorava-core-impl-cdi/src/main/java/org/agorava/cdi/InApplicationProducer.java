@@ -14,21 +14,37 @@
  * limitations under the License.
  */
 
-package org.agorava.spi;
+package org.agorava.cdi;
 
+import org.agorava.api.atinject.Current;
 import org.agorava.api.oauth.OAuthSession;
 import org.agorava.api.storage.UserSessionRepository;
+import org.apache.deltaspike.core.api.exclude.Exclude;
 
-import java.io.Serializable;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Produces;
+import javax.enterprise.inject.spi.InjectionPoint;
 
 /**
  * @author Antoine Sabot-Durand
  */
-public abstract class OauthSessionProducer implements Serializable {
-    protected OauthSessionProducer() {
+
+@ApplicationScoped
+@Exclude(onExpression = "producerScope!=application")
+public class InApplicationProducer extends InRequestProducer {
+
+    @Override
+    @Produces
+    @Current
+    @ApplicationScoped
+    public UserSessionRepository getCurrentRepo() {
+        return repository;
     }
 
-    protected abstract UserSessionRepository getCurrentRepo();
 
-    protected abstract OAuthSession getCurrentSession();
+    @Override
+    @Produces
+    public OAuthSession getCurrentSession(InjectionPoint ip) {
+        return super.getCurrentSession(ip);
+    }
 }

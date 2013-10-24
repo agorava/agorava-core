@@ -46,6 +46,7 @@ public class AgoravaTestDeploy {
                     }
                 }, "org.agorava")
                 .addAsResource("META-INF/services/javax.enterprise.inject.spi.Extension")
+                .addAsResource("META-INF/services/org.apache.deltaspike.core.spi.config.ConfigSourceProvider")
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
 
         JavaArchive[] libs = Maven.resolver()
@@ -58,10 +59,12 @@ public class AgoravaTestDeploy {
                 .create(WebArchive.class, "test.war")
                 .addClasses(AgoravaExtensionTestProducers.class, FakeProvider.class, FakeProvider2.class,
                         FakeService.class, FakeService2.class,
-                        FakeServiceLiteral.class, FakeService2Literal.class, FakeServiceImpl.class, FakeUserProfileService.class)
+                        FakeServiceLiteral.class, FakeService2Literal.class, FakeServiceImpl.class,
+                        FakeUserProfileService.class)
                 .addAsLibraries(testJar)
                 .addAsLibraries(libs)
-                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
+                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
+                .addAsWebInfResource("agorava.properties");
 
         System.out.println(System.getProperty("arquillian"));
         return ret;

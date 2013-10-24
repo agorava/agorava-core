@@ -17,7 +17,6 @@
 package org.agorava.cdi.extensions;
 
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Maps;
 import org.agorava.AgoravaContext;
 import org.agorava.api.atinject.GenericBean;
 import org.agorava.api.atinject.InjectWithQualifier;
@@ -25,12 +24,15 @@ import org.agorava.api.atinject.ProviderRelated;
 import org.agorava.api.exception.AgoravaException;
 import org.agorava.api.oauth.OAuth;
 import org.agorava.api.oauth.OAuthService;
+import org.agorava.api.oauth.OAuthSession;
 import org.agorava.api.oauth.application.OAuthAppSettings;
 import org.agorava.api.oauth.application.OAuthAppSettingsBuilder;
 import org.agorava.api.oauth.application.OAuthApplication;
+import org.agorava.cdi.CurrentLiteral;
 import org.agorava.spi.ProviderConfigOauth;
 import org.apache.deltaspike.core.api.literal.AnyLiteral;
 import org.apache.deltaspike.core.util.bean.BeanBuilder;
+import org.apache.deltaspike.core.util.bean.WrappingBeanBuilder;
 import org.apache.deltaspike.core.util.metadata.builder.AnnotatedTypeBuilder;
 
 import javax.enterprise.context.Dependent;
@@ -51,6 +53,7 @@ import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ProcessAnnotatedType;
 import javax.enterprise.inject.spi.ProcessBean;
 import javax.enterprise.inject.spi.ProcessProducer;
+import javax.enterprise.inject.spi.ProcessProducerMethod;
 import javax.enterprise.inject.spi.Producer;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
@@ -63,7 +66,6 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import static com.google.common.collect.Sets.newHashSet;
 import static java.util.logging.Level.INFO;
 import static java.util.logging.Level.WARNING;
 
@@ -76,16 +78,18 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
 
     private static final long serialVersionUID = 1L;
 
-    private static final Set<Annotation> servicesQualifiersConfigured = newHashSet();
+    private Set<Annotation> servicesQualifiersConfigured = new HashSet<Annotation>();
 
     private static Logger log = Logger.getLogger(AgoravaExtension.class.getName());
 
     private Map<Annotation, Set<Type>> overridedGenericServices = new HashMap<Annotation, Set<Type>>();
 
-    private Map<OAuth.OAuthVersion, Class<? extends OAuthService>> genericsOAuthProviders = Maps.newHashMap();
+    private Map<OAuth.OAuthVersion, Class<? extends OAuthService>> genericsOAuthProviders = new HashMap<OAuth.OAuthVersion,
+            Class<? extends OAuthService>>();
 
     private Map<Annotation, OAuth.OAuthVersion> service2OauthVersion = new HashMap<Annotation, OAuth.OAuthVersion>();
 
+    private Bean osb;
 
     /**
      * @return the set of all service's qualifiers present in the application
@@ -195,6 +199,7 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
     public void processOAuthSettingsProducer(@Observes final ProcessProducer<?, OAuthAppSettings> pp) {
         final AnnotatedMember<OAuthAppSettings> annotatedMember = (AnnotatedMember<OAuthAppSettings>) pp.getAnnotatedMember();
 
+        log.log(INFO, "Qualifiers configured {0}", servicesQualifiersConfigured);
         Annotation qual = null;
         try {
             qual = Iterables.getLast(AnnotationUtils.getAnnotationsWithMeta(annotatedMember,
@@ -272,6 +277,10 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
         }
     }
 
+    private void captureOauthSessionProducer(@Observes ProcessProducerMethod<OAuthSession, ?> pb) {
+        osb = pb.getBean();
+    }
+
     /*
     private void captureGenericOAuthProvider(@Observes ProcessBean<? extends OAuthProvider> pb) {
         Bean<? extends OAuthProvider> bean = pb.getBean();
@@ -331,6 +340,13 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
 
             beanRegisterer(clazz, qual, Dependent.class, abd, beanManager, OAuthService.class);
         }
+
+
+        WrappingBeanBuilder<OAuthSession> wbp = new WrappingBeanBuilder<OAuthSession>(osb, beanManager);
+        wbp.readFromType(beanManager.createAnnotatedType(OAuthSession.class)).qualifiers(servicesQualifiersConfigured)
+                .addQualifiers(new AnyLiteral(), CurrentLiteral.INSTANCE).scope(Dependent.class).name("currentSession");
+        Bean res = wbp.create();
+        abd.addBean(res);
 
     }
 
