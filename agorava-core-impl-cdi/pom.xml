@@ -45,6 +45,7 @@
         <dependency>
             <groupId>javax.enterprise</groupId>
             <artifactId>cdi-api</artifactId>
+            <version>${cdi.version}</version>
         </dependency>
 
         <dependency>
