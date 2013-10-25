@@ -45,7 +45,6 @@
         <dependency>
             <groupId>javax.enterprise</groupId>
             <artifactId>cdi-api</artifactId>
-            <version>${cdi.version}</version>
         </dependency>
 
         <dependency>
@@ -92,6 +91,8 @@
 
     </dependencies>
 
+    <!--
+    Removed to support test skipping if no profile used (AGOVA-58). Should be reintegrated somewhere for Arquillian sysprop
     <build>
         <plugins>
             <plugin>
@@ -122,6 +123,6 @@
                 </executions>
             </plugin>
         </plugins>
-    </build>
+    </build>-->
 
 </project>
