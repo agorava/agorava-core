@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package org.agorava.cdi;
+package org.agorava.oauth;
 
 import org.agorava.api.atinject.Current;
 import org.agorava.api.atinject.InjectWithQualifier;
-import org.agorava.api.exception.AgoravaException;
 import org.agorava.api.oauth.OAuthRequest;
 import org.agorava.api.oauth.OAuthService;
 import org.agorava.api.oauth.OAuthSession;
@@ -28,10 +27,11 @@ import org.agorava.api.oauth.application.OAuthAppSettings;
 import org.agorava.api.rest.Response;
 import org.agorava.api.rest.Verb;
 import org.agorava.api.service.JsonMapperService;
+import org.agorava.api.service.OAuthLifeCycleService;
+import org.agorava.api.storage.UserSessionRepository;
 import org.agorava.rest.OAuthRequestImpl;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 import java.text.MessageFormat;
 import java.util.Map;
 
@@ -45,9 +45,12 @@ import static org.agorava.api.rest.Verb.PUT;
 public abstract class OAuthServiceBase implements OAuthService {
 
 
-    @InjectWithQualifier
+    @Inject
+    OAuthLifeCycleService OAuthLifeCycleService;
+
+    @Inject
     @Current
-    Provider<OAuthSession> sessions;
+    UserSessionRepository repo;
 
     @Inject
     JsonMapperService mapperService;
@@ -102,12 +105,8 @@ public abstract class OAuthServiceBase implements OAuthService {
 
     @Override
     public OAuthSession getSession() {
-        OAuthSession session = sessions.get();
-        if (session.getServiceQualifier().equals(config.getQualifier()))
-            return session;
-        else
-            throw new AgoravaException("Inconsistent sate in OauthService. Session provider is " + session.getServiceName()
-                    + " while service provider is " + getSocialMediaName());
+        return OAuthLifeCycleService.getSessionForQualifier(config.getQualifier());
+
     }
 
     @Override

@@ -23,9 +23,9 @@ import org.agorava.api.exception.AgoravaException;
 import org.agorava.api.oauth.OAuthService;
 import org.agorava.api.oauth.OAuthSession;
 import org.agorava.api.oauth.OAuthSessionBuilder;
-import org.agorava.api.service.SessionService;
+import org.agorava.api.service.OAuthLifeCycleService;
+import org.agorava.api.storage.GlobalRepository;
 import org.agorava.api.storage.UserSessionRepository;
-import org.agorava.oauth.UserSessionRepositoryImpl;
 import org.agorava.spi.UserProfileService;
 
 import javax.enterprise.event.Event;
@@ -33,25 +33,24 @@ import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.agorava.AgoravaContext.getServicesToQualifier;
 
 /**
  * @author Antoine Sabot-Durand
  */
-public class SessionServiceImpl implements SessionService {
+public class OAuthLifeCycleServiceImpl implements OAuthLifeCycleService {
 
     private static final long serialVersionUID = 7320799247595986232L;
-
-    private static final UserSessionRepository fakerepo = new UserSessionRepositoryImpl();
 
     @Inject
     @Any
     private Event<OAuthComplete> completeEvt;
 
-    /*@Inject
-    @Current
-    private OAuthSession session;*/
+    @Inject
+    private GlobalRepository globalRepository;
 
     private UserSessionRepository repository;
 
@@ -64,7 +63,7 @@ public class SessionServiceImpl implements SessionService {
     private Instance<OAuthService> services;
 
     @Inject
-    SessionServiceImpl(@Current Instance<UserSessionRepository> repositories) {
+    OAuthLifeCycleServiceImpl(@Current Instance<UserSessionRepository> repositories) {
         if (repositories.isUnsatisfied())
             throw new AgoravaException("No User repo available, you should activate a producer bean");
         else
@@ -76,10 +75,20 @@ public class SessionServiceImpl implements SessionService {
         return services.select(getCurrentSession().getServiceQualifier()).get();
     }
 
+    @Override
     public OAuthSession getCurrentSession() {
         return repository.getCurrent();
     }
 
+    @Override
+    public void disconnect() {
+        repository.removeCurrent();
+    }
+
+    @Override
+    public void disconnect(OAuthSession session) {
+        repository.remove(session);
+    }
 
     @Override
     public UserProfileService getCurrentUserProfileService() {
@@ -87,7 +96,7 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
-    public synchronized void completeSession() {
+    public synchronized void endDance() {
         if (getCurrentSession().getAccessToken() == null)
             getCurrentSession().setAccessToken(getCurrentService().getAccessToken(getCurrentSession().getRequestToken(),
                     getCurrentSession().getVerifier()));
@@ -106,20 +115,60 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
-    public void completeSession(String verifier) {
+    public void endDance(String verifier) {
         getCurrentSession().setVerifier(verifier);
-        completeSession();
-        ;
+        endDance();
     }
 
     @Override
-    public String initNewSession(String servType) {
+    public OAuthSession createSessionForName(String providerName) {
         OAuthSession res;
-        Annotation qualifier = getServicesToQualifier().get(servType);
-        res = new OAuthSessionBuilder().providerName(servType).repo(repository).build();
-        repository.setCurrent(res);
-
-        return getCurrentService().getAuthorizationUrl();
-
+        Annotation qualifier = getServicesToQualifier().get(providerName);
+        return initSessionForQualifier(qualifier);
     }
+
+    @Override
+    public OAuthSession initSessionForQualifier(Annotation qualifier) {
+        OAuthSession res = new OAuthSessionBuilder().qualifier(qualifier).repo(unProxifyRepo(repository)).build();
+        repository.setCurrent(res);
+        return res;
+    }
+
+    private UserSessionRepository unProxifyRepo(UserSessionRepository repo) {
+        return globalRepository.get(repo.getId());
+    }
+
+    @Override
+    public OAuthSession getSessionForQualifier(Annotation qualifier) {
+        if (repository.getCurrent().equals(OAuthSession.NULL))
+            initSessionForQualifier(qualifier);
+        else if (!repository.getCurrent().getServiceQualifier().equals(qualifier))
+            throw new AgoravaException("Inconsistent state between repo and service. In repo Session provider is " +
+                    repository.getCurrent().getServiceName() + " while service provider is " + qualifier);
+
+        return repository.getCurrent();
+    }
+
+
+    @Override
+    public String startDance(String providerName) {
+        createSessionForName(providerName);
+        return getCurrentService().getAuthorizationUrl();
+    }
+
+    @Override
+    public String getVerifierParamName() {
+        return getCurrentService().getVerifierParamName();
+    }
+
+    @Override
+    public List<OAuthSession> getAllActiveSessions() {
+        return new ArrayList(repository.getAll());
+    }
+
+    @Override
+    public void setCurrentSession(OAuthSession session) {
+        repository.setCurrent(session);
+    }
+
 }

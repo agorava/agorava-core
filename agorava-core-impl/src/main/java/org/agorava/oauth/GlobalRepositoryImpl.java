@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package org.agorava.cdi;
+package org.agorava.oauth;
 
 import org.agorava.api.oauth.OAuthSession;
 import org.agorava.api.storage.GlobalRepository;
 import org.agorava.api.storage.UserSessionRepository;
-import org.agorava.oauth.UserSessionRepositoryImpl;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Singleton;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -31,7 +30,7 @@ import java.util.Set;
 /**
  * @author Antoine Sabot-Durand
  */
-@ApplicationScoped
+@Singleton
 public class GlobalRepositoryImpl implements GlobalRepository {
 
 

@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-package org.agorava.cdi;
+package org.agorava.oauth;
+
 
 import org.agorava.api.atinject.GenericBean;
 import org.agorava.api.atinject.InjectWithQualifier;
@@ -28,16 +29,11 @@ import org.agorava.api.rest.Response;
 import org.agorava.rest.OAuthRequestImpl;
 import org.agorava.spi.ProviderConfigOauth20;
 
-import static org.agorava.api.oauth.OAuth.OAuthVersion.TWO_FINAL;
+import static org.agorava.api.oauth.OAuth.OAuthVersion.TWO_DRAFT_11;
 
-
-/**
- * @author Antoine Sabot-Durand
- */
 @GenericBean
-@OAuth(TWO_FINAL)
-public class OAuth20FinalServiceImpl extends OAuth20ServiceImpl {
-
+@OAuth(TWO_DRAFT_11)
+public class OAuth20ServiceImpl extends OAuthServiceBase {
 
     @InjectWithQualifier
     ProviderConfigOauth20 api;
@@ -45,21 +41,52 @@ public class OAuth20FinalServiceImpl extends OAuth20ServiceImpl {
     @InjectWithQualifier
     OAuthAppSettings config;
 
-    @Override
+
+    /**
+     * {@inheritDoc}
+     */
     public Token getAccessToken(Token requestToken, Verifier verifier) {
         OAuthRequest request = new OAuthRequestImpl(api.getAccessTokenVerb(), api.getAccessTokenEndpoint());
-        request.addBodyParameter(OAuthConstants.CLIENT_ID, config.getApiKey());
-        request.addBodyParameter(OAuthConstants.CLIENT_SECRET, config.getApiSecret());
-        request.addBodyParameter(OAuthConstants.CODE, verifier.getValue());
-        request.addBodyParameter(OAuthConstants.REDIRECT_URI, config.getCallback());
-        request.addBodyParameter("grant_type", "authorization_code");
-        if (config.hasScope()) request.addBodyParameter(OAuthConstants.SCOPE, config.getScope());
+        request.addQuerystringParameter(OAuthConstants.CLIENT_ID, config.getApiKey());
+        request.addQuerystringParameter(OAuthConstants.CLIENT_SECRET, config.getApiSecret());
+        request.addQuerystringParameter(OAuthConstants.CODE, verifier.getValue());
+        request.addQuerystringParameter(OAuthConstants.REDIRECT_URI, config.getCallback());
+        if (config.hasScope()) request.addQuerystringParameter(OAuthConstants.SCOPE, config.getScope());
         Response response = request.send(); //todo:should check return code and launch ResponseException if it's not 200
         return api.getAccessTokenExtractor().extract(response.getBody());
     }
 
-    @Override
-    public String getVersion() {
-        return TWO_FINAL.getLabel();
+    /**
+     * {@inheritDoc}
+     */
+    public Token getRequestToken() {
+        throw new UnsupportedOperationException("Unsupported operation, please use 'startDance' and redirect your " +
+                "users there");
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getVersion() {
+        return TWO_DRAFT_11.getLabel();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void signRequest(Token accessToken, OAuthRequest request) {
+        request.addQuerystringParameter(OAuthConstants.ACCESS_TOKEN, accessToken.getToken());
+    }
+
+
+    @Override
+    public String getVerifierParamName() {
+        return OAuthConstants.CODE;
+    }
+
+    @Override
+    public String getAuthorizationUrl() {
+        return api.getAuthorizationUrl(config);
+    }
+
 }

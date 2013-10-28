@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.agorava.cdi;
+package org.agorava.oauth;
 
 import org.agorava.api.atinject.GenericBean;
 import org.agorava.api.atinject.InjectWithQualifier;

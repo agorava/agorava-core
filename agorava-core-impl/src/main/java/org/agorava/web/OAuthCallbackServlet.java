@@ -17,12 +17,11 @@
 package org.agorava.web;
 
 import org.agorava.api.exception.AgoravaException;
-import org.agorava.api.service.SessionService;
+import org.agorava.api.service.OAuthLifeCycleService;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,11 +30,11 @@ import java.io.IOException;
 /**
  * @author Antoine Sabot-Durand
  */
-@WebServlet(value = "/callback", name = "OAuthCallBackCdi")
+//@WebServlet(value = "/callback", name = "OAuthCallBackCdi")
 public class OAuthCallbackServlet extends HttpServlet {
 
     @Inject
-    SessionService sessionService;
+    OAuthLifeCycleService OAuthLifeCycleService;
 
     protected void renderResponse(HttpServletRequest req, HttpServletResponse resp) {
         ServletOutputStream os = null;
@@ -58,8 +57,8 @@ public class OAuthCallbackServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String verifier = req.getParameter(sessionService.getCurrentService().getVerifierParamName());
-        sessionService.completeSession(verifier);
+        String verifier = req.getParameter(OAuthLifeCycleService.getVerifierParamName());
+        OAuthLifeCycleService.endDance(verifier);
         renderResponse(req, resp);
     }
 }

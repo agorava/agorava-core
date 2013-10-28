@@ -21,6 +21,7 @@ import org.agorava.api.atinject.ProviderRelated;
 import org.agorava.api.exception.AgoravaException;
 import org.agorava.api.oauth.OAuthSession;
 import org.agorava.api.oauth.OAuthSessionBuilder;
+import org.agorava.api.storage.GlobalRepository;
 import org.agorava.api.storage.UserSessionRepository;
 import org.apache.deltaspike.core.api.exclude.Exclude;
 
@@ -43,19 +44,19 @@ public class InRequestProducer implements Serializable {
     private static final long serialVersionUID = 6446160199657772110L;
 
     @Inject
-    UserSessionRepository repository;
+    GlobalRepository globalRepository;
 
 
     @Produces
     @Current
     @RequestScoped
     public UserSessionRepository getCurrentRepo() {
-        return repository;
+        return globalRepository.createNew();
     }
 
 
     @Produces
-    public OAuthSession getCurrentSession(InjectionPoint ip) {
+    public OAuthSession getCurrentSession(InjectionPoint ip, @Current UserSessionRepository repository) {
         if (ip == null)
             return repository.getCurrent();
         Set<Annotation> quals = ip.getQualifiers();

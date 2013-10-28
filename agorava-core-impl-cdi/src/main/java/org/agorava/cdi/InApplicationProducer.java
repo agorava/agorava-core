@@ -38,13 +38,13 @@ public class InApplicationProducer extends InRequestProducer {
     @Current
     @ApplicationScoped
     public UserSessionRepository getCurrentRepo() {
-        return repository;
+        return super.getCurrentRepo();
     }
 
 
     @Override
     @Produces
-    public OAuthSession getCurrentSession(InjectionPoint ip) {
-        return super.getCurrentSession(ip);
+    public OAuthSession getCurrentSession(InjectionPoint ip, @Current UserSessionRepository repository) {
+        return super.getCurrentSession(ip, repository);
     }
 }

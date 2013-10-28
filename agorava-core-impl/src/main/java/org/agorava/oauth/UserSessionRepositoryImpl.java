@@ -33,7 +33,6 @@ import java.util.UUID;
  *
  * @author Antoine Sabot-Durand
  */
-
 public class UserSessionRepositoryImpl implements UserSessionRepository {
 
     private static final long serialVersionUID = 2681869484541158766L;
@@ -86,7 +85,7 @@ public class UserSessionRepositoryImpl implements UserSessionRepository {
     public boolean removeCurrent() {
         if (getCurrent() != null) {
             activeSessions.remove(getCurrent());
-            setCurrent(activeSessions.size() > 0 ? activeSessions.iterator().next() : null);
+            setCurrent(activeSessions.size() > 0 ? activeSessions.iterator().next() : OAuthSession.NULL);
             return true;
         }
         return false;

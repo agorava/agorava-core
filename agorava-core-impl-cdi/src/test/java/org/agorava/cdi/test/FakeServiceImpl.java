@@ -16,7 +16,7 @@
 
 package org.agorava.cdi.test;
 
-import org.agorava.cdi.OAuth10aServiceImpl;
+import org.agorava.oauth.OAuth10aServiceImpl;
 
 import javax.enterprise.context.ApplicationScoped;
 

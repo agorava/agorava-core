@@ -17,30 +17,51 @@
 package org.agorava.api.service;
 
 import org.agorava.api.oauth.OAuthService;
+import org.agorava.api.oauth.OAuthSession;
 import org.agorava.spi.UserProfileService;
 
 import java.io.Serializable;
+import java.lang.annotation.Annotation;
+import java.util.List;
 
 /**
  * @author Antoine Sabot-Durand
  */
-public interface SessionService extends Serializable{
+public interface OAuthLifeCycleService extends Serializable {
 
 
     OAuthService getCurrentService();
 
+    OAuthSession getCurrentSession();
+
+    void disconnect();
+
+    void disconnect(OAuthSession session);
+
     UserProfileService getCurrentUserProfileService();
 
 
-    void completeSession();
+    void endDance();
 
-    void completeSession(String verifier);
+    void endDance(String verifier);
 
     /**
-     * Instantiate a new Service which become the new current service
+     * Instantiate a new Service which become the current service
      *
-     * @param type the type of the service to Instantiate
-     * @return the authorization url to call to start the OAuth process
+     * @return the oauth session related tot his new service
      */
-    String initNewSession(String servType);
+    OAuthSession createSessionForName(String providerName);
+
+
+    OAuthSession getSessionForQualifier(Annotation qualifier);
+
+    OAuthSession initSessionForQualifier(Annotation qualifier);
+
+    String startDance(String providerName);
+
+    String getVerifierParamName();
+
+    List<OAuthSession> getAllActiveSessions();
+
+    void setCurrentSession(OAuthSession session);
 }
