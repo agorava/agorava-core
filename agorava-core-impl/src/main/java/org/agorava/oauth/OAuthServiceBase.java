@@ -16,7 +16,6 @@
 
 package org.agorava.oauth;
 
-import org.agorava.api.atinject.Current;
 import org.agorava.api.atinject.InjectWithQualifier;
 import org.agorava.api.oauth.OAuthRequest;
 import org.agorava.api.oauth.OAuthService;
@@ -28,7 +27,6 @@ import org.agorava.api.rest.Response;
 import org.agorava.api.rest.Verb;
 import org.agorava.api.service.JsonMapperService;
 import org.agorava.api.service.OAuthLifeCycleService;
-import org.agorava.api.storage.UserSessionRepository;
 import org.agorava.rest.OAuthRequestImpl;
 
 import javax.inject.Inject;
@@ -47,10 +45,6 @@ public abstract class OAuthServiceBase implements OAuthService {
 
     @Inject
     OAuthLifeCycleService OAuthLifeCycleService;
-
-    @Inject
-    @Current
-    UserSessionRepository repo;
 
     @Inject
     JsonMapperService mapperService;
@@ -224,15 +218,6 @@ public abstract class OAuthServiceBase implements OAuthService {
         this.requestHeader = requestHeader;
     }
 
-    @Override
-    public void resetSession() {
-
-        OAuthSession session = getSession();
-        session.setAccessToken(null);
-        session.setVerifier(null);
-        session.setUserProfile(null);
-
-    }
 
     @Override
     public Token getAccessToken(Token requestToken, String verifier) {

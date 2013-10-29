@@ -68,6 +68,7 @@ public interface OAuthService extends RestService {
      *//*
     void initAccessToken();
 */
+
     /**
      * Send an OAuth request signed without any parameter
      *
@@ -148,12 +149,6 @@ public interface OAuthService extends RestService {
      */
     String getVerifierParamName();
 
-    /**
-     * Close the connexion to the current Oauth service by resetting the OAuthSession
-     */
-    void resetSession();
-
-    /*------------------------*/
 
     /**
      * Returns an OAuth request token to initiate an OAuth connection. It's the the first step of OAuth negotiation connexion
