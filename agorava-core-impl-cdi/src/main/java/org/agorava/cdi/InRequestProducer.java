@@ -20,7 +20,6 @@ import org.agorava.api.atinject.Current;
 import org.agorava.api.atinject.ProviderRelated;
 import org.agorava.api.exception.AgoravaException;
 import org.agorava.api.oauth.OAuthSession;
-import org.agorava.api.oauth.OAuthSessionBuilder;
 import org.agorava.api.storage.GlobalRepository;
 import org.agorava.api.storage.UserSessionRepository;
 import org.apache.deltaspike.core.api.exclude.Exclude;
@@ -77,7 +76,7 @@ public class InRequestProducer implements Serializable {
         if (iscurrent) {
             if (service != null) {
                 if (!service.equals(repository.getCurrent().getServiceQualifier())) {
-                    repository.setCurrent(new OAuthSessionBuilder().qualifier(service).repo(repository).build());
+                    repository.setCurrent(new OAuthSession.Builder().qualifier(service).repo(repository).build());
                 }
             }
             return repository.getCurrent();

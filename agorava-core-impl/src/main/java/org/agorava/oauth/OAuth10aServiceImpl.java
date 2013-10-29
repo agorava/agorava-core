@@ -57,6 +57,7 @@ public class OAuth10aServiceImpl extends OAuthServiceBase {
         return getRequestToken(new TimeoutTuner(timeout, unit));
     }
 
+    @Override
     public Token getRequestToken() {
         return getRequestToken(2, TimeUnit.SECONDS);
     }

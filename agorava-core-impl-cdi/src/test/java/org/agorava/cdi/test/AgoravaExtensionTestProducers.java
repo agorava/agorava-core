@@ -50,6 +50,6 @@ public class AgoravaExtensionTestProducers {
     @FakeService
     public OAuthSession produceAppSession() {
 
-        return new OAuthSessionBuilder().qualifier(FakeServiceLiteral.INSTANCE).build();
+        return new Builder().qualifier(FakeServiceLiteral.INSTANCE).build();
     }*/
 }

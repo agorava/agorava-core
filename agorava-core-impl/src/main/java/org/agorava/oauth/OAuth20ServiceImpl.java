@@ -60,7 +60,7 @@ public class OAuth20ServiceImpl extends OAuthServiceBase {
      * {@inheritDoc}
      */
     public Token getRequestToken() {
-        throw new UnsupportedOperationException("Unsupported operation, please use 'startDance' and redirect your " +
+        throw new UnsupportedOperationException("Unsupported operation, please use 'getAuthorizationUrl' and redirect your " +
                 "users there");
     }
 

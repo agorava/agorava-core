@@ -99,7 +99,7 @@ public abstract class OAuthServiceBase implements OAuthService {
 
     @Override
     public OAuthSession getSession() {
-        return OAuthLifeCycleService.getSessionForQualifier(config.getQualifier());
+        return OAuthLifeCycleService.resolveSessionForQualifier(config.getQualifier());
 
     }
 

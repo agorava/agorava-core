@@ -20,9 +20,9 @@ import org.agorava.api.atinject.Current;
 import org.agorava.api.event.OAuthComplete;
 import org.agorava.api.event.SocialEvent;
 import org.agorava.api.exception.AgoravaException;
+import org.agorava.api.exception.ProviderMismatchException;
 import org.agorava.api.oauth.OAuthService;
 import org.agorava.api.oauth.OAuthSession;
-import org.agorava.api.oauth.OAuthSessionBuilder;
 import org.agorava.api.service.OAuthLifeCycleService;
 import org.agorava.api.storage.GlobalRepository;
 import org.agorava.api.storage.UserSessionRepository;
@@ -81,12 +81,12 @@ public class OAuthLifeCycleServiceImpl implements OAuthLifeCycleService {
     }
 
     @Override
-    public void disconnect() {
+    public void killCurrentSession() {
         repository.removeCurrent();
     }
 
     @Override
-    public void disconnect(OAuthSession session) {
+    public void killSession(OAuthSession session) {
         repository.remove(session);
     }
 
@@ -94,6 +94,7 @@ public class OAuthLifeCycleServiceImpl implements OAuthLifeCycleService {
     public UserProfileService getCurrentUserProfileService() {
         return userProfileServices.select(getCurrentSession().getServiceQualifier()).get();
     }
+
 
     @Override
     public synchronized void endDance() {
@@ -121,15 +122,15 @@ public class OAuthLifeCycleServiceImpl implements OAuthLifeCycleService {
     }
 
     @Override
-    public OAuthSession createSessionForName(String providerName) {
+    public OAuthSession buildSessionFor(String providerName) {
         OAuthSession res;
         Annotation qualifier = getServicesToQualifier().get(providerName);
-        return initSessionForQualifier(qualifier);
+        return buildSessionFor(qualifier);
     }
 
     @Override
-    public OAuthSession initSessionForQualifier(Annotation qualifier) {
-        OAuthSession res = new OAuthSessionBuilder().qualifier(qualifier).repo(unProxifyRepo(repository)).build();
+    public OAuthSession buildSessionFor(Annotation qualifier) {
+        OAuthSession res = new OAuthSession.Builder().qualifier(qualifier).repo(unProxifyRepo(repository)).build();
         repository.setCurrent(res);
         return res;
     }
@@ -139,11 +140,11 @@ public class OAuthLifeCycleServiceImpl implements OAuthLifeCycleService {
     }
 
     @Override
-    public OAuthSession getSessionForQualifier(Annotation qualifier) {
+    public OAuthSession resolveSessionForQualifier(Annotation qualifier) {
         if (repository.getCurrent().equals(OAuthSession.NULL))
-            initSessionForQualifier(qualifier);
+            buildSessionFor(qualifier);
         else if (!repository.getCurrent().getServiceQualifier().equals(qualifier))
-            throw new AgoravaException("Inconsistent state between repo and service. In repo Session provider is " +
+            throw new ProviderMismatchException("Inconsistent state between repo and service. In repo Session provider is " +
                     repository.getCurrent().getServiceName() + " while service provider is " + qualifier);
 
         return repository.getCurrent();
@@ -151,8 +152,14 @@ public class OAuthLifeCycleServiceImpl implements OAuthLifeCycleService {
 
 
     @Override
-    public String startDance(String providerName) {
-        createSessionForName(providerName);
+    public String startDanceFor(String providerName) {
+        buildSessionFor(providerName);
+        return getCurrentService().getAuthorizationUrl();
+    }
+
+    @Override
+    public String startDanceFor(Annotation provider) {
+        buildSessionFor(provider);
         return getCurrentService().getAuthorizationUrl();
     }
 

@@ -18,7 +18,6 @@
 package org.agorava.oauth;
 
 import org.agorava.api.oauth.OAuthSession;
-import org.agorava.api.oauth.OAuthSessionBuilder;
 import org.agorava.api.storage.UserSessionRepository;
 
 import java.util.Collection;
@@ -112,7 +111,7 @@ public class UserSessionRepositoryImpl implements UserSessionRepository {
     @Override
     public void add(OAuthSession elt) {
         if (elt.getClass() != OAuthSession.class)
-            elt = new OAuthSessionBuilder().readFromOAuthSession(elt).build();
+            elt = new OAuthSession.Builder().readFromOAuthSession(elt).build();
         activeSessions.add(elt);
     }
 
