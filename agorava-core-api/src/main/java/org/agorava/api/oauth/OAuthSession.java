@@ -256,7 +256,7 @@ public class OAuthSession implements Identifiable {
          */
         public Builder qualifier(Annotation qualifier) throws ProviderMismatchException {
             this.qualifier = qualifier;
-            if (qualifier == null && AgoravaContext.getQualifierToService().containsKey(qualifier))
+            if (qualifier != null && AgoravaContext.getQualifierToService().containsKey(qualifier))
                 return this;
             else
                 throw new ProviderMismatchException("No provider found for qualifier : " + qualifier);
