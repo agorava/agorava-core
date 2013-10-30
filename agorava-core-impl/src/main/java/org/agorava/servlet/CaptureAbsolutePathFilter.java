@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.agorava.web;
+package org.agorava.servlet;
 
 import org.agorava.AgoravaContext;
 

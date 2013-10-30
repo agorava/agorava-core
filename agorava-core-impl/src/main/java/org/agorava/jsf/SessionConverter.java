@@ -14,32 +14,31 @@
  * limitations under the License.
  */
 
-package org.agorava.cdi.jsf;
+package org.agorava.jsf;
 
+import org.agorava.api.atinject.Current;
 import org.agorava.api.oauth.OAuthSession;
 import org.agorava.api.storage.UserSessionRepository;
-import org.agorava.cdi.CurrentLiteral;
-import org.apache.deltaspike.core.api.provider.BeanProvider;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.convert.FacesConverter;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * @author Antoine Sabot-Durand
  */
-
-@FacesConverter(forClass = OAuthSession.class)
+@Named
 public class SessionConverter implements Converter {
 
-    private UserSessionRepository getRepo() {
-        return BeanProvider.getContextualReference(UserSessionRepository.class, CurrentLiteral.INSTANCE);
-    }
+    @Inject
+    @Current
+    UserSessionRepository repo;
 
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
-        return getRepo().get(value);
+        return repo.get(value);
     }
 
     @Override
