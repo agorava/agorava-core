@@ -37,7 +37,7 @@ public class AgoravaContext {
     public static String webAbsolutePath = "undefined";
 
 
-    protected static String producerScope = "";
+    static String producerScope = "";
 
     private static Map<String, Annotation> servicesToQualifier = new HashMap<String, Annotation>();
 
@@ -46,6 +46,10 @@ public class AgoravaContext {
     private static List<String> listOfServices = null;
 
 
+    /**
+     * @return the way that {@link org.agorava.api.oauth.OAuthSession} and {@link org.agorava.api.storage
+     * .UserSessionRepository} are produce and stored
+     */
     public static String getProducerScope() {
         return producerScope;
     }

@@ -19,9 +19,17 @@ package org.agorava.spi;
 import org.agorava.api.oauth.application.OAuthAppSettings;
 
 /**
+ * An interface to provide a way to tune {@link org.agorava.api.oauth.application.OAuthAppSettings}
+ *
  * @author Antoine Sabot-Durand
  */
 public interface AppSettingsTuner {
 
+    /**
+     * The tuning method
+     *
+     * @param toTune the setting to tune
+     * @return the tuned settings
+     */
     OAuthAppSettings tune(final OAuthAppSettings toTune);
 }
