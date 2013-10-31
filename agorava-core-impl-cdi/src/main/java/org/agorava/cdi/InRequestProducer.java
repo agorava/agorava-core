@@ -57,7 +57,7 @@ public class InRequestProducer implements Serializable {
     @Web
     HttpServletRequest request;
 
-    private String getRepoId() {
+    protected String getRepoId() {
         return request.getParameter("repoid");
     }
 
