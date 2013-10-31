@@ -16,6 +16,7 @@
 
 package org.agorava.oauth;
 
+import org.agorava.api.atinject.BeanResolver;
 import org.agorava.api.atinject.InjectWithQualifier;
 import org.agorava.api.oauth.OAuthRequest;
 import org.agorava.api.oauth.OAuthService;
@@ -28,6 +29,7 @@ import org.agorava.api.rest.Verb;
 import org.agorava.api.service.JsonMapperService;
 import org.agorava.api.service.OAuthLifeCycleService;
 import org.agorava.rest.OAuthRequestImpl;
+import org.agorava.spi.AppSettingsTuner;
 
 import javax.inject.Inject;
 import java.text.MessageFormat;
@@ -224,5 +226,9 @@ public abstract class OAuthServiceBase implements OAuthService {
         return getAccessToken(requestToken, new Verifier(verifier));
     }
 
+    protected OAuthAppSettings getTunedOAuthAppSettings() {
+        AppSettingsTuner tuner = BeanResolver.getInstance().resolve(AppSettingsTuner.class, true);
+        return tuner == null ? this.config : tuner.tune(this.config);
+    }
 
 }

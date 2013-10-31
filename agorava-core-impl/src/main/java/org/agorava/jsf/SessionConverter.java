@@ -16,29 +16,29 @@
 
 package org.agorava.jsf;
 
-import org.agorava.api.atinject.Current;
+import org.agorava.api.atinject.BeanResolver;
 import org.agorava.api.oauth.OAuthSession;
 import org.agorava.api.storage.UserSessionRepository;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.inject.Inject;
-import javax.inject.Named;
+import javax.faces.convert.FacesConverter;
 
 /**
  * @author Antoine Sabot-Durand
  */
-@Named
+
+@FacesConverter(forClass = OAuthSession.class)
 public class SessionConverter implements Converter {
 
-    @Inject
-    @Current
-    UserSessionRepository repo;
+    private UserSessionRepository getRepo() {
+        return (UserSessionRepository) BeanResolver.getInstance().resolve("currentRepo");
+    }
 
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
-        return repo.get(value);
+        return getRepo().get(value);
     }
 
     @Override

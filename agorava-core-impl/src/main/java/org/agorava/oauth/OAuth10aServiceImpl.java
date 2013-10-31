@@ -23,6 +23,7 @@ import org.agorava.api.oauth.OAuthConstants;
 import org.agorava.api.oauth.OAuthRequest;
 import org.agorava.api.oauth.Token;
 import org.agorava.api.oauth.Verifier;
+import org.agorava.api.oauth.application.OAuthAppSettings;
 import org.agorava.api.rest.Request;
 import org.agorava.api.rest.RequestTuner;
 import org.agorava.api.rest.Response;
@@ -76,6 +77,7 @@ public class OAuth10aServiceImpl extends OAuthServiceBase {
 
     public Token getRequestToken(RequestTuner tuner) {
 
+        OAuthAppSettings config = getTunedOAuthAppSettings();
         LOGGER.fine("obtaining request token from " + api.getRequestTokenEndpoint());
         OAuthRequest request = requestFactory(api.getRequestTokenVerb(), api.getRequestTokenEndpoint());
 

@@ -30,6 +30,7 @@ import org.agorava.api.oauth.application.OAuthAppSettingsBuilder;
 import org.agorava.api.oauth.application.OAuthApplication;
 import org.agorava.cdi.CurrentLiteral;
 import org.agorava.spi.ProviderConfigOauth;
+import org.apache.deltaspike.core.api.config.ConfigResolver;
 import org.apache.deltaspike.core.api.literal.AnyLiteral;
 import org.apache.deltaspike.core.util.bean.BeanBuilder;
 import org.apache.deltaspike.core.util.bean.WrappingBeanBuilder;
@@ -356,6 +357,10 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
     public void endOfExtension(@Observes AfterDeploymentValidation adv, BeanManager beanManager) {
 
         registerServiceNames(beanManager);
+
+        new BeanResolverCdi();
+
+        producerScope = ConfigResolver.getPropertyValue("producerScope", "");
 
         log.info("Agorava initialization complete");
     }

@@ -82,10 +82,11 @@ public class GlobalRepositoryImpl implements GlobalRepository {
 
     @Override
     public UserSessionRepository get(String id) {
-        for (UserSessionRepository userRepo : userRepos) {
-            if (userRepo.getId().equals(id))
-                return userRepo;
-        }
+        if (id != null)
+            for (UserSessionRepository userRepo : userRepos) {
+                if (userRepo.getId().equals(id))
+                    return userRepo;
+            }
         return null;
     }
 

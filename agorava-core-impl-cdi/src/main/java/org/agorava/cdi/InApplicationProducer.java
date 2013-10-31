@@ -24,6 +24,7 @@ import org.apache.deltaspike.core.api.exclude.Exclude;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
+import javax.inject.Named;
 
 /**
  * @author Antoine Sabot-Durand
@@ -36,6 +37,7 @@ public class InApplicationProducer extends InRequestProducer {
     @Override
     @Produces
     @Current
+    @Named
     @ApplicationScoped
     public UserSessionRepository getCurrentRepo() {
         return super.getCurrentRepo();

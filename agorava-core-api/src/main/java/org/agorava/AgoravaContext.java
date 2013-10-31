@@ -36,12 +36,19 @@ public class AgoravaContext {
      */
     public static String webAbsolutePath = "undefined";
 
+
+    protected static String producerScope = "";
+
     private static Map<String, Annotation> servicesToQualifier = new HashMap<String, Annotation>();
 
     private static Map<Annotation, String> qualifierToService = new HashMap<Annotation, String>();
 
     private static List<String> listOfServices = null;
 
+
+    public static String getProducerScope() {
+        return producerScope;
+    }
 
     /**
      * Default protected constructor to prevent instantiation of this class
@@ -79,11 +86,10 @@ public class AgoravaContext {
     }
 
     /**
-     *
      * @return the list of all service's names present in the application
      */
     public static List<String> getListOfServices() {
-        if(listOfServices == null)
+        if (listOfServices == null)
             listOfServices = new ArrayList<String>(getSocialRelated());
         return listOfServices;
     }

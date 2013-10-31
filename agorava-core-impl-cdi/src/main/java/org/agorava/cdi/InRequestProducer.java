@@ -20,14 +20,21 @@ import org.agorava.api.atinject.Current;
 import org.agorava.api.atinject.ProviderRelated;
 import org.agorava.api.exception.AgoravaException;
 import org.agorava.api.oauth.OAuthSession;
+import org.agorava.api.oauth.application.OAuthAppSettings;
+import org.agorava.api.oauth.application.SimpleOAuthAppSettingsBuilder;
 import org.agorava.api.storage.GlobalRepository;
 import org.agorava.api.storage.UserSessionRepository;
+import org.agorava.jsf.FacesUrlTransformer;
+import org.agorava.spi.AppSettingsTuner;
 import org.apache.deltaspike.core.api.exclude.Exclude;
+import org.apache.deltaspike.servlet.api.Web;
 
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.inject.Inject;
+import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.util.Set;
@@ -46,11 +53,25 @@ public class InRequestProducer implements Serializable {
     GlobalRepository globalRepository;
 
 
+    @Inject
+    @Web
+    HttpServletRequest request;
+
+    private String getRepoId() {
+        return request.getParameter("repoid");
+    }
+
+
     @Produces
     @Current
+    @Named
     @RequestScoped
     public UserSessionRepository getCurrentRepo() {
-        return globalRepository.createNew();
+        String id = getRepoId();
+        if (id == null || globalRepository.get(id) == null)
+            return globalRepository.createNew();
+        else
+            return globalRepository.get(id);
     }
 
 
@@ -84,5 +105,29 @@ public class InRequestProducer implements Serializable {
         throw new UnsupportedOperationException("Cannot inject session whitout Current Qualifier in " + ip);
     }
 
+    @Produces
+    @RequestScoped
+    public AppSettingsTuner produceCallBackTuner(@Current UserSessionRepository repo) {
+        return new addRepoToCallbackTuner(repo);
+    }
+
+    static public class addRepoToCallbackTuner implements AppSettingsTuner {
+
+
+        UserSessionRepository repo;
+
+        public addRepoToCallbackTuner(UserSessionRepository repo) {
+            this.repo = repo;
+        }
+
+        @Override
+        public OAuthAppSettings tune(OAuthAppSettings toTune) {
+            return new SimpleOAuthAppSettingsBuilder()
+                    .readFromSettings(toTune)
+                    .callback(new FacesUrlTransformer(toTune.getCallback())
+                            .appendParamIfNecessary("repoid", repo.getId()).getUrl())
+                    .build();
+        }
+    }
 
 }

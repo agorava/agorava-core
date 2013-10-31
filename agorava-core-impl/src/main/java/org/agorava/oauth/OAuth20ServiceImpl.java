@@ -38,14 +38,12 @@ public class OAuth20ServiceImpl extends OAuthServiceBase {
     @InjectWithQualifier
     ProviderConfigOauth20 api;
 
-    @InjectWithQualifier
-    OAuthAppSettings config;
-
 
     /**
      * {@inheritDoc}
      */
     public Token getAccessToken(Token requestToken, Verifier verifier) {
+        OAuthAppSettings config = getTunedOAuthAppSettings();
         OAuthRequest request = new OAuthRequestImpl(api.getAccessTokenVerb(), api.getAccessTokenEndpoint());
         request.addQuerystringParameter(OAuthConstants.CLIENT_ID, config.getApiKey());
         request.addQuerystringParameter(OAuthConstants.CLIENT_SECRET, config.getApiSecret());
@@ -86,7 +84,8 @@ public class OAuth20ServiceImpl extends OAuthServiceBase {
 
     @Override
     public String getAuthorizationUrl() {
-        return api.getAuthorizationUrl(config);
+        return api.getAuthorizationUrl(getTunedOAuthAppSettings());
     }
+
 
 }

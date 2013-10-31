@@ -24,6 +24,7 @@ import org.apache.deltaspike.core.api.exclude.Exclude;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
+import javax.inject.Named;
 
 /**
  * @author Antoine Sabot-Durand
@@ -33,16 +34,16 @@ import javax.enterprise.inject.spi.InjectionPoint;
 @Exclude(onExpression = "producerScope!=session")
 public class InSessionProducer extends InRequestProducer {
 
-    @Override
+
     @Produces
     @Current
+    @Named
     @SessionScoped
     public UserSessionRepository getCurrentRepo() {
-        return super.getCurrentRepo();
+        return globalRepository.createNew();
     }
 
 
-    @Override
     @Produces
     public OAuthSession getCurrentSession(InjectionPoint ip, @Current UserSessionRepository repository) {
         return super.getCurrentSession(ip, repository);
