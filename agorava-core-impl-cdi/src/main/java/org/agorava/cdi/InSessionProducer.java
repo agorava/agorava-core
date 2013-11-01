@@ -32,7 +32,7 @@ import javax.inject.Named;
 
 @SessionScoped
 @Exclude(onExpression = "producerScope!=session")
-public class InSessionProducer extends InRequestProducer {
+public class InSessionProducer extends InApplicationProducer {
 
 
     @Produces

@@ -49,7 +49,7 @@ public class InCookieProducer extends InRequestProducer {
 
     @Inject
     @Web
-    HttpServletResponse response;
+    private HttpServletResponse response;
 
     @Override
     protected String getRepoId() {

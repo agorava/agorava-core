@@ -37,7 +37,12 @@ public class AgoravaContext {
     public static String webAbsolutePath = "undefined";
 
 
-    static String producerScope = "";
+    /**
+     * Scope for the producer
+     *
+     * @see AgoravaContext#getProducerScope()
+     */
+    protected static String producerScope = "";
 
     private static Map<String, Annotation> servicesToQualifier = new HashMap<String, Annotation>();
 

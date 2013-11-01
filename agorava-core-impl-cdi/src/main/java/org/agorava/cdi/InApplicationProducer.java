@@ -17,14 +17,21 @@
 package org.agorava.cdi;
 
 import org.agorava.api.atinject.Current;
+import org.agorava.api.atinject.ProviderRelated;
+import org.agorava.api.exception.AgoravaException;
 import org.agorava.api.oauth.OAuthSession;
+import org.agorava.api.storage.GlobalRepository;
 import org.agorava.api.storage.UserSessionRepository;
 import org.apache.deltaspike.core.api.exclude.Exclude;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
+import javax.inject.Inject;
 import javax.inject.Named;
+import java.io.Serializable;
+import java.lang.annotation.Annotation;
+import java.util.Set;
 
 /**
  * @author Antoine Sabot-Durand
@@ -32,21 +39,48 @@ import javax.inject.Named;
 
 @ApplicationScoped
 @Exclude(onExpression = "producerScope!=application")
-public class InApplicationProducer extends InRequestProducer {
+public class InApplicationProducer implements Serializable {
 
-    @Override
+    @Inject
+    GlobalRepository globalRepository;
+
+
     @Produces
     @Current
     @Named
     @ApplicationScoped
     public UserSessionRepository getCurrentRepo() {
-        return super.getCurrentRepo();
+        return globalRepository.createNew();
     }
 
 
-    @Override
     @Produces
     public OAuthSession getCurrentSession(InjectionPoint ip, @Current UserSessionRepository repository) {
-        return super.getCurrentSession(ip, repository);
+        if (ip == null)
+            return repository.getCurrent();
+        Set<Annotation> quals = ip.getQualifiers();
+        OAuthSession res;
+
+        Annotation service = null;
+        boolean iscurrent = false;
+        for (Annotation qual : quals) {
+            if (qual.annotationType().isAnnotationPresent(ProviderRelated.class)) {
+                if (service != null)
+                    throw new AgoravaException("There's more thant one provider related qualifier aon Injection Point" +
+                            ip);
+                service = qual;
+            }
+            if (qual.annotationType().equals(Current.class))
+                iscurrent = true;
+        }
+        if (iscurrent) {
+            if (service != null) {
+                if (!service.equals(repository.getCurrent().getServiceQualifier())) {
+                    repository.setCurrent(new OAuthSession.Builder().qualifier(service).repo(repository).build());
+                }
+            }
+            return repository.getCurrent();
+        }
+        throw new UnsupportedOperationException("Cannot inject session whitout Current Qualifier in " + ip);
     }
 }

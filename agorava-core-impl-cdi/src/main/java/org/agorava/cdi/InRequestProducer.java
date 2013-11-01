@@ -17,12 +17,9 @@
 package org.agorava.cdi;
 
 import org.agorava.api.atinject.Current;
-import org.agorava.api.atinject.ProviderRelated;
-import org.agorava.api.exception.AgoravaException;
 import org.agorava.api.oauth.OAuthSession;
 import org.agorava.api.oauth.application.OAuthAppSettings;
 import org.agorava.api.oauth.application.SimpleOAuthAppSettingsBuilder;
-import org.agorava.api.storage.GlobalRepository;
 import org.agorava.api.storage.UserSessionRepository;
 import org.agorava.jsf.FacesUrlTransformer;
 import org.agorava.spi.AppSettingsTuner;
@@ -35,9 +32,6 @@ import javax.enterprise.inject.spi.InjectionPoint;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
-import java.io.Serializable;
-import java.lang.annotation.Annotation;
-import java.util.Set;
 
 /**
  * @author Antoine Sabot-Durand
@@ -45,17 +39,15 @@ import java.util.Set;
 
 @RequestScoped
 @Exclude(onExpression = "producerScope!=request")
-public class InRequestProducer implements Serializable {
+public class InRequestProducer extends InApplicationProducer {
 
     private static final long serialVersionUID = 6446160199657772110L;
 
-    @Inject
-    GlobalRepository globalRepository;
 
 
     @Inject
     @Web
-    HttpServletRequest request;
+    protected HttpServletRequest request;
 
     protected String getRepoId() {
         return request.getParameter("repoid");
@@ -77,32 +69,8 @@ public class InRequestProducer implements Serializable {
 
     @Produces
     public OAuthSession getCurrentSession(InjectionPoint ip, @Current UserSessionRepository repository) {
-        if (ip == null)
-            return repository.getCurrent();
-        Set<Annotation> quals = ip.getQualifiers();
-        OAuthSession res;
+        return super.getCurrentSession(ip, repository);
 
-        Annotation service = null;
-        boolean iscurrent = false;
-        for (Annotation qual : quals) {
-            if (qual.annotationType().isAnnotationPresent(ProviderRelated.class)) {
-                if (service != null)
-                    throw new AgoravaException("There's more thant one provider related qualifier aon Injection Point" +
-                            ip);
-                service = qual;
-            }
-            if (qual.annotationType().equals(Current.class))
-                iscurrent = true;
-        }
-        if (iscurrent) {
-            if (service != null) {
-                if (!service.equals(repository.getCurrent().getServiceQualifier())) {
-                    repository.setCurrent(new OAuthSession.Builder().qualifier(service).repo(repository).build());
-                }
-            }
-            return repository.getCurrent();
-        }
-        throw new UnsupportedOperationException("Cannot inject session whitout Current Qualifier in " + ip);
     }
 
     @Produces
