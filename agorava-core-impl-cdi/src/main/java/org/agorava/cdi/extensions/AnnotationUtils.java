@@ -65,4 +65,9 @@ public class AnnotationUtils implements Serializable {
     }
 
 
+    public static Annotation getSingleProviderRelatedQualifier(Annotated element, boolean emptyAccepted) {
+        return getSingleProviderRelatedQualifier(element.getAnnotations(), emptyAccepted);
+    }
+
+
 }

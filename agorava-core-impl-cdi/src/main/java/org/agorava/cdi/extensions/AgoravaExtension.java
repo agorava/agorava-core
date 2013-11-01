@@ -16,7 +16,6 @@
 
 package org.agorava.cdi.extensions;
 
-import com.google.common.collect.Iterables;
 import org.agorava.AgoravaContext;
 import org.agorava.api.atinject.GenericBean;
 import org.agorava.api.atinject.InjectWithQualifier;
@@ -63,12 +62,13 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.logging.Logger;
 
 import static java.util.logging.Level.INFO;
 import static java.util.logging.Level.WARNING;
+import static org.agorava.cdi.extensions.AnnotationUtils.getAnnotationsWithMeta;
+import static org.agorava.cdi.extensions.AnnotationUtils.getSingleProviderRelatedQualifier;
 
 /**
  * Agorava CDI extension to discover existing module and configured modules
@@ -152,7 +152,7 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
         AnnotatedType<T> at = pat.getAnnotatedType();
         if (!at.isAnnotationPresent(GenericBean.class)) {
             log.log(INFO, "Found a Bean of class {0} overriding generic bean", at.getBaseType());
-            Annotation qual = AnnotationUtils.getSingleProviderRelatedQualifier(at.getAnnotations(), true);
+            Annotation qual = getSingleProviderRelatedQualifier(at, true);
             if (qual != null) {
                 if (overridedGenericServices.containsKey(qual))
                     overridedGenericServices.get(qual).addAll(at.getTypeClosure());
@@ -203,9 +203,8 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
         log.log(INFO, "Qualifiers configured {0}", servicesQualifiersConfigured);
         Annotation qual = null;
         try {
-            qual = Iterables.getLast(AnnotationUtils.getAnnotationsWithMeta(annotatedMember,
-                    ProviderRelated.class));
-        } catch (NoSuchElementException e) {
+            qual = getSingleProviderRelatedQualifier(annotatedMember, false);
+        } catch (AgoravaException e) {
             pp.addDefinitionError(new AgoravaException("OAuthAppSettings producers should be annotated with a Service " +
                     "Provider on " + annotatedMember.getJavaMember().getName() + " in " + annotatedMember.getJavaMember()
                     .getDeclaringClass()));
@@ -254,14 +253,15 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
     private void CommonsProcessOAuthTier(ProcessBean<? extends ProviderConfigOauth> pb) {
 
         Annotated annotated = pb.getAnnotated();
-        Set<Annotation> qualifiers = AnnotationUtils.getAnnotationsWithMeta(annotated, ProviderRelated.class);
+        Set<Annotation> qualifiers = getAnnotationsWithMeta(annotated, ProviderRelated.class);
         if (qualifiers.size() != 1)
             throw new AgoravaException("A RemoteService bean should have one and only one service related Qualifier : " + pb
                     .getAnnotated().toString());
 
         Class<? extends ProviderConfigOauth> clazz = (Class<? extends ProviderConfigOauth>) pb.getBean().getBeanClass();
         try {
-            service2OauthVersion.put(Iterables.getOnlyElement(qualifiers), clazz.newInstance().getOAuthVersion());
+            service2OauthVersion.put(getSingleProviderRelatedQualifier(qualifiers, true),
+                    clazz.newInstance().getOAuthVersion());
         } catch (Exception e) {
             throw new AgoravaException("Error while retrieving version of OAuth in tier config", e);
         }
@@ -369,8 +369,7 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
         Set<Bean<?>> beans = beanManager.getBeans(ProviderConfigOauth.class, new AnyLiteral());
 
         for (Bean<?> bean : beans) {
-            Set<Annotation> qualifiers = AnnotationUtils.getAnnotationsWithMeta(bean.getQualifiers(), ProviderRelated.class);
-            Annotation qual = Iterables.getOnlyElement(qualifiers);
+            Annotation qual = getSingleProviderRelatedQualifier(bean.getQualifiers(), false);
             CreationalContext<?> ctx = beanManager.createCreationalContext(null);
             final ProviderConfigOauth tierConfig = (ProviderConfigOauth) beanManager.getReference(bean,
                     ProviderConfigOauth.class, ctx);
