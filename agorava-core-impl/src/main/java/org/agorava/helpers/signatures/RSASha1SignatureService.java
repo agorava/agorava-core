@@ -19,8 +19,8 @@ package org.agorava.helpers.signatures;
 import org.agorava.api.exception.OAuthSignatureException;
 import org.agorava.api.service.SignatureService;
 import org.agorava.api.service.SignatureType;
-import org.apache.commons.codec.binary.Base64;
 
+import javax.xml.bind.DatatypeConverter;
 import java.security.PrivateKey;
 import java.security.Signature;
 
@@ -49,7 +49,7 @@ public class RSASha1SignatureService implements SignatureService {
             Signature signature = Signature.getInstance(RSA_SHA1);
             signature.initSign(privateKey);
             signature.update(baseString.getBytes());
-            return new String(Base64.encodeBase64(signature.sign(), false));
+            return new String(DatatypeConverter.printBase64Binary(signature.sign()));
         } catch (Exception e) {
             throw new OAuthSignatureException(baseString, e);
         }

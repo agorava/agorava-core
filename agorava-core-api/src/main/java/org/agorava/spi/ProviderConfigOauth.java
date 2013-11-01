@@ -21,7 +21,7 @@ import org.agorava.api.extractor.TokenExtractor;
 import static org.agorava.api.oauth.OAuth.OAuthVersion;
 
 /**
- * Root of all OAuth tier service configuration
+ * Root of all OAuth providers services configuration
  *
  * @author Antoine Sabot-Durand
  */

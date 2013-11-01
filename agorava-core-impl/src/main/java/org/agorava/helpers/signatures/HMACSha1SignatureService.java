@@ -21,10 +21,10 @@ import org.agorava.api.service.OAuthEncoder;
 import org.agorava.api.service.Preconditions;
 import org.agorava.api.service.SignatureService;
 import org.agorava.api.service.SignatureType;
-import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import javax.xml.bind.DatatypeConverter;
 
 import static org.agorava.api.service.SignatureType.Type.HMACSHA1;
 
@@ -65,7 +65,7 @@ public class HMACSha1SignatureService implements SignatureService {
         Mac mac = Mac.getInstance(HMAC_SHA1);
         mac.init(key);
         byte[] bytes = mac.doFinal(toSign.getBytes(UTF8));
-        return new String(Base64.encodeBase64(bytes)).replace(CARRIAGE_RETURN, EMPTY_STRING);
+        return new String(DatatypeConverter.printBase64Binary(bytes).replace(CARRIAGE_RETURN, EMPTY_STRING));
     }
 
     /**

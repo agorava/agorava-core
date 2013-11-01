@@ -22,7 +22,7 @@ import org.agorava.api.exception.AgoravaException;
 import java.lang.annotation.Annotation;
 
 /**
- * Root of all remote tier service configuration
+ * Root of all providers services configuration
  *
  * @author Antoine Sabot-Durand
  */
