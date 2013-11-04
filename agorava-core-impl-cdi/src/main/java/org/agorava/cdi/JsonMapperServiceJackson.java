@@ -16,13 +16,15 @@
 
 package org.agorava.cdi;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.Module;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.agorava.api.exception.AgoravaException;
 import org.agorava.api.exception.ResponseException;
 import org.agorava.api.rest.Response;
 import org.agorava.api.service.JsonMapperService;
-import org.codehaus.jackson.map.Module;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -31,9 +33,6 @@ import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import java.io.IOException;
-
-import static org.codehaus.jackson.map.DeserializationConfig.Feature.READ_ENUMS_USING_TO_STRING;
-import static org.codehaus.jackson.map.SerializationConfig.Feature.WRITE_ENUMS_USING_TO_STRING;
 
 /**
  * {@inheritDoc}
@@ -87,8 +86,9 @@ public class JsonMapperServiceJackson implements JsonMapperService {
 
     @PostConstruct
     protected void init() {
-        objectMapper.enable(WRITE_ENUMS_USING_TO_STRING).setSerializationInclusion(Inclusion.NON_NULL);
-        objectMapper.enable(READ_ENUMS_USING_TO_STRING);
+        objectMapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING).setSerializationInclusion(JsonInclude.Include
+                .NON_NULL);
+        objectMapper.enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
         for (Module module : moduleInstances) {
             registerModule(module);
         }
