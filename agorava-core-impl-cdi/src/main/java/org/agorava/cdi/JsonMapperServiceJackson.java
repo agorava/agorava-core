@@ -32,6 +32,7 @@ import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.io.IOException;
 
 /**
@@ -46,6 +47,7 @@ public class JsonMapperServiceJackson implements JsonMapperService {
     private static final long serialVersionUID = -2012295612034078749L;
 
     @Produces
+    @Singleton
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Inject
@@ -53,7 +55,7 @@ public class JsonMapperServiceJackson implements JsonMapperService {
     protected Instance<Module> moduleInstances;
 
     @Override
-    public <T> T mapToObject(Response resp, Class<T> clazz) {
+    public <T> T mapToObject(Response resp, Class<T> clazz) throws ResponseException {
 
         String msg = resp.getBody();
         if (resp.getCode() != 200) {

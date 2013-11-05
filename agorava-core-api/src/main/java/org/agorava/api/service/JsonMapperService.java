@@ -16,6 +16,7 @@
 
 package org.agorava.api.service;
 
+import org.agorava.api.exception.ResponseException;
 import org.agorava.api.rest.Response;
 
 import java.io.Serializable;
@@ -35,7 +36,7 @@ public interface JsonMapperService extends Serializable {
      * @param clazz the target class of the object
      * @return an object of the given Class with fields coming from the response
      */
-    <T> T mapToObject(Response resp, Class<T> clazz);
+    <T> T mapToObject(Response resp, Class<T> clazz) throws ResponseException;
 
     /**
      * Transforms an object to a JSON string
