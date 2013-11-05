@@ -42,11 +42,6 @@ public class AgoravaExtensionOverrideServiceTest extends AgoravaTestDeploy {
     @Current
     OAuthSession session;
 
-    @Test
-    public void testIsServiceOverrided() throws Exception {
-        Assert.assertEquals(service.getVerifier(), "FAKE");
-
-    }
 
     @Test
     public void testIsInjectified() {

@@ -24,6 +24,7 @@ import org.agorava.api.oauth.OAuthSession;
 import org.agorava.api.oauth.Token;
 import org.agorava.api.oauth.Verifier;
 import org.agorava.api.oauth.application.OAuthAppSettings;
+import org.agorava.api.rest.RequestTuner;
 import org.agorava.api.rest.Response;
 import org.agorava.api.rest.Verb;
 import org.agorava.api.service.JsonMapperService;
@@ -32,8 +33,11 @@ import org.agorava.rest.OAuthRequestImpl;
 import org.agorava.spi.AppSettingsTuner;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 import java.text.MessageFormat;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static org.agorava.api.rest.Verb.GET;
 import static org.agorava.api.rest.Verb.POST;
@@ -44,6 +48,7 @@ import static org.agorava.api.rest.Verb.PUT;
  */
 public abstract class OAuthServiceBase implements OAuthService {
 
+    private static final Logger LOGGER = Logger.getLogger(OAuthServiceBase.class.getName());
 
     @Inject
     OAuthLifeCycleService OAuthLifeCycleService;
@@ -53,6 +58,9 @@ public abstract class OAuthServiceBase implements OAuthService {
 
     @InjectWithQualifier
     OAuthAppSettings config;
+
+    @InjectWithQualifier
+    Provider<RequestTuner> tunerProvider;
 
     private Map<String, String> requestHeader;
 
@@ -69,9 +77,16 @@ public abstract class OAuthServiceBase implements OAuthService {
 
     @Override
     public Response sendSignedRequest(OAuthRequest request) {
-        if (getRequestHeader() != null) request.getHeaders().putAll(getRequestHeader());
-        signRequest(getAccessToken(), request);
-        return request.send(); //todo:should check return code and launch ResponseException if it's not 200
+        RequestTuner tuner;
+        try {
+            tuner = tunerProvider.get();
+            tuner.tune(request);
+        } catch (RuntimeException e) {
+            LOGGER.log(Level.FINE, "No Tuner found for " + getSocialMediaName());
+        } finally {
+            signRequest(getAccessToken(), request);
+            return request.send(); //todo:should check return code and launch ResponseException if it's not 200
+        }
     }
 
     @Override

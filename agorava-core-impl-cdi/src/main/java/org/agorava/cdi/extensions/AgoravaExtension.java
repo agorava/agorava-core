@@ -17,7 +17,6 @@
 package org.agorava.cdi.extensions;
 
 import org.agorava.AgoravaContext;
-import org.agorava.api.atinject.GenericBean;
 import org.agorava.api.atinject.InjectWithQualifier;
 import org.agorava.api.atinject.ProviderRelated;
 import org.agorava.api.exception.AgoravaException;
@@ -83,12 +82,10 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
 
     private static Logger log = Logger.getLogger(AgoravaExtension.class.getName());
 
-    private Map<Annotation, Set<Type>> overridedGenericServices = new HashMap<Annotation, Set<Type>>();
-
-    private Map<OAuth.OAuthVersion, Class<? extends OAuthService>> genericsOAuthProviders = new HashMap<OAuth.OAuthVersion,
+    private Map<OAuth.OAuthVersion, Class<? extends OAuthService>> version2ServiceClass = new HashMap<OAuth.OAuthVersion,
             Class<? extends OAuthService>>();
 
-    private Map<Annotation, OAuth.OAuthVersion> service2OauthVersion = new HashMap<Annotation, OAuth.OAuthVersion>();
+    private Map<Annotation, OAuth.OAuthVersion> serviceQualifier2Version = new HashMap<Annotation, OAuth.OAuthVersion>();
 
     private Bean osb;
 
@@ -148,43 +145,13 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
 
     //----------------- Process AnnotatedType Phase ----------------------------------
 
-    private <T> boolean processGenericAnnotatedType(ProcessAnnotatedType<T> pat) {
-        AnnotatedType<T> at = pat.getAnnotatedType();
-        if (!at.isAnnotationPresent(GenericBean.class)) {
-            log.log(INFO, "Found a Bean of class {0} overriding generic bean", at.getBaseType());
-            Annotation qual = getSingleProviderRelatedQualifier(at, true);
-            if (qual != null) {
-                if (overridedGenericServices.containsKey(qual))
-                    overridedGenericServices.get(qual).addAll(at.getTypeClosure());
-                else
-                    overridedGenericServices.put(qual, new HashSet<Type>(at.getTypeClosure()));
-
-                Class<T> clazz = (Class) at.getBaseType();
-
-                AnnotatedTypeBuilder<T> atb = new AnnotatedTypeBuilder<T>()
-                        .readFromType(clazz)
-                        .setJavaClass(clazz);
-
-                applyQualifier(qual, atb.create(), atb);
-                pat.setAnnotatedType(atb.create());
-            }
-            return false;
-
-        } else {
-            pat.veto();
-            return true;
-        }
-    }
-
-    public void processGenericOauthProvider(@Observes ProcessAnnotatedType<? extends OAuthService> pat) {
-        if (processGenericAnnotatedType(pat)) {
-            AnnotatedType<? extends OAuthService> at = pat.getAnnotatedType();
-            Class<? extends OAuthService> clazz = (Class<? extends OAuthService>) at.getBaseType();
-            OAuth qualOauth = at.getAnnotation(OAuth.class);
-            genericsOAuthProviders.put(qualOauth.value(), clazz);
-
-        }
-        ;
+    public void processOauthService(@Observes ProcessAnnotatedType<? extends OAuthService> pat) {
+        pat.veto();
+        AnnotatedType<? extends OAuthService> at = pat.getAnnotatedType();
+        Class<? extends OAuthService> clazz = (Class<? extends OAuthService>) at.getBaseType();
+        OAuth qualOauth = at.getAnnotation(OAuth.class);
+        if (qualOauth != null)
+            version2ServiceClass.put(qualOauth.value(), clazz);
     }
 
 
@@ -260,7 +227,7 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
 
         Class<? extends ProviderConfigOauth> clazz = (Class<? extends ProviderConfigOauth>) pb.getBean().getBeanClass();
         try {
-            service2OauthVersion.put(getSingleProviderRelatedQualifier(qualifiers, true),
+            serviceQualifier2Version.put(getSingleProviderRelatedQualifier(qualifiers, true),
                     clazz.newInstance().getOAuthVersion());
         } catch (Exception e) {
             throw new AgoravaException("Error while retrieving version of OAuth in tier config", e);
@@ -289,7 +256,7 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
         if (bean.getQualifiers().contains(GenericBeanLiteral.INSTANCE)) {
             for (Annotation annotation : bean.getQualifiers()) {
                 if (annotation instanceof OAuth) {
-                    genericsOAuthProviders.put(((OAuth) annotation).value(), bean);
+                    version2ServiceClass.put(((OAuth) annotation).value(), bean);
 
                 }
             }
@@ -302,25 +269,22 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
     private <T> void beanRegisterer(Class<T> clazz, Annotation qual, Class<? extends Annotation> scope, AfterBeanDiscovery abd,
                                     BeanManager beanManager, Type... types) {
 
-        if (!(overridedGenericServices.containsKey(qual) && overridedGenericServices.get(qual).contains(clazz))) {
+        AnnotatedType<T> at = beanManager.createAnnotatedType(clazz);
+        AnnotatedTypeBuilder<T> atb = new AnnotatedTypeBuilder<T>()
+                .readFromType(clazz)
+                .addToClass(qual)
+                .setJavaClass(clazz);
 
-            AnnotatedType<T> at = beanManager.createAnnotatedType(clazz);
-            AnnotatedTypeBuilder<T> atb = new AnnotatedTypeBuilder<T>()
-                    .readFromType(clazz)
-                    .addToClass(qual)
-                    .setJavaClass(clazz);
+        applyQualifier(qual, at, atb);
 
-            applyQualifier(qual, at, atb);
+        BeanBuilder<T> providerBuilder = new BeanBuilder<T>(beanManager)
+                .readFromType(atb.create())
+                .scope(scope)
+                .passivationCapable(true)
+                .addTypes(types);
 
-            BeanBuilder<T> providerBuilder = new BeanBuilder<T>(beanManager)
-                    .readFromType(atb.create())
-                    .scope(scope)
-                    .passivationCapable(true)
-                    .addTypes(types);
-
-            Bean<T> newBean = providerBuilder.create();
-            abd.addBean(newBean);
-        }
+        Bean<T> newBean = providerBuilder.create();
+        abd.addBean(newBean);
     }
 
     /**
@@ -335,9 +299,9 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
 
 
         for (Annotation qual : servicesQualifiersConfigured) {
-            OAuth.OAuthVersion version = service2OauthVersion.get(qual);
+            OAuth.OAuthVersion version = serviceQualifier2Version.get(qual);
 
-            Class clazz = genericsOAuthProviders.get(version);
+            Class clazz = version2ServiceClass.get(version);
 
             beanRegisterer(clazz, qual, Dependent.class, abd, beanManager, OAuthService.class);
         }
