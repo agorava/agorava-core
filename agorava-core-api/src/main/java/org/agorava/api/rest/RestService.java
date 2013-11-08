@@ -103,12 +103,5 @@ public interface RestService extends Serializable {
      */
     void delete(String uri);
 
-    /**
-     * Allow to add specific parameter to header of all requests send by this service
-     *
-     * @param requestHeader a map containing these headers
-     */
-    void setRequestHeader(Map<String, String> requestHeader);
-
 
 }

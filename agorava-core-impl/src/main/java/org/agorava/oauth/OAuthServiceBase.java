@@ -226,15 +226,6 @@ public abstract class OAuthServiceBase implements OAuthService {
         sendSignedRequest(Verb.DELETE, uri);
     }
 
-    protected Map<String, String> getRequestHeader() {
-        return requestHeader;
-    }
-
-    @Override
-    public void setRequestHeader(Map<String, String> requestHeader) {
-        this.requestHeader = requestHeader;
-    }
-
 
     @Override
     public Token getAccessToken(Token requestToken, String verifier) {
