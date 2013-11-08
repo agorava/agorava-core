@@ -99,7 +99,9 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
 
     //-------------------- Utilities -------------------------------------
 
-    void applyQualifier(Annotation qual, AnnotatedType<?> at, AnnotatedTypeBuilder<?> atb) {
+    void applyQualifier(Annotation qual, AnnotatedTypeBuilder<?> atb) {
+        AnnotatedType<?> at = atb.create();
+
         //do a loop on all field to replace annotation mark by CDI annotations
         for (AnnotatedField af : at.getFields())
             if (af.isAnnotationPresent(InjectWithQualifier.class)) {
@@ -269,13 +271,12 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
     private <T> void beanRegisterer(Class<T> clazz, Annotation qual, Class<? extends Annotation> scope, AfterBeanDiscovery abd,
                                     BeanManager beanManager, Type... types) {
 
-        AnnotatedType<T> at = beanManager.createAnnotatedType(clazz);
         AnnotatedTypeBuilder<T> atb = new AnnotatedTypeBuilder<T>()
                 .readFromType(clazz)
                 .addToClass(qual)
                 .setJavaClass(clazz);
 
-        applyQualifier(qual, at, atb);
+        applyQualifier(qual, atb);
 
         BeanBuilder<T> providerBuilder = new BeanBuilder<T>(beanManager)
                 .readFromType(atb.create())
@@ -307,6 +308,7 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
         }
 
 
+        // Adding all Provider Related qualifier on Session producer
         WrappingBeanBuilder<OAuthSession> wbp = new WrappingBeanBuilder<OAuthSession>(osb, beanManager);
         wbp.readFromType(beanManager.createAnnotatedType(OAuthSession.class)).qualifiers(servicesQualifiersConfigured)
                 .addQualifiers(new AnyLiteral(), CurrentLiteral.INSTANCE).scope(Dependent.class).name("currentSession");
