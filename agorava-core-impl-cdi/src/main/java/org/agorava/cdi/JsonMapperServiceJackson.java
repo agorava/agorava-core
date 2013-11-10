@@ -57,11 +57,14 @@ public class JsonMapperServiceJackson implements JsonMapperService {
     @Override
     public <T> T mapToObject(Response resp, Class<T> clazz) throws ResponseException {
 
-        String msg = resp.getBody();
+        String msg = "";
         if (resp.getCode() != 200) {
             throw new ResponseException(resp);
         }
         try {
+            msg = resp.getBody();
+            if (clazz.equals(String.class))
+                return (T) msg;
             return objectMapper.readValue(msg, clazz);
         } catch (IOException e) {
             throw new AgoravaException("Unable to map Json response for this response " + msg, e);
@@ -71,6 +74,8 @@ public class JsonMapperServiceJackson implements JsonMapperService {
     @Override
     public String objectToJsonString(Object obj) {
         try {
+            if (obj.getClass().equals(String.class))
+                return (String) obj;
             return objectMapper.writeValueAsString(obj);
         } catch (Exception e) {
             throw new AgoravaException("Unable to map a " + obj.getClass().getName() + " to json", e);
