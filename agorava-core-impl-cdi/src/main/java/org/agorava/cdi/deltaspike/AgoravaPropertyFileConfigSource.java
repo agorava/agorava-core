@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.agorava.cdi;
+package org.agorava.cdi.deltaspike;
 
 import org.apache.deltaspike.core.spi.config.ConfigSource;
 

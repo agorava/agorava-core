@@ -19,6 +19,7 @@ package org.agorava.cdi;
 import org.agorava.api.atinject.Current;
 import org.agorava.api.oauth.OAuthSession;
 import org.agorava.api.storage.UserSessionRepository;
+import org.agorava.cdi.deltaspike.DifferentOrNull;
 import org.apache.deltaspike.core.api.exclude.Exclude;
 
 import javax.enterprise.context.SessionScoped;
@@ -31,7 +32,7 @@ import javax.inject.Named;
  */
 
 @SessionScoped
-@Exclude(onExpression = "producerScope!=session")
+@Exclude(onExpression = "producerScope,session", interpretedBy = DifferentOrNull.class)
 public class InSessionProducer extends InApplicationProducer {
 
 

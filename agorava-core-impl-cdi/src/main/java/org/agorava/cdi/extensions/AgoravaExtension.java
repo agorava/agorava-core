@@ -309,11 +309,18 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
 
 
         // Adding all Provider Related qualifier on Session producer
-        WrappingBeanBuilder<OAuthSession> wbp = new WrappingBeanBuilder<OAuthSession>(osb, beanManager);
-        wbp.readFromType(beanManager.createAnnotatedType(OAuthSession.class)).qualifiers(servicesQualifiersConfigured)
-                .addQualifiers(new AnyLiteral(), CurrentLiteral.INSTANCE).scope(Dependent.class).name("currentSession");
-        Bean res = wbp.create();
-        abd.addBean(res);
+        if (osb == null) {
+            abd.addDefinitionError(new AgoravaException("Application didn't provided OAuthSession bean. You should add one " +
+                    "via a producer or activate automatic management by adding " +
+                    "producerScope=<application|session|request|cookie> in " +
+                    "agorava.properties file"));
+        } else {
+            WrappingBeanBuilder<OAuthSession> wbp = new WrappingBeanBuilder<OAuthSession>(osb, beanManager);
+            wbp.readFromType(beanManager.createAnnotatedType(OAuthSession.class)).qualifiers(servicesQualifiersConfigured)
+                    .addQualifiers(new AnyLiteral(), CurrentLiteral.INSTANCE).scope(Dependent.class).name("currentSession");
+            Bean res = wbp.create();
+            abd.addBean(res);
+        }
 
     }
 

@@ -21,6 +21,7 @@ import org.agorava.api.oauth.OAuthSession;
 import org.agorava.api.oauth.application.OAuthAppSettings;
 import org.agorava.api.oauth.application.SimpleOAuthAppSettingsBuilder;
 import org.agorava.api.storage.UserSessionRepository;
+import org.agorava.cdi.deltaspike.DifferentOrNull;
 import org.agorava.jsf.FacesUrlTransformer;
 import org.agorava.spi.AppSettingsTuner;
 import org.apache.deltaspike.core.api.exclude.Exclude;
@@ -38,7 +39,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 
 @RequestScoped
-@Exclude(onExpression = "producerScope!=request")
+@Exclude(onExpression = "producerScope,request", interpretedBy = DifferentOrNull.class)
 public class InRequestProducer extends InApplicationProducer {
 
     private static final long serialVersionUID = 6446160199657772110L;

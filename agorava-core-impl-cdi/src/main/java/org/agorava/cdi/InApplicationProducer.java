@@ -22,6 +22,7 @@ import org.agorava.api.exception.AgoravaException;
 import org.agorava.api.oauth.OAuthSession;
 import org.agorava.api.storage.GlobalRepository;
 import org.agorava.api.storage.UserSessionRepository;
+import org.agorava.cdi.deltaspike.DifferentOrNull;
 import org.apache.deltaspike.core.api.exclude.Exclude;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -38,7 +39,7 @@ import java.util.Set;
  */
 
 @ApplicationScoped
-@Exclude(onExpression = "producerScope!=application")
+@Exclude(onExpression = "producerScope,application", interpretedBy = DifferentOrNull.class)
 public class InApplicationProducer implements Serializable {
 
     @Inject
