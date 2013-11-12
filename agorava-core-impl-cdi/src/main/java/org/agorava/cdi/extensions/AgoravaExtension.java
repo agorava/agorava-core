@@ -30,7 +30,6 @@ import org.agorava.cdi.CurrentLiteral;
 import org.agorava.spi.ProviderConfigOauth;
 import org.apache.deltaspike.core.api.config.ConfigResolver;
 import org.apache.deltaspike.core.api.literal.AnyLiteral;
-import org.apache.deltaspike.core.api.literal.NamedLiteral;
 import org.apache.deltaspike.core.util.bean.BeanBuilder;
 import org.apache.deltaspike.core.util.bean.WrappingBeanBuilder;
 import org.apache.deltaspike.core.util.metadata.builder.AnnotatedTypeBuilder;
@@ -55,6 +54,7 @@ import javax.enterprise.inject.spi.ProcessBean;
 import javax.enterprise.inject.spi.ProcessProducer;
 import javax.enterprise.inject.spi.ProcessProducerMethod;
 import javax.enterprise.inject.spi.Producer;
+import javax.inject.Named;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
@@ -249,7 +249,8 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
     }
 
     private void captureOauthSessionProducer(@Observes ProcessProducerMethod<OAuthSession, ?> pb) {
-        osb = pb.getBean();
+        if (!pb.getAnnotated().isAnnotationPresent(Named.class))
+            osb = pb.getBean();
     }
 
     /*
