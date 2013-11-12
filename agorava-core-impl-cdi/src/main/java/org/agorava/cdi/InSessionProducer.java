@@ -46,7 +46,14 @@ public class InSessionProducer extends InApplicationProducer {
 
 
     @Produces
-    public OAuthSession getCurrentSession(InjectionPoint ip, @Current UserSessionRepository repository) {
-        return super.getCurrentSession(ip, repository);
+    public OAuthSession resolveSession(InjectionPoint ip, @Current UserSessionRepository repository) {
+        return super.resolveSession(ip, repository);
+    }
+
+    @Produces
+    @Named
+    @Override
+    public OAuthSession getCurrentSession(@Current UserSessionRepository repository) {
+        return super.getCurrentSession(repository);
     }
 }

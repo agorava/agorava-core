@@ -56,7 +56,7 @@ public class InApplicationProducer implements Serializable {
 
 
     @Produces
-    public OAuthSession getCurrentSession(InjectionPoint ip, @Current UserSessionRepository repository) {
+    protected OAuthSession resolveSession(InjectionPoint ip, @Current UserSessionRepository repository) {
         if (ip == null)
             return repository.getCurrent();
         Set<Annotation> quals = ip.getQualifiers();
@@ -83,5 +83,12 @@ public class InApplicationProducer implements Serializable {
             return repository.getCurrent();
         }
         throw new UnsupportedOperationException("Cannot inject session whitout Current Qualifier in " + ip);
+    }
+
+    @Produces
+    @Named
+    public OAuthSession getCurrentSession(@Current UserSessionRepository repository) {
+        return resolveSession(null,repository);
+
     }
 }

@@ -30,6 +30,7 @@ import org.agorava.cdi.CurrentLiteral;
 import org.agorava.spi.ProviderConfigOauth;
 import org.apache.deltaspike.core.api.config.ConfigResolver;
 import org.apache.deltaspike.core.api.literal.AnyLiteral;
+import org.apache.deltaspike.core.api.literal.NamedLiteral;
 import org.apache.deltaspike.core.util.bean.BeanBuilder;
 import org.apache.deltaspike.core.util.bean.WrappingBeanBuilder;
 import org.apache.deltaspike.core.util.metadata.builder.AnnotatedTypeBuilder;
@@ -317,7 +318,7 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
         } else {
             WrappingBeanBuilder<OAuthSession> wbp = new WrappingBeanBuilder<OAuthSession>(osb, beanManager);
             wbp.readFromType(beanManager.createAnnotatedType(OAuthSession.class)).qualifiers(servicesQualifiersConfigured)
-                    .addQualifiers(new AnyLiteral(), CurrentLiteral.INSTANCE).scope(Dependent.class).name("currentSession");
+                    .addQualifiers(new AnyLiteral(), CurrentLiteral.INSTANCE).scope(Dependent.class);
             Bean res = wbp.create();
             abd.addBean(res);
         }
