@@ -16,7 +16,7 @@
 
 package org.agorava.api.service;
 
-import org.agorava.api.oauth.OAuthConstants;
+import org.agorava.api.AgoravaConstants;
 
 import java.util.regex.Pattern;
 
@@ -78,12 +78,12 @@ public class Preconditions {
      */
     public static void checkValidOAuthCallback(String url, String errorMsg) {
         checkEmptyString(url, errorMsg);
-        if (url.toLowerCase(ENGLISH).compareToIgnoreCase(OAuthConstants.OUT_OF_BAND) != 0) {
+        if (url.toLowerCase(ENGLISH).compareToIgnoreCase(AgoravaConstants.OUT_OF_BAND) != 0) {
             check(isUrl(url), errorMsg);
         }
     }
 
-    private static boolean isUrl(String url) {
+    public static boolean isUrl(String url) {
         return URL_PATTERN.matcher(url).matches();
     }
 

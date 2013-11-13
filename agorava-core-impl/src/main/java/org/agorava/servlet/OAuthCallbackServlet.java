@@ -16,12 +16,13 @@
 
 package org.agorava.servlet;
 
+import org.agorava.AgoravaContext;
+import org.agorava.api.AgoravaConstants;
 import org.agorava.api.exception.AgoravaException;
 import org.agorava.api.service.OAuthLifeCycleService;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,22 +38,19 @@ public class OAuthCallbackServlet extends HttpServlet {
     OAuthLifeCycleService OAuthLifeCycleService;
 
     protected void renderResponse(HttpServletRequest req, HttpServletResponse resp) {
-        ServletOutputStream os = null;
+
+        String internalCallBack = req.getParameter(AgoravaConstants.INTERN_CALLBACK_PARAM_NAME);
+        if (internalCallBack == null)
+            internalCallBack = AgoravaContext.getInternalCallBack();
+
         try {
-            os = resp.getOutputStream();
-            os.println("<script type=\"text/javascript\">");
-            os.println("function moveOn() {\n" +
-                    "            window.opener.location.reload();\n" +
-                    "            window.close();\n" +
-                    "        }\n" +
-                    "moveOn();");
-            os.println("</script>");
-            os.flush();
-            os.close();
+            if (internalCallBack.startsWith("/"))
+                internalCallBack = req.getContextPath() + internalCallBack;
+            internalCallBack = resp.encodeRedirectURL(internalCallBack + "?" + req.getQueryString());
+            resp.sendRedirect(internalCallBack);
         } catch (IOException e) {
             throw new AgoravaException(e);
         }
-
     }
 
     @Override

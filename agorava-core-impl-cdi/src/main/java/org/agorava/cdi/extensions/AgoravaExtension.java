@@ -17,6 +17,7 @@
 package org.agorava.cdi.extensions;
 
 import org.agorava.AgoravaContext;
+import org.agorava.api.AgoravaConstants;
 import org.agorava.api.atinject.InjectWithQualifier;
 import org.agorava.api.atinject.ProviderRelated;
 import org.agorava.api.exception.AgoravaException;
@@ -336,6 +337,11 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
         new BeanResolverCdi();
 
         producerScope = ConfigResolver.getPropertyValue("producerScope", "");
+        internalCallBack = ConfigResolver.getPropertyValue(AgoravaConstants.INTERN_CALLBACK_PARAM_NAME);
+        if (internalCallBack == null) {
+            log.warning("No internal callback defined, it's defaulted to home page");
+            internalCallBack = "/";
+        }
 
         log.info("Agorava initialization complete");
     }

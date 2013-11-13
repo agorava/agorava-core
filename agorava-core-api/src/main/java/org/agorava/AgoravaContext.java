@@ -50,6 +50,8 @@ public class AgoravaContext {
 
     private static List<String> listOfServices = null;
 
+    protected static String internalCallBack;
+
 
     /**
      * @return the way that {@link org.agorava.api.oauth.OAuthSession} and {@link org.agorava.api.storage
@@ -101,5 +103,12 @@ public class AgoravaContext {
         if (listOfServices == null)
             listOfServices = new ArrayList<String>(getSocialRelated());
         return listOfServices;
+    }
+
+    /**
+     * @return the relative url of the default page to return after an OAuth callback
+     */
+    public static String getInternalCallBack() {
+        return internalCallBack;
     }
 }

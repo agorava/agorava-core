@@ -17,6 +17,7 @@
 package org.agorava.api.oauth.application;
 
 import org.agorava.AgoravaContext;
+import org.agorava.api.AgoravaConstants;
 import org.agorava.api.exception.AgoravaException;
 
 import java.lang.annotation.Annotation;
@@ -35,7 +36,7 @@ public class SimpleOAuthAppSettingsBuilder implements OAuthAppSettingsBuilder {
 
     private String apiSecret;
 
-    private String callback = "oob";
+    private String callback;
 
     private String scope = "";
 
@@ -77,7 +78,10 @@ public class SimpleOAuthAppSettingsBuilder implements OAuthAppSettingsBuilder {
      * {@inheritDoc}
      * This implementation add a check to callback. If it's not 'oob' and doesn't start with 'http://'
      * it'll try to get the path of the current application to dynamically create a return URL when
-     * connection on remote Media is over.
+     * connection on Oauth service is over.
+     * As some service build the Callback URL from domain name configured when the OAuth application is created (for security
+     * reasons), whe should make the distinction between relative URL that should be prefixed here (without a beginning "/")
+     * and relative url that will prefixed by remote service (with a beginning "/")
      *
      * @param callback a callback url or 'oob' if the application is not on the web
      * @return this builder
@@ -100,6 +104,8 @@ public class SimpleOAuthAppSettingsBuilder implements OAuthAppSettingsBuilder {
 
     @Override
     public OAuthAppSettings build() {
+        if (callback == null)
+            callback(AgoravaConstants.CALLBACK_URL);
         return new OAuthAppSettings(name, apiKey, apiSecret, callback, scope, qualifier);
     }
 

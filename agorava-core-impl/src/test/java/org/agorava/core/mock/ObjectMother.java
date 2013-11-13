@@ -17,7 +17,7 @@
 package org.agorava.core.mock;
 
 
-import org.agorava.api.oauth.OAuthConstants;
+import org.agorava.api.AgoravaConstants;
 import org.agorava.api.oauth.OAuthRequest;
 import org.agorava.api.rest.Verb;
 import org.agorava.rest.OAuthRequestImpl;
@@ -26,10 +26,10 @@ public class ObjectMother {
 
     public static OAuthRequest createSampleOAuthRequest() {
         OAuthRequest request = new OAuthRequestImpl(Verb.GET, "http://example.com");
-        request.addOAuthParameter(OAuthConstants.TIMESTAMP, "123456");
-        request.addOAuthParameter(OAuthConstants.CONSUMER_KEY, "AS#$^*@&");
-        request.addOAuthParameter(OAuthConstants.CALLBACK, "http://example/callback");
-        request.addOAuthParameter(OAuthConstants.SIGNATURE, "OAuth-Signature");
+        request.addOAuthParameter(AgoravaConstants.TIMESTAMP, "123456");
+        request.addOAuthParameter(AgoravaConstants.CONSUMER_KEY, "AS#$^*@&");
+        request.addOAuthParameter(AgoravaConstants.CALLBACK, "http://example/callback");
+        request.addOAuthParameter(AgoravaConstants.SIGNATURE, "OAuth-Signature");
         return request;
     }
 }

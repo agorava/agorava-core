@@ -16,7 +16,7 @@
 
 package org.agorava.rest;
 
-import org.agorava.api.oauth.OAuthConstants;
+import org.agorava.api.AgoravaConstants;
 import org.agorava.api.oauth.OAuthRequest;
 import org.agorava.api.rest.Verb;
 
@@ -52,11 +52,11 @@ public class OAuthRequestImpl extends RequestImpl implements OAuthRequest {
     }
 
     private String checkKey(String key) {
-        if (key.startsWith(OAUTH_PREFIX) || key.equals(OAuthConstants.SCOPE)) {
+        if (key.startsWith(OAUTH_PREFIX) || key.equals(AgoravaConstants.SCOPE)) {
             return key;
         } else {
             throw new IllegalArgumentException(String.format("OAuth parameters must either be '%s' or start with '%s'",
-                    OAuthConstants.SCOPE, OAUTH_PREFIX));
+                    AgoravaConstants.SCOPE, OAUTH_PREFIX));
         }
     }
 

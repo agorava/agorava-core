@@ -17,10 +17,10 @@
 package org.agorava.oauth;
 
 
+import org.agorava.api.AgoravaConstants;
 import org.agorava.api.atinject.GenericBean;
 import org.agorava.api.atinject.InjectWithQualifier;
 import org.agorava.api.oauth.OAuth;
-import org.agorava.api.oauth.OAuthConstants;
 import org.agorava.api.oauth.OAuthRequest;
 import org.agorava.api.oauth.Token;
 import org.agorava.api.oauth.Verifier;
@@ -45,11 +45,11 @@ public class OAuth20ServiceImpl extends OAuthServiceBase {
     public Token getAccessToken(Token requestToken, Verifier verifier) {
         OAuthAppSettings config = getTunedOAuthAppSettings();
         OAuthRequest request = new OAuthRequestImpl(api.getAccessTokenVerb(), api.getAccessTokenEndpoint());
-        request.addQuerystringParameter(OAuthConstants.CLIENT_ID, config.getApiKey());
-        request.addQuerystringParameter(OAuthConstants.CLIENT_SECRET, config.getApiSecret());
-        request.addQuerystringParameter(OAuthConstants.CODE, verifier.getValue());
-        request.addQuerystringParameter(OAuthConstants.REDIRECT_URI, config.getCallback());
-        if (config.hasScope()) request.addQuerystringParameter(OAuthConstants.SCOPE, config.getScope());
+        request.addQuerystringParameter(AgoravaConstants.CLIENT_ID, config.getApiKey());
+        request.addQuerystringParameter(AgoravaConstants.CLIENT_SECRET, config.getApiSecret());
+        request.addQuerystringParameter(AgoravaConstants.CODE, verifier.getValue());
+        request.addQuerystringParameter(AgoravaConstants.REDIRECT_URI, config.getCallback());
+        if (config.hasScope()) request.addQuerystringParameter(AgoravaConstants.SCOPE, config.getScope());
         Response response = request.send(); //todo:should check return code and launch ResponseException if it's not 200
         return api.getAccessTokenExtractor().extract(response.getBody());
     }
@@ -73,13 +73,13 @@ public class OAuth20ServiceImpl extends OAuthServiceBase {
      * {@inheritDoc}
      */
     public void signRequest(Token accessToken, OAuthRequest request) {
-        request.addQuerystringParameter(OAuthConstants.ACCESS_TOKEN, accessToken.getToken());
+        request.addQuerystringParameter(AgoravaConstants.ACCESS_TOKEN, accessToken.getToken());
     }
 
 
     @Override
     public String getVerifierParamName() {
-        return OAuthConstants.CODE;
+        return AgoravaConstants.CODE;
     }
 
     @Override

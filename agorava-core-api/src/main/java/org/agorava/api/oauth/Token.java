@@ -16,6 +16,7 @@
 
 package org.agorava.api.oauth;
 
+import org.agorava.api.AgoravaConstants;
 import org.agorava.api.service.Preconditions;
 
 import java.io.Serializable;
@@ -69,7 +70,7 @@ public class Token implements Serializable {
      * @return true if the token is empty (token = "", secret = "")
      */
     public boolean isEmpty() {
-        return equals(OAuthConstants.EMPTY_TOKEN);
+        return equals(AgoravaConstants.EMPTY_TOKEN);
     }
 
     @Override

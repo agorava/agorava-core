@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package org.agorava.api.oauth;
+package org.agorava.api;
+
+import org.agorava.api.oauth.Token;
 
 /**
- * This interface contains OAuth constants, used project-wide
+ * This interface contains OAuth and other Agorava constants
  *
- * @author Pablo Fernandez
  * @author Antoine Sabot-Durand
  */
-public interface OAuthConstants {
+public interface AgoravaConstants {
     /**
      * Time stamp field name in OAuth request
      */
@@ -126,9 +127,21 @@ public interface OAuthConstants {
     String REDIRECT_URI = "redirect_uri";
 
     /**
-     * Returned code field name in OAuth request
+     * Return code field name in OAuth request
      */
     String CODE = "code";
+
+    /**
+     * default OAuth Callback relative url to send user when returning from OAuth service. It's used in {@link org.agorava
+     * .api.oauth.application.SimpleOAuthAppSettingsBuilder}
+     * to provide a default callback.
+     */
+    String CALLBACK_URL = "callback";
+
+    /**
+     * parameter name to store internal callback in url
+     */
+    String INTERN_CALLBACK_PARAM_NAME = "internalcallback";
 
 
 }

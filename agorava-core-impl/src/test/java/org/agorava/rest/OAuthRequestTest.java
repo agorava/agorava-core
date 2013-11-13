@@ -16,7 +16,7 @@
 
 package org.agorava.rest;
 
-import org.agorava.api.oauth.OAuthConstants;
+import org.agorava.api.AgoravaConstants;
 import org.agorava.api.oauth.OAuthRequest;
 import org.agorava.api.rest.Verb;
 import org.junit.Before;
@@ -35,10 +35,10 @@ public class OAuthRequestTest {
 
     @Test
     public void shouldAddOAuthParamters() {
-        request.addOAuthParameter(OAuthConstants.TOKEN, "token");
-        request.addOAuthParameter(OAuthConstants.NONCE, "nonce");
-        request.addOAuthParameter(OAuthConstants.TIMESTAMP, "ts");
-        request.addOAuthParameter(OAuthConstants.SCOPE, "feeds");
+        request.addOAuthParameter(AgoravaConstants.TOKEN, "token");
+        request.addOAuthParameter(AgoravaConstants.NONCE, "nonce");
+        request.addOAuthParameter(AgoravaConstants.TIMESTAMP, "ts");
+        request.addOAuthParameter(AgoravaConstants.SCOPE, "feeds");
 
         assertEquals(4, request.getOauthParameters().size());
     }

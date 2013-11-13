@@ -234,7 +234,7 @@ public abstract class OAuthServiceBase implements OAuthService {
 
     protected OAuthAppSettings getTunedOAuthAppSettings() {
         AppSettingsTuner tuner = BeanResolver.getInstance().resolve(AppSettingsTuner.class, true);
-        return tuner == null ? this.config : tuner.tune(this.config);
+        return tuner == null ? config : tuner.tune(config);
     }
 
 }

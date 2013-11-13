@@ -16,10 +16,10 @@
 
 package org.agorava.oauth;
 
+import org.agorava.api.AgoravaConstants;
 import org.agorava.api.atinject.GenericBean;
 import org.agorava.api.atinject.InjectWithQualifier;
 import org.agorava.api.oauth.OAuth;
-import org.agorava.api.oauth.OAuthConstants;
 import org.agorava.api.oauth.OAuthRequest;
 import org.agorava.api.oauth.Token;
 import org.agorava.api.oauth.Verifier;
@@ -65,14 +65,14 @@ public class OAuth10aServiceImpl extends OAuthServiceBase {
 
     @Override
     public String getVerifierParamName() {
-        return OAuthConstants.VERIFIER;
+        return AgoravaConstants.VERIFIER;
     }
 
     @Override
     public String getAuthorizationUrl() {
-        Token req = getRequestToken();
-        getSession().setRequestToken(req);
-        return getAuthorizationUrl(req);
+        Token token = getRequestToken();
+        getSession().setRequestToken(token);
+        return getAuthorizationUrl(token);
     }
 
     public Token getRequestToken(RequestTuner tuner) {
@@ -82,8 +82,8 @@ public class OAuth10aServiceImpl extends OAuthServiceBase {
         OAuthRequest request = requestFactory(api.getRequestTokenVerb(), api.getRequestTokenEndpoint());
 
         LOGGER.fine("setting oauth_callback to " + config.getCallback());
-        request.addOAuthParameter(OAuthConstants.CALLBACK, config.getCallback());
-        addOAuthParams(request, OAuthConstants.EMPTY_TOKEN);
+        request.addOAuthParameter(AgoravaConstants.CALLBACK, config.getCallback());
+        addOAuthParams(request, AgoravaConstants.EMPTY_TOKEN);
         appendSignature(request);
 
         LOGGER.fine("sending request...");
@@ -97,13 +97,13 @@ public class OAuth10aServiceImpl extends OAuthServiceBase {
     }
 
     private void addOAuthParams(OAuthRequest request, Token token) {
-        request.addOAuthParameter(OAuthConstants.TIMESTAMP, api.getTimestampService().getTimestampInSeconds());
-        request.addOAuthParameter(OAuthConstants.NONCE, api.getTimestampService().getNonce());
-        request.addOAuthParameter(OAuthConstants.CONSUMER_KEY, config.getApiKey());
-        request.addOAuthParameter(OAuthConstants.SIGN_METHOD, api.getSignatureService().getSignatureMethod());
-        request.addOAuthParameter(OAuthConstants.VERSION, getVersion());
-        if (config.hasScope()) request.addOAuthParameter(OAuthConstants.SCOPE, config.getScope());
-        request.addOAuthParameter(OAuthConstants.SIGNATURE, getSignature(request, token));
+        request.addOAuthParameter(AgoravaConstants.TIMESTAMP, api.getTimestampService().getTimestampInSeconds());
+        request.addOAuthParameter(AgoravaConstants.NONCE, api.getTimestampService().getNonce());
+        request.addOAuthParameter(AgoravaConstants.CONSUMER_KEY, config.getApiKey());
+        request.addOAuthParameter(AgoravaConstants.SIGN_METHOD, api.getSignatureService().getSignatureMethod());
+        request.addOAuthParameter(AgoravaConstants.VERSION, getVersion());
+        if (config.hasScope()) request.addOAuthParameter(AgoravaConstants.SCOPE, config.getScope());
+        request.addOAuthParameter(AgoravaConstants.SIGNATURE, getSignature(request, token));
 
         LOGGER.fine("appended additional OAuth parameters: " + MapUtils.toString(request.getOauthParameters()));
     }
@@ -122,8 +122,8 @@ public class OAuth10aServiceImpl extends OAuthServiceBase {
     public Token getAccessToken(Token requestToken, Verifier verifier, RequestTuner tuner) {
         LOGGER.fine("obtaining access token from " + api.getAccessTokenEndpoint());
         OAuthRequest request = requestFactory(api.getAccessTokenVerb(), api.getAccessTokenEndpoint());
-        request.addOAuthParameter(OAuthConstants.TOKEN, requestToken.getToken());
-        request.addOAuthParameter(OAuthConstants.VERIFIER, verifier.getValue());
+        request.addOAuthParameter(AgoravaConstants.TOKEN, requestToken.getToken());
+        request.addOAuthParameter(AgoravaConstants.VERIFIER, verifier.getValue());
 
         LOGGER.fine("setting token to: " + requestToken + " and verifier to: " + verifier);
         addOAuthParams(request, requestToken);
@@ -141,7 +141,7 @@ public class OAuth10aServiceImpl extends OAuthServiceBase {
 
         // Do not append the token if empty. This is for two legged OAuth calls.
         if (!token.isEmpty()) {
-            request.addOAuthParameter(OAuthConstants.TOKEN, token.getToken());
+            request.addOAuthParameter(AgoravaConstants.TOKEN, token.getToken());
         }
         LOGGER.fine("setting token to: " + token);
         addOAuthParams(request, token);
@@ -178,7 +178,7 @@ public class OAuth10aServiceImpl extends OAuthServiceBase {
                 LOGGER.fine("using Http HEADER signature");
 
                 String oauthHeader = api.getHeaderExtractor().extract(request);
-                request.addHeader(OAuthConstants.HEADER, oauthHeader);
+                request.addHeader(AgoravaConstants.HEADER, oauthHeader);
                 break;
             case QUERY_STRING:
                 LOGGER.fine("using Querystring signature");

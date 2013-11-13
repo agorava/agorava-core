@@ -16,10 +16,10 @@
 
 package org.agorava.oauth;
 
+import org.agorava.api.AgoravaConstants;
 import org.agorava.api.atinject.GenericBean;
 import org.agorava.api.atinject.InjectWithQualifier;
 import org.agorava.api.oauth.OAuth;
-import org.agorava.api.oauth.OAuthConstants;
 import org.agorava.api.oauth.OAuthRequest;
 import org.agorava.api.oauth.Token;
 import org.agorava.api.oauth.Verifier;
@@ -48,12 +48,12 @@ public class OAuth20FinalServiceImpl extends OAuth20ServiceImpl {
     @Override
     public Token getAccessToken(Token requestToken, Verifier verifier) {
         OAuthRequest request = new OAuthRequestImpl(api.getAccessTokenVerb(), api.getAccessTokenEndpoint());
-        request.addBodyParameter(OAuthConstants.CLIENT_ID, config.getApiKey());
-        request.addBodyParameter(OAuthConstants.CLIENT_SECRET, config.getApiSecret());
-        request.addBodyParameter(OAuthConstants.CODE, verifier.getValue());
-        request.addBodyParameter(OAuthConstants.REDIRECT_URI, config.getCallback());
+        request.addBodyParameter(AgoravaConstants.CLIENT_ID, config.getApiKey());
+        request.addBodyParameter(AgoravaConstants.CLIENT_SECRET, config.getApiSecret());
+        request.addBodyParameter(AgoravaConstants.CODE, verifier.getValue());
+        request.addBodyParameter(AgoravaConstants.REDIRECT_URI, config.getCallback());
         request.addBodyParameter("grant_type", "authorization_code");
-        if (config.hasScope()) request.addBodyParameter(OAuthConstants.SCOPE, config.getScope());
+        if (config.hasScope()) request.addBodyParameter(AgoravaConstants.SCOPE, config.getScope());
         Response response = request.send(); //todo:should check return code and launch ResponseException if it's not 200
         return api.getAccessTokenExtractor().extract(response.getBody());
     }
