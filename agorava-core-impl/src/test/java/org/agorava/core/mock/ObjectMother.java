@@ -17,7 +17,7 @@
 package org.agorava.core.mock;
 
 
-import org.agorava.api.AgoravaConstants;
+import org.agorava.AgoravaConstants;
 import org.agorava.api.oauth.OAuthRequest;
 import org.agorava.api.rest.Verb;
 import org.agorava.rest.OAuthRequestImpl;

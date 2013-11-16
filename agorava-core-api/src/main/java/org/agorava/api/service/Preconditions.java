@@ -16,7 +16,7 @@
 
 package org.agorava.api.service;
 
-import org.agorava.api.AgoravaConstants;
+import org.agorava.AgoravaConstants;
 
 import java.util.regex.Pattern;
 
@@ -83,7 +83,7 @@ public class Preconditions {
         }
     }
 
-    public static boolean isUrl(String url) {
+    private static boolean isUrl(String url) {
         return URL_PATTERN.matcher(url).matches();
     }
 

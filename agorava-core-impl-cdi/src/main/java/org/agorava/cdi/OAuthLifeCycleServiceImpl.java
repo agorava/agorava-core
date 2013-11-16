@@ -16,6 +16,7 @@
 
 package org.agorava.cdi;
 
+import org.agorava.AgoravaConstants;
 import org.agorava.api.atinject.Current;
 import org.agorava.api.event.OAuthComplete;
 import org.agorava.api.event.SocialEvent;
@@ -95,6 +96,11 @@ public class OAuthLifeCycleServiceImpl implements OAuthLifeCycleService {
         return userProfileServices.select(getCurrentSession().getServiceQualifier()).get();
     }
 
+    @Override
+    public String startDanceFor(String providerName) {
+        return startDanceFor(providerName, null);
+    }
+
 
     @Override
     public synchronized void endDance() {
@@ -152,8 +158,10 @@ public class OAuthLifeCycleServiceImpl implements OAuthLifeCycleService {
 
 
     @Override
-    public String startDanceFor(String providerName) {
-        buildSessionFor(providerName);
+    public String startDanceFor(String providerName, String internalCallBack) {
+        OAuthSession session = buildSessionFor(providerName);
+        if (internalCallBack != null && !"".equals(internalCallBack.trim()))
+            session.getExtraData().put(AgoravaConstants.INTERN_CALLBACK_PARAM_NAME, internalCallBack);
         return getCurrentService().getAuthorizationUrl();
     }
 

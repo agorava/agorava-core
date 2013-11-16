@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.agorava.api;
+package org.agorava;
 
 import org.agorava.api.oauth.Token;
 

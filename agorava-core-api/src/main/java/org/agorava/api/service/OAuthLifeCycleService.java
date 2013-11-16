@@ -76,6 +76,16 @@ public interface OAuthLifeCycleService extends Serializable {
 
 
     /**
+     * OAuth Dance entry point. For a given Provider name initialize OAuth workflow by returning authorization url end user
+     * should connect to in order to grant permission to the OAuth application to use her account or her behalf
+     *
+     * @param providerName     name of the service provider to connect to
+     * @param internalCallBack the internal URL to go back to after ending the dance
+     * @return the Authorization url needed to continue the OAuth Dance workflow
+     */
+    String startDanceFor(String providerName, String internalCallBack);
+
+    /**
      * OAuth dance entry point. For a given Provider {@link org.agorava.api.atinject.ProviderRelated} qualifier,
      * initializes OAuth workflow by returning authorization url end user should connect to in order to grant permission to
      * the OAuth application to use her account or her behalf

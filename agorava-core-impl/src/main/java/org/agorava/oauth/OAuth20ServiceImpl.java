@@ -17,7 +17,7 @@
 package org.agorava.oauth;
 
 
-import org.agorava.api.AgoravaConstants;
+import org.agorava.AgoravaConstants;
 import org.agorava.api.atinject.GenericBean;
 import org.agorava.api.atinject.InjectWithQualifier;
 import org.agorava.api.oauth.OAuth;

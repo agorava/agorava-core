@@ -16,8 +16,8 @@
 
 package org.agorava.servlet;
 
+import org.agorava.AgoravaConstants;
 import org.agorava.AgoravaContext;
-import org.agorava.api.AgoravaConstants;
 import org.agorava.api.exception.AgoravaException;
 import org.agorava.api.service.OAuthLifeCycleService;
 
@@ -35,11 +35,12 @@ import java.io.IOException;
 public class OAuthCallbackServlet extends HttpServlet {
 
     @Inject
-    OAuthLifeCycleService OAuthLifeCycleService;
+    OAuthLifeCycleService lifeCycleService;
 
     protected void renderResponse(HttpServletRequest req, HttpServletResponse resp) {
 
-        String internalCallBack = req.getParameter(AgoravaConstants.INTERN_CALLBACK_PARAM_NAME);
+        String internalCallBack = (String) lifeCycleService.getCurrentSession().getExtraData().get(AgoravaConstants
+                .INTERN_CALLBACK_PARAM_NAME);
         if (internalCallBack == null)
             internalCallBack = AgoravaContext.getInternalCallBack();
 
@@ -55,8 +56,8 @@ public class OAuthCallbackServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String verifier = req.getParameter(OAuthLifeCycleService.getVerifierParamName());
-        OAuthLifeCycleService.endDance(verifier);
+        String verifier = req.getParameter(lifeCycleService.getVerifierParamName());
+        lifeCycleService.endDance(verifier);
         renderResponse(req, resp);
     }
 }

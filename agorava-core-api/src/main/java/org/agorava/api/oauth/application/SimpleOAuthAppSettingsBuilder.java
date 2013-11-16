@@ -16,8 +16,8 @@
 
 package org.agorava.api.oauth.application;
 
+import org.agorava.AgoravaConstants;
 import org.agorava.AgoravaContext;
-import org.agorava.api.AgoravaConstants;
 import org.agorava.api.exception.AgoravaException;
 
 import java.lang.annotation.Annotation;

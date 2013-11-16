@@ -16,7 +16,7 @@
 
 package org.agorava.api.oauth;
 
-import org.agorava.api.AgoravaConstants;
+import org.agorava.AgoravaConstants;
 import org.agorava.api.service.Preconditions;
 
 import java.io.Serializable;

@@ -16,8 +16,8 @@
 
 package org.agorava.cdi.extensions;
 
+import org.agorava.AgoravaConstants;
 import org.agorava.AgoravaContext;
-import org.agorava.api.AgoravaConstants;
 import org.agorava.api.atinject.InjectWithQualifier;
 import org.agorava.api.atinject.ProviderRelated;
 import org.agorava.api.exception.AgoravaException;

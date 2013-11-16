@@ -16,6 +16,7 @@
 
 package org.agorava.utils;
 
+import org.agorava.api.service.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
 

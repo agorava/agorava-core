@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.agorava.utils;
+package org.agorava.api.service;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -51,7 +51,7 @@ public class StringUtils {
     /**
      * Join an array of Object with a given character as a separator
      *
-     * @param collection collection to join
+     * @param array array to join
      * @param separator  char to separate values
      * @return resulting string of the concatained values with separator
      */

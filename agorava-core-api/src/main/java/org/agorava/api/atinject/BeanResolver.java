@@ -18,7 +18,7 @@ package org.agorava.api.atinject;
 
 /**
  *
- * Provide an agnostic way to resolve a bean accross all JSR 330 engine
+ * Provide an agnostic way to resolve a bean across all JSR 330 engine
  *
  * @author Antoine Sabot-Durand
  */
@@ -30,7 +30,7 @@ public abstract class BeanResolver {
     protected static BeanResolver instance;
 
     /**
-     * @return the current resulover
+     * @return the current resolver
      */
     public static BeanResolver getInstance() {
         return instance;
@@ -58,7 +58,7 @@ public abstract class BeanResolver {
 
 
     /**
-     * Rsolve bean by its class. Resolution can be optional
+     * Resolve bean by its class. Resolution can be optional
      *
      * @param name of the bean
      * @param optional if true and no bean found return null

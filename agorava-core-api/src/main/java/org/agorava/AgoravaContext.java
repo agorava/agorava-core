@@ -50,6 +50,9 @@ public class AgoravaContext {
 
     private static List<String> listOfServices = null;
 
+    /**
+     * The default internal callback when whe return from OAuth connexion
+     */
     protected static String internalCallBack;
 
 

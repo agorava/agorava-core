@@ -22,7 +22,10 @@ import org.agorava.api.storage.Identifiable;
 import org.agorava.api.storage.UserSessionRepository;
 import org.agorava.spi.UserProfile;
 
+import java.io.Serializable;
 import java.lang.annotation.Annotation;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -54,6 +57,8 @@ public class OAuthSession implements Identifiable {
     private UserProfile userProfile;
 
     private UserSessionRepository repo;
+
+    private final Map<String, Serializable> extraData = new HashMap<String, Serializable>();
 
 
     OAuthSession(Annotation qualifier, Token requestToken, Token accessToken, String verifier,
@@ -211,6 +216,14 @@ public class OAuthSession implements Identifiable {
 
 
     /**
+     *
+     * @return the extra data map that can be associated to this Session
+     */
+    public Map<String, Serializable> getExtraData() {
+        return extraData;
+    }
+
+    /**
      * Builder class for {@link org.agorava.api.oauth.OAuthSession}
      *
      * @author Antoine Sabot-Durand
@@ -362,4 +375,5 @@ public class OAuthSession implements Identifiable {
             return new OAuthSession(qualifier, requestToken, accessToken, verifier, userProfile, repo, id);
         }
     }
+
 }
