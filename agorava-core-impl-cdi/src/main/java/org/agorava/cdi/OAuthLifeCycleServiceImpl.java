@@ -161,7 +161,7 @@ public class OAuthLifeCycleServiceImpl implements OAuthLifeCycleService {
     public String startDanceFor(String providerName, String internalCallBack) {
         OAuthSession session = buildSessionFor(providerName);
         if (internalCallBack != null && !"".equals(internalCallBack.trim()))
-            session.getExtraData().put(AgoravaConstants.INTERN_CALLBACK_PARAM_NAME, internalCallBack);
+            session.getExtraData().put(AgoravaConstants.INTERN_CALLBACK_PARAM, internalCallBack);
         return getCurrentService().getAuthorizationUrl();
     }
 

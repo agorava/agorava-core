@@ -26,7 +26,7 @@ import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Annotation used in Generic Bean (qualified with {@link GenericBean})to mark injection point that should be modified by
+ * Annotation used in Generic Bean to mark injection point that should be modified by
  * framework bootstrap to bear the same {@link ProviderRelated} qualifier than the containing bean.
  * <p>For example:
  * <pre>

@@ -28,19 +28,17 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * This qualifier is used to mark Class to indicate that they hare the default implementation for a Generic bean
- * For a given {@link ProviderRelated} Qualifier.
+ * This qualifier is used to mark Class to indicate that it should be used to generate differrent beans for each {@link
+ * ProviderRelated} Qualifier.
  * <p/>
  * Provider services (i.e. Social Media) are dynamically discovered when Agorava is bootstrapped thanks to Provider services
  * qualifiers
  * defined in each module and bearing the {@link ProviderRelated} annotation.
  * <p/>
  * Bootstrap process retrieve Generic Beans (thanks to this qualifier) and produces qualified versions with {@link
- * ProviderRelated} qualifiers discovered previously except if specific implementation bearing concrete service related
- * qualifier is found.
+ * ProviderRelated} qualifiers discovered previously.
  * <p/>
- * In any case (whether the bean is automatically produced from generic or specifically by third party developer) the
- * bootstrapping process will analyse generic beans to replace {@link InjectWithQualifier} annotation by injection with Bean
+ * The bootstrapping process will analyse generic beans to replace {@link InjectWithQualifier} annotation by injection with Bean
  * qualifier
  *
  * @author Antoine Sabot-Durand

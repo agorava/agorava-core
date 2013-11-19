@@ -55,6 +55,11 @@ public interface OAuthAppSettingsBuilder {
     String SCOPE = "scope";
 
     /**
+     * key prefix label
+     */
+    String PREFIX = "prefix";
+
+    /**
      * Set the qualifier of the Social Media for which the settings are intended.
      *
      * @param qualifier the name of the related Social Media

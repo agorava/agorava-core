@@ -39,6 +39,7 @@ import static org.agorava.api.oauth.OAuth.OAuthVersion.ONE;
 /**
  * OAuth 1.0a implementation of {@link org.agorava.api.oauth.OAuthProvider}
  *
+ * @author Antoine Sabot-Durand
  * @author Pablo Fernandez
  */
 

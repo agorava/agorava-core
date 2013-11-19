@@ -16,6 +16,7 @@
 
 package org.agorava.cdi;
 
+import org.agorava.AgoravaConstants;
 import org.agorava.api.atinject.Current;
 import org.agorava.api.oauth.OAuthSession;
 import org.agorava.api.storage.UserSessionRepository;
@@ -38,13 +39,11 @@ import javax.servlet.http.HttpServletResponse;
  */
 
 @SessionScoped
-@Exclude(onExpression = "producerScope,cookie", interpretedBy = DifferentOrNull.class)
+@Exclude(onExpression = InApplicationProducer.RESOLVER + ",cookie", interpretedBy = DifferentOrNull.class)
 public class InCookieProducer extends InRequestProducer {
 
-    public final static String REPO_COOKIE_NAME = "agorava_repo_id";
-
     @Inject
-    @ConfigProperty(name = "cookie.life", defaultValue = "-1")
+    @ConfigProperty(name = AgoravaConstants.RESOLVER_COOKIE_LIFE_PARAM, defaultValue = "-1")
     Integer cookielife;
 
 
@@ -56,23 +55,23 @@ public class InCookieProducer extends InRequestProducer {
     protected String getRepoId() {
         String id;
         for (Cookie cookie : request.getCookies()) {
-            if (cookie.getName().equals(REPO_COOKIE_NAME))
+            if (cookie.getName().equals(AgoravaConstants.RESOLVER_REPO_COOKIE_NAME))
                 return cookie.getValue();
         }
         return null;
     }
 
     private void setCookie(String id) {
-        Cookie cookie = new Cookie(REPO_COOKIE_NAME, id);
+        Cookie cookie = new Cookie(AgoravaConstants.RESOLVER_REPO_COOKIE_NAME, id);
         cookie.setMaxAge(cookielife);
         response.addCookie(cookie);
     }
 
     @Produces
     @Current
-    @Named
+    @Named("currentRepo")
     @RequestScoped
-    public UserSessionRepository getCurrentRepo() {
+    public UserSessionRepository getCurrentRepository() {
         String id = getRepoId();
         if (id == null || globalRepository.get(id) == null) {
             UserSessionRepository repo = globalRepository.createNew();

@@ -40,7 +40,7 @@ public class OAuthCallbackServlet extends HttpServlet {
     protected void renderResponse(HttpServletRequest req, HttpServletResponse resp) {
 
         String internalCallBack = (String) lifeCycleService.getCurrentSession().getExtraData().get(AgoravaConstants
-                .INTERN_CALLBACK_PARAM_NAME);
+                .INTERN_CALLBACK_PARAM);
         if (internalCallBack == null)
             internalCallBack = AgoravaContext.getInternalCallBack();
 

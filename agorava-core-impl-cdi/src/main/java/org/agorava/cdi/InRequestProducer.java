@@ -16,6 +16,7 @@
 
 package org.agorava.cdi;
 
+import org.agorava.AgoravaConstants;
 import org.agorava.api.atinject.Current;
 import org.agorava.api.oauth.OAuthSession;
 import org.agorava.api.oauth.application.OAuthAppSettings;
@@ -39,11 +40,10 @@ import javax.servlet.http.HttpServletRequest;
  */
 
 @RequestScoped
-@Exclude(onExpression = "producerScope,request", interpretedBy = DifferentOrNull.class)
+@Exclude(onExpression = InApplicationProducer.RESOLVER + ",request", interpretedBy = DifferentOrNull.class)
 public class InRequestProducer extends InApplicationProducer {
 
     private static final long serialVersionUID = 6446160199657772110L;
-
 
 
     @Inject
@@ -51,15 +51,15 @@ public class InRequestProducer extends InApplicationProducer {
     protected HttpServletRequest request;
 
     protected String getRepoId() {
-        return request.getParameter("repoid");
+        return request.getParameter(AgoravaConstants.REPOID_PARAM);
     }
 
 
     @Produces
     @Current
-    @Named
+    @Named("currentRepo")
     @RequestScoped
-    public UserSessionRepository getCurrentRepo() {
+    public UserSessionRepository getCurrentRepository() {
         String id = getRepoId();
         if (id == null || globalRepository.get(id) == null)
             return globalRepository.createNew();
@@ -94,7 +94,7 @@ public class InRequestProducer extends InApplicationProducer {
             return new SimpleOAuthAppSettingsBuilder()
                     .readFromSettings(toTune)
                     .callback(new FacesUrlTransformer(toTune.getCallback())
-                            .appendParamIfNecessary("repoid", repo.getId()).getUrl())
+                            .appendParamIfNecessary(AgoravaConstants.REPOID_PARAM, repo.getId()).getUrl())
                     .build();
         }
     }

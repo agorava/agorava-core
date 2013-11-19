@@ -32,15 +32,15 @@ import javax.inject.Named;
  */
 
 @SessionScoped
-@Exclude(onExpression = "producerScope,session", interpretedBy = DifferentOrNull.class)
+@Exclude(onExpression = InApplicationProducer.RESOLVER + ",session", interpretedBy = DifferentOrNull.class)
 public class InSessionProducer extends InApplicationProducer {
 
 
     @Produces
     @Current
-    @Named
+    @Named("currentRepo")
     @SessionScoped
-    public UserSessionRepository getCurrentRepo() {
+    public UserSessionRepository getCurrentRepository() {
         return globalRepository.createNew();
     }
 

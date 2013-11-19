@@ -139,9 +139,23 @@ public interface AgoravaConstants {
     String CALLBACK_URL = "callback";
 
     /**
-     * parameter name to store internal callback in url
+     * parameter name to store internal callback in {@link org.agorava.api.oauth.OAuthSession#extraData}
      */
-    String INTERN_CALLBACK_PARAM_NAME = "internalcallback";
+    String INTERN_CALLBACK_PARAM = "internalcallback";
 
 
+    /**
+     * parameter name used to propagate {@link org.agorava.api.storage.UserSessionRepository#getId()} in url
+     */
+    String REPOID_PARAM = "repoid";
+
+    /**
+     * cookie name used to store {@link org.agorava.api.storage.UserSessionRepository#getId()} on the browser
+     */
+    String RESOLVER_REPO_COOKIE_NAME = "agorava_repo_id";
+
+    /**
+     * parameter name in config containing the the lifetime of cookies
+     */
+    String RESOLVER_COOKIE_LIFE_PARAM = "cookie.life";
 }

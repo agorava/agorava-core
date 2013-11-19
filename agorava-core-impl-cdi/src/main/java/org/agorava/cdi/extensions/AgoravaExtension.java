@@ -337,7 +337,7 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
         new BeanResolverCdi();
 
         producerScope = ConfigResolver.getPropertyValue("producerScope", "");
-        internalCallBack = ConfigResolver.getPropertyValue(AgoravaConstants.INTERN_CALLBACK_PARAM_NAME);
+        internalCallBack = ConfigResolver.getPropertyValue(AgoravaConstants.INTERN_CALLBACK_PARAM);
         if (internalCallBack == null) {
             log.warning("No internal callback defined, it's defaulted to home page");
             internalCallBack = "/";

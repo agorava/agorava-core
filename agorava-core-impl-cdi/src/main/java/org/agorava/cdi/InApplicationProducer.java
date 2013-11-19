@@ -23,6 +23,8 @@ import org.agorava.api.oauth.OAuthSession;
 import org.agorava.api.storage.GlobalRepository;
 import org.agorava.api.storage.UserSessionRepository;
 import org.agorava.cdi.deltaspike.DifferentOrNull;
+import org.agorava.spi.SessionResolver;
+import org.agorava.spi.UserSessionRepositoryResolver;
 import org.apache.deltaspike.core.api.exclude.Exclude;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -30,7 +32,6 @@ import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.util.Set;
 
@@ -39,18 +40,21 @@ import java.util.Set;
  */
 
 @ApplicationScoped
-@Exclude(onExpression = "producerScope,application", interpretedBy = DifferentOrNull.class)
-public class InApplicationProducer implements Serializable {
+@Exclude(onExpression = InApplicationProducer.RESOLVER + ",application", interpretedBy = DifferentOrNull.class)
+public class InApplicationProducer implements SessionResolver, UserSessionRepositoryResolver {
+
+    public static final String RESOLVER = "resolverType";
 
     @Inject
     GlobalRepository globalRepository;
 
 
+    @Override
     @Produces
     @Current
-    @Named
+    @Named("currentRepo")
     @ApplicationScoped
-    public UserSessionRepository getCurrentRepo() {
+    public UserSessionRepository getCurrentRepository() {
         return globalRepository.createNew();
     }
 
@@ -85,10 +89,11 @@ public class InApplicationProducer implements Serializable {
         throw new UnsupportedOperationException("Cannot inject session whitout Current Qualifier in " + ip);
     }
 
+    @Override
     @Produces
     @Named
     public OAuthSession getCurrentSession(@Current UserSessionRepository repository) {
-        return resolveSession(null,repository);
+        return resolveSession(null, repository);
 
     }
 }
