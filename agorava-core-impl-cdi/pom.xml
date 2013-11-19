@@ -40,6 +40,7 @@
         <dependency>
             <groupId>org.agorava</groupId>
             <artifactId>agorava-core-impl</artifactId>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
