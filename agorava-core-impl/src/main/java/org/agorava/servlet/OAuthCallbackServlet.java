@@ -23,6 +23,7 @@ import org.agorava.api.service.OAuthLifeCycleService;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,7 +32,7 @@ import java.io.IOException;
 /**
  * @author Antoine Sabot-Durand
  */
-//@WebServlet(value = "/callback", name = "OAuthCallBackCdi")
+@WebServlet(value = "/callback", name = "OAuthCallBackCdi")
 public class OAuthCallbackServlet extends HttpServlet {
 
     @Inject
