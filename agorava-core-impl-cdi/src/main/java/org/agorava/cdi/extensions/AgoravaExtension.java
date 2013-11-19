@@ -28,6 +28,7 @@ import org.agorava.api.oauth.application.OAuthAppSettings;
 import org.agorava.api.oauth.application.OAuthAppSettingsBuilder;
 import org.agorava.api.oauth.application.OAuthApplication;
 import org.agorava.cdi.CurrentLiteral;
+import org.agorava.cdi.InApplicationProducer;
 import org.agorava.spi.ProviderConfigOauth;
 import org.apache.deltaspike.core.api.config.ConfigResolver;
 import org.apache.deltaspike.core.api.literal.AnyLiteral;
@@ -314,8 +315,8 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
         // Adding all Provider Related qualifier on Session producer
         if (osb == null) {
             abd.addDefinitionError(new AgoravaException("Application didn't provided OAuthSession bean. You should add one " +
-                    "via a producer or activate automatic management by adding " +
-                    "producerScope=<application|session|request|cookie> in " +
+                    "via a producer or activate automatic management by adding " + InApplicationProducer.RESOLVER +
+                    "=<application|session|request|cookie> in " +
                     "agorava.properties file"));
         } else {
             WrappingBeanBuilder<OAuthSession> wbp = new WrappingBeanBuilder<OAuthSession>(osb, beanManager);
