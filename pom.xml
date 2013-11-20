@@ -28,7 +28,7 @@
     <artifactId>agorava-core-parent</artifactId>
     <packaging>pom</packaging>
     <name>Agorava Core</name>
-    <version>0.7.0-SNAPSHOT</version>
+    <version>0.7.0</version>
     <description>Java API to ease the use of social media</description>
     <url>http://agorava.org</url>
     <inceptionYear>2012</inceptionYear>
