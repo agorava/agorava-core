@@ -90,7 +90,7 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
 
     private Map<Annotation, OAuth.OAuthVersion> serviceQualifier2Version = new HashMap<Annotation, OAuth.OAuthVersion>();
 
-    private Bean osb;
+    private static Bean osb;
 
     /**
      * @return the set of all service's qualifiers present in the application
