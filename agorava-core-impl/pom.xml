@@ -19,14 +19,14 @@
     <parent>
         <artifactId>agorava-core-parent</artifactId>
         <groupId>org.agorava</groupId>
-        <version>0.6.1</version>
+        <version>0.7.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>agorava-core-impl</artifactId>
     <packaging>jar</packaging>
 
-    <name>Agorava Core Java SE implementation</name>
+    <name>Agorava Core abstract JSR-330 implementation</name>
 
     <dependencies>
         <dependency>
@@ -34,29 +34,22 @@
             <artifactId>agorava-core-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.scribe</groupId>
-            <artifactId>scribe</artifactId>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>commons-beanutils</groupId>
-            <artifactId>commons-beanutils</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>commons-collections</groupId>
-            <artifactId>commons-collections</artifactId>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <groupId>javax.faces</groupId>
+            <artifactId>jsf-api</artifactId>
         </dependency>
+
     </dependencies>
 
 </project>
