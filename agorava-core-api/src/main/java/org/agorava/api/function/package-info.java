@@ -14,18 +14,9 @@
  * limitations under the License.
  */
 
-package org.agorava.api.storage;
-
-import org.agorava.api.function.Identifiable;
-import org.agorava.api.oauth.OAuthSession;
 
 /**
- * Allows to manage multiple OAuth Session. The connection to service are backed by a Set to
- * avoid null or duplicate connection. Uniqueness of a connection is based on service type and User name on the service
- *
- * @author Antoine Sabot-Durand
+ * This package contains functional API for Agorava
+ * @author Werner Keil
  */
-public interface UserSessionRepository extends Repository<OAuthSession>, Identifiable {
-
-
-}
+package org.agorava.api.function;

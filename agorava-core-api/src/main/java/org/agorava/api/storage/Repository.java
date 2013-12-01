@@ -19,6 +19,8 @@ package org.agorava.api.storage;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.agorava.api.function.Identifiable;
+
 /**
  * A repository containing a collection of element that can be iterated
  *
@@ -26,7 +28,7 @@ import java.util.Collection;
  * @author Antoine Sabot-Durand
  */
 public interface Repository<T extends Identifiable> extends Serializable, Iterable<T> {
-
+// TODO for Java 8 also add some functional interface on top...?
     /**
      * @return the current element
      */

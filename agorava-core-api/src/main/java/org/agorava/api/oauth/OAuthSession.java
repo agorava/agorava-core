@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-3014 Agorava
+ * Copyright 2013 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,8 @@ package org.agorava.api.oauth;
 
 import org.agorava.AgoravaContext;
 import org.agorava.api.exception.ProviderMismatchException;
-import org.agorava.api.storage.Identifiable;
-import org.agorava.api.storage.Nameable;
+import org.agorava.api.function.Identifiable;
+import org.agorava.api.function.Nameable;
 import org.agorava.api.storage.UserSessionRepository;
 import org.agorava.spi.UserProfile;
 

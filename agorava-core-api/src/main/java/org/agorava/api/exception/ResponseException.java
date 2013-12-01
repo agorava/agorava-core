@@ -33,7 +33,7 @@ public class ResponseException extends AgoravaException {
     private static final String MSG = "Remote service returned the error code {0} for the following Request : {1}\n" +
             "The following data was returned :\n{2}\n";
 
-    private Response response;
+    private final Response response;
 
     /**
      * Default constructor

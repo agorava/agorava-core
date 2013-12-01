@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-package org.agorava.api.storage;
+package org.agorava.api.function;
 
 import java.io.Serializable;
 
 /**
- * Provides String id to implementations
+ * Provides String name to implementations
  *
- * @author Antoine Sabot-Durand
+ * @author Werner Keil
  */
-public interface Identifiable extends Serializable {
-
+public interface Nameable extends Serializable {
+	
+	// TODO for Java 8 consider this a @FunctionalInterface
     /**
-     * @return a unique id
+     * @return a unique name
      */
-    String getId();
+    String getName();
 }

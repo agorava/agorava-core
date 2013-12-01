@@ -17,6 +17,9 @@
 package org.agorava.api.oauth;
 
 import javax.inject.Qualifier;
+
+import org.agorava.api.function.Labeled;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -47,8 +50,9 @@ public @interface OAuth {
      * The different values of OAuth
      *
      * @author Antoine Sabot-Durand
+     * @author Werner Keil
      */
-    enum OAuthVersion {
+    enum OAuthVersion implements Labeled {
 
         /**
          * Value for OAuth 1.0a

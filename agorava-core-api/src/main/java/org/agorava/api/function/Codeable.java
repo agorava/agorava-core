@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Agorava
+ * Copyright 2013 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-package org.agorava.api.storage;
+package org.agorava.api.function;
 
 import java.io.Serializable;
 
 /**
- * Provides String name to implementations
+ * Provides String code to implementations
  *
  * @author Werner Keil
  */
-public interface Nameable extends Serializable {
-
+public interface Codeable extends Serializable {
+	
+	// TODO for Java 8 consider this a functional interface
     /**
-     * @return a name
+     * @return a unique code
      */
-    String getName();
+    String getCode();
 }

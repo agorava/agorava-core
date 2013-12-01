@@ -14,18 +14,19 @@
  * limitations under the License.
  */
 
-package org.agorava.api.storage;
+package org.agorava.api.function;
 
-import org.agorava.api.function.Identifiable;
-import org.agorava.api.oauth.OAuthSession;
+import java.io.Serializable;
 
 /**
- * Allows to manage multiple OAuth Session. The connection to service are backed by a Set to
- * avoid null or duplicate connection. Uniqueness of a connection is based on service type and User name on the service
+ * Provides <type>int</type> id to implementations
  *
- * @author Antoine Sabot-Durand
+ * @author Werner Keil
  */
-public interface UserSessionRepository extends Repository<OAuthSession>, Identifiable {
-
-
+public interface IntIdentifiable extends Serializable {
+	// TODO for Java 8 consider this a functional interface
+    /**
+     * @return a unique id
+     */
+    int getId();
 }
