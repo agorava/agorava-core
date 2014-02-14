@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2014 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,10 @@ import org.apache.deltaspike.core.api.literal.AnyLiteral;
 import org.apache.deltaspike.core.util.bean.BeanBuilder;
 import org.apache.deltaspike.core.util.bean.WrappingBeanBuilder;
 import org.apache.deltaspike.core.util.metadata.builder.AnnotatedTypeBuilder;
+import static java.util.logging.Level.INFO;
+import static java.util.logging.Level.WARNING;
+import static org.agorava.cdi.extensions.AnnotationUtils.getAnnotationsWithMeta;
+import static org.agorava.cdi.extensions.AnnotationUtils.getSingleProviderRelatedQualifier;
 
 import javax.enterprise.context.Dependent;
 import javax.enterprise.context.spi.CreationalContext;
@@ -67,11 +71,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import static java.util.logging.Level.INFO;
-import static java.util.logging.Level.WARNING;
-import static org.agorava.cdi.extensions.AnnotationUtils.getAnnotationsWithMeta;
-import static org.agorava.cdi.extensions.AnnotationUtils.getSingleProviderRelatedQualifier;
-
 /**
  * Agorava CDI extension to discover existing module and configured modules
  *
@@ -80,17 +79,12 @@ import static org.agorava.cdi.extensions.AnnotationUtils.getSingleProviderRelate
 public class AgoravaExtension extends AgoravaContext implements Extension, Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    private Set<Annotation> servicesQualifiersConfigured = new HashSet<Annotation>();
-
     private static Logger log = Logger.getLogger(AgoravaExtension.class.getName());
-
+    private static Bean osb;
+    private Set<Annotation> providerQualifiersConfigured = new HashSet<Annotation>();
     private Map<OAuth.OAuthVersion, Class<? extends OAuthService>> version2ServiceClass = new HashMap<OAuth.OAuthVersion,
             Class<? extends OAuthService>>();
-
-    private Map<Annotation, OAuth.OAuthVersion> serviceQualifier2Version = new HashMap<Annotation, OAuth.OAuthVersion>();
-
-    private static Bean osb;
+    private Map<Annotation, OAuth.OAuthVersion> providerQualifiers2Version = new HashMap<Annotation, OAuth.OAuthVersion>();
 
     /**
      * @return the set of all service's qualifiers present in the application
@@ -98,7 +92,6 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
     public static Collection<Annotation> getServicesQualifiersAvailable() {
         return getServicesToQualifier().values();
     }
-
 
     //-------------------- Utilities -------------------------------------
 
@@ -135,7 +128,6 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
 
     }
 
-
     //----------------- Before Bean discovery Phase ----------------------------------
 
     /**
@@ -147,7 +139,6 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
         log.info("Starting Agorava Framework initialization");
     }
 
-
     //----------------- Process AnnotatedType Phase ----------------------------------
 
     public void processOauthService(@Observes ProcessAnnotatedType<? extends OAuthService> pat) {
@@ -158,7 +149,6 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
         if (qualOauth != null)
             version2ServiceClass.put(qualOauth.value(), clazz);
     }
-
 
     //----------------- Process Producer Phase ----------------------------------
 
@@ -172,7 +162,7 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
     public void processOAuthSettingsProducer(@Observes final ProcessProducer<?, OAuthAppSettings> pp) {
         final AnnotatedMember<OAuthAppSettings> annotatedMember = (AnnotatedMember<OAuthAppSettings>) pp.getAnnotatedMember();
 
-        log.log(INFO, "Qualifiers configured {0}", servicesQualifiersConfigured);
+        log.log(INFO, "Qualifiers configured {0}", providerQualifiersConfigured);
         Annotation qual = null;
         try {
             qual = getSingleProviderRelatedQualifier(annotatedMember, false);
@@ -181,7 +171,6 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
                     "Provider on " + annotatedMember.getJavaMember().getName() + " in " + annotatedMember.getJavaMember()
                     .getDeclaringClass()));
         }
-
 
         if (annotatedMember.isAnnotationPresent(OAuthApplication.class)) {
             if (annotatedMember instanceof AnnotatedField) {
@@ -209,11 +198,9 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
             pp.setProducer(new OAuthAppSettingsProducerDecorator(oldProducer, qual));
         }
 
-
         log.log(INFO, "Found settings for {0}", qual);
-        servicesQualifiersConfigured.add(qual);
+        providerQualifiersConfigured.add(qual);
     }
-
 
     //----------------- Process Bean Phase ----------------------------------
 
@@ -232,7 +219,7 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
 
         Class<? extends ProviderConfigOauth> clazz = (Class<? extends ProviderConfigOauth>) pb.getBean().getBeanClass();
         try {
-            serviceQualifier2Version.put(getSingleProviderRelatedQualifier(qualifiers, true),
+            providerQualifiers2Version.put(getSingleProviderRelatedQualifier(qualifiers, true),
                     clazz.newInstance().getOAuthVersion());
         } catch (Exception e) {
             throw new AgoravaException("Error while retrieving version of OAuth in tier config", e);
@@ -269,11 +256,10 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
         }
     }*/
 
-
     //----------------- Process After Bean Discovery Phase ----------------------------------
 
     private <T> void beanRegisterer(Class<T> clazz, Annotation qual, Class<? extends Annotation> scope, AfterBeanDiscovery abd,
-                                    BeanManager beanManager, Type... types) {
+            BeanManager beanManager, Type... types) {
 
         AnnotatedTypeBuilder<T> atb = new AnnotatedTypeBuilder<T>()
                 .readFromType(clazz)
@@ -302,15 +288,21 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
      */
     public void registerGenericBeans(@Observes AfterBeanDiscovery abd, BeanManager beanManager) {
 
-
-        for (Annotation qual : servicesQualifiersConfigured) {
-            OAuth.OAuthVersion version = serviceQualifier2Version.get(qual);
+        for (Annotation qual : providerQualifiersConfigured) {
+            OAuth.OAuthVersion version = providerQualifiers2Version.get(qual);
+            if (version == null) {
+                abd.addDefinitionError(new AgoravaException("There is no OAuth version associated to provider related " +
+                        "Qualifier " +
+                        "" + qual));
+            }
 
             Class clazz = version2ServiceClass.get(version);
+            if (clazz == null) {
+                abd.addDefinitionError(new AgoravaException("There is no OAuth Service class for OAuth version " + version));
+            }
 
             beanRegisterer(clazz, qual, Dependent.class, abd, beanManager, OAuthService.class);
         }
-
 
         // Adding all Provider Related qualifier on Session producer
         if (osb == null) {
@@ -320,14 +312,13 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
                     "agorava.properties file"));
         } else {
             WrappingBeanBuilder<OAuthSession> wbp = new WrappingBeanBuilder<OAuthSession>(osb, beanManager);
-            wbp.readFromType(beanManager.createAnnotatedType(OAuthSession.class)).qualifiers(servicesQualifiersConfigured)
+            wbp.readFromType(beanManager.createAnnotatedType(OAuthSession.class)).qualifiers(providerQualifiersConfigured)
                     .addQualifiers(new AnyLiteral(), CurrentLiteral.INSTANCE).scope(Dependent.class);
             Bean res = wbp.create();
             abd.addBean(res);
         }
 
     }
-
 
     //--------------------- After Deployment validation phase
 
@@ -359,7 +350,7 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
             getServicesToQualifier().put(name, qual);
             ctx.release();
         }
-        if (servicesQualifiersConfigured.size() != getServicesToQualifier().size())
+        if (providerQualifiersConfigured.size() != getServicesToQualifier().size())
             log.log(WARNING, "Some Service modules present in the application are not configured so won't be available");
         //TODO:list the service without config
 
