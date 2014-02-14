@@ -54,16 +54,19 @@ public class InCookieProducer extends InRequestProducer {
     @Override
     protected String getRepoId() {
         String id;
-        for (Cookie cookie : request.getCookies()) {
-            if (cookie.getName().equals(AgoravaConstants.RESOLVER_REPO_COOKIE_NAME))
-                return cookie.getValue();
-        }
+        if (request.getCookies() != null)
+            for (Cookie cookie : request.getCookies()) {
+                if (cookie.getName().equals(AgoravaConstants.RESOLVER_REPO_COOKIE_NAME))
+                    return cookie.getValue();
+            }
         return null;
     }
 
     private void setCookie(String id) {
         Cookie cookie = new Cookie(AgoravaConstants.RESOLVER_REPO_COOKIE_NAME, id);
         cookie.setMaxAge(cookielife);
+        String path = request.getContextPath().isEmpty() ? "/" : request.getContextPath();
+        cookie.setPath(request.getContextPath());
         response.addCookie(cookie);
     }
 
