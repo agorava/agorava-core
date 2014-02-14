@@ -26,7 +26,6 @@ import org.apache.deltaspike.core.api.exclude.Exclude;
 import org.apache.deltaspike.servlet.api.Web;
 
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.inject.Inject;
@@ -38,7 +37,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author Antoine Sabot-Durand
  */
 
-@SessionScoped
+@RequestScoped
 @Exclude(onExpression = InApplicationProducer.RESOLVER + ",cookie", interpretedBy = DifferentOrNull.class)
 public class InCookieProducer extends InRequestProducer {
 
