@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2014 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.agorava.cdi;
+package org.agorava.cdi.resolver;
 
 import org.agorava.api.atinject.Current;
 import org.agorava.api.oauth.OAuthSession;
@@ -32,8 +32,8 @@ import javax.inject.Named;
  */
 
 @SessionScoped
-@Exclude(onExpression = InApplicationProducer.RESOLVER + ",session", interpretedBy = DifferentOrNull.class)
-public class InSessionProducer extends InApplicationProducer {
+@Exclude(onExpression = ApplicationResolver.RESOLVER + ",session", interpretedBy = DifferentOrNull.class)
+public class SessionResolver extends ApplicationResolver {
 
 
     @Produces

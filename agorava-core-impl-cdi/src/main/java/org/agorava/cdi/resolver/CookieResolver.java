@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2014 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.agorava.cdi;
+package org.agorava.cdi.resolver;
 
 import org.agorava.AgoravaConstants;
 import org.agorava.api.atinject.Current;
@@ -38,8 +38,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 
 @RequestScoped
-@Exclude(onExpression = InApplicationProducer.RESOLVER + ",cookie", interpretedBy = DifferentOrNull.class)
-public class InCookieProducer extends InRequestProducer {
+@Exclude(onExpression = ApplicationResolver.RESOLVER + ",cookie", interpretedBy = DifferentOrNull.class)
+public class CookieResolver extends RequestResolver {
 
     @Inject
     @ConfigProperty(name = AgoravaConstants.RESOLVER_COOKIE_LIFE_PARAM, defaultValue = "-1")

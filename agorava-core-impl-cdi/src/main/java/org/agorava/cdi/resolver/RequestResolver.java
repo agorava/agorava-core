@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2014 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.agorava.cdi;
+package org.agorava.cdi.resolver;
 
 import org.agorava.AgoravaConstants;
 import org.agorava.api.atinject.Current;
@@ -40,8 +40,8 @@ import javax.servlet.http.HttpServletRequest;
  */
 
 @RequestScoped
-@Exclude(onExpression = InApplicationProducer.RESOLVER + ",request", interpretedBy = DifferentOrNull.class)
-public class InRequestProducer extends InApplicationProducer {
+@Exclude(onExpression = ApplicationResolver.RESOLVER + ",request", interpretedBy = DifferentOrNull.class)
+public class RequestResolver extends ApplicationResolver {
 
     private static final long serialVersionUID = 6446160199657772110L;
 

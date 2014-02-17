@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2014 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.agorava.cdi;
+package org.agorava.cdi.resolver;
 
 import org.agorava.api.atinject.Current;
 import org.agorava.api.atinject.ProviderRelated;
@@ -40,8 +40,8 @@ import java.util.Set;
  */
 
 @ApplicationScoped
-@Exclude(onExpression = InApplicationProducer.RESOLVER + ",application", interpretedBy = DifferentOrNull.class)
-public class InApplicationProducer implements SessionResolver, UserSessionRepositoryResolver {
+@Exclude(onExpression = ApplicationResolver.RESOLVER + ",application", interpretedBy = DifferentOrNull.class)
+public class ApplicationResolver implements SessionResolver, UserSessionRepositoryResolver {
 
     public static final String RESOLVER = "resolverType";
 
