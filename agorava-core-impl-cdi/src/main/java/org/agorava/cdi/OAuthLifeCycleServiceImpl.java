@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2014 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,16 +28,15 @@ import org.agorava.api.service.OAuthLifeCycleService;
 import org.agorava.api.storage.GlobalRepository;
 import org.agorava.api.storage.UserSessionRepository;
 import org.agorava.spi.UserProfileService;
+import static org.agorava.AgoravaContext.getServicesToQualifier;
 
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.List;
 import javax.enterprise.event.Event;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
-import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.agorava.AgoravaContext.getServicesToQualifier;
 
 /**
  * @author Antoine Sabot-Durand
@@ -54,6 +53,10 @@ public class OAuthLifeCycleServiceImpl implements OAuthLifeCycleService {
     private GlobalRepository globalRepository;
 
     private UserSessionRepository repository;
+
+    @Inject
+    @Current
+    private Instance<OAuthSession> sessionInstance;
 
     @Inject
     @Any
@@ -78,7 +81,7 @@ public class OAuthLifeCycleServiceImpl implements OAuthLifeCycleService {
 
     @Override
     public OAuthSession getCurrentSession() {
-        return repository.getCurrent();
+        return sessionInstance.get();
     }
 
     @Override

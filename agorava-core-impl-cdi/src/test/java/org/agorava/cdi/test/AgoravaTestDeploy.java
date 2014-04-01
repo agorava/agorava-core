@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2014 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,10 +54,9 @@ public class AgoravaTestDeploy {
                 .resolve("org.apache.deltaspike.core:deltaspike-core-impl")
                 .withTransitivity().as(JavaArchive.class);
 
-
         WebArchive ret = ShrinkWrap
                 .create(WebArchive.class, "test.war")
-                .addClasses(AgoravaExtensionTestProducers.class, FakeProvider.class, FakeProvider2.class,
+                .addClasses(AgoravaTestsProducers.class, FakeProvider.class, FakeProvider2.class,
                         FakeService.class, FakeService2.class,
                         FakeServiceLiteral.class, FakeService2Literal.class,
                         FakeUserProfileService.class)
@@ -65,6 +64,7 @@ public class AgoravaTestDeploy {
                 .addAsLibraries(libs)
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsWebInfResource("agorava.properties");
+        //  .addAsResource("META-INF/services/javax.enterprise.inject.spi.Extension");
 
         System.out.println(System.getProperty("arquillian"));
         return ret;

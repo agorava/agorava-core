@@ -44,16 +44,19 @@ import javax.servlet.http.HttpServletRequest;
 public class RequestResolver extends ApplicationResolver {
 
     private static final long serialVersionUID = 6446160199657772110L;
-
-
     @Inject
     @DeltaSpike
     protected HttpServletRequest request;
+    private OAuthSession currentSession;
+    private UserSessionRepository currentRepo;
 
     protected String getRepoId() {
         return request.getParameter(AgoravaConstants.REPOID_PARAM);
     }
 
+    protected String getSessionId() {
+        return request.getParameter(AgoravaConstants.SESSIONID_PARAM);
+    }
 
     @Produces
     @Current
@@ -71,13 +74,28 @@ public class RequestResolver extends ApplicationResolver {
     @Produces
     public OAuthSession resolveSession(InjectionPoint ip, @Current UserSessionRepository repository) {
         return super.resolveSession(ip, repository);
-
     }
 
     @Produces
     @RequestScoped
     public AppSettingsTuner produceCallBackTuner(@Current UserSessionRepository repo) {
         return new addRepoToCallbackTuner(repo);
+    }
+
+    @Produces
+    @Named
+    @Current
+    @RequestScoped
+    public OAuthSession getCurrentSession() {
+        String sid = getSessionId();
+        if (sid != null) {
+            for (OAuthSession session : globalRepository.getAllSessions()) {
+                if (session.getId().equals(sid)) {
+                    return session;
+                }
+            }
+        }
+        return super.getCurrentSession(getCurrentRepository());
     }
 
     static public class addRepoToCallbackTuner implements AppSettingsTuner {
@@ -97,13 +115,6 @@ public class RequestResolver extends ApplicationResolver {
                             .appendParamIfNecessary(AgoravaConstants.REPOID_PARAM, repo.getId()).getUrl())
                     .build();
         }
-    }
-
-    @Produces
-    @Named
-    @Override
-    public OAuthSession getCurrentSession(@Current UserSessionRepository repository) {
-        return super.getCurrentSession(repository);
     }
 
 }
