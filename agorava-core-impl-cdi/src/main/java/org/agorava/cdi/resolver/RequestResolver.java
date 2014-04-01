@@ -25,8 +25,8 @@ import org.agorava.api.storage.UserSessionRepository;
 import org.agorava.cdi.deltaspike.DifferentOrNull;
 import org.agorava.jsf.FacesUrlTransformer;
 import org.agorava.spi.AppSettingsTuner;
+import org.apache.deltaspike.core.api.common.DeltaSpike;
 import org.apache.deltaspike.core.api.exclude.Exclude;
-import org.apache.deltaspike.servlet.api.Web;
 
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
@@ -47,7 +47,7 @@ public class RequestResolver extends ApplicationResolver {
 
 
     @Inject
-    @Web
+    @DeltaSpike
     protected HttpServletRequest request;
 
     protected String getRepoId() {

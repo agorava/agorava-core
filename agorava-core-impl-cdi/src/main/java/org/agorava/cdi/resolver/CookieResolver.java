@@ -21,9 +21,9 @@ import org.agorava.api.atinject.Current;
 import org.agorava.api.oauth.OAuthSession;
 import org.agorava.api.storage.UserSessionRepository;
 import org.agorava.cdi.deltaspike.DifferentOrNull;
+import org.apache.deltaspike.core.api.common.DeltaSpike;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.apache.deltaspike.core.api.exclude.Exclude;
-import org.apache.deltaspike.servlet.api.Web;
 
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
@@ -47,7 +47,7 @@ public class CookieResolver extends RequestResolver {
 
 
     @Inject
-    @Web
+    @DeltaSpike
     private HttpServletResponse response;
 
     @Override
