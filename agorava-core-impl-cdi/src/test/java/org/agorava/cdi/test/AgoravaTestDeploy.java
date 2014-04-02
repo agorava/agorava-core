@@ -64,9 +64,7 @@ public class AgoravaTestDeploy {
                 .addAsLibraries(libs)
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsWebInfResource("agorava.properties");
-        //  .addAsResource("META-INF/services/javax.enterprise.inject.spi.Extension");
 
-        System.out.println(System.getProperty("arquillian"));
         return ret;
     }
 }

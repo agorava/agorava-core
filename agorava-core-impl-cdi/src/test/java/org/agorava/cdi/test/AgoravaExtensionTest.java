@@ -22,11 +22,13 @@ import org.agorava.api.exception.AgoravaException;
 import org.agorava.api.oauth.OAuthService;
 import org.agorava.api.oauth.OAuthSession;
 import org.agorava.api.oauth.application.OAuthAppSettings;
+import org.apache.deltaspike.core.api.common.DeltaSpike;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Antoine Sabot-Durand
@@ -64,6 +66,11 @@ public class AgoravaExtensionTest extends AgoravaTestDeploy {
     @FakeService
     @Current
     OAuthSession session;
+
+    @Inject
+    @DeltaSpike
+    HttpServletRequest request; //Added to trigger Mocked RequestContext in Weld 1.1.x
+    
 
     @Test
     public void testFakeProvider1Version() {
