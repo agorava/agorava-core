@@ -51,6 +51,7 @@ public class SessionResolver extends ApplicationResolver {
     }
 
     @Produces
+    @Current
     @Named
     @Override
     public OAuthSession getCurrentSession(@Current UserSessionRepository repository) {

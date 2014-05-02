@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2014 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ package org.agorava.oauth;
 import org.agorava.api.oauth.OAuthSession;
 import org.agorava.api.storage.UserSessionRepository;
 
+import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -50,6 +51,19 @@ public class UserSessionRepositoryImpl implements UserSessionRepository {
     @Override
     public OAuthSession getCurrent() {
         return currentSession;
+    }
+
+    @Override
+    public OAuthSession getForProvider(Annotation qual) {
+        if (getCurrent().getServiceQualifier().equals(qual))
+            return getCurrent();
+        else {
+            for (OAuthSession session : activeSessions) {
+                if (session.getServiceQualifier().equals(qual))
+                    return session;
+            }
+        }
+        return OAuthSession.NULL;
     }
 
     @Override

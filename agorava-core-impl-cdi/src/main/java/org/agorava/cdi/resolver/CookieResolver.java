@@ -91,6 +91,7 @@ public class CookieResolver extends RequestResolver {
 
     @Produces
     @Named
+    @Current
     @Override
     public OAuthSession getCurrentSession(@Current UserSessionRepository repository) {
         return super.getCurrentSession(repository);
