@@ -19,6 +19,7 @@ package org.agorava.api.oauth;
 import org.agorava.AgoravaContext;
 import org.agorava.api.exception.ProviderMismatchException;
 import org.agorava.api.storage.Identifiable;
+import org.agorava.api.storage.Nameable;
 import org.agorava.api.storage.UserSessionRepository;
 import org.agorava.spi.UserProfile;
 
@@ -35,7 +36,7 @@ import java.util.UUID;
  *
  * @author Antoine Sabot-Durand
  */
-public class OAuthSession implements Identifiable {
+public class OAuthSession implements Identifiable, Nameable {
 
     private static final long serialVersionUID = -2526192334215289830L;
 
