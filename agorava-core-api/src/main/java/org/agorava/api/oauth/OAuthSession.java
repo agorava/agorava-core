@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2013-3014 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,9 +32,10 @@ import java.util.UUID;
 /**
  * Contains user data for a session connection to a given {@link OAuthService}.
  * It completes data in {@link org.agorava.api.oauth.application.OAuthAppSettings}.
- * More over it contains status and basic user data when OAuth connexion has been completed
+ * More over it contains status and basic user data when OAuth connection has been completed
  *
  * @author Antoine Sabot-Durand
+ * @author Werner Keil
  */
 public class OAuthSession implements Identifiable, Nameable {
 
