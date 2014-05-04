@@ -68,7 +68,7 @@ public class ApplicationResolver implements OAuthSessionResolver, UserSessionRep
      * @return
      */
     @Produces
-    protected OAuthSession resolveSession(InjectionPoint ip, @Current UserSessionRepository repository) {
+    protected OAuthSession resolveOAuthSession(InjectionPoint ip, @Current UserSessionRepository repository) {
         if (ip == null)
             throw new UnsupportedOperationException("Cannot resolve session for a null InjectionPoint");
         Set<Annotation> quals = ip.getQualifiers();
@@ -95,7 +95,7 @@ public class ApplicationResolver implements OAuthSessionResolver, UserSessionRep
     @Produces
     @Named
     @Current
-    public OAuthSession getCurrentSession(@Current UserSessionRepository repository) {
+    public OAuthSession getCurrentOAuthSession(@Current UserSessionRepository repository) {
         return repository.getCurrent();
 
     }

@@ -26,5 +26,5 @@ import java.io.Serializable;
  */
 public interface OAuthSessionResolver extends Serializable {
 
-    OAuthSession getCurrentSession(UserSessionRepository repository);
+    OAuthSession getCurrentOAuthSession(UserSessionRepository repository);
 }

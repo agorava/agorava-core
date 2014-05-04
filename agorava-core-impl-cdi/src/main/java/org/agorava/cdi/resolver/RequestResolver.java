@@ -72,8 +72,8 @@ public class RequestResolver extends ApplicationResolver {
 
 
     @Produces
-    public OAuthSession resolveSession(InjectionPoint ip, @Current UserSessionRepository repository) {
-        return super.resolveSession(ip, repository);
+    public OAuthSession resolveOAuthSession(InjectionPoint ip, @Current UserSessionRepository repository) {
+        return super.resolveOAuthSession(ip, repository);
     }
 
     @Produces
@@ -94,7 +94,7 @@ public class RequestResolver extends ApplicationResolver {
                 }
             }
         }
-        return super.getCurrentSession(getCurrentRepository());
+        return super.getCurrentOAuthSession(getCurrentRepository());
     }
 
     static public class addRepoToCallbackTuner implements AppSettingsTuner {
