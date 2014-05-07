@@ -16,6 +16,9 @@
 
 package org.agorava.cdi.test;
 
+import org.agorava.cdi.deltaspike.AgoravaConfigSourceProvider;
+import org.agorava.cdi.extensions.AgoravaExtension;
+import org.apache.deltaspike.core.spi.config.ConfigSourceProvider;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ArchivePath;
@@ -27,6 +30,7 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 
 import java.io.FileNotFoundException;
+import javax.enterprise.inject.spi.Extension;
 
 /**
  * Created with IntelliJ IDEA.
@@ -45,8 +49,8 @@ public class AgoravaTestDeploy {
                         return !((path.get().contains("test") || path.get().contains("servlet")));
                     }
                 }, "org.agorava")
-                .addAsResource("META-INF/services/javax.enterprise.inject.spi.Extension")
-                .addAsResource("META-INF/services/org.apache.deltaspike.core.spi.config.ConfigSourceProvider")
+                .addAsServiceProvider(Extension.class, AgoravaExtension.class)
+                .addAsServiceProvider(ConfigSourceProvider.class, AgoravaConfigSourceProvider.class)
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
 
         JavaArchive[] libs = Maven.resolver()
