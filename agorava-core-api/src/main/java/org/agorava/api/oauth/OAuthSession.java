@@ -78,6 +78,10 @@ public class OAuthSession implements Identifiable {
         this.id = id;
     }
 
+    OAuthSession() {
+        this("");
+    }
+
     /**
      * {@inheritDoc}
      */

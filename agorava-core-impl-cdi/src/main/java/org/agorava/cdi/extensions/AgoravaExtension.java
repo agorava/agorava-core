@@ -312,7 +312,7 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
         } else {
             WrappingBeanBuilder<OAuthSession> wbp = new WrappingBeanBuilder<OAuthSession>(osb, beanManager);
             wbp.readFromType(beanManager.createAnnotatedType(OAuthSession.class)).qualifiers(providerQualifiersConfigured)
-                    .addQualifiers(new AnyLiteral()).scope(Dependent.class);
+                    .scope(Dependent.class);
             Bean res = wbp.create();
             abd.addBean(res);
         }
