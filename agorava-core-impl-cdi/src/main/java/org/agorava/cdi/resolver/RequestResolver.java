@@ -85,6 +85,7 @@ public class RequestResolver extends ApplicationResolver {
     @Produces
     @Named
     @Current
+    @RequestScoped
     public OAuthSession getCurrentSession() {
         String sid = getSessionId();
         if (sid != null) {
