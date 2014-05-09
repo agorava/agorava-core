@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2014 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,30 +16,36 @@
 
 package org.agorava.oauth;
 
+import org.agorava.api.exception.AgoravaException;
 import org.agorava.api.oauth.OAuthSession;
 import org.agorava.api.storage.GlobalRepository;
 import org.agorava.api.storage.UserSessionRepository;
 
-import javax.inject.Singleton;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import javax.inject.Singleton;
 
 /**
  * @author Antoine Sabot-Durand
  */
 @Singleton
-public class GlobalRepositoryImpl implements GlobalRepository {
+public class GlobalRepositoryImpl extends GlobalRepository {
 
 
+    private static final long serialVersionUID = -4639395999488886050L;
     private final Set<UserSessionRepository> userRepos = new HashSet<UserSessionRepository>();
 
     private UserSessionRepository current;
 
+    public GlobalRepositoryImpl() {
+        instance = this;
+    }
+
     @Override
-    public Collection<OAuthSession> getAllSessions() {
+    public Collection<OAuthSession> getAllOauthSessions() {
         Set<OAuthSession> res = new HashSet<OAuthSession>();
         for (UserSessionRepository userRepo : userRepos) {
             res.addAll(userRepo.getAll());
@@ -48,11 +54,35 @@ public class GlobalRepositoryImpl implements GlobalRepository {
     }
 
     @Override
+    public OAuthSession getOauthSession(String sid) {
+        if (sid != null && !sid.isEmpty()) {
+            for (OAuthSession session : getAllOauthSessions()) {
+                if (session.getId().equals(sid)) {
+                    return session;
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
     public UserSessionRepository createNew() {
         UserSessionRepository res = new UserSessionRepositoryImpl();
         add(res);
         setCurrent(res);
         return res;
+    }
+
+    @Override
+    public UserSessionRepository createNew(String id) {
+        if (get(id) != null) {
+            throw new AgoravaException("Unable to create new user repository : repository with id " + id + " already exists");
+        } else {
+            UserSessionRepository res = new UserSessionRepositoryImpl(id);
+            add(res);
+            setCurrent(res);
+            return res;
+        }
     }
 
     @Override
@@ -82,7 +112,7 @@ public class GlobalRepositoryImpl implements GlobalRepository {
 
     @Override
     public UserSessionRepository get(String id) {
-        if (id != null)
+        if (id != null && !id.isEmpty())
             for (UserSessionRepository userRepo : userRepos) {
                 if (userRepo.getId().equals(id))
                     return userRepo;

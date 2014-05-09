@@ -85,6 +85,11 @@ public class OAuthLifeCycleServiceImpl implements OAuthLifeCycleService {
     }
 
     @Override
+    public void setCurrentSession(OAuthSession session) {
+        repository.setCurrent(session);
+    }
+
+    @Override
     public void killCurrentSession() {
         repository.removeCurrent();
     }
@@ -104,12 +109,12 @@ public class OAuthLifeCycleServiceImpl implements OAuthLifeCycleService {
         return startDanceFor(providerName, null);
     }
 
-
     @Override
     public synchronized void endDance() {
-        if (getCurrentSession().getAccessToken() == null)
+        if (getCurrentSession().getAccessToken() == null) {
             getCurrentSession().setAccessToken(getCurrentService().getAccessToken(getCurrentSession().getRequestToken(),
                     getCurrentSession().getVerifier()));
+        }
         if (getCurrentSession().getAccessToken() != null) {
             getCurrentSession().setRequestToken(null);
             getCurrentSession().setUserProfile(getCurrentUserProfileService().getUserProfile());
@@ -150,21 +155,26 @@ public class OAuthLifeCycleServiceImpl implements OAuthLifeCycleService {
 
     @Override
     public OAuthSession resolveSessionForQualifier(Annotation qualifier) {
-        if (repository.getCurrent().equals(OAuthSession.NULL))
+        OAuthSession current = getCurrentSession();
+        if (current.getServiceQualifier().equals(qualifier)) {
+            return current;
+        }
+        if (repository.getCurrent().equals(OAuthSession.NULL)) {
             buildSessionFor(qualifier);
-        else if (!repository.getCurrent().getServiceQualifier().equals(qualifier))
+        } else if (!repository.getCurrent().getServiceQualifier().equals(qualifier)) {
             throw new ProviderMismatchException("Inconsistent state between repo and service. In repo Session provider is " +
                     repository.getCurrent().getServiceName() + " while service provider is " + qualifier);
+        }
 
         return repository.getCurrent();
     }
 
-
     @Override
     public String startDanceFor(String providerName, String internalCallBack) {
         OAuthSession session = buildSessionFor(providerName);
-        if (internalCallBack != null && !"".equals(internalCallBack.trim()))
+        if (internalCallBack != null && !"".equals(internalCallBack.trim())) {
             session.getExtraData().put(AgoravaConstants.INTERN_CALLBACK_PARAM, internalCallBack);
+        }
         return getCurrentService().getAuthorizationUrl();
     }
 
@@ -182,11 +192,6 @@ public class OAuthLifeCycleServiceImpl implements OAuthLifeCycleService {
     @Override
     public List<OAuthSession> getAllActiveSessions() {
         return new ArrayList(repository.getAll());
-    }
-
-    @Override
-    public void setCurrentSession(OAuthSession session) {
-        repository.setCurrent(session);
     }
 
 }

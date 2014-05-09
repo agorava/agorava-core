@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2014 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,6 @@ import org.agorava.api.oauth.application.OAuthAppSettings;
 import org.agorava.api.rest.Response;
 import org.agorava.rest.OAuthRequestImpl;
 import org.agorava.spi.ProviderConfigOauth20;
-
 import static org.agorava.api.oauth.OAuth.OAuthVersion.TWO_FINAL;
 
 
@@ -53,13 +52,14 @@ public class OAuth20FinalServiceImpl extends OAuth20ServiceImpl {
         request.addBodyParameter(AgoravaConstants.CODE, verifier.getValue());
         request.addBodyParameter(AgoravaConstants.REDIRECT_URI, config.getCallback());
         request.addBodyParameter("grant_type", "authorization_code");
-        if (config.hasScope()) request.addBodyParameter(AgoravaConstants.SCOPE, config.getScope());
+        if (config.hasScope())
+            request.addBodyParameter(AgoravaConstants.SCOPE, config.getScope());
         Response response = request.send(); //todo:should check return code and launch ResponseException if it's not 200
         return api.getAccessTokenExtractor().extract(response.getBody());
     }
 
     @Override
-    public String getVersion() {
-        return TWO_FINAL.getLabel();
+    public OAuth.OAuthVersion getVersion() {
+        return TWO_FINAL;
     }
 }

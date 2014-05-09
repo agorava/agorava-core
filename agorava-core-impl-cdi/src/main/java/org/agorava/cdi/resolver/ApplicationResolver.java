@@ -23,17 +23,17 @@ import org.agorava.api.oauth.OAuthSession;
 import org.agorava.api.storage.GlobalRepository;
 import org.agorava.api.storage.UserSessionRepository;
 import org.agorava.cdi.deltaspike.DifferentOrNull;
-import org.agorava.spi.SessionResolver;
+import org.agorava.spi.OAuthSessionResolver;
 import org.agorava.spi.UserSessionRepositoryResolver;
 import org.apache.deltaspike.core.api.exclude.Exclude;
 
+import java.lang.annotation.Annotation;
+import java.util.Set;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.lang.annotation.Annotation;
-import java.util.Set;
 
 /**
  * @author Antoine Sabot-Durand
@@ -41,7 +41,7 @@ import java.util.Set;
 
 @ApplicationScoped
 @Exclude(onExpression = ApplicationResolver.RESOLVER + ",application", interpretedBy = DifferentOrNull.class)
-public class ApplicationResolver implements SessionResolver, UserSessionRepositoryResolver {
+public class ApplicationResolver implements OAuthSessionResolver, UserSessionRepositoryResolver {
 
     public static final String RESOLVER = "resolverType";
 
@@ -59,12 +59,20 @@ public class ApplicationResolver implements SessionResolver, UserSessionReposito
     }
 
 
+    /**
+     * This producer is enhanced by extension to bear all RelatedProvider
+     * It should find an existing session depending on the requested provider (annotation on InjectionPoint)
+     *
+     * @param ip
+     * @param repository
+     * @return
+     */
     @Produces
-    protected OAuthSession resolveSession(InjectionPoint ip, @Current UserSessionRepository repository) {
+    protected OAuthSession resolveOAuthSession(InjectionPoint ip, @Current UserSessionRepository repository) {
         if (ip == null)
-            return repository.getCurrent();
+            throw new UnsupportedOperationException("Cannot resolve session for a null InjectionPoint");
         Set<Annotation> quals = ip.getQualifiers();
-        OAuthSession res;
+        OAuthSession res = null;
 
         Annotation service = null;
         boolean iscurrent = false;
@@ -73,27 +81,22 @@ public class ApplicationResolver implements SessionResolver, UserSessionReposito
                 if (service != null)
                     throw new AgoravaException("There's more thant one provider related qualifier aon Injection Point" +
                             ip);
-                service = qual;
+                res = repository.getForProvider(qual);
+                break;
             }
-            if (qual.annotationType().equals(Current.class))
-                iscurrent = true;
         }
-        if (iscurrent) {
-            if (service != null) {
-                if (!service.equals(repository.getCurrent().getServiceQualifier())) {
-                    repository.setCurrent(new OAuthSession.Builder().qualifier(service).repo(repository).build());
-                }
-            }
-            return repository.getCurrent();
-        }
-        throw new UnsupportedOperationException("Cannot inject session whitout Current Qualifier in " + ip);
+        if (res.isNull())
+            throw new AgoravaException("There's no active session for requested provider");
+
+        return res;
     }
 
     @Override
     @Produces
     @Named
-    public OAuthSession getCurrentSession(@Current UserSessionRepository repository) {
-        return resolveSession(null, repository);
+    @Current
+    public OAuthSession getCurrentOAuthSession(@Current UserSessionRepository repository) {
+        return repository.getCurrent();
 
     }
 }

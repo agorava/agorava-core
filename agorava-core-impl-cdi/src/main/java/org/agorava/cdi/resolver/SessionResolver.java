@@ -46,14 +46,15 @@ public class SessionResolver extends ApplicationResolver {
 
 
     @Produces
-    public OAuthSession resolveSession(InjectionPoint ip, @Current UserSessionRepository repository) {
-        return super.resolveSession(ip, repository);
+    public OAuthSession resolveOAuthSession(InjectionPoint ip, @Current UserSessionRepository repository) {
+        return super.resolveOAuthSession(ip, repository);
     }
 
     @Produces
+    @Current
     @Named
     @Override
-    public OAuthSession getCurrentSession(@Current UserSessionRepository repository) {
-        return super.getCurrentSession(repository);
+    public OAuthSession getCurrentOAuthSession(@Current UserSessionRepository repository) {
+        return super.getCurrentOAuthSession(repository);
     }
 }

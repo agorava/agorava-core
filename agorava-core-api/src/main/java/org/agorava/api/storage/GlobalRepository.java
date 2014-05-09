@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2014 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,21 +25,37 @@ import java.util.Collection;
  *
  * @author Antoine Sabot-Durand
  */
-public interface GlobalRepository extends Repository<UserSessionRepository> {
+public abstract class GlobalRepository implements Repository<UserSessionRepository> {
+
+    protected static GlobalRepository instance;
+
+
+    public static GlobalRepository getInstance() {
+        return instance;
+    }
+    
+    /**
+     * @return a collection containing all existing {@link OAuthSession} contained in the application
+     */
+    public abstract Collection<OAuthSession> getAllOauthSessions();
 
 
     /**
-     * @return a collection containing all existing OAuthSession contained in the application
+     *
+     * Return the {@link OAuthSession} with the given id or null if there's no OAuthSession with this id  
+     *
+     * @param id the unqiue id of the OauthSession
+     * @return the corresponding {@link OAuthSession} or null if doesn't exist
      */
-    Collection<OAuthSession> getAllSessions();
-
+    public abstract OAuthSession getOauthSession(String id);
 
     /**
      * Create a new element and set it as current
      *
      * @return the created element
      */
-    UserSessionRepository createNew();
+    public abstract UserSessionRepository createNew();
 
 
+    public abstract UserSessionRepository createNew(String id);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2014 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ package org.agorava.oauth;
 import org.agorava.api.oauth.OAuthSession;
 import org.agorava.api.storage.UserSessionRepository;
 
+import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -37,11 +38,17 @@ public class UserSessionRepositoryImpl implements UserSessionRepository {
     private static final long serialVersionUID = 2681869484541158766L;
 
     private final Set<OAuthSession> activeSessions = new HashSet<OAuthSession>();
-
-
+    private final String id;
     private OAuthSession currentSession = OAuthSession.NULL;
 
-    private String id = UUID.randomUUID().toString();
+    UserSessionRepositoryImpl(String id) {
+        this.id = id;
+    }
+
+    public UserSessionRepositoryImpl() {
+        this(UUID.randomUUID().toString());
+    }
+
 
     public String getId() {
         return id;
@@ -55,6 +62,20 @@ public class UserSessionRepositoryImpl implements UserSessionRepository {
     @Override
     public void setCurrent(OAuthSession currentSession) {
         this.currentSession = currentSession;
+    }
+
+    @Override
+    public OAuthSession getForProvider(Annotation qual) {
+        if (getCurrent().getServiceQualifier().equals(qual)) {
+            return getCurrent();
+        } else {
+            for (OAuthSession session : activeSessions) {
+                if (session.getServiceQualifier().equals(qual)) {
+                    return session;
+                }
+            }
+        }
+        return OAuthSession.NULL;
     }
 
     @Override
@@ -138,5 +159,28 @@ public class UserSessionRepositoryImpl implements UserSessionRepository {
 
             }
         };
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof UserSessionRepositoryImpl)) {
+            return false;
+        }
+
+        UserSessionRepositoryImpl that = (UserSessionRepositoryImpl) o;
+
+        if (!id.equals(that.id)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }
