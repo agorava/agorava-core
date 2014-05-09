@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2014 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package org.agorava.api.service;
 import org.agorava.api.exception.ProviderMismatchException;
 import org.agorava.api.oauth.OAuthService;
 import org.agorava.api.oauth.OAuthSession;
+import org.agorava.api.storage.UserSessionRepository;
 import org.agorava.spi.UserProfileService;
 
 import java.io.Serializable;
@@ -34,6 +35,8 @@ import java.util.List;
  */
 public interface OAuthLifeCycleService extends Serializable {
 
+
+    UserSessionRepository getCurrentRepository();
 
     /**
      * @return the current service (associated to the current session)

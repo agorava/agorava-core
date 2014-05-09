@@ -20,7 +20,6 @@ import org.agorava.AgoravaConstants;
 import org.agorava.api.atinject.Current;
 import org.agorava.api.event.OAuthComplete;
 import org.agorava.api.event.SocialEvent;
-import org.agorava.api.exception.AgoravaException;
 import org.agorava.api.exception.ProviderMismatchException;
 import org.agorava.api.oauth.OAuthService;
 import org.agorava.api.oauth.OAuthSession;
@@ -52,7 +51,9 @@ public class OAuthLifeCycleServiceImpl implements OAuthLifeCycleService {
     @Inject
     private GlobalRepository globalRepository;
 
-    private UserSessionRepository repository;
+    @Inject
+    @Current
+    private Instance<UserSessionRepository> repositories;
 
     @Inject
     @Current
@@ -66,12 +67,9 @@ public class OAuthLifeCycleServiceImpl implements OAuthLifeCycleService {
     @Any
     private Instance<OAuthService> services;
 
-    @Inject
-    OAuthLifeCycleServiceImpl(@Current Instance<UserSessionRepository> repositories) {
-        if (repositories.isUnsatisfied())
-            throw new AgoravaException("No User repo available, you should activate a producer bean");
-        else
-            repository = repositories.get();
+    @Override
+    public UserSessionRepository getCurrentRepository() {
+        return repositories.get();
     }
 
     @Override
@@ -86,17 +84,17 @@ public class OAuthLifeCycleServiceImpl implements OAuthLifeCycleService {
 
     @Override
     public void setCurrentSession(OAuthSession session) {
-        repository.setCurrent(session);
+        getCurrentRepository().setCurrent(session);
     }
 
     @Override
     public void killCurrentSession() {
-        repository.removeCurrent();
+        getCurrentRepository().removeCurrent();
     }
 
     @Override
     public void killSession(OAuthSession session) {
-        repository.remove(session);
+        getCurrentRepository().remove(session);
     }
 
     @Override
@@ -144,8 +142,8 @@ public class OAuthLifeCycleServiceImpl implements OAuthLifeCycleService {
 
     @Override
     public OAuthSession buildSessionFor(Annotation qualifier) {
-        OAuthSession res = new OAuthSession.Builder().qualifier(qualifier).repo(unProxifyRepo(repository)).build();
-        repository.setCurrent(res);
+        OAuthSession res = new OAuthSession.Builder().qualifier(qualifier).repo(unProxifyRepo(getCurrentRepository())).build();
+        getCurrentRepository().setCurrent(res);
         return res;
     }
 
@@ -159,14 +157,14 @@ public class OAuthLifeCycleServiceImpl implements OAuthLifeCycleService {
         if (current.getServiceQualifier().equals(qualifier)) {
             return current;
         }
-        if (repository.getCurrent().equals(OAuthSession.NULL)) {
+        if (getCurrentRepository().getCurrent().equals(OAuthSession.NULL)) {
             buildSessionFor(qualifier);
-        } else if (!repository.getCurrent().getServiceQualifier().equals(qualifier)) {
+        } else if (!getCurrentRepository().getCurrent().getServiceQualifier().equals(qualifier)) {
             throw new ProviderMismatchException("Inconsistent state between repo and service. In repo Session provider is " +
-                    repository.getCurrent().getServiceName() + " while service provider is " + qualifier);
+                    getCurrentRepository().getCurrent().getServiceName() + " while service provider is " + qualifier);
         }
 
-        return repository.getCurrent();
+        return getCurrentRepository().getCurrent();
     }
 
     @Override
@@ -191,7 +189,7 @@ public class OAuthLifeCycleServiceImpl implements OAuthLifeCycleService {
 
     @Override
     public List<OAuthSession> getAllActiveSessions() {
-        return new ArrayList(repository.getAll());
+        return new ArrayList(getCurrentRepository().getAll());
     }
 
 }
