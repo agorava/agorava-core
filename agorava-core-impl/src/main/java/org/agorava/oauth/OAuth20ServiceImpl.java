@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2014 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,6 @@ import org.agorava.api.oauth.application.OAuthAppSettings;
 import org.agorava.api.rest.Response;
 import org.agorava.rest.OAuthRequestImpl;
 import org.agorava.spi.ProviderConfigOauth20;
-
 import static org.agorava.api.oauth.OAuth.OAuthVersion.TWO_DRAFT_11;
 
 @GenericBean
@@ -49,7 +48,8 @@ public class OAuth20ServiceImpl extends OAuthServiceBase {
         request.addQuerystringParameter(AgoravaConstants.CLIENT_SECRET, config.getApiSecret());
         request.addQuerystringParameter(AgoravaConstants.CODE, verifier.getValue());
         request.addQuerystringParameter(AgoravaConstants.REDIRECT_URI, config.getCallback());
-        if (config.hasScope()) request.addQuerystringParameter(AgoravaConstants.SCOPE, config.getScope());
+        if (config.hasScope())
+            request.addQuerystringParameter(AgoravaConstants.SCOPE, config.getScope());
         Response response = request.send(); //todo:should check return code and launch ResponseException if it's not 200
         return api.getAccessTokenExtractor().extract(response.getBody());
     }
@@ -65,8 +65,8 @@ public class OAuth20ServiceImpl extends OAuthServiceBase {
     /**
      * {@inheritDoc}
      */
-    public String getVersion() {
-        return TWO_DRAFT_11.getLabel();
+    public OAuth.OAuthVersion getVersion() {
+        return TWO_DRAFT_11;
     }
 
     /**

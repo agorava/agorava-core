@@ -216,7 +216,7 @@ public class OAuthSession implements Identifiable {
             return true;
         if (obj == null)
             return false;
-        if (getClass() != obj.getClass())
+        if (!(obj instanceof OAuthSession))
             return false;
         OAuthSession other = (OAuthSession) obj;
         if (userProfile != null)

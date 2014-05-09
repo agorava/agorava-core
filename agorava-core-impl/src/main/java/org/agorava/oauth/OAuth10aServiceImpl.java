@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2014 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,12 +29,11 @@ import org.agorava.api.rest.RequestTuner;
 import org.agorava.api.rest.Response;
 import org.agorava.spi.ProviderConfigOauth10a;
 import org.agorava.utils.MapUtils;
+import static org.agorava.api.oauth.OAuth.OAuthVersion.ONE;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
-
-import static org.agorava.api.oauth.OAuth.OAuthVersion.ONE;
 
 /**
  * OAuth 1.0a implementation of {@link org.agorava.api.oauth.OAuthProvider}
@@ -102,8 +101,9 @@ public class OAuth10aServiceImpl extends OAuthServiceBase {
         request.addOAuthParameter(AgoravaConstants.NONCE, api.getTimestampService().getNonce());
         request.addOAuthParameter(AgoravaConstants.CONSUMER_KEY, config.getApiKey());
         request.addOAuthParameter(AgoravaConstants.SIGN_METHOD, api.getSignatureService().getSignatureMethod());
-        request.addOAuthParameter(AgoravaConstants.VERSION, getVersion());
-        if (config.hasScope()) request.addOAuthParameter(AgoravaConstants.SCOPE, config.getScope());
+        request.addOAuthParameter(AgoravaConstants.VERSION, getVersion().getLabel());
+        if (config.hasScope())
+            request.addOAuthParameter(AgoravaConstants.SCOPE, config.getScope());
         request.addOAuthParameter(AgoravaConstants.SIGNATURE, getSignature(request, token));
 
         LOGGER.fine("appended additional OAuth parameters: " + MapUtils.toString(request.getOauthParameters()));
@@ -152,8 +152,8 @@ public class OAuth10aServiceImpl extends OAuthServiceBase {
     /**
      * {@inheritDoc}
      */
-    public String getVersion() {
-        return ONE.getLabel();
+    public OAuth.OAuthVersion getVersion() {
+        return ONE;
     }
 
     /**

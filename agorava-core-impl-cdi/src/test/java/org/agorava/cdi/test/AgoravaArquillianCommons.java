@@ -19,8 +19,6 @@ package org.agorava.cdi.test;
 import org.agorava.cdi.deltaspike.AgoravaConfigSourceProvider;
 import org.agorava.cdi.extensions.AgoravaExtension;
 import org.apache.deltaspike.core.spi.config.ConfigSourceProvider;
-import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ArchivePath;
 import org.jboss.shrinkwrap.api.Filter;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -32,17 +30,29 @@ import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import java.io.FileNotFoundException;
 import javax.enterprise.inject.spi.Extension;
 
-/**
- * Created with IntelliJ IDEA.
- * User: antoine
- * Date: 24/06/13
- * Time: 22:13
- * To change this template use File | Settings | File Templates.
- */
-public class AgoravaTestDeploy {
-    @Deployment
-    public static Archive<?> createTestArchive() throws FileNotFoundException {
-        JavaArchive testJar = ShrinkWrap.create(JavaArchive.class, "all-agorava.jar")
+
+public class AgoravaArquillianCommons {
+
+    public static WebArchive getBasicArchive() throws FileNotFoundException {
+
+        WebArchive ret = ShrinkWrap
+                .create(WebArchive.class, "test.war")
+                .addAsLibraries(getAgoravaAllArchive())
+                .addAsLibraries(getMavenArchives())
+                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
+
+        return ret;
+    }
+
+    public static JavaArchive[] getMavenArchives() {
+        return Maven.resolver()
+                .loadPomFromFile("pom.xml")
+                .resolve("org.apache.deltaspike.core:deltaspike-core-impl")
+                .withTransitivity().as(JavaArchive.class);
+    }
+
+    public static JavaArchive getAgoravaAllArchive() {
+        return ShrinkWrap.create(JavaArchive.class, "all-agorava.jar")
                 .addPackages(true, new Filter<ArchivePath>() {
                     @Override
                     public boolean include(ArchivePath path) {
@@ -52,23 +62,5 @@ public class AgoravaTestDeploy {
                 .addAsServiceProvider(Extension.class, AgoravaExtension.class)
                 .addAsServiceProvider(ConfigSourceProvider.class, AgoravaConfigSourceProvider.class)
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
-
-        JavaArchive[] libs = Maven.resolver()
-                .loadPomFromFile("pom.xml")
-                .resolve("org.apache.deltaspike.core:deltaspike-core-impl")
-                .withTransitivity().as(JavaArchive.class);
-
-        WebArchive ret = ShrinkWrap
-                .create(WebArchive.class, "test.war")
-                .addClasses(AgoravaTestsProducers.class, FakeProvider.class, FakeProvider2.class,
-                        FakeService.class, FakeService2.class,
-                        FakeServiceLiteral.class, FakeService2Literal.class,
-                        FakeUserProfileService.class)
-                .addAsLibraries(testJar)
-                .addAsLibraries(libs)
-                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-                .addAsWebInfResource("agorava.properties");
-
-        return ret;
     }
 }

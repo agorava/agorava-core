@@ -38,11 +38,17 @@ public class UserSessionRepositoryImpl implements UserSessionRepository {
     private static final long serialVersionUID = 2681869484541158766L;
 
     private final Set<OAuthSession> activeSessions = new HashSet<OAuthSession>();
-
-
+    private final String id;
     private OAuthSession currentSession = OAuthSession.NULL;
 
-    private String id = UUID.randomUUID().toString();
+    UserSessionRepositoryImpl(String id) {
+        this.id = id;
+    }
+
+    public UserSessionRepositoryImpl() {
+        this(UUID.randomUUID().toString());
+    }
+
 
     public String getId() {
         return id;
@@ -54,21 +60,22 @@ public class UserSessionRepositoryImpl implements UserSessionRepository {
     }
 
     @Override
-    public OAuthSession getForProvider(Annotation qual) {
-        if (getCurrent().getServiceQualifier().equals(qual))
-            return getCurrent();
-        else {
-            for (OAuthSession session : activeSessions) {
-                if (session.getServiceQualifier().equals(qual))
-                    return session;
-            }
-        }
-        return OAuthSession.NULL;
+    public void setCurrent(OAuthSession currentSession) {
+        this.currentSession = currentSession;
     }
 
     @Override
-    public void setCurrent(OAuthSession currentSession) {
-        this.currentSession = currentSession;
+    public OAuthSession getForProvider(Annotation qual) {
+        if (getCurrent().getServiceQualifier().equals(qual)) {
+            return getCurrent();
+        } else {
+            for (OAuthSession session : activeSessions) {
+                if (session.getServiceQualifier().equals(qual)) {
+                    return session;
+                }
+            }
+        }
+        return OAuthSession.NULL;
     }
 
     @Override
@@ -152,5 +159,28 @@ public class UserSessionRepositoryImpl implements UserSessionRepository {
 
             }
         };
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof UserSessionRepositoryImpl)) {
+            return false;
+        }
+
+        UserSessionRepositoryImpl that = (UserSessionRepositoryImpl) o;
+
+        if (!id.equals(that.id)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }

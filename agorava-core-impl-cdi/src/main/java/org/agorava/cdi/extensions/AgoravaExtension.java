@@ -27,6 +27,7 @@ import org.agorava.api.oauth.OAuthSession;
 import org.agorava.api.oauth.application.OAuthAppSettings;
 import org.agorava.api.oauth.application.OAuthAppSettingsBuilder;
 import org.agorava.api.oauth.application.OAuthApplication;
+import org.agorava.api.storage.GlobalRepository;
 import org.agorava.cdi.resolver.ApplicationResolver;
 import org.agorava.spi.ProviderConfigOauth;
 import org.apache.deltaspike.core.api.config.ConfigResolver;
@@ -321,12 +322,14 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
 
     //--------------------- After Deployment validation phase
 
-    public void endOfExtension(@Observes AfterDeploymentValidation adv, BeanManager beanManager) {
+    public void endOfExtension(@Observes AfterDeploymentValidation adv, BeanManager bm) {
 
-        registerServiceNames(beanManager);
+        registerServiceNames(bm);
 
         new BeanResolverCdi();
+        Bean<?> bean = bm.getBeans(GlobalRepository.class).iterator().next();
 
+        bm.getReference(bean, GlobalRepository.class, bm.createCreationalContext(bean));
         producerScope = ConfigResolver.getPropertyValue("producerScope", "");
         internalCallBack = ConfigResolver.getPropertyValue(AgoravaConstants.INTERN_CALLBACK_PARAM);
         if (internalCallBack == null) {
