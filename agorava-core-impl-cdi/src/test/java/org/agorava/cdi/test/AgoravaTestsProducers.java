@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2014 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,22 @@
 
 package org.agorava.cdi.test;
 
+import org.agorava.AgoravaConstants;
 import org.agorava.api.oauth.application.OAuthAppSettings;
 import org.agorava.api.oauth.application.PropertyOAuthAppSettingsBuilder;
+import org.apache.deltaspike.core.api.common.DeltaSpike;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Antoine Sabot-Durand
  */
-public class AgoravaExtensionTestProducers {
+public class AgoravaTestsProducers {
 
 
     @ApplicationScoped
@@ -44,6 +50,15 @@ public class AgoravaExtensionTestProducers {
         return builder.prefix("test").build();
     }
 
+    @Produces
+    @DeltaSpike
+    @RequestScoped
+    public HttpServletRequest produceMockedRequest() {
+        HttpServletRequest req = mock(HttpServletRequest.class);
+        when(req.getParameter(AgoravaConstants.REPOID_PARAM)).thenReturn("1234");
+        when(req.getParameter(AgoravaConstants.SESSIONID_PARAM)).thenReturn("5678");
+        return req;
+    }
  /*   @ApplicationScoped
     @Produces
     @Current
