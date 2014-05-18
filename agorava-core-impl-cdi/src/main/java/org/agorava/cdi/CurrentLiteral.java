@@ -25,5 +25,9 @@ import javax.enterprise.util.AnnotationLiteral;
  */
 public class CurrentLiteral extends AnnotationLiteral<Current> implements Current {
 
-    public static CurrentLiteral INSTANCE = new CurrentLiteral();
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -1224603757124841646L;
+	public static CurrentLiteral INSTANCE = new CurrentLiteral();
 }
