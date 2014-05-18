@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2014 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -188,7 +188,7 @@ public interface OAuthService extends RestService {
      *
      * @return the OAuth version used by the provider (i.e. 1.0a or 2.0)
      */
-    String getVersion();
+    OAuth.OAuthVersion getVersion();
 
     /**
      * Creates an OAuthRequest with the given Rest Verb and uri

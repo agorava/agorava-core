@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2014 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import org.agorava.AgoravaConstants;
 import org.agorava.api.atinject.Current;
 import org.agorava.api.event.OAuthComplete;
 import org.agorava.api.event.SocialEvent;
-import org.agorava.api.exception.AgoravaException;
 import org.agorava.api.exception.ProviderMismatchException;
 import org.agorava.api.oauth.OAuthService;
 import org.agorava.api.oauth.OAuthSession;
@@ -28,16 +27,15 @@ import org.agorava.api.service.OAuthLifeCycleService;
 import org.agorava.api.storage.GlobalRepository;
 import org.agorava.api.storage.UserSessionRepository;
 import org.agorava.spi.UserProfileService;
+import static org.agorava.AgoravaContext.getServicesToQualifier;
 
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.List;
 import javax.enterprise.event.Event;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
-import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.agorava.AgoravaContext.getServicesToQualifier;
 
 /**
  * @author Antoine Sabot-Durand
@@ -53,7 +51,13 @@ public class OAuthLifeCycleServiceImpl implements OAuthLifeCycleService {
     @Inject
     private GlobalRepository globalRepository;
 
-    private UserSessionRepository repository;
+    @Inject
+    @Current
+    private Instance<UserSessionRepository> repositories;
+
+    @Inject
+    @Current
+    private Instance<OAuthSession> sessionInstance;
 
     @Inject
     @Any
@@ -63,12 +67,9 @@ public class OAuthLifeCycleServiceImpl implements OAuthLifeCycleService {
     @Any
     private Instance<OAuthService> services;
 
-    @Inject
-    OAuthLifeCycleServiceImpl(@Current Instance<UserSessionRepository> repositories) {
-        if (repositories.isUnsatisfied())
-            throw new AgoravaException("No User repo available, you should activate a producer bean");
-        else
-            repository = repositories.get();
+    @Override
+    public UserSessionRepository getCurrentRepository() {
+        return repositories.get();
     }
 
     @Override
@@ -78,17 +79,22 @@ public class OAuthLifeCycleServiceImpl implements OAuthLifeCycleService {
 
     @Override
     public OAuthSession getCurrentSession() {
-        return repository.getCurrent();
+        return sessionInstance.get();
+    }
+
+    @Override
+    public void setCurrentSession(OAuthSession session) {
+        getCurrentRepository().setCurrent(session);
     }
 
     @Override
     public void killCurrentSession() {
-        repository.removeCurrent();
+        getCurrentRepository().removeCurrent();
     }
 
     @Override
     public void killSession(OAuthSession session) {
-        repository.remove(session);
+        getCurrentRepository().remove(session);
     }
 
     @Override
@@ -101,12 +107,12 @@ public class OAuthLifeCycleServiceImpl implements OAuthLifeCycleService {
         return startDanceFor(providerName, null);
     }
 
-
     @Override
     public synchronized void endDance() {
-        if (getCurrentSession().getAccessToken() == null)
+        if (getCurrentSession().getAccessToken() == null) {
             getCurrentSession().setAccessToken(getCurrentService().getAccessToken(getCurrentSession().getRequestToken(),
                     getCurrentSession().getVerifier()));
+        }
         if (getCurrentSession().getAccessToken() != null) {
             getCurrentSession().setRequestToken(null);
             getCurrentSession().setUserProfile(getCurrentUserProfileService().getUserProfile());
@@ -136,8 +142,8 @@ public class OAuthLifeCycleServiceImpl implements OAuthLifeCycleService {
 
     @Override
     public OAuthSession buildSessionFor(Annotation qualifier) {
-        OAuthSession res = new OAuthSession.Builder().qualifier(qualifier).repo(unProxifyRepo(repository)).build();
-        repository.setCurrent(res);
+        OAuthSession res = new OAuthSession.Builder().qualifier(qualifier).repo(unProxifyRepo(getCurrentRepository())).build();
+        getCurrentRepository().setCurrent(res);
         return res;
     }
 
@@ -147,21 +153,26 @@ public class OAuthLifeCycleServiceImpl implements OAuthLifeCycleService {
 
     @Override
     public OAuthSession resolveSessionForQualifier(Annotation qualifier) {
-        if (repository.getCurrent().equals(OAuthSession.NULL))
+        OAuthSession current = getCurrentSession();
+        if (current.getServiceQualifier().equals(qualifier)) {
+            return current;
+        }
+        if (getCurrentRepository().getCurrent().equals(OAuthSession.NULL)) {
             buildSessionFor(qualifier);
-        else if (!repository.getCurrent().getServiceQualifier().equals(qualifier))
+        } else if (!getCurrentRepository().getCurrent().getServiceQualifier().equals(qualifier)) {
             throw new ProviderMismatchException("Inconsistent state between repo and service. In repo Session provider is " +
-                    repository.getCurrent().getServiceName() + " while service provider is " + qualifier);
+                    getCurrentRepository().getCurrent().getServiceName() + " while service provider is " + qualifier);
+        }
 
-        return repository.getCurrent();
+        return getCurrentRepository().getCurrent();
     }
-
 
     @Override
     public String startDanceFor(String providerName, String internalCallBack) {
         OAuthSession session = buildSessionFor(providerName);
-        if (internalCallBack != null && !"".equals(internalCallBack.trim()))
+        if (internalCallBack != null && !"".equals(internalCallBack.trim())) {
             session.getExtraData().put(AgoravaConstants.INTERN_CALLBACK_PARAM, internalCallBack);
+        }
         return getCurrentService().getAuthorizationUrl();
     }
 
@@ -178,12 +189,7 @@ public class OAuthLifeCycleServiceImpl implements OAuthLifeCycleService {
 
     @Override
     public List<OAuthSession> getAllActiveSessions() {
-        return new ArrayList(repository.getAll());
-    }
-
-    @Override
-    public void setCurrentSession(OAuthSession session) {
-        repository.setCurrent(session);
+        return new ArrayList(getCurrentRepository().getAll());
     }
 
 }

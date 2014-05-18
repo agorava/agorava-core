@@ -28,6 +28,8 @@ import org.agorava.spi.AppSettingsTuner;
 import org.apache.deltaspike.core.api.common.DeltaSpike;
 import org.apache.deltaspike.core.api.exclude.Exclude;
 
+import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
@@ -45,13 +47,43 @@ public class RequestResolver extends ApplicationResolver {
 
     private static final long serialVersionUID = 6446160199657772110L;
 
+    private static Logger log = Logger.getLogger(RequestResolver.class.getName());
 
     @Inject
     @DeltaSpike
     protected HttpServletRequest request;
 
+    private OAuthSession currentSession;
+
+    private UserSessionRepository currentRepo;
+
     protected String getRepoId() {
         return request.getParameter(AgoravaConstants.REPOID_PARAM);
+    }
+
+    protected String getSessionId() {
+        return request.getParameter(AgoravaConstants.SESSIONID_PARAM);
+    }
+
+    @PostConstruct
+    protected void init() {
+        UserSessionRepository r;
+        OAuthSession s;
+
+        s = globalRepository.getOauthSession(getSessionId());
+        if (s != null) {
+            currentSession = s;
+            currentRepo = s.getRepo();
+
+        } else {
+            r = globalRepository.get(getRepoId());
+            if (r != null) {
+                currentRepo = r;
+            } else {
+                currentRepo = globalRepository.createNew();
+            }
+            currentSession = currentRepo.getCurrent();
+        }
     }
 
 
@@ -60,33 +92,37 @@ public class RequestResolver extends ApplicationResolver {
     @Named("currentRepo")
     @RequestScoped
     public UserSessionRepository getCurrentRepository() {
-        String id = getRepoId();
-        if (id == null || globalRepository.get(id) == null)
-            return globalRepository.createNew();
-        else
-            return globalRepository.get(id);
+        return currentRepo;
+
     }
 
 
     @Produces
-    public OAuthSession resolveSession(InjectionPoint ip, @Current UserSessionRepository repository) {
-        return super.resolveSession(ip, repository);
-
+    public OAuthSession resolveOAuthSession(InjectionPoint ip, @Current UserSessionRepository repository) {
+        return super.resolveOAuthSession(ip, repository);
     }
 
     @Produces
     @RequestScoped
-    public AppSettingsTuner produceCallBackTuner(@Current UserSessionRepository repo) {
-        return new addRepoToCallbackTuner(repo);
+    public AppSettingsTuner produceCallBackTuner(@Current OAuthSession session) {
+        return new addSessionToCallbackTuner(session);
     }
 
-    static public class addRepoToCallbackTuner implements AppSettingsTuner {
+    @Produces
+    @Named
+    @Current
+    @RequestScoped
+    public OAuthSession getCurrentSession() {
+        return currentSession;
+    }
+
+    static public class addSessionToCallbackTuner implements AppSettingsTuner {
 
 
-        UserSessionRepository repo;
+        OAuthSession session;
 
-        public addRepoToCallbackTuner(UserSessionRepository repo) {
-            this.repo = repo;
+        public addSessionToCallbackTuner(OAuthSession session) {
+            this.session = session;
         }
 
         @Override
@@ -94,16 +130,9 @@ public class RequestResolver extends ApplicationResolver {
             return new SimpleOAuthAppSettingsBuilder()
                     .readFromSettings(toTune)
                     .callback(new FacesUrlTransformer(toTune.getCallback())
-                            .appendParamIfNecessary(AgoravaConstants.REPOID_PARAM, repo.getId()).getUrl())
+                            .appendParamIfNecessary(AgoravaConstants.SESSIONID_PARAM, session.getId()).getUrl())
                     .build();
         }
-    }
-
-    @Produces
-    @Named
-    @Override
-    public OAuthSession getCurrentSession(@Current UserSessionRepository repository) {
-        return super.getCurrentSession(repository);
     }
 
 }

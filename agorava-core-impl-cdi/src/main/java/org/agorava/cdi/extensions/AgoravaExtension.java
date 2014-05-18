@@ -27,7 +27,7 @@ import org.agorava.api.oauth.OAuthSession;
 import org.agorava.api.oauth.application.OAuthAppSettings;
 import org.agorava.api.oauth.application.OAuthAppSettingsBuilder;
 import org.agorava.api.oauth.application.OAuthApplication;
-import org.agorava.cdi.CurrentLiteral;
+import org.agorava.api.storage.GlobalRepository;
 import org.agorava.cdi.resolver.ApplicationResolver;
 import org.agorava.spi.ProviderConfigOauth;
 import org.apache.deltaspike.core.api.config.ConfigResolver;
@@ -40,6 +40,15 @@ import static java.util.logging.Level.WARNING;
 import static org.agorava.cdi.extensions.AnnotationUtils.getAnnotationsWithMeta;
 import static org.agorava.cdi.extensions.AnnotationUtils.getSingleProviderRelatedQualifier;
 
+import java.io.Serializable;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.logging.Logger;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.event.Observes;
@@ -61,15 +70,6 @@ import javax.enterprise.inject.spi.ProcessProducer;
 import javax.enterprise.inject.spi.ProcessProducerMethod;
 import javax.enterprise.inject.spi.Producer;
 import javax.inject.Named;
-import java.io.Serializable;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Type;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.logging.Logger;
 
 /**
  * Agorava CDI extension to discover existing module and configured modules
@@ -313,7 +313,7 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
         } else {
             WrappingBeanBuilder<OAuthSession> wbp = new WrappingBeanBuilder<OAuthSession>(osb, beanManager);
             wbp.readFromType(beanManager.createAnnotatedType(OAuthSession.class)).qualifiers(providerQualifiersConfigured)
-                    .addQualifiers(new AnyLiteral(), CurrentLiteral.INSTANCE).scope(Dependent.class);
+                    .scope(Dependent.class);
             Bean res = wbp.create();
             abd.addBean(res);
         }
@@ -322,12 +322,14 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
 
     //--------------------- After Deployment validation phase
 
-    public void endOfExtension(@Observes AfterDeploymentValidation adv, BeanManager beanManager) {
+    public void endOfExtension(@Observes AfterDeploymentValidation adv, BeanManager bm) {
 
-        registerServiceNames(beanManager);
+        registerServiceNames(bm);
 
         new BeanResolverCdi();
+        Bean<?> bean = bm.getBeans(GlobalRepository.class).iterator().next();
 
+        bm.getReference(bean, GlobalRepository.class, bm.createCreationalContext(bean));
         producerScope = ConfigResolver.getPropertyValue("producerScope", "");
         internalCallBack = ConfigResolver.getPropertyValue(AgoravaConstants.INTERN_CALLBACK_PARAM);
         if (internalCallBack == null) {

@@ -85,14 +85,15 @@ public class CookieResolver extends RequestResolver {
 
 
     @Produces
-    public OAuthSession resolveSession(InjectionPoint ip, @Current UserSessionRepository repository) {
-        return super.resolveSession(ip, repository);
+    public OAuthSession resolveOAuthSession(InjectionPoint ip, @Current UserSessionRepository repository) {
+        return super.resolveOAuthSession(ip, repository);
     }
 
     @Produces
     @Named
+    @Current
     @Override
-    public OAuthSession getCurrentSession(@Current UserSessionRepository repository) {
-        return super.getCurrentSession(repository);
+    public OAuthSession getCurrentOAuthSession(@Current UserSessionRepository repository) {
+        return super.getCurrentOAuthSession(repository);
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2014 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -148,6 +148,11 @@ public interface AgoravaConstants {
      * parameter name used to propagate {@link org.agorava.api.storage.UserSessionRepository#getId()} in url
      */
     String REPOID_PARAM = "repoid";
+
+    /**
+     * parameter name used to propagate {@link org.agorava.api.oauth.OAuthSession#getId()} in url
+     */
+    String SESSIONID_PARAM = "sessionid";
 
     /**
      * cookie name used to store {@link org.agorava.api.storage.UserSessionRepository#getId()} on the browser

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2014 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,7 +62,7 @@ public class OAuthSession implements Identifiable {
 
 
     OAuthSession(Annotation qualifier, Token requestToken, Token accessToken, String verifier,
-                 UserProfile userProfile, UserSessionRepository repo, String id) {
+            UserProfile userProfile, UserSessionRepository repo, String id) {
 
         this.qualifier = qualifier;
         this.requestToken = requestToken;
@@ -76,6 +76,10 @@ public class OAuthSession implements Identifiable {
     OAuthSession(String id) {
         qualifier = null;
         this.id = id;
+    }
+
+    OAuthSession() {
+        this("");
     }
 
     /**
@@ -173,6 +177,13 @@ public class OAuthSession implements Identifiable {
     }
 
     /**
+     * @return true if the session is the {@link #NULL} OAuthSession
+     */
+    public boolean isNull() {
+        return this.equals(NULL);
+    }
+
+    /**
      * @return the name of the session to display for user
      */
     public String getName() {
@@ -205,7 +216,7 @@ public class OAuthSession implements Identifiable {
             return true;
         if (obj == null)
             return false;
-        if (getClass() != obj.getClass())
+        if (!(obj instanceof OAuthSession))
             return false;
         OAuthSession other = (OAuthSession) obj;
         if (userProfile != null)
@@ -216,7 +227,6 @@ public class OAuthSession implements Identifiable {
 
 
     /**
-     *
      * @return the extra data map that can be associated to this Session
      */
     public Map<String, Serializable> getExtraData() {
