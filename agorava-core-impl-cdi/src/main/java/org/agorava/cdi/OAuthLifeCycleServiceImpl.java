@@ -109,16 +109,17 @@ public class OAuthLifeCycleServiceImpl implements OAuthLifeCycleService {
 
     @Override
     public synchronized void endDance() {
-        if (getCurrentSession().getAccessToken() == null) {
-            getCurrentSession().setAccessToken(getCurrentService().getAccessToken(getCurrentSession().getRequestToken(),
-                    getCurrentSession().getVerifier()));
+        OAuthSession currentSession = getCurrentSession();
+        if (currentSession.getAccessToken() == null) {
+            currentSession.setAccessToken(getCurrentService().getAccessToken(currentSession.getRequestToken(),
+                    currentSession.getVerifier()));
         }
-        if (getCurrentSession().getAccessToken() != null) {
-            getCurrentSession().setRequestToken(null);
-            getCurrentSession().setUserProfile(getCurrentUserProfileService().getUserProfile());
-            getCurrentSession().getRepo().add(getCurrentSession());
-            completeEvt.select(getCurrentSession().getServiceQualifier()).fire(new OAuthComplete(SocialEvent.Status.SUCCESS, "",
-                    getCurrentSession()));
+        if (currentSession.getAccessToken() != null) {
+            currentSession.setRequestToken(null);
+            currentSession.setUserProfile(getCurrentUserProfileService().getUserProfile());
+            currentSession.getRepo().add(currentSession);
+            completeEvt.select(currentSession.getServiceQualifier()).fire(new OAuthComplete(SocialEvent.Status.SUCCESS, "",
+                    currentSession));
 
             //TODO: reactivate logger
         } else {
