@@ -41,6 +41,28 @@ import javax.inject.Inject;
 @RunWith(Arquillian.class)
 public class ProvidersAndSettingsBeanGenerationTest extends AgoravaArquillianCommons {
 
+    @Inject
+    @FakeService
+    OAuthService fakeProvider1;
+    @Inject
+    @FakeService2
+    OAuthService fakeProvider2;
+    @Inject
+    @FakeService
+    OAuthAppSettings settings1;
+    @Inject
+    @FakeService2
+    OAuthAppSettings settings2;
+    @Inject
+    @FakeService
+    OAuthService service;
+    @Inject
+    @FakeService2
+    OAuthService service2;
+    @Inject
+    @Any
+    Instance<OAuthSession> sessions;
+
     @Deployment
     public static Archive<?> createTestArchive() throws FileNotFoundException {
 
@@ -52,40 +74,14 @@ public class ProvidersAndSettingsBeanGenerationTest extends AgoravaArquillianCom
                         FakeService2.class,
                         FakeServiceLiteral.class,
                         FakeService2Literal.class)
-                .addAsWebInfResource("agorava.properties");
-
+                .addAsResource("agorava-request-resolver.properties", "agorava.properties");
         return ret;
     }
 
-
-    @Inject
-    @FakeService
-    OAuthService fakeProvider1;
-
-    @Inject
-    @FakeService2
-    OAuthService fakeProvider2;
-
-    @Inject
-    @FakeService
-    OAuthAppSettings settings1;
-
-
-    @Inject
-    @FakeService2
-    OAuthAppSettings settings2;
-
-    @Inject
-    @FakeService
-    OAuthService service;
-
-    @Inject
-    @FakeService2
-    OAuthService service2;
-
-    @Inject
-    @Any
-    Instance<OAuthSession> sessions;
+    /*@BeforeClass
+    public static void before() {
+        getenv().put("agorava.bundle", "agorava-request-resolver");
+    }*/
 
 
     @Test

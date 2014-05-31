@@ -19,7 +19,7 @@ package org.agorava.cdi.resolver;
 import org.agorava.api.atinject.Current;
 import org.agorava.api.oauth.OAuthSession;
 import org.agorava.api.storage.UserSessionRepository;
-import org.agorava.cdi.deltaspike.DifferentOrNull;
+import org.agorava.cdi.config.DifferentOrNull;
 import org.apache.deltaspike.core.api.exclude.Exclude;
 
 import javax.enterprise.context.SessionScoped;
@@ -54,7 +54,7 @@ public class SessionResolver extends ApplicationResolver {
     @Current
     @Named
     @Override
-    public OAuthSession getCurrentOAuthSession(@Current UserSessionRepository repository) {
-        return super.getCurrentOAuthSession(repository);
+    public OAuthSession getCurrentSession(@Current UserSessionRepository repository) {
+        return super.getCurrentSession(repository);
     }
 }

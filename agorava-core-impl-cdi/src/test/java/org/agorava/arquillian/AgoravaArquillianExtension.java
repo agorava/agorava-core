@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package org.agorava.spi;
+package org.agorava.arquillian;
 
-import org.agorava.api.oauth.OAuthSession;
-import org.agorava.api.storage.UserSessionRepository;
-
-import java.io.Serializable;
+import org.jboss.arquillian.container.spi.client.container.DeploymentExceptionTransformer;
+import org.jboss.arquillian.core.spi.LoadableExtension;
 
 /**
  * @author Antoine Sabot-Durand
  */
-public interface OAuthSessionResolver extends Serializable {
+public class AgoravaArquillianExtension implements LoadableExtension {
+    @Override
+    public void register(ExtensionBuilder extensionBuilder) {
+        extensionBuilder.service(DeploymentExceptionTransformer.class, AgoravaDeploymentExceptionTranformer.class);
 
-    OAuthSession getCurrentSession(UserSessionRepository repository);
+    }
 }

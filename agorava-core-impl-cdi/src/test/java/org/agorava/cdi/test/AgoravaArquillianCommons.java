@@ -16,7 +16,7 @@
 
 package org.agorava.cdi.test;
 
-import org.agorava.cdi.deltaspike.AgoravaConfigSourceProvider;
+import org.agorava.cdi.config.AgoravaDefaultConfigSourceProvider;
 import org.agorava.cdi.extensions.AgoravaExtension;
 import org.apache.deltaspike.core.spi.config.ConfigSourceProvider;
 import org.jboss.shrinkwrap.api.ArchivePath;
@@ -60,7 +60,7 @@ public class AgoravaArquillianCommons {
                     }
                 }, "org.agorava")
                 .addAsServiceProvider(Extension.class, AgoravaExtension.class)
-                .addAsServiceProvider(ConfigSourceProvider.class, AgoravaConfigSourceProvider.class)
+                .addAsServiceProvider(ConfigSourceProvider.class, AgoravaDefaultConfigSourceProvider.class)
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
     }
 }

@@ -20,7 +20,7 @@ import org.agorava.AgoravaConstants;
 import org.agorava.api.atinject.Current;
 import org.agorava.api.oauth.OAuthSession;
 import org.agorava.api.storage.UserSessionRepository;
-import org.agorava.cdi.deltaspike.DifferentOrNull;
+import org.agorava.cdi.config.DifferentOrNull;
 import org.apache.deltaspike.core.api.common.DeltaSpike;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.apache.deltaspike.core.api.exclude.Exclude;
@@ -53,11 +53,13 @@ public class CookieResolver extends RequestResolver {
     @Override
     protected String getRepoId() {
         String id;
-        if (request.getCookies() != null)
+        if (request.getCookies() != null) {
             for (Cookie cookie : request.getCookies()) {
-                if (cookie.getName().equals(AgoravaConstants.RESOLVER_REPO_COOKIE_NAME))
+                if (cookie.getName().equals(AgoravaConstants.RESOLVER_REPO_COOKIE_NAME)) {
                     return cookie.getValue();
+                }
             }
+        }
         return null;
     }
 
@@ -79,8 +81,9 @@ public class CookieResolver extends RequestResolver {
             UserSessionRepository repo = globalRepository.createNew();
             setCookie(repo.getId());
             return globalRepository.createNew();
-        } else
+        } else {
             return globalRepository.get(id);
+        }
     }
 
 
@@ -93,7 +96,7 @@ public class CookieResolver extends RequestResolver {
     @Named
     @Current
     @Override
-    public OAuthSession getCurrentOAuthSession(@Current UserSessionRepository repository) {
-        return super.getCurrentOAuthSession(repository);
+    public OAuthSession getCurrentSession(@Current UserSessionRepository repository) {
+        return super.getCurrentSession(repository);
     }
 }

@@ -81,7 +81,7 @@ public class RequestResolverTest extends AgoravaArquillianCommons {
                         FakeService2.class,
                         FakeServiceLiteral.class,
                         FakeService2Literal.class)
-                .addAsWebInfResource("agorava.properties");
+                .addAsResource("agorava-request-resolver.properties", "agorava.properties");
 
         return ret;
     }
@@ -97,7 +97,7 @@ public class RequestResolverTest extends AgoravaArquillianCommons {
         r.add(session2);
         r.setCurrent(session2);
     }
-    
+
 
     @Test
     public void addedSessionShouldBeAvailableInGlobalRepo() {

@@ -247,10 +247,26 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
     }
 
     private void captureOauthSessionProducer(@Observes ProcessProducerMethod<OAuthSession, ?> pb) {
-        if (!pb.getAnnotated().isAnnotationPresent(Named.class))
-            osb = pb.getBean();
-    }
+        Annotated at = pb.getAnnotated();
 
+        Bean<?> bean = pb.getBean();
+
+        if (bean.getQualifiers().contains(CurrentLiteral.INSTANCE)) {
+            Set<Annotation> providerRelatedAnnotations = getAnnotationsWithMeta(bean.getQualifiers(), ProviderRelated.class);
+
+            if (!providerRelatedAnnotations.isEmpty()) {
+                throw new AgoravaException("OAuthSession cannot have @Current annotation and a provider " +
+                        "related annotation. Error on bean " + pb.getBean().toString());
+            }
+            if (!pb.getAnnotated().isAnnotationPresent(Named.class)) {
+                log.warning("@Current OAuthSession won't be accessible from UI");
+            }
+        }
+        if (!pb.getAnnotated().isAnnotationPresent(Current.class)) {
+            osb = pb.getBean();
+        }
+    }
+    
     /*
     private void captureGenericOAuthProvider(@Observes ProcessBean<? extends OAuthProvider> pb) {
         Bean<? extends OAuthProvider> bean = pb.getBean();
@@ -321,10 +337,14 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
                     "agorava.properties file"));
         } else {
             WrappingBeanBuilder<OAuthSession> wbp = new WrappingBeanBuilder<OAuthSession>(osb, beanManager);
-            wbp.readFromType(beanManager.createAnnotatedType(OAuthSession.class)).qualifiers(providerQualifiersConfigured)
+            wbp.readFromType(beanManager.createAnnotatedType(OAuthSession.class))
                     .scope(Dependent.class);
-            Bean res = wbp.create();
-            abd.addBean(res);
+            for (Annotation qual : providerQualifiersConfigured) {
+                wbp.qualifiers(qual);
+                Bean res = wbp.create();
+                abd.addBean(res);
+            }
+
         }
 
     }
