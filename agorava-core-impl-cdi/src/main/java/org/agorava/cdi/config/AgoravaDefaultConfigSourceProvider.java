@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2014 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package org.agorava.cdi.deltaspike;
+package org.agorava.cdi.config;
 
+import org.apache.deltaspike.core.impl.config.DefaultConfigSourceProvider;
 import org.apache.deltaspike.core.spi.config.ConfigSource;
-import org.apache.deltaspike.core.spi.config.ConfigSourceProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,18 +25,27 @@ import java.util.List;
 /**
  * @author Antoine Sabot-Durand
  */
-public class AgoravaConfigSourceProvider implements ConfigSourceProvider {
+public class AgoravaDefaultConfigSourceProvider extends DefaultConfigSourceProvider {
+    private static final String PROPERTY_FILE_NAME = "agorava.properties";
 
-    private List<ConfigSource> sources = new ArrayList<ConfigSource>();
+    private List<ConfigSource> configSources = new ArrayList<ConfigSource>();
 
-
-    public AgoravaConfigSourceProvider() {
-        getConfigSources().add(new AgoravaPropertyFileConfigSource("agorava"));
+    /**
+     * Default constructor which adds the {@link ConfigSource} implementations which are supported by default
+     */
+    public AgoravaDefaultConfigSourceProvider() {
+        super();
+        AgoravaEnvConfigSourceProvider csp = new AgoravaEnvConfigSourceProvider(PROPERTY_FILE_NAME);
+        getConfigSources().addAll(csp.getConfigSources());
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<ConfigSource> getConfigSources() {
-        return sources;
+        return configSources;
     }
+
 }

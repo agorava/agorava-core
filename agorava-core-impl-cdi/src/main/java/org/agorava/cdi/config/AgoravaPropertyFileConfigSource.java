@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2014 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,15 @@
  * limitations under the License.
  */
 
-package org.agorava.cdi.deltaspike;
+package org.agorava.cdi.config;
 
+import org.agorava.api.exception.AgoravaException;
 import org.apache.deltaspike.core.spi.config.ConfigSource;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
+import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
 /**
@@ -37,8 +41,18 @@ public class AgoravaPropertyFileConfigSource implements ConfigSource {
 
     public AgoravaPropertyFileConfigSource(String bundleName) {
         this.bundleName = bundleName;
-        resourceBundle = ResourceBundle.getBundle(bundleName);
+        resourceBundle = retrievePropertyBundle(bundleName);
 
+    }
+
+    public static ResourceBundle retrievePropertyBundle(String bundleName) {
+        ClassLoader cl = Thread.currentThread().getContextClassLoader();
+        InputStream is = cl.getResourceAsStream(bundleName + ".properties");
+        try {
+            return new PropertyResourceBundle(is);
+        } catch (IOException e) {
+            throw new AgoravaException("Didn't found Agorava properties file", e);
+        }
     }
 
     @Override
