@@ -16,13 +16,13 @@
 
 package org.agorava.api.oauth.application;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
 /**
  * This annotation is used to produce {@link OAuthAppSettings} in code
@@ -37,7 +37,7 @@ public @interface OAuthApplication {
     /**
      * @return the builder class name used to build the final {@link OAuthAppSettings}
      */
-    Class<? extends OAuthAppSettingsBuilder> builder() default PropertyOAuthAppSettingsBuilder.class;
+    Class<? extends OAuthAppSettingsBuilder> builder() default OAuthAppSettingsBuilder.class;
 
     /**
      * @return a list of optional {@link Param} to configure the builder

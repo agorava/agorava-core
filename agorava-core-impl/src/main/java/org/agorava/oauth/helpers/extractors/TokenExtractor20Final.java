@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.agorava.helpers.extractors;
+package org.agorava.oauth.helpers.extractors;
 
 import org.agorava.api.exception.AgoravaException;
 import org.agorava.api.extractor.TokenExtractor;
@@ -26,21 +26,21 @@ import org.agorava.api.service.Preconditions;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.agorava.api.oauth.OAuth.OAuthVersion.TWO_DRAFT_11;
+import static org.agorava.api.oauth.OAuth.OAuthVersion.TWO_FINAL;
 
 /**
- * Default implementation of {@AccessTokenExtractor}. Conforms to OAuth 2.0
+ * @author Antoine Sabot-Durand
  */
-@OAuth(TWO_DRAFT_11)
-public class TokenExtractor20 implements TokenExtractor {
-    private static final String TOKEN_REGEX = "access_token=([^&]+)";
+@OAuth(TWO_FINAL)
+public class TokenExtractor20Final implements TokenExtractor {
+
+    private static final String TOKEN_REGEX = "\"access_token\":\"([^\"]+)";
 
     private static final String EMPTY_SECRET = "";
 
     /**
      * {@inheritDoc}
      */
-    @Override
     public Token extract(String response) {
         Preconditions.checkEmptyString(response, "Response body is incorrect. Can't extract a token from an empty string");
 
@@ -51,5 +51,6 @@ public class TokenExtractor20 implements TokenExtractor {
         } else {
             throw new AgoravaException("Response body is incorrect. Can't extract a token from this: '" + response + "'", null);
         }
+
     }
 }

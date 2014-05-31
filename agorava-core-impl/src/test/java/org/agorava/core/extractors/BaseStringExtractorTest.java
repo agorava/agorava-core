@@ -20,7 +20,7 @@ import org.agorava.api.exception.OAuthParametersMissingException;
 import org.agorava.api.oauth.OAuthRequest;
 import org.agorava.api.rest.Verb;
 import org.agorava.core.mock.ObjectMother;
-import org.agorava.helpers.extractors.BaseStringExtractor;
+import org.agorava.oauth.helpers.extractors.BaseStringExtractor;
 import org.agorava.rest.OAuthRequestImpl;
 import org.junit.Before;
 import org.junit.Test;

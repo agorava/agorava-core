@@ -14,34 +14,42 @@
  * limitations under the License.
  */
 
-package org.agorava.helpers.signatures;
+package org.agorava.oauth.helpers.signatures;
 
 import org.agorava.api.exception.OAuthSignatureException;
-import org.agorava.api.service.OAuthEncoder;
-import org.agorava.api.service.Preconditions;
 import org.agorava.api.service.SignatureService;
 import org.agorava.api.service.SignatureType;
 
-import static org.agorava.api.service.SignatureType.Type.PLAINTEXT;
+import javax.xml.bind.DatatypeConverter;
+import java.security.PrivateKey;
+import java.security.Signature;
+
+import static org.agorava.api.service.SignatureType.Type.RSASHA1;
 
 /**
- * plaintext implementation of {@SignatureService}
- *
- * @author Pablo Fernandez
- * @author Antoine Sabot-Durand
+ * A signature service that uses the RSA-SHA1 algorithm.
  */
+@SignatureType(RSASHA1)
+public class RSASha1SignatureService implements SignatureService {
+    private static final String METHOD = "RSA-SHA1";
 
-@SignatureType(PLAINTEXT)
-public class PlaintextSignatureService implements SignatureService {
-    private static final String METHOD = "PLAINTEXT";
+    private static final String RSA_SHA1 = "SHA1withRSA";
+
+    private PrivateKey privateKey;
+
+    public RSASha1SignatureService(PrivateKey privateKey) {
+        this.privateKey = privateKey;
+    }
 
     /**
      * {@inheritDoc}
      */
     public String getSignature(String baseString, String apiSecret, String tokenSecret) {
         try {
-            Preconditions.checkEmptyString(apiSecret, "Api secret cant be null or empty string");
-            return OAuthEncoder.encode(apiSecret) + '&' + OAuthEncoder.encode(tokenSecret);
+            Signature signature = Signature.getInstance(RSA_SHA1);
+            signature.initSign(privateKey);
+            signature.update(baseString.getBytes());
+            return new String(DatatypeConverter.printBase64Binary(signature.sign()));
         } catch (Exception e) {
             throw new OAuthSignatureException(baseString, e);
         }
@@ -54,4 +62,3 @@ public class PlaintextSignatureService implements SignatureService {
         return METHOD;
     }
 }
-
