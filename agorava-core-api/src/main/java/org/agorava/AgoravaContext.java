@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2014 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,18 +43,22 @@ public class AgoravaContext {
      * @see AgoravaContext#getProducerScope()
      */
     protected static String producerScope = "";
-
-    private static Map<String, Annotation> servicesToQualifier = new HashMap<String, Annotation>();
-
-    private static Map<Annotation, String> qualifierToService = new HashMap<Annotation, String>();
-
-    private static List<String> listOfServices = null;
-
     /**
      * The default internal callback when whe return from OAuth connexion
      */
     protected static String internalCallBack;
+    private static Map<String, Annotation> servicesToQualifier = new HashMap<String, Annotation>();
+    private static Map<Annotation, String> qualifierToService = new HashMap<Annotation, String>();
+    private static Map<Class<? extends Annotation>, Annotation> classToQualifier = new HashMap<Class<? extends Annotation>,
+            Annotation>();
+    private static List<String> listOfServices = null;
 
+
+    /**
+     * Default protected constructor to prevent instantiation of this class
+     */
+    protected AgoravaContext() {
+    }
 
     /**
      * @return the way that {@link org.agorava.api.oauth.OAuthSession} and {@link org.agorava.api.storage
@@ -62,12 +66,6 @@ public class AgoravaContext {
      */
     public static String getProducerScope() {
         return producerScope;
-    }
-
-    /**
-     * Default protected constructor to prevent instantiation of this class
-     */
-    protected AgoravaContext() {
     }
 
     /**
@@ -90,6 +88,19 @@ public class AgoravaContext {
             }
         }
         return qualifierToService;
+    }
+
+    /**
+     * @return a map associating provider qualifiers classes (qualifiers bearing {@link org.agorava.api.atinject
+     * .ProviderRelated} meta-annotation) to provider qualifier instances
+     */
+    public static Map<Class<? extends Annotation>, Annotation> getClassToQualifierQualifier() {
+        if (classToQualifier.isEmpty()) {
+            for (Annotation a : servicesToQualifier.values()) {
+                classToQualifier.put(a.annotationType(), a);
+            }
+        }
+        return classToQualifier;
     }
 
     /**

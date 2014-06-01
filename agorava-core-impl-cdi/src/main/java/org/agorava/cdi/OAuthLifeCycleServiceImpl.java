@@ -20,6 +20,7 @@ import org.agorava.AgoravaConstants;
 import org.agorava.api.atinject.Current;
 import org.agorava.api.event.OAuthComplete;
 import org.agorava.api.event.SocialEvent;
+import org.agorava.api.exception.AgoravaException;
 import org.agorava.api.exception.ProviderMismatchException;
 import org.agorava.api.oauth.OAuthService;
 import org.agorava.api.oauth.OAuthSession;
@@ -27,6 +28,7 @@ import org.agorava.api.service.OAuthLifeCycleService;
 import org.agorava.api.storage.GlobalRepository;
 import org.agorava.api.storage.UserSessionRepository;
 import org.agorava.spi.UserProfileService;
+import static org.agorava.AgoravaContext.getClassToQualifierQualifier;
 import static org.agorava.AgoravaContext.getServicesToQualifier;
 
 import java.lang.annotation.Annotation;
@@ -138,6 +140,9 @@ public class OAuthLifeCycleServiceImpl implements OAuthLifeCycleService {
     public OAuthSession buildSessionFor(String providerName) {
         OAuthSession res;
         Annotation qualifier = getServicesToQualifier().get(providerName);
+        if (qualifier == null) {
+            throw new AgoravaException("Cannot find configured service provider with name : " + providerName);
+        }
         return buildSessionFor(qualifier);
     }
 
@@ -181,6 +186,15 @@ public class OAuthLifeCycleServiceImpl implements OAuthLifeCycleService {
     public String startDanceFor(Annotation provider) {
         buildSessionFor(provider);
         return getCurrentService().getAuthorizationUrl();
+    }
+
+    @Override
+    public String startDanceFor(Class<? extends Annotation> providerClass) {
+        Annotation qualifier = getClassToQualifierQualifier().get(providerClass);
+        if (qualifier == null) {
+            throw new AgoravaException("Cannot find configured service provider with class : " + providerClass);
+        }
+        return startDanceFor(qualifier);
     }
 
     @Override
