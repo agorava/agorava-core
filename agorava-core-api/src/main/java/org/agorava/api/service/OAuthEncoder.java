@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2014 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,6 +45,7 @@ public class OAuthEncoder {
 
     private static String CHARSET = "UTF-8";
 
+    /* preventing instantiation */
     private OAuthEncoder() {
     }
 

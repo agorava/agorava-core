@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2014 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,11 @@ import java.util.Map;
  * @author: Pablo Fernandez
  */
 public class MapUtils {
+
+    /* prevent instantiation */
+    private MapUtils() {
+    }
+    
     public static <K, V> String toString(Map<K, V> map) {
         if (map == null) return "";
         if (map.isEmpty()) return "{}";
