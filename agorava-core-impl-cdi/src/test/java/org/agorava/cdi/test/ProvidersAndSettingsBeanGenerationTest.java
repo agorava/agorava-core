@@ -63,6 +63,10 @@ public class ProvidersAndSettingsBeanGenerationTest extends AgoravaArquillianCom
     @Any
     Instance<OAuthSession> sessions;
 
+    @Inject
+    @Any
+    Instance<GenericService> genericServices;
+
     @Deployment
     public static Archive<?> createTestArchive() throws FileNotFoundException {
 
@@ -73,15 +77,11 @@ public class ProvidersAndSettingsBeanGenerationTest extends AgoravaArquillianCom
                         FakeService.class,
                         FakeService2.class,
                         FakeServiceLiteral.class,
-                        FakeService2Literal.class)
+                        FakeService2Literal.class,
+                        GenericService.class)
                 .addAsResource("agorava-request-resolver.properties", "agorava.properties");
         return ret;
     }
-
-    /*@BeforeClass
-    public static void before() {
-        getenv().put("agorava.bundle", "agorava-request-resolver");
-    }*/
 
 
     @Test
@@ -96,7 +96,15 @@ public class ProvidersAndSettingsBeanGenerationTest extends AgoravaArquillianCom
         Assert.assertEquals("Bad qualifier for settings2", FakeService2Literal.INSTANCE, settings2.getQualifier());
     }
 
-    
+    @Test
+    public void genericServiceShouldBeTwo() {
+        int i = 0;
+        for (GenericService g : genericServices) {
+            i++;
+            Assert.assertNotNull(g.getSettings());
+        }
+        Assert.assertEquals(i, 2);
+    } 
     
     /*@Test(expected = NullPointerException.class)
     public void testServiceWithCurrentSession() {

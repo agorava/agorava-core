@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2014 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,21 +16,21 @@
 
 package org.agorava.api.atinject;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
 /**
  * Annotation used in Generic Bean to mark injection point that should be modified by
  * framework bootstrap to bear the same {@link ProviderRelated} qualifier than the containing bean.
  * <p>For example:
  * <pre>
- *   &#064;org.agorava.api.atinject.GenericBean
+ *   &#064;org.agorava.api.atinject.Generic
  *   public OAuthServiceImpl extends OAuthService {
  *
  *       &#064;InjectWithQualifier
@@ -40,9 +40,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  *
  * @author Antoine Sabot-Durand
  * @see ProviderRelated
- * @see GenericBean
+ * @see Generic
  */
-@Target({METHOD, FIELD, PARAMETER})
+@Target({ METHOD, FIELD, PARAMETER })
 @Retention(RUNTIME)
 @Documented
 public @interface InjectWithQualifier {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2014 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,19 @@
 
 package org.agorava.api.atinject;
 
-import javax.inject.Qualifier;
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+import javax.inject.Qualifier;
+
 /**
- * This qualifier is used to mark Class to indicate that it should be used to generate differrent beans for each {@link
+ * This qualifier is used to mark Class to indicate that it should be used to generate different beans for each {@link
  * ProviderRelated} Qualifier.
  * <p/>
  * Provider services (i.e. Social Media) are dynamically discovered when Agorava is bootstrapped thanks to Provider services
@@ -46,8 +46,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * @see InjectWithQualifier
  */
 @Qualifier
-@Target({TYPE, METHOD, PARAMETER, FIELD})
+@Target({ TYPE, METHOD, PARAMETER, FIELD })
 @Retention(RUNTIME)
 @Documented
-public @interface GenericBean {
+public @interface Generic {
 }
