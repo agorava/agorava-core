@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package org.agorava.helpers;
+package org.agorava.oauth.helpers;
 
-import org.agorava.helpers.signatures.RSASha1SignatureService;
+import org.agorava.oauth.helpers.signatures.RSASha1SignatureService;
 import org.junit.Test;
 
 import javax.xml.bind.DatatypeConverter;

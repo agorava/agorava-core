@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.agorava.helpers.signatures;
+package org.agorava.oauth.helpers.signatures;
 
 import org.agorava.api.exception.OAuthSignatureException;
 import org.agorava.api.service.OAuthEncoder;

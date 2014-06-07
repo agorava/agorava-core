@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.agorava.helpers;
+package org.agorava.oauth.helpers;
 
 import org.agorava.api.service.TimestampService;
 

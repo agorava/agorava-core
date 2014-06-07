@@ -19,7 +19,7 @@ package org.agorava.core.extractors;
 import org.agorava.api.exception.AgoravaException;
 import org.agorava.api.extractor.TokenExtractor;
 import org.agorava.api.oauth.Token;
-import org.agorava.helpers.extractors.TokenExtractor10;
+import org.agorava.oauth.helpers.extractors.TokenExtractor10;
 import org.junit.Before;
 import org.junit.Test;
 

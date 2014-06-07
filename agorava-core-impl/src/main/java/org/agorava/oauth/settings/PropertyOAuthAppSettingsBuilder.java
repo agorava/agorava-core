@@ -14,10 +14,14 @@
  * limitations under the License.
  */
 
-package org.agorava.api.oauth.application;
+package org.agorava.oauth.settings;
 
 import org.agorava.api.exception.AgoravaException;
+import org.agorava.api.oauth.application.OAuthAppSettings;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
 /**
@@ -83,6 +87,20 @@ public class PropertyOAuthAppSettingsBuilder extends SimpleOAuthAppSettingsBuild
         return this;
     }
 
+    public static ResourceBundle retrievePropertyBundle(String bundleName) {
+            ClassLoader cl=Thread.currentThread().getContextClassLoader();
+            InputStream is =cl.getResourceAsStream(bundleName+".properties");
+        if(is==null) {
+            throw new AgoravaException("Property file : " +bundleName+".properties, not found");
+        }
+            
+            try {
+                return new PropertyResourceBundle(is);
+            } catch (IOException e) {
+                throw new AgoravaException("Didn't found Agorava properties file",e);
+            }
+        }
+    
     /**
      * {@inheritDoc} <p/>
      * This implementation will build the {@link OAuthAppSettings} from a {@link ResourceBundle}
@@ -102,7 +120,7 @@ public class PropertyOAuthAppSettingsBuilder extends SimpleOAuthAppSettingsBuild
     public OAuthAppSettings build() {
         String key;
         String value;
-        ResourceBundle rb = ResourceBundle.getBundle(bundleName);
+        ResourceBundle rb = retrievePropertyBundle(bundleName);
         String pref = "".equals(prefix) ? "" : prefix + ".";
 
 

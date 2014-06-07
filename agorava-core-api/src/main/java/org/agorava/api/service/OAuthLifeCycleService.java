@@ -49,10 +49,16 @@ public interface OAuthLifeCycleService extends Serializable {
     OAuthSession getCurrentSession();
 
     /**
+     * Makes the given OAuth session the current session
+     *
+     * @param session to put as current session
+     */
+    void setCurrentSession(OAuthSession session);
+
+    /**
      * kill (disconnect and garbage) the current session
      */
     void killCurrentSession();
-
 
     /**
      * kill (disconnect and garbage) the given session
@@ -61,12 +67,10 @@ public interface OAuthLifeCycleService extends Serializable {
      */
     void killSession(OAuthSession session);
 
-
     /**
      * @return the service needed to retrieve user profile for the given provider
      */
     UserProfileService getCurrentUserProfileService();
-
 
     /**
      * OAuth Dance entry point. For a given Provider name initialize OAuth workflow by returning authorization url end user
@@ -76,7 +80,6 @@ public interface OAuthLifeCycleService extends Serializable {
      * @return the Authorization url needed to continue the OAuth Dance workflow
      */
     String startDanceFor(String providerName);
-
 
     /**
      * OAuth Dance entry point. For a given Provider name initialize OAuth workflow by returning authorization url end user
@@ -98,6 +101,15 @@ public interface OAuthLifeCycleService extends Serializable {
      */
     String startDanceFor(Annotation provider);
 
+    /**
+     * OAuth dance entry point. For a given Provider {@link org.agorava.api.atinject.ProviderRelated} qualifier class,
+     * initializes OAuth workflow by returning authorization url end user should connect to in order to grant permission to
+     * the OAuth application to use her account or her behalf
+     *
+     * @param provider qualifier class with {@link org.agorava.api.atinject.ProviderRelated} meta annotation
+     * @return the Authorization url needed to continue the OAuth Dance workflow
+     */
+    String startDanceFor(Class<? extends Annotation> provider);
 
     /**
      * OAuth dance exit point. After visiting the URL returned by startDanceFor
@@ -106,12 +118,10 @@ public interface OAuthLifeCycleService extends Serializable {
      */
     void endDance(String verifier);
 
-
     /**
      * OAuth dance exit point. This version is used when activating session with existing Access Token
      */
     void endDance();
-
 
     /**
      * Build a new OAuth Session for the given provider name and set it as current
@@ -129,7 +139,6 @@ public interface OAuthLifeCycleService extends Serializable {
      */
     OAuthSession buildSessionFor(Annotation qualifier);
 
-
     /**
      * Resolve session for the given qualifier.
      * <ul>
@@ -144,7 +153,6 @@ public interface OAuthLifeCycleService extends Serializable {
      */
     OAuthSession resolveSessionForQualifier(Annotation qualifier) throws ProviderMismatchException;
 
-
     /**
      * return the name of the parameter for the verifier (OAuth 1.0a) or code (OAuth 2.0) returned by the provider in the
      * callback
@@ -157,11 +165,4 @@ public interface OAuthLifeCycleService extends Serializable {
      * @return all active session (connected session) in the current {@link org.agorava.api.storage.UserSessionRepository}
      */
     List<OAuthSession> getAllActiveSessions();
-
-    /**
-     * Makes the given OAuth session the current session
-     *
-     * @param session to put as current session
-     */
-    void setCurrentSession(OAuthSession session);
 }

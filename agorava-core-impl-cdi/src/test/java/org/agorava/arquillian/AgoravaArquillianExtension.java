@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2014 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,29 +14,18 @@
  * limitations under the License.
  */
 
-package org.agorava.cdi.deltaspike;
+package org.agorava.arquillian;
 
-import org.apache.deltaspike.core.spi.config.ConfigSource;
-import org.apache.deltaspike.core.spi.config.ConfigSourceProvider;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.jboss.arquillian.container.spi.client.container.DeploymentExceptionTransformer;
+import org.jboss.arquillian.core.spi.LoadableExtension;
 
 /**
  * @author Antoine Sabot-Durand
  */
-public class AgoravaConfigSourceProvider implements ConfigSourceProvider {
-
-    private List<ConfigSource> sources = new ArrayList<ConfigSource>();
-
-
-    public AgoravaConfigSourceProvider() {
-        getConfigSources().add(new AgoravaPropertyFileConfigSource("agorava"));
-
-    }
-
+public class AgoravaArquillianExtension implements LoadableExtension {
     @Override
-    public List<ConfigSource> getConfigSources() {
-        return sources;
+    public void register(ExtensionBuilder extensionBuilder) {
+        extensionBuilder.service(DeploymentExceptionTransformer.class, AgoravaDeploymentExceptionTranformer.class);
+
     }
 }

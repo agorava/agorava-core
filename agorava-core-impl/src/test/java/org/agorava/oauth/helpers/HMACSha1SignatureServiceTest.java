@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package org.agorava.helpers;
+package org.agorava.oauth.helpers;
 
 import org.agorava.api.exception.AgoravaException;
-import org.agorava.helpers.signatures.HMACSha1SignatureService;
+import org.agorava.oauth.helpers.signatures.HMACSha1SignatureService;
 import org.junit.Before;
 import org.junit.Test;
 

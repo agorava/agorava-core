@@ -18,6 +18,7 @@ package org.agorava.cdi.extensions;
 
 import org.agorava.AgoravaConstants;
 import org.agorava.AgoravaContext;
+import org.agorava.api.atinject.Current;
 import org.agorava.api.atinject.InjectWithQualifier;
 import org.agorava.api.atinject.ProviderRelated;
 import org.agorava.api.exception.AgoravaException;
@@ -28,7 +29,9 @@ import org.agorava.api.oauth.application.OAuthAppSettings;
 import org.agorava.api.oauth.application.OAuthAppSettingsBuilder;
 import org.agorava.api.oauth.application.OAuthApplication;
 import org.agorava.api.storage.GlobalRepository;
+import org.agorava.cdi.CurrentLiteral;
 import org.agorava.cdi.resolver.ApplicationResolver;
+import org.agorava.oauth.settings.PropertyOAuthAppSettingsBuilder;
 import org.agorava.spi.ProviderConfigOauth;
 import org.apache.deltaspike.core.api.config.ConfigResolver;
 import org.apache.deltaspike.core.api.literal.AnyLiteral;
@@ -153,7 +156,7 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
     //----------------- Process Producer Phase ----------------------------------
 
     /**
-     * This observer decorates the produced {@link org.agorava.api.oauth.application.OAuthAppSettings} by injecting
+     * This observer decorates the produced {@link OAuthAppSettings} by injecting
      * its own qualifier and service name
      * and build the list of Qualifiers bearing the ProviderRelated meta annotation (configured services)
      *
@@ -178,11 +181,17 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
                 final OAuthApplication app = annotatedMember.getAnnotation(OAuthApplication.class);
 
                 OAuthAppSettingsBuilder builderOAuthApp = null;
+                Class<? extends OAuthAppSettingsBuilder> builderClass = app.builder();
+                if (builderClass == OAuthAppSettingsBuilder.class) {
+                    log.info("You didn't provide a Concrete OAuthAppSettingsBuilder class using the default " +
+                            "PropertyOAuthAppSettingsBuilder class");
+                    builderClass = PropertyOAuthAppSettingsBuilder.class;
+                }
                 try {
-                    builderOAuthApp = app.builder().newInstance();
+                    builderOAuthApp = builderClass.newInstance();
                 } catch (Exception e) {
                     pp.addDefinitionError(new AgoravaException("Unable to create Settings Builder with class " +
-                            app.builder(), e));
+                            builderClass, e));
                 }
 
                 builderOAuthApp.qualifier(qual)
@@ -238,10 +247,26 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
     }
 
     private void captureOauthSessionProducer(@Observes ProcessProducerMethod<OAuthSession, ?> pb) {
-        if (!pb.getAnnotated().isAnnotationPresent(Named.class))
-            osb = pb.getBean();
-    }
+        Annotated at = pb.getAnnotated();
 
+        Bean<?> bean = pb.getBean();
+
+        if (bean.getQualifiers().contains(CurrentLiteral.INSTANCE)) {
+            Set<Annotation> providerRelatedAnnotations = getAnnotationsWithMeta(bean.getQualifiers(), ProviderRelated.class);
+
+            if (!providerRelatedAnnotations.isEmpty()) {
+                throw new AgoravaException("OAuthSession cannot have @Current annotation and a provider " +
+                        "related annotation. Error on bean " + pb.getBean().toString());
+            }
+            if (!pb.getAnnotated().isAnnotationPresent(Named.class)) {
+                log.warning("@Current OAuthSession won't be accessible from UI");
+            }
+        }
+        if (!pb.getAnnotated().isAnnotationPresent(Current.class)) {
+            osb = pb.getBean();
+        }
+    }
+    
     /*
     private void captureGenericOAuthProvider(@Observes ProcessBean<? extends OAuthProvider> pb) {
         Bean<? extends OAuthProvider> bean = pb.getBean();
@@ -279,7 +304,7 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
     }
 
     /**
-     * After all {@link org.agorava.api.oauth.application.OAuthAppSettings} were discovered we get their bean to
+     * After all {@link OAuthAppSettings} were discovered we get their bean to
      * retrieve the actual name of Social Media
      * and associates it with the corresponding Qualifier
      *
@@ -312,10 +337,14 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
                     "agorava.properties file"));
         } else {
             WrappingBeanBuilder<OAuthSession> wbp = new WrappingBeanBuilder<OAuthSession>(osb, beanManager);
-            wbp.readFromType(beanManager.createAnnotatedType(OAuthSession.class)).qualifiers(providerQualifiersConfigured)
+            wbp.readFromType(beanManager.createAnnotatedType(OAuthSession.class))
                     .scope(Dependent.class);
-            Bean res = wbp.create();
-            abd.addBean(res);
+            for (Annotation qual : providerQualifiersConfigured) {
+                wbp.qualifiers(qual);
+                Bean res = wbp.create();
+                abd.addBean(res);
+            }
+
         }
 
     }

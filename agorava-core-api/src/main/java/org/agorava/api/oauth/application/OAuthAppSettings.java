@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2014 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,88 +26,39 @@ import java.lang.annotation.Annotation;
  *
  * @author Antoine Sabot-Durand
  */
-public class OAuthAppSettings implements Serializable {
-
-    private static final long serialVersionUID = -8018722725677732853L;
-
-    private String apiKey;
-
-    private String apiSecret;
-
-    private String callback;
-
-    private String scope;
-
-    private String name;
-
-    private Annotation qualifier;
-
-    OAuthAppSettings() {
-    }
-
-    OAuthAppSettings(String name, String apiKey, String apiSecret, String callback, String scope, Annotation qualifier) {
-        this.apiKey = apiKey;
-        this.apiSecret = apiSecret;
-        this.callback = callback;
-        this.scope = scope;
-        this.name = name;
-        this.qualifier = qualifier;
-    }
-
+public interface OAuthAppSettings extends Serializable {
     /**
      * @return the key consumer key for the OAuth service
      */
-    public String getApiKey() {
-        return apiKey;
-    }
+    String getApiKey();
 
     /**
      * @return the consumer secret key for the OAuth service
      */
-    public String getApiSecret() {
-        return apiSecret;
-    }
+    String getApiSecret();
 
     /**
      * @return the call back URL for the OAuth service
      */
-    public String getCallback() {
-        return callback;
-    }
+    String getCallback();
 
     /**
      * @return the scope requested
      */
-    public String getScope() {
-        return scope;
-    }
+    String getScope();
 
     /**
      * @return the name of the service
      */
-    public String getSocialMediaName() {
-        return name;
-    }
+    String getSocialMediaName();
 
     /**
      * @return the qualifier associated to the service
      */
-    public Annotation getQualifier() {
-        return qualifier;
-    }
-
-    @Override
-    public String toString() {
-        return "OAuthAppSettings [apiKey=" + apiKey + ", apiSecret=" + apiSecret + ", callback=" + callback
-                + ", scope=" + scope + ", serviceName=" + getSocialMediaName() + "]";
-    }
+    Annotation getQualifier();
 
     /**
      * @return true if this OAuthAppSettings contains a scope
      */
-    public boolean hasScope() {
-        return (scope != null && !"".equals(scope));
-    }
-
-
+    boolean hasScope();
 }

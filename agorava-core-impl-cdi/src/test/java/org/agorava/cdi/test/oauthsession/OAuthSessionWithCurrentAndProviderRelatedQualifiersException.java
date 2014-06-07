@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-package org.agorava.spi;
+package org.agorava.cdi.test.oauthsession;
 
-import org.agorava.api.oauth.OAuthSession;
-import org.agorava.api.storage.UserSessionRepository;
-
-import java.io.Serializable;
+import org.agorava.api.exception.AgoravaException;
 
 /**
  * @author Antoine Sabot-Durand
  */
-public interface OAuthSessionResolver extends Serializable {
+public class OAuthSessionWithCurrentAndProviderRelatedQualifiersException extends AgoravaException {
 
-    OAuthSession getCurrentSession(UserSessionRepository repository);
+    public OAuthSessionWithCurrentAndProviderRelatedQualifiersException(String message) {
+        super(message);
+    }
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.agorava.helpers.extractors;
+package org.agorava.oauth.helpers.extractors;
 
 import org.agorava.api.exception.OAuthParametersMissingException;
 import org.agorava.api.extractor.ExtractorType;

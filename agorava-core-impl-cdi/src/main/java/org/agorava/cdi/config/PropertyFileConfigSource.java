@@ -14,17 +14,31 @@
  * limitations under the License.
  */
 
-package org.agorava.spi;
+package org.agorava.cdi.config;
 
-import org.agorava.api.oauth.OAuthSession;
-import org.agorava.api.storage.UserSessionRepository;
+import org.apache.deltaspike.core.impl.config.PropertiesConfigSource;
+import org.apache.deltaspike.core.util.PropertyFileUtils;
 
-import java.io.Serializable;
+import java.net.URL;
 
 /**
  * @author Antoine Sabot-Durand
  */
-public interface OAuthSessionResolver extends Serializable {
+public class PropertyFileConfigSource extends PropertiesConfigSource {
 
-    OAuthSession getCurrentSession(UserSessionRepository repository);
+    private String fileName;
+
+    PropertyFileConfigSource(URL propertyFileUrl) {
+        super(PropertyFileUtils.loadProperties(propertyFileUrl));
+        fileName = propertyFileUrl.toExternalForm();
+        initOrdinal(90);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getConfigName() {
+        return fileName;
+    }
 }

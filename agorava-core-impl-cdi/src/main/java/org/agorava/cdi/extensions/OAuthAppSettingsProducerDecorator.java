@@ -18,13 +18,13 @@ package org.agorava.cdi.extensions;
 
 import org.agorava.AgoravaContext;
 import org.agorava.api.oauth.application.OAuthAppSettings;
-import org.agorava.api.oauth.application.SimpleOAuthAppSettingsBuilder;
+import org.agorava.oauth.settings.SimpleOAuthAppSettingsBuilder;
 
+import java.lang.annotation.Annotation;
+import java.util.Set;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.enterprise.inject.spi.Producer;
-import java.lang.annotation.Annotation;
-import java.util.Set;
 
 /**
  * @author Antoine Sabot-Durand

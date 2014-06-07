@@ -18,7 +18,7 @@ package org.agorava.cdi.test;
 
 import org.agorava.AgoravaConstants;
 import org.agorava.api.oauth.application.OAuthAppSettings;
-import org.agorava.api.oauth.application.PropertyOAuthAppSettingsBuilder;
+import org.agorava.oauth.settings.PropertyOAuthAppSettingsBuilder;
 import org.apache.deltaspike.core.api.common.DeltaSpike;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2014 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,9 @@
 package org.agorava.api.service;
 
 import org.agorava.AgoravaConstants;
+import static java.util.Locale.ENGLISH;
 
 import java.util.regex.Pattern;
-
-import static java.util.Locale.ENGLISH;
 
 /**
  * Utils for checking preconditions and invariants
@@ -34,6 +33,7 @@ public class Preconditions {
     // scheme = alpha *( alpha | digit | "+" | "-" | "." )
     private static final Pattern URL_PATTERN = Pattern.compile("^[a-zA-Z][a-zA-Z0-9+.-]*://\\S+");
 
+    /* preventing instantiation */
     private Preconditions() {
     }
 

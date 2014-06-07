@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-package org.agorava.api.oauth.application;
+package org.agorava.oauth.settings;
 
 import org.agorava.AgoravaConstants;
 import org.agorava.AgoravaContext;
 import org.agorava.api.exception.AgoravaException;
+import org.agorava.api.oauth.application.OAuthAppSettings;
+import org.agorava.api.oauth.application.OAuthAppSettingsBuilder;
+import org.agorava.api.oauth.application.Param;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -106,7 +109,7 @@ public class SimpleOAuthAppSettingsBuilder implements OAuthAppSettingsBuilder {
     public OAuthAppSettings build() {
         if (callback == null)
             callback(AgoravaConstants.CALLBACK_URL);
-        return new OAuthAppSettings(name, apiKey, apiSecret, callback, scope, qualifier);
+        return new OAuthAppSettingsImpl(name, apiKey, apiSecret, callback, scope, qualifier);
     }
 
     @Override

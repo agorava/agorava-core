@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2014 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,13 +19,18 @@ package org.agorava.cdi.extensions;
 import org.agorava.api.atinject.ProviderRelated;
 import org.agorava.api.exception.AgoravaException;
 
-import javax.enterprise.inject.spi.Annotated;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.util.HashSet;
 import java.util.Set;
+import javax.enterprise.inject.spi.Annotated;
 
 public class AnnotationUtils implements Serializable {
+
+    /* prevent instantiation*/
+    private AnnotationUtils() {
+    }
+
     /**
      * Inspects an annotated element for any annotations with the given meta
      * annotation. This should only be used for user defined meta annotations,

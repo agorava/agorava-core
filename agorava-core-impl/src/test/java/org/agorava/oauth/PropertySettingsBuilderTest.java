@@ -19,11 +19,9 @@ package org.agorava.oauth;
 import org.agorava.api.exception.AgoravaException;
 import org.agorava.api.oauth.application.OAuthAppSettings;
 import org.agorava.api.oauth.application.OAuthAppSettingsBuilder;
-import org.agorava.api.oauth.application.PropertyOAuthAppSettingsBuilder;
+import org.agorava.oauth.settings.PropertyOAuthAppSettingsBuilder;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.util.MissingResourceException;
 
 /**
  * @author Antoine Sabot-Durand
@@ -103,7 +101,7 @@ public class PropertySettingsBuilderTest {
     }
 
 
-    @Test(expected = MissingResourceException.class)
+    @Test(expected = AgoravaException.class)
     public void testBadBundleBuild() {
 
         PropertyOAuthAppSettingsBuilder builder = new PropertyOAuthAppSettingsBuilder();
