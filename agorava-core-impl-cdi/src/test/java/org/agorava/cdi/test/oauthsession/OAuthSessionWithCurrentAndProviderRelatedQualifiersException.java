@@ -23,7 +23,12 @@ import org.agorava.api.exception.AgoravaException;
  */
 public class OAuthSessionWithCurrentAndProviderRelatedQualifiersException extends AgoravaException {
 
-    public OAuthSessionWithCurrentAndProviderRelatedQualifiersException(String message) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 8908143481901854872L;
+
+	public OAuthSessionWithCurrentAndProviderRelatedQualifiersException(String message) {
         super(message);
     }
 }
