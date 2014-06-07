@@ -163,4 +163,9 @@ public interface AgoravaConstants {
      * parameter name in config containing the the lifetime of cookies
      */
     String RESOLVER_COOKIE_LIFE_PARAM = "cookie.life";
+
+    /**
+     * parameter name to ask a specific social media provider from client
+     */
+    String PROVIDER_PARAM = "provider";
 }
