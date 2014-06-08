@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2014 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,13 @@
 
 package org.agorava.cdi.extensions;
 
-import org.agorava.api.atinject.GenericBean;
+import org.agorava.api.atinject.Generic;
 
 import javax.enterprise.util.AnnotationLiteral;
 
 /**
  * @author Antoine Sabot-Durand
  */
-class GenericBeanLiteral extends AnnotationLiteral<GenericBean> implements GenericBean {
-    public static GenericBeanLiteral INSTANCE = new GenericBeanLiteral();
+class GenericLiteral extends AnnotationLiteral<Generic> implements Generic {
+    public static GenericLiteral INSTANCE = new GenericLiteral();
 }

@@ -38,10 +38,11 @@
         <module>agorava-core-api</module>
         <module>agorava-core-impl</module>
         <module>agorava-core-impl-cdi</module>
-    </modules>
+		<module>agorava-picketlink</module>
+	</modules>
 
 
-    <developers>
+	<developers>
         <developer>
             <name>Antoine Sabot-Durand</name>
             <email>antoine@sabot-durand.net</email>

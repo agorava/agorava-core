@@ -18,7 +18,7 @@ package org.agorava.oauth;
 
 
 import org.agorava.AgoravaConstants;
-import org.agorava.api.atinject.GenericBean;
+import org.agorava.api.atinject.Generic;
 import org.agorava.api.atinject.InjectWithQualifier;
 import org.agorava.api.oauth.OAuth;
 import org.agorava.api.oauth.OAuthRequest;
@@ -30,7 +30,7 @@ import org.agorava.rest.OAuthRequestImpl;
 import org.agorava.spi.ProviderConfigOauth20;
 import static org.agorava.api.oauth.OAuth.OAuthVersion.TWO_DRAFT_11;
 
-@GenericBean
+@Generic
 @OAuth(TWO_DRAFT_11)
 public class OAuth20ServiceImpl extends OAuthServiceBase {
 

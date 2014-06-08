@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2014 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,6 +51,12 @@ public abstract class UserProfile implements Serializable {
      * @return the user's full name
      */
     public abstract String getFullName();
+
+    public abstract String getFirstName();
+
+    public abstract String getLastName();
+
+    public abstract String getEmail();
 
     /**
      * @return the user's picture url

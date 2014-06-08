@@ -19,6 +19,7 @@ package org.agorava.cdi.extensions;
 import org.agorava.AgoravaConstants;
 import org.agorava.AgoravaContext;
 import org.agorava.api.atinject.Current;
+import org.agorava.api.atinject.Generic;
 import org.agorava.api.atinject.InjectWithQualifier;
 import org.agorava.api.atinject.ProviderRelated;
 import org.agorava.api.exception.AgoravaException;
@@ -88,6 +89,7 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
     private Map<OAuth.OAuthVersion, Class<? extends OAuthService>> version2ServiceClass = new HashMap<OAuth.OAuthVersion,
             Class<? extends OAuthService>>();
     private Map<Annotation, OAuth.OAuthVersion> providerQualifiers2Version = new HashMap<Annotation, OAuth.OAuthVersion>();
+    private Set<Class<?>> genericClasses = new HashSet<Class<?>>();
 
     /**
      * @return the set of all service's qualifiers present in the application
@@ -151,6 +153,19 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
         OAuth qualOauth = at.getAnnotation(OAuth.class);
         if (qualOauth != null)
             version2ServiceClass.put(qualOauth.value(), clazz);
+    }
+
+    public void vetoOauthSession(@Observes ProcessAnnotatedType<OAuthSession> pat) {
+        pat.veto();
+    }
+
+    public void processGenericBeanAnnotated(@Observes ProcessAnnotatedType<?> pat) {
+
+        AnnotatedType<?> at = pat.getAnnotatedType();
+        if (at.isAnnotationPresent(Generic.class) && !(at.isAnnotationPresent(OAuth.class))) {
+            genericClasses.add(at.getJavaClass());
+            pat.veto();
+        }
     }
 
     //----------------- Process Producer Phase ----------------------------------
@@ -239,12 +254,6 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
         CommonsProcessOAuthTier(pb);
     }
 
-    private void captureGenericOAuthService(@Observes ProcessBean<? extends OAuthService> pb) {
-        Bean<? extends OAuthService> bean = pb.getBean();
-        if (bean.getQualifiers().contains(GenericBeanLiteral.INSTANCE)) {
-            log.info("here");
-        }
-    }
 
     private void captureOauthSessionProducer(@Observes ProcessProducerMethod<OAuthSession, ?> pb) {
         Annotated at = pb.getAnnotated();
@@ -295,10 +304,12 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
 
         BeanBuilder<T> providerBuilder = new BeanBuilder<T>(beanManager)
                 .readFromType(atb.create())
-                .scope(scope)
                 .passivationCapable(true)
                 .addTypes(types);
 
+        if (scope != null) {
+            providerBuilder.scope(scope);
+        }
         Bean<T> newBean = providerBuilder.create();
         abd.addBean(newBean);
     }
@@ -314,6 +325,11 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
     public void registerGenericBeans(@Observes AfterBeanDiscovery abd, BeanManager beanManager) {
 
         for (Annotation qual : providerQualifiersConfigured) {
+            for (Class<?> aClass : genericClasses) {
+                beanRegisterer(aClass, qual, Dependent.class, abd, beanManager);
+
+            }
+
             OAuth.OAuthVersion version = providerQualifiers2Version.get(qual);
             if (version == null) {
                 abd.addDefinitionError(new AgoravaException("There is no OAuth version associated to provider related " +

@@ -17,7 +17,7 @@
 package org.agorava.oauth;
 
 import org.agorava.AgoravaConstants;
-import org.agorava.api.atinject.GenericBean;
+import org.agorava.api.atinject.Generic;
 import org.agorava.api.atinject.InjectWithQualifier;
 import org.agorava.api.oauth.OAuth;
 import org.agorava.api.oauth.OAuthRequest;
@@ -42,7 +42,7 @@ import java.util.logging.Logger;
  * @author Pablo Fernandez
  */
 
-@GenericBean
+@Generic
 @OAuth(ONE)
 public class OAuth10aServiceImpl extends OAuthServiceBase {
     private static Logger LOGGER = Logger.getLogger(OAuth10aServiceImpl.class.getName());
