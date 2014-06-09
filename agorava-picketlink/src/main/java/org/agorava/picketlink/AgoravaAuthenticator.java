@@ -27,7 +27,6 @@ import org.apache.deltaspike.core.api.common.DeltaSpike;
 import org.picketlink.authentication.BaseAuthenticator;
 import org.picketlink.credential.DefaultLoginCredentials;
 import org.picketlink.idm.credential.Credentials.Status;
-import org.picketlink.idm.model.basic.User;
 
 import java.io.IOException;
 import javax.enterprise.inject.Instance;
@@ -62,10 +61,7 @@ public class AgoravaAuthenticator extends BaseAuthenticator {
             UserProfile userProfile = session.getUserProfile();
             credentials.setCredential(session.getAccessToken());
             setStatus(AuthenticationStatus.SUCCESS);
-
-            User user = new User(userProfile.getId());
-            user.setFirstName(userProfile.getFullName());
-            setAccount(user);
+            setAccount(new AgoravaUser(userProfile));
         } else {
 
             String authorizationUrl = lifeCycleService.startDanceFor(settings.getQualifier());
