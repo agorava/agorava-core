@@ -19,6 +19,7 @@ package org.agorava.picketlink;
 
 import org.agorava.api.atinject.Generic;
 import org.agorava.api.atinject.InjectWithQualifier;
+import org.agorava.api.exception.AgoravaException;
 import org.agorava.api.oauth.OAuthSession;
 import org.agorava.api.oauth.application.OAuthAppSettings;
 import org.agorava.api.service.OAuthLifeCycleService;
@@ -68,8 +69,7 @@ public class AgoravaAuthenticator extends BaseAuthenticator {
             try {
                 response.get().sendRedirect(authorizationUrl);
             } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                throw new AgoravaException("Unable to redirect user to: " + authorizationUrl);
             }
             credentials.setStatus(Status.IN_PROGRESS);
             setStatus(AuthenticationStatus.DEFERRED);
