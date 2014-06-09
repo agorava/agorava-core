@@ -24,15 +24,18 @@ import org.picketlink.annotations.PicketLink;
 import org.picketlink.authentication.Authenticator;
 
 import java.lang.annotation.Annotation;
+import java.util.List;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Antoine Sabot-Durand
  */
+@Named
 public class AuthenticatorSelector {
 
     @Inject
@@ -42,6 +45,10 @@ public class AuthenticatorSelector {
     @Inject
     @Any
     Instance<AgoravaAuthenticator> authenticators;
+
+    public List<String> getListOfServices() {
+        return AgoravaContext.getListOfServices();
+    }
 
     @Produces
     @PicketLink
