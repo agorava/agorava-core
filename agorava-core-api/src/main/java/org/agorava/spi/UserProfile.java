@@ -35,7 +35,7 @@ public abstract class UserProfile implements Serializable {
     /**
      * Default constructor
      *
-     * @param id identifier of the user
+     * @param id        identifier of the user
      * @param qualifier
      */
     protected UserProfile(String id, Class<? extends Annotation> qualifier) {
@@ -53,6 +53,11 @@ public abstract class UserProfile implements Serializable {
     }
 
     /**
+     * @return the user login name
+     */
+    public abstract String getLoginName();
+
+    /**
      * @return the user full name
      */
     public abstract String getFullName();
@@ -63,19 +68,16 @@ public abstract class UserProfile implements Serializable {
     public abstract String getFirstName();
 
     /**
-     *
      * @return the user last name
      */
     public abstract String getLastName();
 
     /**
-     *
      * @return the user email
      */
     public abstract String getEmail();
 
     /**
-     *
      * @return the qualifier of the service provider that issued the current profile
      */
     public Class<? extends Annotation> getQualifier() {
