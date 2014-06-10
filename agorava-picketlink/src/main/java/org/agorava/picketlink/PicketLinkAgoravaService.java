@@ -22,9 +22,12 @@ import org.agorava.api.atinject.Current;
 import org.agorava.api.event.OAuthComplete;
 import org.agorava.api.exception.AgoravaException;
 import org.agorava.api.oauth.OAuthSession;
+import org.agorava.api.service.OAuthLifeCycleService;
 import org.picketlink.Identity;
 import org.picketlink.annotations.PicketLink;
 import org.picketlink.authentication.Authenticator;
+import org.picketlink.authentication.event.PostLoggedOutEvent;
+import org.picketlink.idm.model.Account;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
@@ -48,11 +51,11 @@ public class PicketLinkAgoravaService implements Serializable {
     @Inject
     @Any
     Instance<AgoravaAuthenticator> authenticators;
-
+    @Inject
+    OAuthLifeCycleService lfs;
     @Inject
     @Current
     private OAuthSession session;
-
     private String provider;
 
     public List<String> getListOfServices() {
@@ -71,6 +74,12 @@ public class PicketLinkAgoravaService implements Serializable {
         Identity.AuthenticationResult result = identity.login();
     }
 
+    protected void listenLogout(@Observes PostLoggedOutEvent plo) {
+        Account account = plo.getAccount();
+        if (account instanceof AgoravaUser) {
+            lfs.getCurrentRepository().clear();
+        }
+    }
 
     @Produces
     @PicketLink
