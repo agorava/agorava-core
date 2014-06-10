@@ -137,6 +137,11 @@ public class UserSessionRepositoryImpl implements UserSessionRepository {
     }
 
     @Override
+    public void clear() {
+        activeSessions.clear();
+    }
+
+    @Override
     public Iterator<OAuthSession> iterator() {
         return new Iterator<OAuthSession>() {
 

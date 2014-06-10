@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2014 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -93,4 +93,9 @@ public interface Repository<T extends Identifiable> extends Serializable, Iterab
      * @param element to add
      */
     void add(T element);
+
+    /**
+     * Remove all the elements in this repository
+     */
+    void clear();
 }
