@@ -18,50 +18,77 @@ package org.agorava.picketlink;
 
 import org.agorava.AgoravaConstants;
 import org.agorava.AgoravaContext;
+import org.agorava.api.atinject.Current;
+import org.agorava.api.event.OAuthComplete;
 import org.agorava.api.exception.AgoravaException;
-import org.apache.deltaspike.core.api.common.DeltaSpike;
+import org.agorava.api.oauth.OAuthSession;
+import org.picketlink.Identity;
 import org.picketlink.annotations.PicketLink;
 import org.picketlink.authentication.Authenticator;
 
+import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.util.List;
+import javax.enterprise.context.RequestScoped;
+import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Antoine Sabot-Durand
  */
-@Named
-public class AuthenticatorSelector {
+@RequestScoped
+@Named("plaService")
+public class PicketLinkAgoravaService implements Serializable {
 
-    @Inject
-    @DeltaSpike
-    HttpServletRequest request;
 
     @Inject
     @Any
     Instance<AgoravaAuthenticator> authenticators;
 
+    @Inject
+    @Current
+    private OAuthSession session;
+
+    private String provider;
+
     public List<String> getListOfServices() {
         return AgoravaContext.getListOfServices();
     }
 
+    public String getProvider() {
+        return provider;
+    }
+
+    public void setProvider(String provider) {
+        this.provider = provider;
+    }
+
+    protected void listenEndDance(@Observes OAuthComplete complete, Identity identity) {
+        Identity.AuthenticationResult result = identity.login();
+    }
+
+
     @Produces
     @PicketLink
+    @RequestScoped
     public Authenticator authenticatorProducer() {
 
-        String providerName = request.getParameter(AgoravaConstants.PROVIDER_PARAM);
-        if (providerName == null || "".equals(providerName)) {
-            throw new AgoravaException("Request doesn't contain " + AgoravaConstants.PROVIDER_PARAM + " parameter");
-        }
-        Annotation qualifier = AgoravaContext.getServicesToQualifier().get(providerName);
+        Annotation qualifier;
 
+        if (session != OAuthSession.NULL) {
+            qualifier = session.getServiceQualifier();
+        } else if (AgoravaContext.getListOfServices().contains(provider)) {
+            qualifier = AgoravaContext.getServicesToQualifier().get(provider);
+        } else {
+            throw new AgoravaException("Current OAuthSession is NULL and Request doesn't contain " + AgoravaConstants
+                    .PROVIDER_PARAM + " parameter");
+        }
         if (qualifier == null) {
-            throw new AgoravaException("No qualifier found for the following provider " + providerName);
+            throw new AgoravaException("No qualifier found for the following provider " + provider);
         }
         return authenticators.select(qualifier).get();
 

@@ -38,7 +38,13 @@ public class AgoravaUser extends User {
     public String getProviderName() {
         return AgoravaContext.getServiceFromClass(profile.getQualifier());
     }
-    
+
+
+    @Override
+    public String getLoginName() {
+        return profile.getLoginName();
+    }
+
     @Override
     public String getId() {
         return profile.getId();

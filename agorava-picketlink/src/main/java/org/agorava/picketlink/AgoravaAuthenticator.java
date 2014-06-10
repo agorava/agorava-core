@@ -17,6 +17,7 @@
 package org.agorava.picketlink;
 
 
+import org.agorava.api.atinject.Current;
 import org.agorava.api.atinject.Generic;
 import org.agorava.api.atinject.InjectWithQualifier;
 import org.agorava.api.exception.AgoravaException;
@@ -30,12 +31,13 @@ import org.picketlink.credential.DefaultLoginCredentials;
 import org.picketlink.idm.credential.Credentials.Status;
 
 import java.io.IOException;
+import java.io.Serializable;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
 @Generic
-public class AgoravaAuthenticator extends BaseAuthenticator {
+public class AgoravaAuthenticator extends BaseAuthenticator implements Serializable {
 
     @InjectWithQualifier
     OAuthAppSettings settings;
@@ -52,19 +54,20 @@ public class AgoravaAuthenticator extends BaseAuthenticator {
     @Inject
     OAuthLifeCycleService lifeCycleService;
 
+    @Inject
+    @Current
+    private OAuthSession session;
+
 
     @Override
     public void authenticate() {
 
-        if (lifeCycleService.getCurrentSession().isConnected()) {
-
-            OAuthSession session = lifeCycleService.getCurrentSession();
+        if (session.isConnected()) {
             UserProfile userProfile = session.getUserProfile();
             credentials.setCredential(session.getAccessToken());
             setStatus(AuthenticationStatus.SUCCESS);
             setAccount(new AgoravaUser(userProfile));
         } else {
-
             String authorizationUrl = lifeCycleService.startDanceFor(settings.getQualifier());
             try {
                 response.get().sendRedirect(authorizationUrl);
