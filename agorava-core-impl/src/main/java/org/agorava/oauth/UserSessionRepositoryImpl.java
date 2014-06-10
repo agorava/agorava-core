@@ -139,6 +139,7 @@ public class UserSessionRepositoryImpl implements UserSessionRepository {
     @Override
     public void clear() {
         activeSessions.clear();
+        setCurrent(OAuthSession.NULL);
     }
 
     @Override
