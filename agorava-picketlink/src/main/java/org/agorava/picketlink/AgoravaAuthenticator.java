@@ -17,8 +17,10 @@
 package org.agorava.picketlink;
 
 
+import org.agorava.api.atinject.Current;
 import org.agorava.api.atinject.Generic;
 import org.agorava.api.atinject.InjectWithQualifier;
+import org.agorava.api.exception.AgoravaException;
 import org.agorava.api.oauth.OAuthSession;
 import org.agorava.api.oauth.application.OAuthAppSettings;
 import org.agorava.api.service.OAuthLifeCycleService;
@@ -27,15 +29,15 @@ import org.apache.deltaspike.core.api.common.DeltaSpike;
 import org.picketlink.authentication.BaseAuthenticator;
 import org.picketlink.credential.DefaultLoginCredentials;
 import org.picketlink.idm.credential.Credentials.Status;
-import org.picketlink.idm.model.basic.User;
 
 import java.io.IOException;
+import java.io.Serializable;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
 @Generic
-public class AgoravaAuthenticator extends BaseAuthenticator {
+public class AgoravaAuthenticator extends BaseAuthenticator implements Serializable {
 
     @InjectWithQualifier
     OAuthAppSettings settings;
@@ -52,28 +54,25 @@ public class AgoravaAuthenticator extends BaseAuthenticator {
     @Inject
     OAuthLifeCycleService lifeCycleService;
 
+    @Inject
+    @Current
+    private OAuthSession session;
+
 
     @Override
     public void authenticate() {
 
-        if (lifeCycleService.getCurrentSession().isConnected()) {
-
-            OAuthSession session = lifeCycleService.getCurrentSession();
+        if (session.isConnected()) {
             UserProfile userProfile = session.getUserProfile();
             credentials.setCredential(session.getAccessToken());
             setStatus(AuthenticationStatus.SUCCESS);
-
-            User user = new User(userProfile.getId());
-            user.setFirstName(userProfile.getFullName());
-            setAccount(user);
+            setAccount(new AgoravaUser(userProfile));
         } else {
-
             String authorizationUrl = lifeCycleService.startDanceFor(settings.getQualifier());
             try {
                 response.get().sendRedirect(authorizationUrl);
             } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                throw new AgoravaException("Unable to redirect user to: " + authorizationUrl);
             }
             credentials.setStatus(Status.IN_PROGRESS);
             setStatus(AuthenticationStatus.DEFERRED);

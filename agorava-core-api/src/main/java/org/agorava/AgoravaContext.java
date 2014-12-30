@@ -91,6 +91,15 @@ public class AgoravaContext {
     }
 
     /**
+     *
+     * @param clazz provider qualifier class for which we're looking service name
+     * @return the service name
+     */
+    public static String getServiceFromClass(Class<? extends Annotation> clazz) {
+        return getQualifierToService().get(getClassToQualifierQualifier().get(clazz));
+    }
+
+    /**
      * @return a map associating provider qualifiers classes (qualifiers bearing {@link org.agorava.api.atinject
      * .ProviderRelated} meta-annotation) to provider qualifier instances
      */

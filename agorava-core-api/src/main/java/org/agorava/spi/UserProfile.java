@@ -17,6 +17,7 @@
 package org.agorava.spi;
 
 import java.io.Serializable;
+import java.lang.annotation.Annotation;
 
 /**
  * Generic abstract class to define a basic user information
@@ -29,13 +30,17 @@ public abstract class UserProfile implements Serializable {
 
     private final String id;
 
+    private final Class<? extends Annotation> qualifier;
+
     /**
      * Default constructor
      *
-     * @param id identifier of the user
+     * @param id        identifier of the user
+     * @param qualifier
      */
-    protected UserProfile(String id) {
+    protected UserProfile(String id, Class<? extends Annotation> qualifier) {
         this.id = id;
+        this.qualifier = qualifier;
     }
 
     /**
@@ -48,15 +53,36 @@ public abstract class UserProfile implements Serializable {
     }
 
     /**
-     * @return the user's full name
+     * @return the user login name
+     */
+    public abstract String getLoginName();
+
+    /**
+     * @return the user full name
      */
     public abstract String getFullName();
 
+    /**
+     * @return the user first name
+     */
     public abstract String getFirstName();
 
+    /**
+     * @return the user last name
+     */
     public abstract String getLastName();
 
+    /**
+     * @return the user email
+     */
     public abstract String getEmail();
+
+    /**
+     * @return the qualifier of the service provider that issued the current profile
+     */
+    public Class<? extends Annotation> getQualifier() {
+        return qualifier;
+    }
 
     /**
      * @return the user's picture url

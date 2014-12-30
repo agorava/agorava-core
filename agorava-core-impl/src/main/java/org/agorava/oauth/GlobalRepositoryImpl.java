@@ -148,6 +148,11 @@ public class GlobalRepositoryImpl extends GlobalRepository {
     }
 
     @Override
+    public void clear() {
+        userRepos.clear();
+    }
+
+    @Override
     public Iterator<UserSessionRepository> iterator() {
         return new Iterator<UserSessionRepository>() {
 
