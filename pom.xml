@@ -1,74 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!--
-  ~ Copyright 2014 Agorava
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~   http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
+<!-- ~ Copyright 2014 Agorava ~ ~ Licensed under the Apache License, Version 
+	2.0 (the "License"); ~ you may not use this file except in compliance with 
+	the License. ~ You may obtain a copy of the License at ~ ~ http://www.apache.org/licenses/LICENSE-2.0 
+	~ ~ Unless required by applicable law or agreed to in writing, software ~ 
+	distributed under the License is distributed on an "AS IS" BASIS, ~ WITHOUT 
+	WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. ~ See the 
+	License for the specific language governing permissions and ~ limitations 
+	under the License. -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.agorava</groupId>
-        <artifactId>agorava-parent</artifactId>
-        <version>0.7.1-SNAPSHOT</version>
-    </parent>
+	<parent>
+		<groupId>org.agorava</groupId>
+		<artifactId>agorava-parent</artifactId>
+		<version>0.7.1-SNAPSHOT</version>
+	</parent>
 
-    <artifactId>agorava-core-parent</artifactId>
-    <packaging>pom</packaging>
-    <name>Agorava Core</name>
-    <version>0.7.1-SNAPSHOT</version>
-    <description>Java API to ease the use of social media</description>
-    <url>http://agorava.org</url>
-    <inceptionYear>2012</inceptionYear>
+	<artifactId>agorava-core-parent</artifactId>
+	<packaging>pom</packaging>
+	<name>Agorava Core</name>
+	<version>0.7.1-SNAPSHOT</version>
+	<description>Java API to ease the use of social media</description>
+	<url>http://www.agorava.org</url>
+	<inceptionYear>2012</inceptionYear>
 
-    <modules>
-        <module>agorava-core-api</module>
-        <module>agorava-core-impl</module>
-        <module>agorava-core-impl-cdi</module>
+	<modules>
+		<module>agorava-core-api</module>
+		<module>agorava-core-impl</module>
+		<module>agorava-core-impl-cdi</module>
 		<module>agorava-picketlink</module>
 	</modules>
 
 
 	<developers>
-        <developer>
-            <name>Antoine Sabot-Durand</name>
-            <email>antoine@sabot-durand.net</email>
-            <timezone>CET</timezone>
-            <roles>
-                <role>Project Lead</role>
-            </roles>
-        </developer>
-    </developers>
+		<developer>
+			<name>Antoine Sabot-Durand</name>
+			<email>antoine@sabot-durand.net</email>
+			<timezone>CET</timezone>
+			<roles>
+				<role>Project Lead</role>
+			</roles>
+		</developer>
+		<developer>
+			<name>Werner Keil</name>
+			<email>werner(at)catmedia.us</email>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<timezone>CET</timezone>
+		</developer>
+	</developers>
 
-    <scm>
-        <connection>scm:git:git://github.com/agorava/agorava-core.git</connection>
-        <developerConnection>scm:git:git@github.com:agorava/agorava-core.git</developerConnection>
-        <url>http://github.com/agorava/agorava-core</url>
-        <tag>HEAD</tag>
-    </scm>
+	<scm>
+		<connection>scm:git:git://github.com/agorava/agorava-core.git</connection>
+		<developerConnection>scm:git:git@github.com:agorava/agorava-core.git</developerConnection>
+		<url>http://github.com/agorava/agorava-core</url>
+		<tag>HEAD</tag>
+	</scm>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.agorava</groupId>
-                <artifactId>agorava-bom</artifactId>
-                <version>${project.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.agorava</groupId>
+				<artifactId>agorava-bom</artifactId>
+				<version>${project.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>
