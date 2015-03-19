@@ -27,4 +27,4 @@ Agorava core relies on [Agorava Parent](https://github.com/agorava/parent) so yo
 
     mvn clean install
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.agorava/agorava-core/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.agorava/agorava-core) 
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.agorava/agorava-core-parent/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.agorava/agorava-core-parent) 
