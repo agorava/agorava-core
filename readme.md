@@ -27,5 +27,4 @@ Agorava core relies on [Agorava Parent](https://github.com/agorava/parent) so yo
 
     mvn clean install
 
-##Usage
-You'll need at least one SN module to use Agorava. Right now there's only one module for [Twitter](https://github.com/agorava/twitter)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.agorava/agorava-core/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.agorava/agorava-core) 
