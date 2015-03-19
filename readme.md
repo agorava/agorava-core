@@ -21,7 +21,7 @@ with CDI in JSE (desktop application).
 For more information, see the [Agorava Website](http://agorava.org).
 
 ##Building
-Agorava core relies on [Agorava Parent](https://github.com/agorava/parent) so you should have installed this resource to your
+Agorava core relies on [Agorava Parent](https://github.com/agorava/agorava-parent) so you should have installed this resource to your
  local maven repo
 (Agorava is not available in a public maven repo yet). After that you can build (and install in your local maven repo) Agorava Core with the following command
 
