@@ -1,5 +1,7 @@
 #Agorava Core
 
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.agorava/agorava-core-parent/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.agorava/agorava-core-parent) 
+[![License](http://img.shields.io/badge/license-Apache2-red.svg)](http://opensource.org/licenses/apache-2.0)
 
 ##Introduction
 Agorava Provides CDI Beans and extensions to interact with major social media (SM).
@@ -26,5 +28,3 @@ Agorava core relies on [Agorava Parent](https://github.com/agorava/agorava-paren
 (Agorava is not available in a public maven repo yet). After that you can build (and install in your local maven repo) Agorava Core with the following command
 
     mvn clean install
-
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.agorava/agorava-core-parent/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.agorava/agorava-core-parent) 
