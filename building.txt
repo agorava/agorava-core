@@ -1,7 +1,0 @@
-Building this project
-=====================
-
-This project requires Apache Maven (available from http://maven.apache.org/) 
-Version 3.0.3 or later to build. You'll need to launch the following command in the root of the project
-
-  mvn clean install
