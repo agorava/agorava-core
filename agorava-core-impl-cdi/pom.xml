@@ -35,6 +35,7 @@
 		<dependency>
 			<groupId>org.agorava</groupId>
 			<artifactId>agorava-core-api</artifactId>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -51,7 +52,6 @@
 			<groupId>org.apache.deltaspike.modules</groupId>
 			<artifactId>deltaspike-servlet-module-impl</artifactId>
 		</dependency>
-
 
 		<dependency>
 			<groupId>javax.enterprise</groupId>
@@ -109,9 +109,5 @@
 			<artifactId>shrinkwrap-resolver-depchain</artifactId>
 			<type>pom</type>
 		</dependency>
-
-
 	</dependencies>
-
-
 </project>

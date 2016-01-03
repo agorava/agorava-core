@@ -2,12 +2,12 @@
     <servers>
         <server>
             <id>bintray-snapshot</id>
-            <username>${env.CI_DEPLOY_USERNAME}</username>
+            <username>${env.CIRCLE_USERNAME}</username>
             <password>${env.CI_DEPLOY_PASSWORD}</password>
         </server>
         <server>
             <id>bintray-release</id>
-            <username>${env.CI_DEPLOY_USERNAME}</username>
+            <username>${env.CIRCLE_USERNAME}</username>
             <password>${env.CI_DEPLOY_PASSWORD}</password>
         </server>
     </servers>

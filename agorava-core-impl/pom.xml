@@ -32,6 +32,7 @@
         <dependency>
             <groupId>org.agorava</groupId>
             <artifactId>agorava-core-api</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

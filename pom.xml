@@ -27,10 +27,10 @@
 	<inceptionYear>2012</inceptionYear>
 
 	<modules>
-		<module>agorava-core-api</module><!--  
+		<module>agorava-core-api</module> 
 		<module>agorava-core-impl</module>
-		<module>agorava-core-impl-cdi</module>
-		<module>agorava-picketlink</module> -->
+		<!--  >module>agorava-core-impl-cdi</module -->
+		<module>agorava-picketlink</module>
 	</modules>
 
 	<developers>
