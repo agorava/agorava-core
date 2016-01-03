@@ -33,7 +33,6 @@
 		<module>agorava-picketlink</module>
 	</modules>
 
-
 	<developers>
 		<developer>
 			<name>Antoine Sabot-Durand</name>
@@ -59,7 +58,32 @@
 		<url>http://github.com/agorava/agorava-core</url>
 		<tag>HEAD</tag>
 	</scm>
-
+  <!-- Additional repositories -->
+    <!-- Helps to resolve Parent POM and Snapshot artifacts -->
+    <repositories>
+        <repository>
+            <id>jcenter</id>
+            <name>JCenter</name>
+            <url>http://jcenter.bintray.com</url>
+        </repository>
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>bintray-release</id>
+            <name>libs-release</name>
+            <url>http://oss.jfrog.org/artifactory/libs-release</url>
+        </repository>
+        <repository>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>bintray-snapshot</id>
+            <name>libs-snapshot</name>
+            <url>http://oss.jfrog.org/artifactory/libs-snapshot</url>
+        </repository>
+    </repositories>
+    
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
