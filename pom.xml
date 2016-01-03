@@ -16,13 +16,12 @@
 	<parent>
 		<groupId>org.agorava</groupId>
 		<artifactId>agorava-parent</artifactId>
-		<version>0.7.0</version>
+		<version>0.7.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>agorava-core-parent</artifactId>
 	<packaging>pom</packaging>
 	<name>Agorava Core</name>
-	<version>0.7.1-SNAPSHOT</version>
 	<description>Java API to ease the use of social media</description>
 	<url>http://www.agorava.org</url>
 	<inceptionYear>2012</inceptionYear>
@@ -66,7 +65,7 @@
 			<dependency>
 				<groupId>org.agorava</groupId>
 				<artifactId>agorava-bom</artifactId>
-				<version>0.7.0</version>
+				<version>0.7.1-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
