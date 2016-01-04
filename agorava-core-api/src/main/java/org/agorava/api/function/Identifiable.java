@@ -20,6 +20,10 @@ import java.io.Serializable;
 
 /**
  * Provides String id to implementations.
+ * 
+ * <p>There is no requirement that a distinct result be returned each
+ * time the supplier is invoked, unless implementing classes enforce it.
+ * 
  * <p>This is a <a href="http://docs.oracle.com/javase/8/docs/api/java/util/function/package-summary.html#package.description">functional interface</a>
  * whose functional method is {@link #getId()}.
  *
