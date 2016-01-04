@@ -1,5 +1,6 @@
 #Agorava Core
 
+[![Circle CI](https://circleci.com/gh/agorava/agorava-core.svg?style=svg)](https://circleci.com/gh/agorava/agorava-core) 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.agorava/agorava-core-parent/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.agorava/agorava-core-parent) 
 [![License](http://img.shields.io/badge/license-Apache2-red.svg)](http://opensource.org/licenses/apache-2.0)
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Agorava
+ * Copyright 2014-2016 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,16 @@
 package org.agorava.picketlink;
 
 import org.agorava.AgoravaContext;
+import org.agorava.api.function.Identifiable;
 import org.agorava.spi.UserProfile;
 import org.picketlink.idm.model.basic.User;
 
 /**
  * @author Antoine Sabot-Durand
+ * @author Werner Keil
  */
-public class AgoravaUser extends User {
+@SuppressWarnings("serial")
+public class AgoravaUser extends User implements Identifiable {
 
     private final UserProfile profile;
 
