@@ -19,6 +19,8 @@ package org.agorava.api.storage;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.agorava.api.function.Identifiable;
+
 /**
  * A repository containing a collection of element that can be iterated
  *

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Agorava
+ * Copyright 2014-2016 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,12 +27,14 @@ import org.agorava.api.oauth.application.OAuthAppSettings;
 import org.agorava.api.rest.Response;
 import org.agorava.rest.OAuthRequestImpl;
 import org.agorava.spi.ProviderConfigOauth20;
-import static org.agorava.api.oauth.OAuth.OAuthVersion.TWO_FINAL;
 
+import static org.agorava.api.oauth.OAuth.OAuthVersion.TWO_FINAL;
 
 /**
  * @author Antoine Sabot-Durand
+ * @author Werner Keil
  */
+@SuppressWarnings("serial")
 @Generic
 @OAuth(TWO_FINAL)
 public class OAuth20FinalServiceImpl extends OAuth20ServiceImpl {

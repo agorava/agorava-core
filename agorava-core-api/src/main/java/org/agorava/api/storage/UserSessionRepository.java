@@ -16,6 +16,7 @@
 
 package org.agorava.api.storage;
 
+import org.agorava.api.function.Identifiable;
 import org.agorava.api.oauth.OAuthSession;
 
 import java.lang.annotation.Annotation;

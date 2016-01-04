@@ -18,7 +18,7 @@ package org.agorava.api.oauth;
 
 import org.agorava.AgoravaContext;
 import org.agorava.api.exception.ProviderMismatchException;
-import org.agorava.api.storage.Identifiable;
+import org.agorava.api.function.Identifiable;
 import org.agorava.api.storage.UserSessionRepository;
 import org.agorava.spi.UserProfile;
 
