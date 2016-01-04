@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2014 Agorava
+  ~ Copyright 2016 Agorava
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -24,12 +24,10 @@
 		<version>0.7.1-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-
+    <name>Agorava Core PicketLink</name>
 	<artifactId>agorava-picketlink</artifactId>
 
 	<dependencies>
-
-
 		<dependency>
 			<groupId>javax.enterprise</groupId>
 			<artifactId>cdi-api</artifactId>
@@ -54,9 +52,5 @@
 			<groupId>org.picketlink</groupId>
 			<artifactId>picketlink-api</artifactId>
 		</dependency>
-
 	</dependencies>
-
-
-	<name>Agorava Core PicketLink</name>
 </project>
