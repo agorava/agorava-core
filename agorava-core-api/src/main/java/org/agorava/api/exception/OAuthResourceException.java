@@ -26,9 +26,9 @@ import org.agorava.api.exception.AgoravaException;
  * 
  */
 @SuppressWarnings("serial")
-public class ResourceOwnershipException extends AgoravaException {
+public class OAuthResourceException extends AgoravaException {
 
-    public ResourceOwnershipException(String message) {
+    public OAuthResourceException(String message) {
         super(message);
     }
 
