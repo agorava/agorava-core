@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Agorava
+ * Copyright 2016 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,20 +16,21 @@
 
 package org.agorava.spi;
 
-import java.io.Serializable;
 import java.lang.annotation.Annotation;
+
+import org.agorava.api.function.Identifiable;
 
 /**
  * Generic abstract class to define a basic user information
  *
  * @author Antoine Sabot-Durand
+ * @author Werner Keil
  */
-public abstract class UserProfile implements Serializable {
+public abstract class UserProfile implements Identifiable {
 
     private static final long serialVersionUID = 5367527950121194789L;
 
     private final String id;
-
     private final Class<? extends Annotation> qualifier;
 
     /**
@@ -113,5 +114,4 @@ public abstract class UserProfile implements Serializable {
             return false;
         return true;
     }
-
 }
