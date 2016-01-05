@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2013-2016 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,7 @@ import org.agorava.spi.AppSettingsTuner;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+
 import java.text.MessageFormat;
 import java.util.Map;
 import java.util.logging.Level;
@@ -45,7 +46,9 @@ import static org.agorava.api.rest.Verb.PUT;
 
 /**
  * @author Antoine Sabot-Durand
+ * @author Werner Keil
  */
+@SuppressWarnings("serial")
 public abstract class OAuthServiceBase implements OAuthService {
 
     private static final Logger LOGGER = Logger.getLogger(OAuthServiceBase.class.getName());
@@ -75,7 +78,8 @@ public abstract class OAuthServiceBase implements OAuthService {
         return mapperService;
     }
 
-    @Override
+    @SuppressWarnings("finally")
+	@Override
     public Response sendSignedRequest(OAuthRequest request) {
         RequestTuner tuner;
         try {
@@ -84,6 +88,7 @@ public abstract class OAuthServiceBase implements OAuthService {
         } catch (RuntimeException e) {
             LOGGER.log(Level.FINE, "No Tuner found for " + getSocialMediaName());
         } finally {
+        	LOGGER.log(Level.FINEST, "Signing with " + getAccessToken());
             signRequest(getAccessToken(), request);
             return request.send(); //todo:should check return code and launch ResponseException if it's not 200
         }
