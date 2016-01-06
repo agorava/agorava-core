@@ -88,7 +88,7 @@ public abstract class OAuthServiceBase implements OAuthService {
         } catch (RuntimeException e) {
             LOGGER.log(Level.FINE, "No Tuner found for " + getSocialMediaName());
         } finally {
-        	LOGGER.log(Level.WARNING, "Signing with " + getAccessToken());
+        	LOGGER.log(Level.FINEST, "Signing with " + getAccessToken());
             signRequest(getAccessToken(), request);
             return request.send(); //todo:should check return code and launch ResponseException if it's not 200
         }
