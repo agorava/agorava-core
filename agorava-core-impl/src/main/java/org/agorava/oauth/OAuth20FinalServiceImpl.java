@@ -53,7 +53,7 @@ public class OAuth20FinalServiceImpl extends OAuth20ServiceImpl {
         request.addBodyParameter(AgoravaConstants.CLIENT_SECRET, config.getApiSecret());
         request.addBodyParameter(AgoravaConstants.CODE, verifier.getValue());
         request.addBodyParameter(AgoravaConstants.REDIRECT_URI, config.getCallback());
-        request.addBodyParameter("grant_type", "authorization_code");
+        request.addBodyParameter(AgoravaConstants.GRANT_TYPE, "authorization_code");
         if (config.hasScope())
             request.addBodyParameter(AgoravaConstants.SCOPE, config.getScope());
         Response response = request.send(); //todo:should check return code and launch ResponseException if it's not 200
@@ -63,5 +63,10 @@ public class OAuth20FinalServiceImpl extends OAuth20ServiceImpl {
     @Override
     public OAuth.OAuthVersion getVersion() {
         return TWO_FINAL;
+    }
+    
+    @Override
+    public OAuthAppSettings getConfig() {
+    	return config;
     }
 }

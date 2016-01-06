@@ -122,7 +122,6 @@ public abstract class OAuthServiceBase implements OAuthService {
     @Override
     public OAuthSession getSession() {
         return OAuthLifeCycleService.resolveSessionForQualifier(config.getQualifier());
-
     }
 
     @Override
@@ -189,13 +188,17 @@ public abstract class OAuthServiceBase implements OAuthService {
         else
             resp = requestFactory(GET, uri).send(); //todo:should check return code and launch
         // ResponseException if it's not 200
+        LOGGER.warning("R: " + resp.toString());
         return getJsonMapper().mapToObject(resp, clazz);
     }
 
     @Override
-    public <T> T get(String uri, Class<T> clazz, Object... urlParams) {
-        String url = MessageFormat.format(uri, urlParams);
-        return getJsonMapper().mapToObject(sendSignedRequest(GET, url), clazz);
+    public <T> T get(String uri, Class<T> clazz, Object... urlParams) {	
+        final String url = MessageFormat.format(uri, urlParams);
+        LOGGER.warning("U: " + url);
+        Response resp = sendSignedRequest(GET, url);
+        LOGGER.warning("R: " + resp.toString());
+        return getJsonMapper().mapToObject(resp, clazz);
     }
 
     @Override
@@ -241,5 +244,8 @@ public abstract class OAuthServiceBase implements OAuthService {
         AppSettingsTuner tuner = BeanResolver.getInstance().resolve(AppSettingsTuner.class, true);
         return tuner == null ? config : tuner.tune(config);
     }
-
+    
+    public OAuthAppSettings getConfig() {
+    	return config;
+    }
 }

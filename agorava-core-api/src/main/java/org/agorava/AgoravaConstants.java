@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Agorava
+ * Copyright 2016 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import org.agorava.api.oauth.Token;
  * This interface contains OAuth and other Agorava constants
  *
  * @author Antoine Sabot-Durand
+ * @author Werner Keil
  */
 public interface AgoravaConstants {
     /**
@@ -130,7 +131,12 @@ public interface AgoravaConstants {
      * Return code field name in OAuth request
      */
     String CODE = "code";
-
+    
+    /**
+     * Return grant type in OAuth request
+     */
+    String GRANT_TYPE = "grant_type";
+    
     /**
      * default OAuth Callback relative url to send user when returning from OAuth service. It's used in {@link org.agorava
      * .api.oauth.application.SimpleOAuthAppSettingsBuilder}

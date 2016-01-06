@@ -16,6 +16,7 @@
 
 package org.agorava.api.oauth;
 
+import org.agorava.api.oauth.application.OAuthAppSettings;
 import org.agorava.api.rest.Response;
 import org.agorava.api.rest.RestService;
 import org.agorava.api.rest.Verb;
@@ -204,5 +205,8 @@ public interface OAuthService extends RestService {
      */
     JsonMapperService getJsonMapper();
 
-
+    /**
+     * @return configuration settings needed to access an OAuth 1.0a and 2.0 service tier
+     */
+    OAuthAppSettings getConfig();
 }

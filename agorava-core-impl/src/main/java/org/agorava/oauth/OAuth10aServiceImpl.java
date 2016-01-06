@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Agorava
+ * Copyright 2016 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import org.agorava.api.rest.RequestTuner;
 import org.agorava.api.rest.Response;
 import org.agorava.spi.ProviderConfigOauth10a;
 import org.agorava.utils.MapUtils;
+
 import static org.agorava.api.oauth.OAuth.OAuthVersion.ONE;
 
 import java.util.Map;
@@ -40,8 +41,10 @@ import java.util.logging.Logger;
  *
  * @author Antoine Sabot-Durand
  * @author Pablo Fernandez
+ * @author Werner Keil
  */
 
+@SuppressWarnings("serial")
 @Generic
 @OAuth(ONE)
 public class OAuth10aServiceImpl extends OAuthServiceBase {

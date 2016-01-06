@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Agorava
+ * Copyright 2016 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,15 +28,16 @@ import org.agorava.api.oauth.application.OAuthAppSettings;
 import org.agorava.api.rest.Response;
 import org.agorava.rest.OAuthRequestImpl;
 import org.agorava.spi.ProviderConfigOauth20;
+
 import static org.agorava.api.oauth.OAuth.OAuthVersion.TWO_DRAFT_11;
 
+@SuppressWarnings("serial")
 @Generic
 @OAuth(TWO_DRAFT_11)
 public class OAuth20ServiceImpl extends OAuthServiceBase {
 
     @InjectWithQualifier
     ProviderConfigOauth20 api;
-
 
     /**
      * {@inheritDoc}
@@ -76,7 +77,6 @@ public class OAuth20ServiceImpl extends OAuthServiceBase {
         request.addQuerystringParameter(AgoravaConstants.ACCESS_TOKEN, accessToken.getToken());
     }
 
-
     @Override
     public String getVerifierParamName() {
         return AgoravaConstants.CODE;
@@ -86,6 +86,4 @@ public class OAuth20ServiceImpl extends OAuthServiceBase {
     public String getAuthorizationUrl() {
         return api.getAuthorizationUrl(getTunedOAuthAppSettings());
     }
-
-
 }
