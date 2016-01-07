@@ -207,6 +207,7 @@ public interface OAuthService extends RestService {
 
     /**
      * @return configuration settings needed to access an OAuth 1.0a and 2.0 service tier
+     * @deprecated this may not be needed, but will explore for certain connectors, if it could still be of use
      */
     OAuthAppSettings getConfig();
 }
