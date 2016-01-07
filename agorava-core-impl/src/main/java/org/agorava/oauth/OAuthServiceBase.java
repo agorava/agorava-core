@@ -188,7 +188,7 @@ public abstract class OAuthServiceBase implements OAuthService {
         else
             resp = requestFactory(GET, uri).send(); //todo:should check return code and launch
         // ResponseException if it's not 200
-        LOGGER.warning("R: " + resp.toString());
+        LOGGER.warning("R: " + resp.getBody()); // FIXME change to finest or comment out
         return getJsonMapper().mapToObject(resp, clazz);
     }
 
@@ -197,7 +197,7 @@ public abstract class OAuthServiceBase implements OAuthService {
         final String url = MessageFormat.format(uri, urlParams);
         LOGGER.warning("U: " + url);
         Response resp = sendSignedRequest(GET, url);
-        LOGGER.warning("R: " + resp.toString());
+        LOGGER.warning("R: " + resp.getBody()); // FIXME change to finest or comment out
         return getJsonMapper().mapToObject(resp, clazz);
     }
 
