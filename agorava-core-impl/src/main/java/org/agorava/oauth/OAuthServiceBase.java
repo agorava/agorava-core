@@ -50,7 +50,6 @@ import static org.agorava.api.rest.Verb.PUT;
  */
 @SuppressWarnings("serial")
 public abstract class OAuthServiceBase implements OAuthService {
-
     private static final Logger LOGGER = Logger.getLogger(OAuthServiceBase.class.getName());
 
     @Inject
@@ -188,16 +187,16 @@ public abstract class OAuthServiceBase implements OAuthService {
         else
             resp = requestFactory(GET, uri).send(); //todo:should check return code and launch
         // ResponseException if it's not 200
-        LOGGER.warning("R: " + resp.getBody()); // FIXME change to finest or comment out
+        LOGGER.log(Level.INFO, "R: " + resp.getBody()); // FIXME change to finest or comment out
         return getJsonMapper().mapToObject(resp, clazz);
     }
 
     @Override
     public <T> T get(String uri, Class<T> clazz, Object... urlParams) {	
         final String url = MessageFormat.format(uri, urlParams);
-        LOGGER.warning("U: " + url);
+        LOGGER.log(Level.INFO, "U: " + url); // FIXME change to finest or comment out
         Response resp = sendSignedRequest(GET, url);
-        LOGGER.warning("R: " + resp.getBody()); // FIXME change to finest or comment out
+        LOGGER.log(Level.INFO, "R: " + resp.getBody()); // FIXME change to finest or comment out
         return getJsonMapper().mapToObject(resp, clazz);
     }
 
