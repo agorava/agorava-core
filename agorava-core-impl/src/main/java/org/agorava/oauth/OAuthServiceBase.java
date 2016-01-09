@@ -172,12 +172,13 @@ public abstract class OAuthServiceBase implements OAuthService {
     public void setAccessToken(String token, String secret) {
         OAuthSession session = getSession();
         session.setAccessToken(new Token(token, secret));
-
     }
 
     @Override
     public <T> T get(String uri, Class<T> clazz) {
-        return getJsonMapper().mapToObject(sendSignedRequest(GET, uri), clazz);
+    	Response resp = sendSignedRequest(GET, uri);
+    	LOGGER.log(Level.FINEST, "R: " + resp.getBody()); // FIXME change to finest or comment out
+    	return getJsonMapper().mapToObject(resp, clazz);
     }
 
     @Override
@@ -187,7 +188,7 @@ public abstract class OAuthServiceBase implements OAuthService {
         else
             resp = requestFactory(GET, uri).send(); //todo:should check return code and launch
         // ResponseException if it's not 200
-        LOGGER.log(Level.INFO, "R: " + resp.getBody()); // FIXME change to finest or comment out
+        LOGGER.log(Level.FINEST, "R: " + resp.getBody()); // FIXME change to finest or comment out
         return getJsonMapper().mapToObject(resp, clazz);
     }
 
@@ -196,7 +197,7 @@ public abstract class OAuthServiceBase implements OAuthService {
         final String url = MessageFormat.format(uri, urlParams);
         LOGGER.log(Level.INFO, "U: " + url); // FIXME change to finest or comment out
         Response resp = sendSignedRequest(GET, url);
-        LOGGER.log(Level.INFO, "R: " + resp.getBody()); // FIXME change to finest or comment out
+        LOGGER.log(Level.FINEST, "R: " + resp.getBody()); // FIXME change to finest or comment out
         return getJsonMapper().mapToObject(resp, clazz);
     }
 
