@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2013-2016 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.agorava.oauth.settings;
 
 import org.agorava.api.oauth.application.OAuthAppSettings;
@@ -26,6 +25,7 @@ import java.lang.annotation.Annotation;
  * connection to Social Media
  *
  * @author Antoine Sabot-Durand
+ * @author Werner Keil
  */
 public class OAuthAppSettingsImpl implements OAuthAppSettings {
 
@@ -42,17 +42,25 @@ public class OAuthAppSettingsImpl implements OAuthAppSettings {
     private String name;
 
     private Annotation qualifier;
+    
+    private boolean enabled;
 
     OAuthAppSettingsImpl() {
     }
 
-    OAuthAppSettingsImpl(String name, String apiKey, String apiSecret, String callback, String scope, Annotation qualifier) {
+    OAuthAppSettingsImpl(String name, String apiKey, String apiSecret, String callback, String scope, Annotation qualifier,
+    		String enable) {
         this.apiKey = apiKey;
         this.apiSecret = apiSecret;
         this.callback = callback;
         this.scope = scope;
         this.name = name;
         this.qualifier = qualifier;
+        if (enable != null && enable.length() > 0) {
+        	this.enabled = Boolean.parseBoolean(enable);
+        } else {
+        	this.enabled = true;
+        }
     }
 
     @Override
@@ -96,5 +104,8 @@ public class OAuthAppSettingsImpl implements OAuthAppSettings {
         return (scope != null && !"".equals(scope));
     }
 
-
+	@Override
+	public boolean isEnabled() {
+		return enabled;
+	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Agorava
+ * Copyright 2014-2016 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import java.lang.annotation.Annotation;
  * connection to Social Media
  *
  * @author Antoine Sabot-Durand
+ * @author Werner Keil
  */
 public interface OAuthAppSettings extends Serializable {
     /**
@@ -61,4 +62,9 @@ public interface OAuthAppSettings extends Serializable {
      * @return true if this OAuthAppSettings contains a scope
      */
     boolean hasScope();
+    
+    /**
+     * @return true if this service is enabled
+     */
+    boolean isEnabled();
 }

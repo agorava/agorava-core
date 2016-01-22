@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Agorava
+ * Copyright 2016 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,8 +39,8 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Antoine Sabot-Durand
+ * @author Werner Keil
  */
-
 @RequestScoped
 @Exclude(onExpression = ApplicationResolver.RESOLVER + ",request", interpretedBy = DifferentOrNull.class)
 public class RequestResolver extends ApplicationResolver {
@@ -96,7 +96,6 @@ public class RequestResolver extends ApplicationResolver {
 
     }
 
-
     @Produces
     public OAuthSession resolveOAuthSession(InjectionPoint ip, @Current UserSessionRepository repository) {
         return super.resolveOAuthSession(ip, repository);
@@ -117,8 +116,6 @@ public class RequestResolver extends ApplicationResolver {
     }
 
     static public class addSessionToCallbackTuner implements AppSettingsTuner {
-
-
         OAuthSession session;
 
         public addSessionToCallbackTuner(OAuthSession session) {
@@ -134,5 +131,4 @@ public class RequestResolver extends ApplicationResolver {
                     .build();
         }
     }
-
 }

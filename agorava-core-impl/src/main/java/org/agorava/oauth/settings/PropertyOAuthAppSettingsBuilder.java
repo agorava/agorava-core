@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2013-2016 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.agorava.oauth.settings;
 
 import org.agorava.api.exception.AgoravaException;
@@ -39,9 +38,9 @@ import java.util.ResourceBundle;
  * You can configure a prefix for the key with {@link #prefix(String)}. By default the prefix is empty
  *
  * @author Antoine Sabot-Durand
+ * @author Werner Keil
  */
 public class PropertyOAuthAppSettingsBuilder extends SimpleOAuthAppSettingsBuilder {
-
 
     /**
      * Global constant to give type safe name for the bundleName property when used in {@link org.agorava.api.oauth
@@ -93,7 +92,6 @@ public class PropertyOAuthAppSettingsBuilder extends SimpleOAuthAppSettingsBuild
         if(is==null) {
             throw new AgoravaException("Property file : " +bundleName+".properties, not found");
         }
-            
             try {
                 return new PropertyResourceBundle(is);
             } catch (IOException e) {
@@ -123,7 +121,6 @@ public class PropertyOAuthAppSettingsBuilder extends SimpleOAuthAppSettingsBuild
         ResourceBundle rb = retrievePropertyBundle(bundleName);
         String pref = "".equals(prefix) ? "" : prefix + ".";
 
-
         for (String k : bindingKeys) {
             key = pref + k;
             if (!rb.containsKey(key)) {
@@ -148,6 +145,4 @@ public class PropertyOAuthAppSettingsBuilder extends SimpleOAuthAppSettingsBuild
 
         return super.build();
     }
-
-
 }

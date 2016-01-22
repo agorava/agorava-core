@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Agorava
+ * Copyright 2016 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import java.util.Set;
  * Static field here are stored here from third parties helper classes.
  *
  * @author Antoine Sabot-Durand
+ * @author Werner Keil
  */
 public class AgoravaContext {
 
@@ -44,7 +45,7 @@ public class AgoravaContext {
      */
     protected static String producerScope = "";
     /**
-     * The default internal callback when whe return from OAuth connexion
+     * The default internal callback when we return from OAuth connexion
      */
     protected static String internalCallBack;
     private static Map<String, Annotation> servicesToQualifier = new HashMap<String, Annotation>();

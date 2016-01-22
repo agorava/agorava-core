@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2016 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ import java.lang.reflect.Method;
  * {@inheritDoc}
  *
  * @author Antoine Sabot-Durand
+ * @author Werner Keil
  */
 public class SimpleOAuthAppSettingsBuilder implements OAuthAppSettingsBuilder {
 
@@ -42,6 +43,8 @@ public class SimpleOAuthAppSettingsBuilder implements OAuthAppSettingsBuilder {
     private String callback;
 
     private String scope = "";
+    
+    private String enable = "";
 
     private Annotation qualifier;
 
@@ -109,7 +112,7 @@ public class SimpleOAuthAppSettingsBuilder implements OAuthAppSettingsBuilder {
     public OAuthAppSettings build() {
         if (callback == null)
             callback(AgoravaConstants.CALLBACK_URL);
-        return new OAuthAppSettingsImpl(name, apiKey, apiSecret, callback, scope, qualifier);
+        return new OAuthAppSettingsImpl(name, apiKey, apiSecret, callback, scope, qualifier, enable);
     }
 
     @Override
