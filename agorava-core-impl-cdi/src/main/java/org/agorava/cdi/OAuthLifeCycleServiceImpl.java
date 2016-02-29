@@ -112,6 +112,7 @@ public class OAuthLifeCycleServiceImpl implements OAuthLifeCycleService {
     @Override
     public synchronized void endDance() {
         OAuthSession currentSession = getCurrentSession();
+        System.out.println("Verifier: " + currentSession.getVerifier()); // FIXME replace with logger or disable
         if (currentSession.getAccessToken() == null) {
             currentSession.setAccessToken(getCurrentService().getAccessToken(currentSession.getRequestToken(),
                     currentSession.getVerifier()));
