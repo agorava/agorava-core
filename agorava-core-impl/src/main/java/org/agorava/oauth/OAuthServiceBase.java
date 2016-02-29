@@ -64,7 +64,7 @@ public abstract class OAuthServiceBase implements OAuthService {
     @InjectWithQualifier
     Provider<RequestTuner> tunerProvider;
 
-    private Map<String, String> requestHeader;
+//    private Map<String, String> requestHeader;
 
     @Override
     public OAuthRequest requestFactory(Verb verb, String uri) {
@@ -105,9 +105,7 @@ public abstract class OAuthServiceBase implements OAuthService {
         OAuthRequest request = requestFactory(verb, uri);
 
         request.addBodyParameter(key, value.toString());
-
         return sendSignedRequest(request);
-
     }
 
     @Override
@@ -136,7 +134,9 @@ public abstract class OAuthServiceBase implements OAuthService {
     @Override
     public String getVerifier() {
         OAuthSession session = getSession();
-        return session.getVerifier();
+        final String verifier = session.getVerifier();
+        LOGGER.info("V: " + verifier);
+        return verifier;
     }
 
     @Override
