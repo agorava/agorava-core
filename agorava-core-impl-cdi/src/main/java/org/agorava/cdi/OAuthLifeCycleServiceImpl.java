@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Agorava
+ * Copyright 2014-2016 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -112,7 +112,7 @@ public class OAuthLifeCycleServiceImpl implements OAuthLifeCycleService {
     @Override
     public synchronized void endDance() {
         OAuthSession currentSession = getCurrentSession();
-        System.out.println("Verifier: " + currentSession.getVerifier()); // FIXME replace with logger or disable
+        System.out.println("Verifier ("+ getVerifierParamName() + ") : " + currentSession.getVerifier()); // FIXME replace with logger or disable
         if (currentSession.getAccessToken() == null) {
             currentSession.setAccessToken(getCurrentService().getAccessToken(currentSession.getRequestToken(),
                     currentSession.getVerifier()));
