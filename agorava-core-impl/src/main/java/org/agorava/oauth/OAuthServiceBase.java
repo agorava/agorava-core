@@ -235,6 +235,9 @@ public abstract class OAuthServiceBase implements OAuthService {
 
     @Override
     public Token getAccessToken(Token requestToken, String verifier) {
+    	if (null == verifier) {
+    		verifier = "12345"; // FIXME try resolve elsewhere
+    	}
         return getAccessToken(requestToken, new Verifier(verifier));
     }
 
