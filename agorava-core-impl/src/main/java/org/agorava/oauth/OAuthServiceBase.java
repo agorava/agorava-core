@@ -176,6 +176,7 @@ public abstract class OAuthServiceBase implements OAuthService {
 
     @Override
     public <T> T get(String uri, Class<T> clazz) {
+    	LOGGER.log(Level.INFO, "U: " + uri);
     	Response resp = sendSignedRequest(GET, uri);
     	LOGGER.log(Level.INFO, "R: " + resp.getBody()); // FIXME change or make configurable
     	return getJsonMapper().mapToObject(resp, clazz);
