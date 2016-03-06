@@ -135,7 +135,7 @@ public abstract class OAuthServiceBase implements OAuthService {
     public String getVerifier() {
         OAuthSession session = getSession();
         final String verifier = session.getVerifier();
-        LOGGER.info("V: " + verifier); // FIXME change to finest or comment out
+        LOGGER.fine("V: " + verifier); // FIXME change to finest or comment out
         return verifier;
     }
 
@@ -177,7 +177,7 @@ public abstract class OAuthServiceBase implements OAuthService {
     @Override
     public <T> T get(String uri, Class<T> clazz) {
     	Response resp = sendSignedRequest(GET, uri);
-    	LOGGER.log(Level.FINEST, "R: " + resp.getBody());
+    	LOGGER.log(Level.INFO, "R: " + resp.getBody()); // FIXME change or make configurable
     	return getJsonMapper().mapToObject(resp, clazz);
     }
 
@@ -188,7 +188,7 @@ public abstract class OAuthServiceBase implements OAuthService {
         else
             resp = requestFactory(GET, uri).send(); //todo:should check return code and launch
         // ResponseException if it's not 200
-        LOGGER.log(Level.FINEST, "R: " + resp.getBody());
+        LOGGER.log(Level.INFO, "R: " + resp.getBody());
         return getJsonMapper().mapToObject(resp, clazz);
     }
 
