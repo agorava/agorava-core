@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Agorava
+ * Copyright 2014-2016 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,8 +39,7 @@ import org.apache.deltaspike.core.api.literal.AnyLiteral;
 import org.apache.deltaspike.core.util.bean.BeanBuilder;
 import org.apache.deltaspike.core.util.bean.WrappingBeanBuilder;
 import org.apache.deltaspike.core.util.metadata.builder.AnnotatedTypeBuilder;
-import static java.util.logging.Level.INFO;
-import static java.util.logging.Level.WARNING;
+import static java.util.logging.Level.*;
 import static org.agorava.cdi.extensions.AnnotationUtils.getAnnotationsWithMeta;
 import static org.agorava.cdi.extensions.AnnotationUtils.getSingleProviderRelatedQualifier;
 
@@ -79,6 +78,7 @@ import javax.inject.Named;
  * Agorava CDI extension to discover existing module and configured modules
  *
  * @author Antoine Sabot-Durand
+ * @author Werner Keil
  */
 public class AgoravaExtension extends AgoravaContext implements Extension, Serializable {
 
@@ -394,14 +394,15 @@ public class AgoravaExtension extends AgoravaContext implements Extension, Seria
             final ProviderConfigOauth tierConfig = (ProviderConfigOauth) beanManager.getReference(bean,
                     ProviderConfigOauth.class, ctx);
             String name = tierConfig.getProviderName();
+            log.log(FINEST, "Putting " + qual + " as " + name);
             getServicesToQualifier().put(name, qual);
             ctx.release();
         }
         if (providerQualifiersConfigured.size() != getServicesToQualifier().size())
             log.log(WARNING, "Some Service modules present in the application are not configured so won't be available");
         //TODO:list the service without config
-
+        for (Annotation a : providerQualifiersConfigured) {
+        	log.log(WARNING, "Configured " + a);
+        }
     }
-
-
 }
