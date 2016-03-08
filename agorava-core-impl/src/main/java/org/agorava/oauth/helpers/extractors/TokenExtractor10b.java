@@ -17,8 +17,8 @@
 package org.agorava.oauth.helpers.extractors;
 
 import org.agorava.api.exception.AgoravaException;
+import org.agorava.api.extractor.ExtractorType;
 import org.agorava.api.extractor.TokenExtractor;
-import org.agorava.api.oauth.OAuth;
 import org.agorava.api.oauth.Token;
 import org.agorava.api.service.OAuthEncoder;
 import org.agorava.api.service.Preconditions;
@@ -26,30 +26,38 @@ import org.agorava.api.service.Preconditions;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.agorava.api.oauth.OAuth.OAuthVersion.TWO_DRAFT_11;
+import static org.agorava.api.extractor.ExtractorType.Type.TOKEN_STD;
 
 /**
- * Default implementation of {@TokenExtractor}. Conforms to OAuth 2.0
+ * Default implementation of {@RequestTokenExtractor} and {@AccessTokenExtractor}. Conforms to OAuth 1.0a
+ * <p/>
+ * The process for extracting access and request tokens is similar so this class can do both things.
+ *
+ * @author Werner Keil
  */
-@OAuth(TWO_DRAFT_11)
-public class TokenExtractor20 implements TokenExtractor {
-    private static final String TOKEN_REGEX = "access_token=([^&]+)";
-
+@ExtractorType(TOKEN_STD)
+public class TokenExtractor10b implements TokenExtractor {
+    private static final Pattern TOKEN_REGEX = Pattern.compile("oauth_token=([^&]+)");
     private static final String EMPTY_SECRET = "";
+    private static final Pattern UID_REGEX = Pattern.compile("userid=([^&]*)");
 
     /**
      * {@inheritDoc}
      */
-    @Override
     public Token extract(String response) {
         Preconditions.checkEmptyString(response, "Response body is incorrect. Can't extract a token from an empty string");
+        String token = extract(response, TOKEN_REGEX);
+        String userId = extract(response, UID_REGEX);
+        return new Token(token, EMPTY_SECRET);
+    }
 
-        Matcher matcher = Pattern.compile(TOKEN_REGEX).matcher(response);
-        if (matcher.find()) {
-            String token = OAuthEncoder.decode(matcher.group(1));
-            return new Token(token, EMPTY_SECRET);
+    private String extract(String response, Pattern p) {
+        Matcher matcher = p.matcher(response);
+        if (matcher.find() && matcher.groupCount() >= 1) {
+            return OAuthEncoder.decode(matcher.group(1));
         } else {
-            throw new AgoravaException("Response body is incorrect. Can't extract a token from this: '" + response + "'", null);
+            throw new AgoravaException("Response body is incorrect. Can't extract token and secret from this: '" + response +
+                    "'", null);
         }
     }
 }

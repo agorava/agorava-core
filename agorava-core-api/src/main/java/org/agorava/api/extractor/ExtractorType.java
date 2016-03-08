@@ -71,6 +71,13 @@ public @interface ExtractorType {
          * @see <a href="http://oauth.net/core/1.0/#anchor14">Base string info in OAuth 1.0a spec</a>
          */
         OAUTH1_BASE_STRING,
+        
+        /**
+         * OAuth 1.0a ext (user id) string extractor (string being signed)
+         *
+         * @see <a href="http://oauth.net/core/1.0/#anchor14">Base string info in OAuth 1.0a spec</a>
+         */
+        OAUTH1_USER_ID,
 
         /**
          * available for third party developer
