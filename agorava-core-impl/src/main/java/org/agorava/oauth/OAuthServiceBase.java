@@ -176,9 +176,9 @@ public abstract class OAuthServiceBase implements OAuthService {
 
     @Override
     public <T> T get(String uri, Class<T> clazz) {
-    	LOGGER.log(Level.INFO, "U: " + uri);
+    	LOGGER.log(Level.FINER, "U: " + uri);
     	Response resp = sendSignedRequest(GET, uri);
-    	LOGGER.log(Level.INFO, "R: " + resp.getBody()); // FIXME change or make configurable
+    	LOGGER.log(Level.FINER, "R: " + resp.getBody()); // FIXME change or make configurable
     	return getJsonMapper().mapToObject(resp, clazz);
     }
 
@@ -189,14 +189,14 @@ public abstract class OAuthServiceBase implements OAuthService {
         else
             resp = requestFactory(GET, uri).send(); //todo:should check return code and launch
         // ResponseException if it's not 200
-        LOGGER.log(Level.INFO, "R: " + resp.getBody());
+        LOGGER.log(Level.FINER, "R: " + resp.getBody()); // FIXME change or make configurable
         return getJsonMapper().mapToObject(resp, clazz);
     }
 
     @Override
     public <T> T get(String uri, Class<T> clazz, Object... urlParams) {	
         final String url = MessageFormat.format(uri, urlParams);
-        LOGGER.log(Level.INFO, "U: " + url); // FIXME change to finest or comment out
+        LOGGER.log(Level.FINER, "U: " + url); // FIXME change to finest or comment out
         Response resp = sendSignedRequest(GET, url);
         LOGGER.log(Level.FINEST, "R: " + resp.getBody());
         return getJsonMapper().mapToObject(resp, clazz);
