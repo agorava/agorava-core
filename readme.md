@@ -1,10 +1,10 @@
-#Agorava Core
+# Agorava Core
 
-[![Circle CI](https://circleci.com/gh/agorava/agorava-core.svg?style=svg)](https://circleci.com/gh/agorava/agorava-core) 
+[![CircleCI](https://circleci.com/gh/agorava/agorava-core/tree/master.svg?style=svg)](https://circleci.com/gh/agorava/agorava-core/tree/master)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.agorava/agorava-core-parent/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.agorava/agorava-core-parent) 
 [![License](http://img.shields.io/badge/license-Apache2-red.svg)](http://opensource.org/licenses/apache-2.0)
 
-##Introduction
+## Introduction
 Agorava Provides CDI Beans and extensions to interact with major social media (SM).
 
 Agorava core contains SN independent services like
@@ -16,14 +16,14 @@ Agorava core contains SN independent services like
 Core also contains provides implementations for these service.
 The only implementation is based on CDI right now.
 
-##CDI implementation
+## CDI implementation
 It is independent of CDI implementation and fully portable between
 Java EE 6 and Servlet environments enhanced with CDI. It can be also used 
 with CDI in JSE (desktop application).
 
 For more information, see the [Agorava Website](http://agorava.org).
 
-##Building
+## Building
 Agorava core relies on [Agorava Parent](https://github.com/agorava/agorava-parent)
 
 It requires Apache Maven (available from http://maven.apache.org/) 
