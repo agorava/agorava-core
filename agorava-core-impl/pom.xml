@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2013-2019 Agorava
+  ~ Copyright 2013-2020 Agorava
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -48,7 +48,7 @@
         </dependency>
         <dependency>
             <groupId>javax.faces</groupId>
-            <artifactId>jsf-api</artifactId>
+            <artifactId>javax.faces-api</artifactId>
         </dependency>
     </dependencies>
 </project>

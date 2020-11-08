@@ -55,7 +55,7 @@
 	<scm>
 		<connection>scm:git:git://github.com/agorava/agorava-core.git</connection>
 		<developerConnection>scm:git:git@github.com:agorava/agorava-core.git</developerConnection>
-		<url>http://github.com/agorava/agorava-core</url>
+		<url>https://github.com/agorava/agorava-core</url>
 		<tag>HEAD</tag>
 	</scm>
   <!-- Additional repositories -->
@@ -64,7 +64,7 @@
         <repository>
             <id>jcenter</id>
             <name>JCenter</name>
-            <url>http://jcenter.bintray.com</url>
+            <url>https://jcenter.bintray.com</url>
         </repository>
         <repository>
             <snapshots>
@@ -72,7 +72,7 @@
             </snapshots>
             <id>bintray-release</id>
             <name>libs-release</name>
-            <url>http://oss.jfrog.org/artifactory/libs-release</url>
+            <url>https://oss.jfrog.org/artifactory/libs-release</url>
         </repository>
         <repository>
             <snapshots>
@@ -80,7 +80,7 @@
             </snapshots>
             <id>bintray-snapshot</id>
             <name>libs-snapshot</name>
-            <url>http://oss.jfrog.org/artifactory/libs-snapshot</url>
+            <url>https://oss.jfrog.org/artifactory/libs-snapshot</url>
         </repository>
     </repositories>
     
