@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2013-2020 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * Qualifier to distinguish different {@link org.agorava.api.service.SignatureService} implementations
  *
  * @author Antoine Sabot-Durand
+ * @author Werner Keil
  */
 @Qualifier
 @Target({TYPE, METHOD, PARAMETER, FIELD})
@@ -63,7 +64,7 @@ public @interface SignatureType {
         /**
          * For signature based on RSA-SHA1
          *
-         * @see <a href=http://www.w3.org/PICS/DSig/RSA-SHA1_1_0.html">w3c documentation on RSA SHA1</a>
+         * @see <a href="http://www.w3.org/PICS/DSig/RSA-SHA1_1_0.html">w3c documentation on RSA SHA1</a>
          */
         RSASHA1,
 

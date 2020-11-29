@@ -25,7 +25,7 @@ import java.util.Map;
 
 /**
  * The representation of an OAuth HttpRequest.
- * <p/>
+ * <p>
  * Adds OAuth-related functionality to the {@link RequestImpl}
  *
  * @author Pablo Fernandez

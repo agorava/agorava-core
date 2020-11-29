@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2013-2020 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,8 @@ import static org.agorava.api.service.SignatureType.Type.RSASHA1;
 
 /**
  * A signature service that uses the RSA-SHA1 algorithm.
+ * @author Werner Keil
+ * @see SignatureService
  */
 @SignatureType(RSASHA1)
 public class RSASha1SignatureService implements SignatureService {

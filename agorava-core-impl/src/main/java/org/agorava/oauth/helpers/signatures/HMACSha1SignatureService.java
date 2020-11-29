@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2013-2020 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,10 +29,12 @@ import javax.xml.bind.DatatypeConverter;
 import static org.agorava.api.service.SignatureType.Type.HMACSHA1;
 
 /**
- * HMAC-SHA1 implementation of {@SignatureService}
+ * HMAC-SHA1 implementation of {@code SignatureService}
  *
  * @author Pablo Fernandez
  * @author Antoine Sabot-Durand
+ * @author Werner Keil
+ * @see SignatureService
  */
 
 @SignatureType(HMACSHA1)

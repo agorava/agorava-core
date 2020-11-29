@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2013-2020 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,9 @@ import java.util.regex.Pattern;
 import static org.agorava.api.oauth.OAuth.OAuthVersion.TWO_DRAFT_11;
 
 /**
- * Default implementation of {@AccessTokenExtractor}. Conforms to OAuth 2.0
+ * Default implementation of {@code TokenExtractor}. Conforms to OAuth 2.0
+ * @see TokenExtractor
+ * @author Werner Keil
  */
 @OAuth(TWO_DRAFT_11)
 public class TokenExtractor20 implements TokenExtractor {

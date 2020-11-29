@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Agorava
+ * Copyright 2014-2020 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,18 +30,19 @@ import javax.inject.Qualifier;
 /**
  * This qualifier is used to mark Class to indicate that it should be used to generate different beans for each {@link
  * ProviderRelated} Qualifier.
- * <p/>
+ * <br>
  * Provider services (i.e. Social Media) are dynamically discovered when Agorava is bootstrapped thanks to Provider services
  * qualifiers
  * defined in each module and bearing the {@link ProviderRelated} annotation.
- * <p/>
+ * <br>
  * Bootstrap process retrieve Generic Beans (thanks to this qualifier) and produces qualified versions with {@link
  * ProviderRelated} qualifiers discovered previously.
- * <p/>
+ * <br>
  * The bootstrapping process will analyse generic beans to replace {@link InjectWithQualifier} annotation by injection with Bean
  * qualifier
  *
  * @author Antoine Sabot-Durand
+ * @author Werner Keil
  * @see ProviderRelated
  * @see InjectWithQualifier
  */

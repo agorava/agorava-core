@@ -27,13 +27,13 @@ import static org.agorava.api.oauth.OAuth.OAuthVersion.TWO_FINAL;
 
 /**
  * Default Provider configuration implementing the OAuth protocol, version 2.0 final
- * <p/>
+ * <p>
  * This class is meant to be extended by concrete implementations of the API,
  * providing the endpoints and endpoint-http-verbs.
- * <p/>
+ * <p>
  * If your Api adheres to the 2.0 final protocol correctly, you just need to extend
  * this class and define the getters for your endpoints.
- * <p/>
+ * <p>
  * If your Api does something a bit different, you can override the different
  * extractors or services, in order to fine-tune the process.
  *

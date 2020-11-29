@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2013-2020 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,11 +29,13 @@ import java.util.regex.Pattern;
 import static org.agorava.api.extractor.ExtractorType.Type.TOKEN_STD;
 
 /**
- * Default implementation of {@RequestTokenExtractor} and {@AccessTokenExtractor}. Conforms to OAuth 1.0a
- * <p/>
+ * Default implementation of {@code TokenExtractor}. Conforms to OAuth 1.0a
+ * <p>
  * The process for extracting access and request tokens is similar so this class can do both things.
  *
  * @author Pablo Fernandez
+ * @author Werner Keil
+ * @see TokenExtractor
  */
 @ExtractorType(TOKEN_STD)
 public class TokenExtractor10 implements TokenExtractor {

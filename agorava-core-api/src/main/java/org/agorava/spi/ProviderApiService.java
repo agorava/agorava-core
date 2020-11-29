@@ -28,7 +28,7 @@ import java.util.Map;
 
 /**
  * Abstract base class for all Provider high level REST API calls.
- * <p/>
+ * <p>
  * Concrete class must implement some or API of the remote service
  *
  * @author Antoine Sabot-Durand

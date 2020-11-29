@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2013-2020 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +21,12 @@ import java.lang.annotation.Annotation;
 /**
  * Builder for an {@link OAuthAppSettings} can be initialized directly from
  * fields name or from an Array of {@link Param} in case of Annotation configuration with {@link OAuthApplication}.
- * <p/>
+ * <p>
  * For this last purpose, the interface {@link OAuthAppSettingsBuilder} contains constants
  * for fields name should the configuration being read from a text file.
  *
  * @author Antoine Sabot-Durand
+ * @author Werner Keil
  */
 public interface OAuthAppSettingsBuilder {
 

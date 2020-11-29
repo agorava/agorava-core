@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Agorava
+ * Copyright 2016-2020 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,9 +27,9 @@ import java.io.Serializable;
  * <p>This is a <a href="http://docs.oracle.com/javase/8/docs/api/java/util/function/package-summary.html#package.description">functional interface</a>
  * whose functional method is {@link #getId()}.
  * 
- * @author Werner KEIL
- * @version 0.4 $Date: 2016/01/04 $
- * @see {@link Identifiable}
+ * @author Werner Keil
+ * @version 1.0 $Date: 2020/11/29 $
+ * @see Identifiable
  */
 public interface IntIdentifiable extends Serializable {
     /**

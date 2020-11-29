@@ -36,13 +36,13 @@ import static org.agorava.api.service.SignatureType.Type.HMACSHA1;
 
 /**
  * Default Provider configuration implementing the OAuth protocol, version 1.0a
- * <p/>
+ * <p>
  * This class is meant to be extended by concrete implementations of the Provider configuration,
  * providing the endpoints and endpoint-http-verbs.
- * <p/>
+ * <p>
  * If your Api adheres to the 1.0a protocol correctly, you just need to extend
  * this class and define the getters for your endpoints.
- * <p/>
+ * <p>
  * If your Api does something a bit different, you can override the different
  * extractors or services, in order to fine-tune the process.
  *

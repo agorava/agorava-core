@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Agorava
+ * Copyright 2013-2020 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,12 @@ package org.agorava.api.service;
 
 /**
  * Unix epoch timestamp generator.
- * <p/>
+ * <p>
  * This class is useful for stubbing in tests.
  *
  * @author Pablo Fernandez
  * @author Antoine Sabot-Durand
+ * @author Werner Keil
  */
 public interface TimestampService {
     /**

@@ -67,7 +67,7 @@ public interface HttpParameters {
 
     /**
      * @return the parameter list converted in OAuth 1.0a base string (the string to sign)
-     * @see <a href="http://oauth.net/core/1.0/#anchor14">the oauth spec</a> for more info on this.
+     * @see <a href="https://oauth.net/core/1.0/#anchor14">the Oauth spec</a> for more info.
      */
     String asOauthBaseString();
 

@@ -34,7 +34,7 @@ import java.util.ResourceBundle;
  * <li>callback</li>
  * <li>scope</li>
  * </ul>
- * <p/>
+ * <p>
  * You can configure a prefix for the key with {@link #prefix(String)}. By default the prefix is empty
  *
  * @author Antoine Sabot-Durand
@@ -100,12 +100,12 @@ public class PropertyOAuthAppSettingsBuilder extends SimpleOAuthAppSettingsBuild
         }
     
     /**
-     * {@inheritDoc} <p/>
+     * {@inheritDoc} <p>
      * This implementation will build the {@link OAuthAppSettings} from a {@link ResourceBundle}
-     * <p/>
+     * <p>
      * It'll first try to load all binding (mandatory) fields from the bundle by looking for the key prefix.fieldName (or
      * fieldName if prefix is empty)
-     * <p/>
+     * <p>
      * In a second time it'll check if optional fields are present in the bundle (with the same key construction) and load
      * them if they are.
      * If they are not present it'll try to load them without prefix

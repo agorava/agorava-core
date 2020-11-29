@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Agorava
+ * Copyright 2016-2020 Agorava
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 /**
- * OAuth 1.0a implementation of {@link org.agorava.api.oauth.OAuthProvider}
+ * OAuth 1.0a implementation of {@code org.agorava.api.oauth.OAuthProvider}
  *
  * @author Antoine Sabot-Durand
  * @author Pablo Fernandez

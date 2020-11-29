@@ -48,7 +48,7 @@ public class RSASha1SignatureServiceTest {
 
     /**
      * Created primary key using openssl.
-     * <p/>
+     * <p>
      * openssl req -x509 -nodes -days 365 -newkey rsa:1024 -sha1 -subj   '/C=GB/ST=/L=Manchester/CN=www.example.com' -keyout
      * myrsakey.pem -out /tmp/myrsacert.pem
      * openssl pkcs8 -in myrsakey.pem -topk8 -nocrypt -out myrsakey.pk8
