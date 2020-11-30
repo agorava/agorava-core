@@ -18,7 +18,7 @@ The only implementation is based on CDI right now.
 
 ## CDI implementation
 It is independent of CDI implementation and fully portable between
-Java EE 6 and Servlet environments enhanced with CDI. It can be also used 
+Java EE 8 and Servlet environments enhanced with CDI. It can be also used 
 with CDI in JSE (desktop application).
 
 For more information, see the [Agorava Website](http://agorava.org).
